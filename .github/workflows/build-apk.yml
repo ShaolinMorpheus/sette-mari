@@ -77,6 +77,14 @@ jobs:
           sed -i "s|PKGLINE|$pkg|" "$f"
           cat "$f"
 
+      - name: Firma fissa (così gli aggiornamenti si installano sopra la versione precedente)
+        run: |
+          mkdir -p ~/.android
+          cp debug.keystore ~/.android/debug.keystore
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
+          sed -i "s/versionName \"1.0\"/versionName \"0.${{ github.run_number }}\"/" android/app/build.gradle
+          grep -n "versionCode\|versionName" android/app/build.gradle
+
       - name: Compila l'APK
         working-directory: android
         run: |
