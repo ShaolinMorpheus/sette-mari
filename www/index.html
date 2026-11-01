@@ -7191,7 +7191,6 @@ document.addEventListener('visibilitychange',()=>{
 });
 addEventListener('pagehide',()=>{try{if(AU.ctx&&AU.ctx.state==='running')AU.ctx.suspend()}catch(_){}});
 window.addEventListener('pagehide',saveGame);window.addEventListener('beforeunload',saveGame);
-/*PROVA-AGG*/{const _iv=setInterval(()=>{if(S&&S.live){clearInterval(_iv);UI.toast('✔ Prova: aggiornamento automatico ricevuto (21:06)',6000)}},800)}
 window.Pirati={
   get S(){return S},P,E,EID,cam,UI,Story,QDEF,PAR,FIX,JOY,TANK,FOG,
   fast(n){TIMESCALE=n},
