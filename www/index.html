@@ -4965,7 +4965,7 @@ Ch2.TRE={lt_isleA:[{legna:6,corda:4},"Una cassa mezza sepolta sulla sabbia dell'
 Ch2.onLoot=function(e){
   const c=C();
   if(e.id&&Ch2.TRE[e.id]){
-    const [cst,tx]=Ch2.TRE[e.id];c.tre=(c.tre||0)+1;
+    const [cst,tx]=Ch2.TRE[e.id];c.treSet=c.treSet||{};c.treSet[e.id]=1;c.tre=Object.keys(c.treSet).length;
     for(const k in cst)gain(k,cst[k],e.x,e.y-20,true);
     UI.dlg([D('hero',tx),D('hero',"Tesori ritrovati: "+c.tre+"/5.")],()=>{UI.syncObj();checkAll()});return true}
   if(e.id==='lt_knife'){c.knife=1;UI.dlg([D('hero',"Un coltello da marinaio con il manico intagliato. Sul legno, una «T» incisa male."),D('hero',"Ha l'aria di essere stato lasciato qui di proposito.")],()=>checkAll());return true}
@@ -7051,6 +7051,7 @@ function startContinue(nm,hero){
   S.vit=Object.assign({t:58,h:70},S.vit);S.said=S.said||{};S.hand='right';S.ctrl='joy';if(S.flags.parrot&&!S.pname)S.pname='Biscotto';if(S.xpt==null)S.xpt=xpFromStats();
   for(const k in S.q)S.q[k].busy=false;
   fogFromStr(S.fog);applyEnts(S.es||{});Story.restore();campClear();campRestore();
+  if(typeof Ch2!=='undefined'&&Ch2.TRE&&EID.lt_hill&&!S.flags.treV3){S.flags.treV3=1;for(const id in Ch2.TRE){if(EID[id])EID[id].got=false;if(S.es)delete S.es[id]}try{C().tre=0;C().treSet={}}catch(_){}}   // reset forzieri dei Fuggiaschi: tutti richiusi
   if(!S.flags.hat&&EID.lt_isle1&&EID.lt_isle1.got){S.flags.isle1=1;EID.lt_isle1.got=false}   // chi aveva già aperto la cassa può riaprirla per trovare il cappello
   auInit();AU.on=S.sound!==false;auSet(AU.on);AU.mus=S.music!==false;muSet(AU.mus);
   beginGame();
