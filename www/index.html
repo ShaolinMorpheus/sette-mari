@@ -65,9 +65,9 @@ button{font-family:inherit;color:inherit}
 #clock{display:flex;align-items:center;gap:5px;padding:5px 10px;font-weight:800;font-size:12.5px;font-variant-numeric:tabular-nums;height:30px}
 #mini{position:absolute;right:var(--gr);top:calc(5px + var(--st));width:132px;height:132px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
 /* joystick */
-#joyGhost{position:absolute;right:calc(var(--gr) + 26px);bottom:calc(22px + var(--sb));width:104px;height:104px;border-radius:50%;border:3px dashed rgba(255,255,255,.28);background:radial-gradient(circle,rgba(255,255,255,.09),rgba(255,255,255,.02))}
+#joyGhost{display:none;position:absolute;right:calc(var(--gr) + 26px);bottom:calc(22px + var(--sb));width:104px;height:104px;border-radius:50%;border:3px dashed rgba(255,255,255,.28);background:radial-gradient(circle,rgba(255,255,255,.09),rgba(255,255,255,.02))}
 body[data-ctrl=tank] #joyGhost{display:none}
-#joy{position:absolute;width:128px;height:128px;margin:-64px 0 0 -64px;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05))}
+#joy{position:absolute;right:calc(var(--gr) + 14px);bottom:calc(10px + var(--sb));width:128px;height:128px;margin:0;touch-action:none;pointer-events:none;transition:background .15s,border-color .15s;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05))}
 #joyKnob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#d8e6ee 60%,#a8bcc8);border:2px solid rgba(40,60,70,.7);box-shadow:0 3px 8px rgba(0,0,0,.4)}
 /* azione */
 #ctr{position:absolute;left:var(--gl);bottom:calc(12px + var(--sb));display:flex;flex-direction:row-reverse;align-items:flex-end;gap:10px}
@@ -93,6 +93,9 @@ body[data-ctrl=tank] #ctr{bottom:calc(104px + var(--sb))}
 .tk{width:76px;height:76px;border-radius:20px;border:3px solid var(--wood-d);background:linear-gradient(180deg,#f6e7be,#d4b070);color:var(--wood-d);display:grid;place-items:center;box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.55);touch-action:none;padding:0}
 .tk .ic{width:36px;height:36px}
 .tk.on{background:linear-gradient(180deg,#ffe58a,#e8aa24)}
+body[data-hand=left] #joy{right:auto;left:calc(var(--gl) + 14px)}
+body[data-ctrl=tank] #joy{display:none}
+#joy.on{border-color:rgba(255,255,255,.85);background:radial-gradient(circle,rgba(255,255,255,.26),rgba(255,255,255,.08))}
 body[data-hand=left] #joyGhost{right:auto;left:calc(var(--gl) + 26px)}
 body[data-hand=left] #ctr{left:auto;right:var(--gr);flex-direction:row}
 body[data-hand=left] #tkL{right:auto;left:var(--gl)}
@@ -110,6 +113,9 @@ body[data-hand=left] #tkR{left:auto;right:var(--gr)}
 #tut small{float:right;color:var(--wood-d);font-weight:800;opacity:.7}
 #tut .trow{display:flex;gap:12px;align-items:center}
 #tut .btn{padding:6px 16px;min-height:0;font-size:14px}
+.tutPt{position:relative}
+.tutPt::after{content:'👇';position:absolute;left:50%;top:-44px;margin-left:-16px;font-size:30px;line-height:1;z-index:20;pointer-events:none;animation:tutb .7s ease-in-out infinite alternate;filter:drop-shadow(0 2px 2px rgba(0,0,0,.6))}
+@keyframes tutb{from{transform:translateY(-6px)}to{transform:translateY(7px)}}
 .tutHi{outline:3px solid #ffd23a;outline-offset:3px;border-radius:14px;animation:tutp 1s ease-in-out infinite}
 @keyframes tutp{0%,100%{box-shadow:0 0 0 0 rgba(255,210,58,.7)}50%{box-shadow:0 0 0 9px rgba(255,210,58,0)}}
 #chal{padding:4px 10px;font-weight:800;font-size:13px;display:flex;align-items:center;gap:3px}
@@ -195,7 +201,7 @@ body.rot{--gl:6px;--gr:6px;--st:0px;--sb:0px}   /* telefono in verticale: il gio
 .seas b{font-family:var(--f-d);font-weight:400;font-size:26px;display:block;line-height:1}
 .seas span{font:800 12px var(--f-b);letter-spacing:.8px;text-transform:uppercase}
 /* mappa del tesoro */
-#mapCard{max-width:none;width:100%;height:100%;max-height:100%;padding:0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0e3b5a;text-align:center}.mxr{position:absolute;right:8px;top:8px;width:38px;height:38px;border-radius:10px;border:2px solid #7a1f12;background:linear-gradient(#e86a55,#b83a28);color:#fff;font:800 19px var(--f-b);cursor:pointer;box-shadow:0 2px 0 #7a1f12;z-index:3;padding:0}#mapCard h2{position:absolute;left:10px;top:8px;margin:0;font-size:17px;padding:2px 10px;background:rgba(251,239,201,.9);border-radius:8px;z-index:2}#mapCard #mapTxt{position:absolute;left:10px;bottom:8px;max-width:min(560px,calc(100% - 70px));margin:0;font-size:11.5px;line-height:1.25;text-align:left;padding:4px 9px;background:rgba(251,239,201,.92);color:var(--ink);border-radius:8px;z-index:2;cursor:pointer}#mapCard #mapTxt:empty{display:none}
+#mapCard{max-width:none;width:100%;height:100%;max-height:100%;padding:0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0e3b5a;text-align:center}.mxr{position:absolute;right:8px;top:8px;width:38px;height:38px;border-radius:10px;border:2px solid #7a1f12;background:linear-gradient(#e86a55,#b83a28);color:#fff;font:800 19px var(--f-b);cursor:pointer;box-shadow:0 2px 0 #7a1f12;z-index:3;padding:0}#mapCard h2{position:absolute;left:10px;top:8px;margin:0;font-size:17px;padding:2px 10px;background:rgba(251,239,201,.9);border-radius:8px;z-index:2}#mapCard #mapTxt{position:absolute;left:10px;bottom:8px;max-width:min(210px,27%);margin:0;font-size:11.5px;line-height:1.25;text-align:left;padding:4px 9px;background:rgba(251,239,201,.92);color:var(--ink);border-radius:8px;z-index:2;cursor:pointer}#mapCard #mapTxt:empty{display:none}
 #mapCv{display:block;border:0;border-radius:0;margin:0}
 /* fine capitolo */
 #endCard{text-align:center;max-width:520px}
@@ -403,7 +409,7 @@ var lt=0;d.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<320&
    <canvas id="mini" width="152" height="152" aria-label="Minimappa"></canvas>
   </div>
   <div id="joyGhost"></div>
-  <div id="joy" hidden><i id="joyKnob"></i></div>
+  <div id="joy"><i id="joyKnob"></i></div>
   <div id="tank">
    <div id="tkL"><button id="tkF" class="tk" aria-label="Avanti"><svg class="ic"><use href="#i-up"/></svg></button><button id="tkB" class="tk" aria-label="Indietro"><svg class="ic" style="transform:rotate(180deg)"><use href="#i-up"/></svg></button></div>
    <div id="tkR"><button id="tkA" class="tk" aria-label="Sterza a sinistra"><svg class="ic" style="transform:rotate(-90deg)"><use href="#i-up"/></svg></button><button id="tkD" class="tk" aria-label="Sterza a destra"><svg class="ic" style="transform:rotate(90deg)"><use href="#i-up"/></svg></button></div>
@@ -4341,6 +4347,10 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.6",d:"30 ott 2026",t:"Capitolo 2: La Baia dei Fuggiaschi",n:[
+    "Joystick fisso: sta sempre nello stesso punto e non si sposta più sotto il dito; si illumina quando lo usi.",
+    "Tutorial: il joystick e il pulsante di interazione si illuminano e hanno una manina che li indica. Se salti il tutorial, la manina indica il joystick finché non ti muovi.",
+    "«Capitolo 1» compare solo dopo il tutorial (finito o saltato).",
+    "Mappa dal Pino Alto: riempie tutto il riquadro, gli angoli dell'isola non sono più tagliati e la didascalia sta nel mare, senza coprire l'isola.",
     "Codice di salvataggio più corto (circa la metà o meno): il testo da copiare è compresso. I vecchi codici funzionano ancora.",
     "Zattera incastrata: se resta addosso a uno scoglio o alla riva, viene riportata subito sull'acqua libera più vicina.",
     "Limiti leggibili: i pulsanti di cibo, acqua e pesce e il riquadro delle risorse mostrano quanto hai e il massimo (per esempio 10/10); diventano rossi quando sei al limite.",
@@ -4556,7 +4566,7 @@ Ch2.decor=function(deco){
 const QDEF={
 m1:{kind:'main',title:"Sulla sabbia",blurb:"La tempesta è finita. Sei ancora qui.",
   onStart(){UI.dlg([D('hero',"Sabbia. Sale in bocca. Il mare che va e viene, come se niente fosse."),D('hero',"Sono vivo. Il resto può aspettare un minuto.")])},
-  goals:[{k:'flag',done:()=>!!S.flags.moved,txt:()=>"Alzati e cammina: trascina il joystick a "+mvSide(),hint:()=>"Tieni il pollice nella metà "+mvSide()+" dello schermo e trascina."}],
+  goals:[{k:'flag',done:()=>!!S.flags.moved,txt:()=>"Alzati e cammina: trascina il joystick a "+mvSide(),hint:()=>"Metti il pollice sul cerchio del joystick, a "+mvSide()+", e trascina."}],
   onDone(){UI.dlg([D('hero',"Il Cormorano è là, a pezzi. Frugherò tra i resti più tardi: la gola brucia."),D('hero',"L'acqua del mare non si beve. Serve un ruscello, un laghetto. Verso l'interno.")],()=>startQuest('m2'))}},
 m2:{kind:'main',title:"Acqua dolce",blurb:"Senza acqua non si arriva a domani.",
   goals:[{k:'flag',done:()=>!!S.flags.drank,txt:"Trova acqua dolce e bevi",hint:"Segui il sentiero che sale verso l'interno: lassù c'è un laghetto. Poi premi «Bevi».",mark:()=>({x:POND.x*TS,y:POND.y*TS,r:3*TS,up:10})}],
@@ -5507,7 +5517,7 @@ Story.afterEnd=function(){
   P.hd=0;cam.x=P.x;cam.y=P.y;camClamp();UI.syncObj();
 };
 /* ---- nuova partita e ripristino ---- */
-Story.newGame=function(){UI.banner('Capitolo 1','Naufrago');startQuest('m1')};
+Story.newGame=function(){startQuest('m1')};      // il banner «Capitolo 1» esce a fine tutorial (UI.tutEnd)
 Story.restore=function(){
   S.said=S.said||{};S.hand=S.hand||'right';
   if(S.flags.parrot){const w=EID.wparrot;w.got=true;PAR.x=P.x-30;PAR.y=P.y}
@@ -6037,7 +6047,7 @@ UI.toast=function(txt,ms,img){
 };
 UI.prog=function(d){UI.progData=d||null};
 const HINTS={
-  move:()=>["Come muoversi","Trascina il pollice nella metà "+mvSide()+" dello schermo: il personaggio cammina nella direzione in cui trascini. Il pulsante giallo a "+actSide()+" compare quando c'è qualcosa da fare."],
+  move:()=>["Come muoversi","Trascina il pollice sul joystick, il cerchio a "+mvSide()+": il personaggio cammina nella direzione in cui trascini. Il pulsante giallo a "+actSide()+" compare quando c'è qualcosa da fare."],
   ptalk:["Biscotto","Tocca il pappagallo: ogni tanto ha qualcosa da dire."],
   act:["Al lavoro","Resta fermo: l'anello giallo si riempie. Se ti muovi, il lavoro si interrompe."],
   vit:["Sete e fame","Le barre in alto a sinistra scendono col tempo. A zero rallenti, ma non muori. Tocca una barra per bere o mangiare."],
@@ -6386,13 +6396,17 @@ UI.sleep=function(){
 
 /* ---- mappe ---- */
 let mapTxtT=0;
-const mapView=()=>WORLD===2?{z:1.3,cx:.53,cy:.5}:{z:1.45,cx:.45,cy:.5};    // la mappa è ingrandita sull'isola
-function drawMapView(g,fn,W,H){const v=mapView();g.save();g.translate(W/2,H/2);g.scale(v.z,v.z);g.translate(-W*v.cx,-H*v.cy);fn(g,W,H);g.restore()}
+const mapView=()=>WORLD===2?{z:1.3,cx:.53,cy:.5,ox:.5}:{z:1.1,cx:.46,cy:.52,ox:.6};    // la mappa è ingrandita sull'isola
+function drawMapView(g,fn,W,H){const v=mapView(),k=H/600*v.z;g.fillStyle='#0d4f86';g.fillRect(0,0,W,H);g.save();g.translate(W*v.ox,H/2);g.scale(k,k);g.translate(-990*v.cx,-600*v.cy);if(fn===drawOverview&&GPREV&&GPREV.width){const e=3;g.drawImage(GPREV,0,0,e,GPREV.height,-1400,0,1400,600);g.drawImage(GPREV,GPREV.width-e,0,e,GPREV.height,990,0,1400,600)}   // oltre il bordo del mondo il mare continua
+  fn(g,990,600);g.restore()}
 function mapModal(title,draw,txt,cb){
   $('mapCard').querySelector('h2').textContent=title;
-  const cvm=$('mapCv'),g=cvm.getContext('2d');cvm.width=990;cvm.height=600;cvm.onclick=null;cvm.style.cursor='';g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cvm.width,cvm.height);drawMapView(g,draw,cvm.width,cvm.height);
+  const cvm=$('mapCv'),g=cvm.getContext('2d');cvm.onclick=null;cvm.style.cursor='';
   const mt=$('mapTxt');mt.textContent=txt;mt.style.display='';mt.onclick=()=>{mt.style.display='none'};clearTimeout(mapTxtT);mapTxtT=setTimeout(()=>{mt.style.display='none'},8000);uShow('mapm',true);
-  {const card=$('mapCard'),ar=cvm.width/cvm.height,cw=card.clientWidth,ch=card.clientHeight;if(cw&&ch){const w=Math.min(cw,ch*ar);cvm.style.width=Math.round(w)+'px';cvm.style.height=Math.round(w/ar)+'px'}}
+  {const card=$('mapCard'),cw=card.clientWidth,ch=card.clientHeight;   // la mappa riempie tutto il riquadro: niente bordi vuoti, angoli compresi
+    cvm.height=600;cvm.width=(cw&&ch)?Math.max(600,Math.round(600*cw/ch)):990;
+    if(cw&&ch){cvm.style.width=cw+'px';cvm.style.height=ch+'px'}}
+  g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cvm.width,cvm.height);drawMapView(g,draw,cvm.width,cvm.height);
   $('mapOk').onclick=()=>{uShow('mapm',false);if(cb)cb()};
 }
 function drawOverview(g,W,H){
@@ -6458,7 +6472,7 @@ UI.openBigMap=function(){
   cv.onclick=ev=>{
     const r=cv.getBoundingClientRect(),rot=document.body.classList.contains('rot');
     const u=rot?(ev.clientY-r.top)/r.height:(ev.clientX-r.left)/r.width,v=rot?(r.right-ev.clientX)/r.width:(ev.clientY-r.top)/r.height;
-    const mv=mapView(),tx=(mv.cx+(u-.5)/mv.z)*MW,ty=(mv.cy+(v-.5)/mv.z)*MH;
+    const mv=mapView(),kk=cv.height/600*mv.z,tx=((u*cv.width-cv.width*mv.ox)/kk+990*mv.cx)/990*MW,ty=((v*cv.height-cv.height/2)/kk+600*mv.cy)/600*MH;
     if(S.mapMark&&hyp(S.mapMark[0]-tx,S.mapMark[1]-ty)<3)S.mapMark=null;else S.mapMark=[Math.round(tx*10)/10,Math.round(ty*10)/10];
     sfx('tap');const g=cv.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cv.width,cv.height);drawMapView(g,drawBigMap,cv.width,cv.height);saveGame(true);
   };
@@ -6517,7 +6531,7 @@ function journalDraw(){
 UI.openJournal=function(tab){jTab=tab||jTab;UI.dot(false);journalDraw();uShow('journal',true)};
 
 /* ---- menu e guida ---- */
-const HOWTO=()=>'<h2>Come si gioca</h2><p><b>Muoversi:</b> tieni il telefono in orizzontale e trascina il pollice nella metà '+mvSide()+' dello schermo (joystick).</p><p><b>Agire:</b> avvicinati a un albero, una palma, un cespuglio, una cassa… Il pulsante giallo a '+actSide()+' cambia nome (Taglia, Scuoti, Raccogli, Bevi, Pesca, Costruisci…). Premilo e resta fermo.</p><p><b>Sopravvivere:</b> le barre sete e fame scendono col tempo. Bevi al laghetto, mangia noci di cocco, bacche, molluschi, pesce cotto sul fuoco.</p><p><b>Orientarsi:</b> il riquadro in alto al centro dice cosa fare e in che direzione. La minimappa si scopre camminando. Una bussola da pirata (da trovare) indica l\'obiettivo.</p><p><b>Il pappagallo:</b> quando ti segue, toccalo e ti racconta qualcosa.</p><p><b>Da computer:</b> WASD o frecce per muoverti, E o Spazio per agire, F mangia, G bevi, P pappagallo, J diario.</p><div class="row"><button class="btn gold" id="shNo">Ho capito</button></div>';
+const HOWTO=()=>'<h2>Come si gioca</h2><p><b>Muoversi:</b> tieni il telefono in orizzontale e trascina il pollice sul joystick, il cerchio fisso a '+mvSide()+' dello schermo.</p><p><b>Agire:</b> avvicinati a un albero, una palma, un cespuglio, una cassa… Il pulsante giallo a '+actSide()+' cambia nome (Taglia, Scuoti, Raccogli, Bevi, Pesca, Costruisci…). Premilo e resta fermo.</p><p><b>Sopravvivere:</b> le barre sete e fame scendono col tempo. Bevi al laghetto, mangia noci di cocco, bacche, molluschi, pesce cotto sul fuoco.</p><p><b>Orientarsi:</b> il riquadro in alto al centro dice cosa fare e in che direzione. La minimappa si scopre camminando. Una bussola da pirata (da trovare) indica l\'obiettivo.</p><p><b>Il pappagallo:</b> quando ti segue, toccalo e ti racconta qualcosa.</p><p><b>Da computer:</b> WASD o frecce per muoverti, E o Spazio per agire, F mangia, G bevi, P pappagallo, J diario.</p><div class="row"><button class="btn gold" id="shNo">Ho capito</button></div>';
 UI.showHow=function(){sheetFor(HOWTO())};
 UI.askParrotName=function(cb,rename){
   const inp=$('pnIn'),ok=$('pnOk'),no=$('pnNo');inp.value=rename?(S.pname||''):'';ok.disabled=!inp.value.trim();no.hidden=!rename;
@@ -6719,30 +6733,38 @@ UI.tick=function(dt,t){
 /* ---- 12b_tutorial.js ---- */
 /* ====== TUTORIAL: pochi passaggi, evidenziando i comandi veri ====== */
 const TUT=[
-  {hi:['joyGhost'],txt:()=>"Benvenuto, "+nomeP()+"! Per muoverti trascina il pollice nella metà "+mvSide()+" dello schermo.",wait:()=>!!S.flags.moved},
-  {hi:['act'],txt:()=>"Il pulsante giallo cambia a seconda di ciò che hai vicino: «Raccogli», «Taglia», «Bevi»… Avvicinati a un oggetto e premilo.",wait:()=>!!S.flags.acted},
+  {hi:['joy'],pt:1,txt:()=>"Benvenuto, "+nomeP()+"! Questo è il joystick: metti il pollice sul cerchio che lampeggia e trascinalo per camminare.",wait:()=>!!S.flags.moved},
+  {hi:['act'],pt:1,txt:()=>"Questo è il pulsante di interazione: cambia a seconda di ciò che hai vicino: «Raccogli», «Taglia», «Bevi»… Avvicinati a un oggetto e premilo.",wait:()=>!!S.flags.acted},
   {hi:['vit'],txt:()=>"Le barre in alto a sinistra sono sete e fame: scendono col tempo. Tocca una barra per bere o mangiare quello che hai con te."},
   {hi:['obj'],txt:()=>"Qui in alto c'è la missione di adesso: dice cosa fare e in che direzione. Toccala per aprire il diario."},
   {hi:['clock'],txt:()=>"Il tempo passa: di sera fa buio, a volte piove e arrivano le tempeste. Un falò e una capanna aiutano; più avanti, anche una torcia."},
   {hi:['bM'],txt:()=>"Dal menu trovi suoni, musica, salvataggio e «Come si gioca». Il gioco comunque salva da solo. Buona fortuna!"}
 ];
 let tutHi=[];
-function tutClearHi(){for(const el of tutHi)el.classList.remove('tutHi');tutHi=[]}
+function tutClearHi(){for(const el of tutHi)el.classList.remove('tutHi','tutPt');tutHi=[]}
 UI.tutShow=function(){
   const box=$('tut');
   if(!S||S.tutDone||S.tut==null||S.tut>=TUT.length){box.hidden=true;tutClearHi();return}
   const st=TUT[S.tut];
   $('tutT').textContent=st.txt();$('tutN').textContent=S.tut===TUT.length-1?'Ho capito':'Avanti';
   $('tutC').textContent=(S.tut+1)+'/'+TUT.length;
-  tutClearHi();for(const id of st.hi){const el=$(id);if(el){el.classList.add('tutHi');tutHi.push(el)}}
+  tutClearHi();for(const id of st.hi){const el=$(id);if(el){el.classList.add('tutHi');if(st.pt)el.classList.add('tutPt');tutHi.push(el)}}
   box.hidden=false;
 };
 UI.tutNext=function(){
   if(!S)return;S.tut=(S.tut||0)+1;sfx('tap');
-  if(S.tut>=TUT.length){S.tutDone=1;S.tut=null}
+  if(S.tut>=TUT.length){S.tutDone=1;S.tut=null;UI.tutEnd(false)}
   UI.tutShow();saveGame();
 };
-UI.tutSkip=function(){if(!S)return;S.tutDone=1;S.tut=null;UI.tutShow();saveGame()};
+UI.tutSkip=function(){if(!S)return;S.tutDone=1;S.tut=null;UI.tutShow();UI.tutEnd(true);saveGame()};
+/* a tutorial finito o saltato: compare «Capitolo 1»; se si salta, una freccia indica il joystick finché non ci si muove */
+UI.tutEnd=function(skipped){
+  if(WORLD===1&&!S.flags.ch1b){S.flags.ch1b=1;setTimeout(()=>UI.banner('Capitolo 1','Naufrago'),500)}
+  if(skipped&&!S.flags.moved){
+    const j=$('joy');j.classList.add('tutHi','tutPt');const t0=performance.now();
+    const iv=setInterval(()=>{if(S.flags.moved||performance.now()-t0>12000||!j.classList.contains('tutPt')){clearInterval(iv);j.classList.remove('tutHi','tutPt')}},400);
+  }
+};
 UI.tutStart=function(){if(!S)return;S.tutDone=0;S.tut=0;UI.tutShow()};
 UI.tutActive=()=>!!(S&&!S.tutDone&&S.tut!=null);
 UI.tutTick=function(){
@@ -6843,9 +6865,10 @@ kbAttach($('inName'));kbAttach($('pnIn'));kbAttach($('fbTx'));
 /* ====== COMANDI: joystick, pulsanti, tastiera ====== */
 const JS={id:null,ox:0,oy:0,tap:null};
 const JR=46;            // raggio di corsa del joystick (px)
-function joyShow(on,x,y){
-  const j=$('joy');j.hidden=!on;
-  if(on){j.style.left=x+'px';j.style.top=y+'px'}
+function joyShow(on){$('joy').classList.toggle('on',!!on)}      // il joystick è fisso: si illumina soltanto quando lo usi
+function joyCenter(){   // centro del joystick in coordinate del canvas (tiene conto della rotazione in verticale)
+  const q=$('joy').getBoundingClientRect(),r=cv.getBoundingClientRect(),cx=q.left+q.width/2,cy=q.top+q.height/2;
+  return document.body.classList.contains('rot')?[cy-r.top,r.right-cx]:[cx-r.left,cy-r.top];
 }
 function joyKnob(dx,dy){$('joyKnob').style.transform='translate('+dx+'px,'+dy+'px)'}
 function joyReset(){JS.id=null;JS.tap=null;JOY.x=JOY.y=0;joyShow(false);joyKnob(0,0)}
@@ -6871,9 +6894,11 @@ function initInput(){
     if(JS.id==null&&!JS.tap&&parrotHit(x,y)){JS.tap={id:e.pointerId,x,y};try{cv.setPointerCapture(e.pointerId)}catch(_){}return}
     if(ctrlMode()!=='joy'||JS.id!=null||JS.tap)return;
     if(lefty()?x>VW*.56:x<VW*.44)return;
-    JS.id=e.pointerId;JS.ox=x;JS.oy=y;
+    const jc=joyCenter();if(hyp(x-jc[0],y-jc[1])>190)return;     // si parte toccando vicino al joystick
+    JS.id=e.pointerId;JS.ox=jc[0];JS.oy=jc[1];
     try{cv.setPointerCapture(e.pointerId)}catch(_){}
-    joyShow(true,x,y);joyKnob(0,0);
+    joyShow(true);joyKnob(0,0);
+    {const dx=x-JS.ox,dy=y-JS.oy,d=hyp(dx,dy),dd=Math.min(d,JR),m=dd/JR;joyKnob(d?dx/d*dd:0,d?dy/d*dd:0);JOY.x=d?dx/d*(m<.14?0:m):0;JOY.y=d?dy/d*(m<.14?0:m):0}
   });
   cv.addEventListener('pointermove',e=>{
     if(JS.tap&&e.pointerId===JS.tap.id){
@@ -6882,11 +6907,11 @@ function initInput(){
       if(hyp(q0[0]-JS.tap.x,q0[1]-JS.tap.y)<14)return;
       const t=JS.tap;JS.tap=null;
       if(ctrlMode()!=='joy'||(lefty()?t.x>VW*.56:t.x<VW*.44))return;
-      JS.id=t.id;JS.ox=t.x;JS.oy=t.y;joyShow(true,t.x,t.y);joyKnob(0,0);
+      const jc=joyCenter();if(hyp(t.x-jc[0],t.y-jc[1])>190)return;
+      JS.id=t.id;JS.ox=jc[0];JS.oy=jc[1];joyShow(true);joyKnob(0,0);
     }
     if(e.pointerId!==JS.id)return;
     const q=cvPt(e),dx=q[0]-JS.ox,dy=q[1]-JS.oy,d=hyp(dx,dy);
-    if(d>JR*1.7){const k=(d-JR*1.7);JS.ox+=dx/d*k;JS.oy+=dy/d*k;joyShow(true,JS.ox,JS.oy)}   // la base segue il dito se lo trascini lontano
     const dd=Math.min(d,JR);
     const nx=d?dx/d:0,ny=d?dy/d:0;
     joyKnob(nx*dd,ny*dd);
@@ -6959,6 +6984,7 @@ function beginGame(){
   $('start').hidden=true;$('hud').hidden=false;syncPause();
   revealFog(P.x,P.y,8);
   if(S.tutDone==null&&S.tut==null){S.tutDone=(S.flags.moved||S.day>1)?1:0;S.tut=S.tutDone?null:0}
+  if(S.tutDone&&S.flags.ch1b==null)S.flags.ch1b=1;
   UI.sync();UI.syncObj();UI.hud();UI.tutShow();
   if(WORLD===2)Ch2.onBegin();
 }
