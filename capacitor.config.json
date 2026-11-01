@@ -7,7 +7,7 @@
     "allowMixedContent": false
   },
   "server": {
-    "url": "https://settemarigame.netlify.app",
+    "url": "https://shaolinmorpheus.github.io/sette-mari/",
     "cleartext": false,
     "errorPath": "offline.html"
   }
