@@ -4573,7 +4573,7 @@ const BOTTLES=[
   "«Se stai leggendo, sei già più fortunato di me. L'acqua dolce è nell'interno, dove l'erba diventa alta e c'è ombra. — J.»",
   "«Giorno 12. Le noci di cocco bastano per vivere, non per sperare. Le bacche rosse sono buone, le altre non le ho provate.»",
   "«Ho lasciato la bussola in una cassetta di ottone, nel campo a nord. A me ormai non serve più.»",
-  "«Fumo a est, ogni sera. Non so se è un amico o un nemico. Domani decido. — J.»"
+  "«Fumo a est, ogni sera. Non so se è un amico o un nemico. Domani decido. Chi vive di fumo, di solito, conta i posti sulla barca. — J.»"
 ];
 
 
@@ -4867,17 +4867,17 @@ c4:{kind:'main',title:"La prova di Ferro",blurb:"Dieci legna, sei pietre, tre pe
   onDone(){startQuest('c5')}},
 c5:{kind:'main',title:"Gente del campo",blurb:"Al campo non c'è solo Ferro.",
   goals:[{k:'flag',done:()=>Ch2.metCount()>=3,txt:()=>"Conosci gli altri: Nives, Gnocco e Tito ("+Ch2.metCount()+"/3)",hint:"I personaggi con il «!» sopra la testa hanno qualcosa da dire.",mark:()=>{const e=nearestE(['npc'],n=>!C().met[n.who]&&n.who!=='ferro');return pt(e,110)}}],
-  onDone(){UI.dlg([D('hero',"Un capo che non sorride, una fabbra che minaccia, un cuoco che sfida il sale e un ragazzo che non c'era."),D('hero',"Sono una squadra strana. Ma una squadra.")],()=>startQuest('c6'))}},
-c6:{kind:'main',title:"La nave senza nome",blurb:"Ferro custodisce un segreto in una cala a sud-est.",
-  goals:[{k:'flag',done:()=>!!C().said.ship,txt:"Chiedi a Ferro della nave",hint:"Parla con Ferro: «Chiedi della nave».",mark:()=>pt(EID.npc_ferro,110)},
+  onDone(){UI.dlg([D('hero',"Un capo che non sorride, una fabbra che minaccia, un cuoco che sfida il sale e un ragazzo che non c'era."),D('hero',"Sono una squadra strana. Ma una squadra."),D('biscotto',"Cra! Casse! Vecchie casse! Sulle isolette e sulla collina! Biscotto le sente. Chiedi, chiedi!")],()=>startQuest('c6'))}},
+c6:{kind:'main',title:"La nave senza nome",blurb:"Ferro custodisce un segreto in una cala a sud-est. Tito sa qualcosa.",
+  goals:[{k:'flag',done:()=>!!C().said.ship,txt:"Chiedi a Tito che cosa nasconde Ferro",hint:"Parla con Tito: «Chiedi della cala a sud-est».",mark:()=>pt(EID.npc_tito,110)},
          {k:'reach',x:CV2.ship[0]*TS,y:(CV2.ship[1]+3.2)*TS,r:5*TS,txt:"Raggiungi la nave, nella cala a sud-est",hint:"Segui il sentiero a sud-est del campo, fino al mare.",mark:()=>({x:CV2.ship[0]*TS,y:(CV2.ship[1]+1)*TS,up:140}),
-    dlg:()=>[D('hero',"Una nave vera. Chiglia intera, fiancate sventrate, nessun albero. Sul fasciame, un nome quasi cancellato: «…ena»."),D('hero',"Mancano tre pezzi, ha detto Ferro: l'albero maestro, il timone, le vele."),D('hero',"L'albero lo darà il Pino Maestro, in cima alla collina a nord-est. Il resto... si vedrà.")]}],
+    dlg:()=>{C().shipJ=1;return[D('hero',"Una nave vera. Chiglia intera, fiancate sventrate, nessun albero. Sul fasciame, un nome sbiadito: «…ena»."),D('hero',"Sul bagnasciuga, una tavola con un nome inciso a punta di coltello: «G. Marrone — Sirena»."),D('hero',"J. firmava le bottiglie soltanto con l'iniziale. Se J. è Giacomo, questa è la sua nave. Ed è qui, nella cala di Ferro."),D('biscotto',"Cra! Rubata! Sirena! Rubata!"),D('hero',"Non lo dico a nessuno. Ma ora so cosa chiedere, quando sarà il momento."),D('hero',"Mancano tre pezzi: l'albero maestro, il timone, le vele. L'albero lo darà il Pino Maestro, sulla collina a nord-est.")]}}],
   onDone(){startQuest('c7')}},
 c7:{kind:'main',title:"L'albero maestro",blurb:"Un pino alto, dritto, antico. Ci vorrà un'ascia buona e molto fiato.",
   goals:[{k:'flag',done:()=>!!C().parts.mast,txt:"Abbatti il Pino Maestro (collina a nord-est): servono molti colpi",hint:"È sulle alture a nord-est. Con l'ascia affilata ci vuole meno tempo.",mark:()=>pt(EID.mast,150)}],
   onDone(){UI.dlg([D('hero',"Cade con un tonfo che si sente in tutta l'isola. Il pezzo più grande è andato."),D('hero',"Restano il timone e le vele.")],()=>startQuest('c8'))}},
 c8:{kind:'main',title:"Il timone nascosto",blurb:"Il timone non è sulla nave. Qualcuno sa dove l'hanno messo.",
-  goals:[{k:'flag',done:()=>Ch2.tr('tito')>=5,txt:()=>"Guadagnati la fiducia di Tito ("+Ch2.tr('tito')+"/5): parlagli, aiutalo",hint:"Chiacchiera con lui (una volta al giorno dà fiducia) e fai le sue richieste.",mark:()=>pt(EID.npc_tito,110)},
+  goals:[{k:'flag',done:()=>Ch2.tr('tito')>=3,txt:()=>"Guadagnati la fiducia di Tito ("+Math.min(3,Ch2.tr('tito'))+"/3): parlagli, aiutalo",hint:"Chiacchiera con lui (una volta al giorno dà fiducia) e fai le sue richieste.",mark:()=>pt(EID.npc_tito,110)},
          {k:'flag',done:()=>!!C().said.rudder,txt:"Chiedi a Tito del timone",hint:"Parla con Tito: «Chiedi del timone».",mark:()=>pt(EID.npc_tito,110)},
          {k:'flag',done:()=>!!C().parts.rudder,txt:"Cerca il timone nella grotta (serve una torcia accesa)",hint:"La grotta è a sud-ovest del campo. Costruisci la Torcia nel Banco e accendila (pulsante a fiamma).",mark:()=>pt(EID.cave,100)}],
   onDone(){startQuest('c9')}},
@@ -4923,13 +4923,13 @@ n9:{kind:'side',title:"I tesori dei Fuggiaschi",blurb:"Si dice che i vecchi abit
   onDone(){UI.dlg([D('hero',"Cinque casse. I vecchi fuggiaschi avevano più fiducia nel mare che nelle persone."),D('biscotto',"Cra! Ricchi! Quasi!")],()=>{gain('tela',3,P.x,P.y);gain('corda',4,P.x,P.y-20);S.phats=S.phats||{};const m=PHATS.find(h=>!S.phats[h.id]);if(m){S.phats[m.id]=1;UI.banner('Cappellino per il pappagallo',m.n)}})}},
 n8:{kind:'side',title:"Il diario di J.",blurb:"Quattro pagine sparse, strappate, della stessa mano.",avail:()=>!!S.q.c3||(C().pages||0)>0,
   goals:[{k:'flag',done:()=>(C().pages||0)>=4,txt:()=>"Trova le pagine del diario ("+(C().pages||0)+"/4)",hint:"Sono nascoste in quattro punti lontani dell'isola: brillano di giorno e di notte.",mark:()=>{const e=nearestE(['loot'],l=>l.kind===11&&!l.got);return pt(e,50)}}],
-  onDone(){UI.dlg([D('hero',"J. è Giacomo Marrone, il capitano della Sirena. Lo stesso J. delle bottiglie dell'isola dove sono approdato."),D('hero',"Non era un naufrago: ha lasciato un segnale per chi sarebbe arrivato dopo."),D('biscotto',"Cra! Un segnale! Per noi!")])}}
+  onDone(){UI.dlg([D('hero',"Le pagine confermano tutto: Giacomo Marrone, capitano della Sirena. Lo stesso J. delle bottiglie dell'isola dove sono approdato."),D('hero',"Ferro lo conosceva. Ha cancellato i nomi che non gli servivano, e si è tenuto la nave."),D('hero',"Non era un naufrago: ha lasciato un segnale per chi sarebbe arrivato dopo."),D('biscotto',"Cra! Un segnale! Per noi!")])}}
 });
 /* ---------- consegne e dialoghi con i personaggi ---------- */
 dlvH('ferro','c4',0,C2COST.prova,"Consegna il carico di Ferro","Hai il carico?",()=>{
   UI.dlg([D('ferro',"Dieci tronchi. Sei pietre. Tre pesci. Contati."),D('ferro',"Resti. Alle mie condizioni.")],()=>{Ch2.addTrust('ferro',2);C().ch.prova=1;checkAll()})});
-Ch2.QH.push({w:'ferro',active:()=>qAct('c6',0),label:()=>"Chiedi della nave",run(){
-  UI.dlg([D('hero',"Ferro, ho visto dei pezzi di fasciame in giro. C'è una nave?"),D('ferro',"C'è. In una cala a sud-est. Senza albero, senza timone, senza vele."),D('ferro',"Con tre pezzi e molto lavoro, si parte. Ci sono posti per pochi."),D('hero',"Quanti?"),D('ferro',"Quanti ne decido io."),D('ferro',"Vai a vederla. Poi torna.")],()=>{C().said.ship=1;checkAll()})}});
+Ch2.QH.push({w:'tito',active:()=>qAct('c6',0),ready:()=>true,label:()=>"Chiedi della cala a sud-est",run(){
+  UI.dlg([D('hero',"Tito, a Ferro si accendono gli occhi quando si parla di sud-est. Cosa c'è laggiù?"),D('tito',"Io non ti ho detto niente. Io non ci sono."),D('tito',"...C'è una nave. In una cala, tra gli scogli. Ferro dice che l'ha trovata già così, senza albero, senza timone e senza vele."),D('tito',"Io c'ero, quando è arrivata. Non è arrivata rotta. E non è arrivata da sola."),D('tito',"Vai a vederla. Ma non dire a Ferro che te l'ho detto.")],()=>{C().said.ship=1;Ch2.addTrust('tito',1);checkAll()})}});
 Ch2.QH.push({w:'tito',active:()=>qAct('c8',1),ready:()=>true,label:()=>"Chiedi del timone",run(){
   UI.dlg([D('hero',"Tito, il timone della nave. Sai dov'è?"),D('tito',"Io? Non so niente. Non ero lì... "),D('tito',"...Va bene. Lo so. Ferro l'ha nascosto nella grotta a sud-ovest, quella con il muschio. Ha detto «per sicurezza»."),D('tito',"Ma non è sicurezza. È che il timone è il modo di decidere chi parte. Ci vuole una torcia, dentro è buio pesto.")],()=>{C().said.rudder=1;Ch2.addTrust('tito',1);checkAll()})}});
 dlvH('nives','c9',1,C2COST.vele,"Consegna il materiale per le vele","Le vele?",()=>{
@@ -5249,7 +5249,7 @@ Ch2.ending=function(k){
   const L={
     ferro:[D('hero',"All'alba, la nave lascia la cala con Ferro al timone. Il cielo è pulito. Ogni ordine, eseguito."),D('hero',"Sulla riva, tre sagome immobili. Nives alza una mano. Non la abbassa finché non spariamo."),D('ferro',"Si sopravvive con la disciplina. Il resto sono storie."),D('hero',"Guardo la riva finché non diventa una linea. Una nave in ordine. Un campo vuoto.")],
     ferro2:[D('hero',"All'alba, la nave lascia la cala con Ferro al timone. Sulla riva, tre sagome immobili. Nives alza una mano."),D('hero',"Poi, un barile si muove. Ne esce Tito, rosso fino alle orecchie."),D('tito',"Io non c'ero. Non ero lì. Ma adesso sono qui."),D('ferro',"Alle corde."),D('hero',"È la cosa più vicina a una concessione che Ferro abbia mai fatto. Tito sorride come un sole."),D('hero',"Una nave quasi in ordine. Un campo quasi vuoto.")],
-    all:[D('hero',"Alle prime luci, il ponte è pieno: Nives con il martello, Gnocco con il pentolone, Tito arrampicato sulle sartie."),D('ferro',"Un ponte pieno. Non l'avevo mai visto. Conto uno a uno."),D('ferro',"...Alle vele."),D('nives',"Hai sentito? Ha detto «alle vele» e non «silenzio». È un record."),D('gnocco',"Brodo per tutti. Oggi, doppio sale."),D('hero',"La baia si allontana. Nessuno è rimasto a riva.")],
+    all:[D('hero',"Alle prime luci, il ponte è pieno: Nives con il martello, Gnocco con il pentolone, Tito arrampicato sulle sartie."),D('ferro',"Un ponte pieno. Non l'avevo mai visto. Conto uno a uno."),D('ferro',"...Alle vele."),D('nives',"Hai sentito? Ha detto «alle vele» e non «silenzio». È un record."),D('gnocco',"Brodo per tutti. Oggi, doppio sale."),D('hero',"La baia si allontana. Nessuno è rimasto a riva."),D('nives',"Quando arriviamo, voglio un'officina vera. Con un tetto che non perde."),D('gnocco',"Io voglio una cucina grande, e un mercato dove il sale costi poco."),D('tito',"Io voglio vedere dove finisce il mare. Poi decido il resto."),D('hero',"Ognuno ha un desiderio. Il mare, per ora, è abbastanza grande per tutti.")],
     fire:[D('hero',"All'alba, la nave è pronta con tutti a bordo, tranne uno."),D('ferro',"Una nave piena di indisciplinati non arriverà lontano."),D('hero',"Ferro resta sulla riva con la torcia in mano. La lascia cadere sul campo: le tende, la bancarella, la bandiera. Il fuoco sale."),D('nives',"Perché?!"),D('ferro',"Così nessuno tornerà."),D('hero',"Salpiamo con il fuoco alle spalle. Nives non gli rivolgerà più la parola. Gnocco cucinerà in silenzio, per giorni.")],
     solo:[D('hero',"Nel buio, uno dopo l'altro, taglio gli ormeggi. La nave scivola via come se avesse aspettato questo da sempre."),D('hero',"Sulla riva, una sola luce: Ferro, con la lanterna. Non grida. Alza la lanterna una volta. Poi la spegne."),D('biscotto',"Cra... non ci voleva."),D('hero',(c.pages||0)>=4?"Sul fondo del timone ho scritto le parole di Giacomo: «Cerca la stella bassa a ovest». È dove andrò.":"Davanti a me, il mare. Dietro, tutto il resto.")]
   }[k];
@@ -5318,7 +5318,7 @@ Ch2.onBegin=function(){
   if(EID.nave)EID.nave.spr=c.parts.yard?'shipFix':'wreck2';
   if(!S.q.c1){
     setTimeout(()=>{UI.banner('Capitolo 2','La Baia dei Fuggiaschi');
-      UI.dlg([D('hero',"Mi sveglio con la faccia nella sabbia. Un'altra spiaggia, un altro mare."),D('hero',"Alle spalle, il fumo di ieri. Davanti, una baia, e tende tra gli alberi. Ma ho la gola secca."),D('biscotto',"Cra! Acqua! Poi tutto il resto!")],()=>startQuest('c1'))},400);
+      UI.dlg([D('hero',"Mi sveglio con la faccia nella sabbia. Un'altra spiaggia, un altro mare."),D('hero',"Alle spalle, il fumo di ieri. Davanti, una baia, e tende tra gli alberi."),D('hero',"Su una duna, a pochi passi, una sagoma. Un uomo con le braccia incrociate, fermo, che mi guarda. Sbatto le palpebre e non c'è più."),D('biscotto',"Cra! Visto! Non visto! Prima acqua, poi tutto il resto!")],()=>startQuest('c1'))},400);
   }
 };
 
@@ -5488,6 +5488,16 @@ Story.parrotTalk=function(){
   else{pool=ok.filter(t=>t.id!==S.lastTalk);if(!pool.length)pool=ok}              // già sentite tutte: a caso, senza ripetere l'ultima
   return Story.parrotLines(pool[(Math.random()*pool.length)|0]);
 };
+/* Biscotto sente le casse dei Fuggiaschi: indica la direzione di quella più vicina ancora chiusa */
+TALK.push({id:'tre',pri:6,ok:()=>WORLD===2&&typeof qDone==='function'&&qDone('c5')&&(C().tre||0)<5,
+  get l(){
+    const nm={lt_hill:'sulla collina a nord-est',lt_isleA:"sull'isoletta a nord-ovest",lt_isleB:"sull'isoletta a sud-ovest",lt_isleC:"sull'isoletta a sud-est",lt_isleD:"sull'isoletta a nord-est"};
+    let best=null,bd=1e9;
+    for(const id in nm){const e=EID[id];if(!e||e.got)continue;const d=hyp(e.x-P.x,e.y-P.y);if(d<bd){bd=d;best=id}}
+    if(!best)return[['b',"Cra! Niente casse. Cra!"],['h',"Allora le ho trovate tutte."]];
+    const raft=best!=='lt_hill'?" Serve la zattera, cra!":" A piedi, cra!";
+    return[['h',"Biscotto, c'è qualche cassa ancora chiusa?"],['b',"Cra! Una! "+nm[best].charAt(0).toUpperCase()+nm[best].slice(1)+"!"+raft],['h',"Segnata. Apro la mappa grande per ritrovarla."]]
+  }});
 Story.parrotLines=function(t){
   S.said[t.id]=1;S.lastTalk=t.id;sfx('cra');PAR.hop=.5;
   UI.dlg(t.l.map(([w,x])=>D(w==='b'?'biscotto':'hero',x)));
@@ -5798,15 +5808,20 @@ function rollFish(){
 /* ---- reliquie dell'equipaggio del Cormorano, nascoste sull'isola ---- */
 const RELICS=[
   {id:'lt_rare1',n:"Medaglione del mozzo",pos:[31,14],kind:2,h:"Sulla spiaggia a nord.",gain:[['pietra',2],['coco',2]],
+   w:"Pietro «Pip» Lanza, mozzo, quattordici anni",f:"vivo",x:"Sul laccio c'è ancora la sabbia asciutta, e accanto ci sono impronte piccole che portano verso il fumo, a est. Pip è vivo. Credo.",
    t:"Un medaglione di ottone, ancora appeso al suo laccio. Dietro, scalfito con la punta di un coltello: «Torna presto». Lo tengo io."},
   {id:'lt_rare2',n:"Pipa del nostromo",pos:[13,29],kind:3,h:"Sulla punta a ovest.",gain:[['corda',2],['legna',3]],
+   w:"Baldo Corsi, nostromo",f:"morto",x:"Era posata sopra un mucchietto di sassi, come una lapide. Baldo non ce l'ha fatta. Ma qualcuno l'ha seppellito: non era solo.",
    t:"La pipa del nostromo, intagliata a forma di ancora. Sa ancora di tabacco e di mare."},
   {id:'lt_rare3',n:"Sestante del cartografo",pos:[13,45],kind:0,h:"Sulla costa a sud-ovest, oltre il relitto.",gain:[['rottami',3]],
+   w:"Ottavio Serra, cartografo",f:"disperso",x:"Dentro la custodia, un biglietto: «Vado a cercare il fumo. Se non torno, la mappa è giusta». Di Ottavio, nessun'altra traccia.",
    t:"Il sestante del cartografo: la lente è incrinata ma l'ago è preciso. Con questo, la mappa di questa parte dell'isola diventa chiara.",
    fx:()=>revealAll(4,34,32,54)},
   {id:'lt_rare4',n:"Campanella del Cormorano",pos:[50,30],kind:1,h:"Nell'entroterra, verso est.",gain:[['pietra',3],['rottami',2]],
+   w:"Renzo Villa, timoniere",f:"disperso",x:"La corda è tagliata di netto, non strappata. Qualcuno l'ha staccata di proposito. Renzo era l'ultimo al timone.",
    t:"La campanella di bordo. La scuoto piano: suona ancora, un suono limpido che si sente lontano."},
   {id:'lt_rare5',n:"Cucchiaio d'argento del cuoco",pos:[47,22],kind:2,h:"A nord-est, lontano dalla riva.",gain:[['coco',3],['pesce',2]],
+   w:"Teo «Dodo» Fiore, cuoco di bordo",f:"vivo",x:"È lucido, appena strofinato: non è rimasto qui da giorni. Dodo è vivo, e ha ancora un motivo per tenerlo pulito.",
    t:"Un cucchiaio d'argento: forse l'unica cosa elegante a bordo. Il cuoco lo nascondeva bene."}
 ];
 const relicCount=()=>Object.keys((S&&S.rare)||{}).length;
@@ -5841,8 +5856,8 @@ Extra.onRare=function(e){
   if(r.fx)r.fx();
   addXp(12);
   const n=relicCount();
-  UI.dlg([D('hero',r.t)],()=>{
-    UI.banner('Reliquia trovata',r.n+'\n'+n+'/'+RELICS.length);sfx('relic');
+  UI.dlg([D('hero',r.t),D('hero',r.w+'.'),D('hero',r.x)],()=>{
+    UI.banner('Reliquia trovata',r.n+'\n'+r.w.split(',')[0]+': '+r.f+'\n'+n+'/'+RELICS.length);sfx('relic');
     if(n>=RELICS.length)Extra.relicsDone();
     UI.syncObj();checkAll();
   });
@@ -5851,7 +5866,7 @@ Extra.relicsDone=function(){
   if(S.flags.relicsAll)return;
   S.flags.relicsAll=1;addXp(60);revealAll(0,0,MW-1,MH-1);
   setTimeout(()=>UI.dlg([
-    D('hero',"Cinque oggetti, cinque nomi. Il Cormorano aveva un equipaggio, e adesso so chi erano."),
+    D('hero',"Cinque oggetti, cinque nomi. Due vivi, un morto sepolto da qualcuno, due dispersi."),D('hero',"Qualcuno, là fuori, sta ancora tenendo in vita il Cormorano. E io so da che parte guardare: est."),
     D('biscotto',"Cra! Tesori! Tutti! Bravo, Capitano!"),
     D('hero',"Con il sestante e i loro segni, la mappa dell'isola ora è completa.")
   ]),1800);
@@ -5971,7 +5986,7 @@ Extra.collectionHtml=function(){
   S.rec=S.rec||{};h+='<h3>Ricettario · '+Object.keys(S.rec).length+'/'+RECIPES.length+'</h3>'+RECIPES.map(r=>S.rec[r.id]?'<div class="qc"><h4><span>'+uEsc(r.n)+'</span><em>x'+S.rec[r.id]+'</em></h4><div class="bl">'+uEsc(r.d)+'</div></div>':'<div class="qc"><h4><span>???</span></h4><div class="bl">Indizio: cuoci al falò con '+Object.keys(r.cost).map(k=>RNAME[k].toLowerCase()).join(', ')+'.</div></div>').join('');
   h+='<h3>Reliquie del Cormorano · '+relicCount()+'/'+RELICS.length+'</h3>';
   h+=RELICS.map(r=>S.rare[r.id]
-    ?'<div class="qc"><h4><span>'+uEsc(r.n)+'</span><svg class="ic"><use href="#i-check"/></svg></h4><div class="bl">'+uEsc(r.t)+'</div></div>'
+    ?'<div class="qc"><h4><span>'+uEsc(r.n)+'</span><svg class="ic"><use href="#i-check"/></svg></h4><div class="bl">'+uEsc(r.t)+'</div><div class="bl"><b>'+uEsc(r.w)+'</b> · '+uEsc(r.f.charAt(0).toUpperCase()+r.f.slice(1))+'. '+uEsc(r.x)+'</div></div>'
     :'<div class="qc"><h4><span>???</span></h4><div class="bl">Indizio: '+uEsc(r.h)+'</div></div>').join('');
   return h;
 };
