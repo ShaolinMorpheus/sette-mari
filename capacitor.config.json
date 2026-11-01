@@ -3,5 +3,12 @@
   "appName": "Sette Mari",
   "webDir": "www",
   "backgroundColor": "#0b2a44",
-  "android": { "allowMixedContent": false }
+  "android": {
+    "allowMixedContent": false
+  },
+  "server": {
+    "url": "https://settemarigame.netlify.app",
+    "cleartext": false,
+    "errorPath": "offline.html"
+  }
 }
