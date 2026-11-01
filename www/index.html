@@ -6917,7 +6917,9 @@ const JS={id:null,ox:0,oy:0,tap:null};
 const JR=46;            // raggio di corsa del joystick (px)
 function joyShow(on,x,y){
   const j=$('joy');j.hidden=!on;
-  if(on){j.style.left=x+'px';j.style.top=y+'px'}
+  const g=$('joyGhost');
+  if(on){j.style.left=x+'px';j.style.top=y+'px';g.style.opacity='0'}
+  else{g.style.opacity='';const l=joyShow.last;if(l){g.style.right='auto';g.style.bottom='auto';g.style.left=l[0]+'px';g.style.top=l[1]+'px';g.style.margin='-52px 0 0 -52px'}}   // il cerchio-guida resta dove hai toccato l'ultima volta
 }
 function joyKnob(dx,dy){$('joyKnob').style.transform='translate('+dx+'px,'+dy+'px)'}
 function joyReset(){JS.id=null;JS.tap=null;JOY.x=JOY.y=0;joyShow(false);joyKnob(0,0)}
@@ -6942,8 +6944,8 @@ function initInput(){
     const[x,y]=cvPt(e);
     if(JS.id==null&&!JS.tap&&parrotHit(x,y)){JS.tap={id:e.pointerId,x,y};try{cv.setPointerCapture(e.pointerId)}catch(_){}return}
     if(ctrlMode()!=='joy'||JS.id!=null||JS.tap)return;
-    if(lefty()?x>VW*.56:x<VW*.44)return;
-    JS.id=e.pointerId;JS.ox=x;JS.oy=y;
+    if(lefty()?x>VW*.5:x<VW*.5)return;
+    JS.id=e.pointerId;JS.ox=x;JS.oy=y;joyShow.last=[x,y];
     try{cv.setPointerCapture(e.pointerId)}catch(_){}
     joyShow(true,x,y);joyKnob(0,0);
   });
@@ -6953,8 +6955,8 @@ function initInput(){
       const q0=cvPt(e);
       if(hyp(q0[0]-JS.tap.x,q0[1]-JS.tap.y)<14)return;
       const t=JS.tap;JS.tap=null;
-      if(ctrlMode()!=='joy'||(lefty()?t.x>VW*.56:t.x<VW*.44))return;
-      JS.id=t.id;JS.ox=t.x;JS.oy=t.y;joyShow(true,t.x,t.y);joyKnob(0,0);
+      if(ctrlMode()!=='joy'||(lefty()?t.x>VW*.5:t.x<VW*.5))return;
+      JS.id=t.id;JS.ox=t.x;JS.oy=t.y;joyShow.last=[t.x,t.y];joyShow(true,t.x,t.y);joyKnob(0,0);
     }
     if(e.pointerId!==JS.id)return;
     const q=cvPt(e),dx=q[0]-JS.ox,dy=q[1]-JS.oy,d=hyp(dx,dy);
