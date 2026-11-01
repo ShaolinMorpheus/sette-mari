@@ -6713,7 +6713,9 @@ function introCard(){
   $('introTxt').innerHTML='<em>'+c[0]+'</em>'+uEsc(c[1])+'<small>Tocca per continuare</small>';
 }
 UI.intro=function(done){
-  Object.assign(INTRO,{on:true,step:0,t:0,cal:0,done,th:false});introCard();uShow('intro',true);
+  Object.assign(INTRO,{on:true,step:0,t:0,cal:0,done,th:false,maxH:0});uShow('intro',true);
+  {const keep=INTRO.step;for(let i=0;i<INTRO_CARDS.length;i++){INTRO.step=i;introCard();INTRO.maxH=Math.max(INTRO.maxH,$('introTxt').offsetHeight)}INTRO.step=keep}   // la nave ha sempre la stessa grandezza in tutte le vignette
+  introCard();
   const c=$('introCv'),d=Math.min(window.devicePixelRatio||1,1.6);c.width=Math.round(c.clientWidth*d);c.height=Math.round(c.clientHeight*d);
   $('intro').onclick=UI.introNext;
 };
@@ -6747,7 +6749,7 @@ function drawIntro(t){
   for(let l=0;l<3;l++)wave(l,true);
   const spr=INTRO.step>=2?SP.wreck:SP.shipOur;
   if(spr){
-    const tx=$('introTxt'),dd=c.width/(c.clientWidth||c.width),cardTop=(tx&&tx.offsetHeight&&!$('intro').hidden)?tx.offsetTop*dd-10*dd:H;   // la nave resta sopra il riquadro del testo
+    const tx=$('introTxt'),dd=c.width/(c.clientWidth||c.width),cardTop=(tx&&tx.offsetHeight&&!$('intro').hidden)?(tx.offsetTop+tx.offsetHeight-Math.max(INTRO.maxH||0,tx.offsetHeight))*dd-10*dd:H;   // la nave resta sopra il riquadro del testo
     const sy0=hy+H*.07,sc=Math.min(W/430*.7,H/330*.62,Math.max(.2,cardTop-8*dd-sy0)/((spr.h-spr.ay)*1.1)),sx=W*.5+Math.sin(t*.7)*10*amp;   // lo scafo resta sempre nell'acqua, sotto l'orizzonte
     const sy=Math.max(sy0,Math.min(hy+H*.18,cardTop-(spr.h-spr.ay)*sc-10*dd))+Math.sin(t*1.2)*7*amp;
     g.save();g.translate(sx,sy);g.rotate(Math.sin(t*1.05)*.2*amp-(INTRO.step>=2?.08:0));drawSp(g,spr,0,0,sc);g.restore();
