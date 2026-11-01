@@ -55,6 +55,17 @@ jobs:
               super.onWindowFocusChanged(focus);
               if (focus) hideBars();
             }
+            @Override
+            public void onPause() {
+              super.onPause();
+              try { getBridge().getWebView().onPause(); getBridge().getWebView().pauseTimers(); } catch (Exception e) { }
+            }
+            @Override
+            public void onResume() {
+              super.onResume();
+              try { getBridge().getWebView().onResume(); getBridge().getWebView().resumeTimers(); } catch (Exception e) { }
+              hideBars();
+            }
             private void hideBars() {
               WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
               WindowInsetsControllerCompat c = new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());

@@ -67,7 +67,7 @@ button{font-family:inherit;color:inherit}
 /* joystick */
 #joyGhost{display:none;position:absolute;right:calc(var(--gr) + 26px);bottom:calc(22px + var(--sb));width:104px;height:104px;border-radius:50%;border:3px dashed rgba(255,255,255,.28);background:radial-gradient(circle,rgba(255,255,255,.09),rgba(255,255,255,.02))}
 body[data-ctrl=tank] #joyGhost{display:none}
-#joy{position:absolute;right:calc(var(--gr) + 14px);bottom:calc(10px + var(--sb));width:128px;height:128px;margin:0;touch-action:none;pointer-events:none;transition:background .15s,border-color .15s;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05))}
+#joy{position:absolute;right:calc(var(--gr) + 52px);bottom:calc(10px + var(--sb));width:128px;height:128px;margin:0;touch-action:none;pointer-events:none;transition:background .15s,border-color .15s;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05))}
 #joyKnob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#d8e6ee 60%,#a8bcc8);border:2px solid rgba(40,60,70,.7);box-shadow:0 3px 8px rgba(0,0,0,.4)}
 /* azione */
 #ctr{position:absolute;left:var(--gl);bottom:calc(12px + var(--sb));display:flex;flex-direction:row-reverse;align-items:flex-end;gap:10px}
@@ -93,7 +93,7 @@ body[data-ctrl=tank] #ctr{bottom:calc(104px + var(--sb))}
 .tk{width:76px;height:76px;border-radius:20px;border:3px solid var(--wood-d);background:linear-gradient(180deg,#f6e7be,#d4b070);color:var(--wood-d);display:grid;place-items:center;box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.55);touch-action:none;padding:0}
 .tk .ic{width:36px;height:36px}
 .tk.on{background:linear-gradient(180deg,#ffe58a,#e8aa24)}
-body[data-hand=left] #joy{right:auto;left:calc(var(--gl) + 14px)}
+body[data-hand=left] #joy{right:auto;left:calc(var(--gl) + 52px)}
 body[data-ctrl=tank] #joy{display:none}
 #joy.on{border-color:rgba(255,255,255,.85);background:radial-gradient(circle,rgba(255,255,255,.26),rgba(255,255,255,.08))}
 body[data-hand=left] #joyGhost{right:auto;left:calc(var(--gl) + 26px)}
@@ -163,6 +163,8 @@ body.rot{--gl:6px;--gr:6px;--st:0px;--sb:0px}   /* telefono in verticale: il gio
 .card .sm{font-size:13px;opacity:.8;font-weight:700}
 .costs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 6px}
 .cost{display:flex;align-items:center;gap:5px;padding:4px 9px 4px 6px;border-radius:999px;background:rgba(110,70,36,.18);border:2px solid rgba(110,70,36,.45);font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
+.cost[data-k]{cursor:pointer}
+.whr{margin:2px 0 8px;padding:6px 10px;border-radius:10px;background:rgba(255,248,220,.9);border:2px solid rgba(110,70,36,.45);font-size:13px;font-weight:700;line-height:1.3;text-align:left;color:var(--ink)}
 .cost.ok{background:rgba(90,166,63,.22);border-color:#4c8a34}
 .cost.no{background:rgba(226,86,58,.18);border-color:#c0452e;color:#8a2210}
 .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
@@ -2184,7 +2186,7 @@ function genWorld(){
   // piazzole di costruzione
   for(const id in FIX.plots){const f=FIX.plots[id];
     const e=ent({id:'plot_'+id,type:'plot',pid:id,x:(f.tx+f.w/2)*TS,y:(f.ty+f.h)*TS-2,tx:f.tx,ty:f.ty,tw:f.w,th:f.h,st:0,prog:0});
-    addBlock(e,f.tx,f.ty,f.w,f.h);
+    addBlock(e,f.tx,f.ty,f.w,f.h);delBlock(e);      // la piazzola vuota si attraversa; diventa solida solo quando è costruita
   }
   // il pappagallo selvatico: l'albero su cui si posa viene scelto a ogni nuova partita (Story.placeParrot)
   ent({id:'wparrot',type:'wparrot',x:-999,y:-999,alt:90,got:false});
@@ -2378,7 +2380,7 @@ function genWorld2(){
   // piazzole di costruzione
   for(const id in FIX.plots){const f=FIX.plots[id];
     const e=ent({id:'plot_'+id,type:'plot',pid:id,x:(f.tx+f.w/2)*TS,y:(f.ty+f.h)*TS-2,tx:f.tx,ty:f.ty,tw:f.w,th:f.h,st:0,prog:0});
-    addBlock(e,f.tx,f.ty,f.w,f.h);
+    addBlock(e,f.tx,f.ty,f.w,f.h);delBlock(e);
   }
   ent({id:'wparrot',type:'wparrot',x:-999,y:-999,alt:90,got:false});
   ent({id:'mraft',type:'mraft',x:-999,y:-999,hd:0});
@@ -2653,6 +2655,7 @@ function stepSound(){
 /* ====== STATO DI GIOCO, GIOCATORE, SOPRAVVIVENZA, AZIONI ====== */
 const RES=['legna','pietra','corda','tela','rottami','coco','bacche','molluschi','pesce','arrosto'];
 const MATS=['legna','pietra','corda','tela','rottami'],FOODS=['arrosto','molluschi','bacche','coco','pesce'];
+const RWHERE={legna:"Si ottiene tagliando gli alberi con l'accetta: pini e palme sull'isola.",pietra:"Si ottiene spaccando le rocce e i massi con il piccone, sulla spiaggia e nelle zone rocciose.",corda:"Si raccoglie dai cespugli di fibre (tasto «Raccogli»), e si trova nelle casse arenate e tra i relitti.",tela:"Si recupera dai pezzi di vela e dai relitti, e nelle casse più preziose.",rottami:"Si trovano tra i detriti sulla spiaggia, vicino ai relitti e nelle casse arenate.",coco:"Si scuotono dalle palme con il pulsante «Scuoti».",bacche:"Si raccolgono dai cespugli di bacche nel bosco.",molluschi:"Si raccolgono nelle pozze di scogliera vicino al mare («Raccogli molluschi»).",pesce:"Si pesca in riva al mare, dopo aver costruito la lenza.",arrosto:"Si cucina il pesce crudo sul falò."};
 const RNAME={legna:'Legna',pietra:'Pietra',corda:'Corda',tela:'Tela di vela',rottami:'Rottami',coco:'Noci di cocco',bacche:'Bacche',molluschi:'Molluschi',pesce:'Pesce crudo',arrosto:'Pesce arrosto'};
 const FOOD={arrosto:{h:38,t:0,n:'pesce arrosto'},pesce:{h:14,t:0,n:'pesce crudo'},molluschi:{h:15,t:0,n:'molluschi'},bacche:{h:11,t:5,n:'bacche'},coco:{h:12,t:18,n:'una noce di cocco'}};
 const SAVEKEY='sette-mari-e-mezzo-s1-v2',SLOTK='sette-mari-slot';
@@ -3037,18 +3040,22 @@ function finishAct0(a){
       const n=S.res.pesce;if(n>0){S.res.pesce=0;S.res.arrosto+=n;sfx('ok');float(P.x,P.y-60,'+'+n+' Pesce arrosto','#ffe0a0');U.sync();Story.onCook(n)}
       break}
     case'build':{
-      const p=e;p.st=2;p.prog=1;S.built[p.pid]=1;S.stat.built++;applyBuilt(p);sfx('ok');sparkBurst(p.x,p.y-40,26);
+      const p=e;p.st=2;p.prog=1;S.built[p.pid]=1;S.stat.built++;applyBuilt(p);plotEject(p);sfx('ok');sparkBurst(p.x,p.y-40,26);
       for(let i=0;i<6;i++)chips(p.x+rnd(-30,30),p.y-10,3,'dust');
       Story.onBuild(p.pid);break}
   }
   saveGame();
 }
-function applyBuilt(p){}
+function applyBuilt(p){reBlock(p)}      // la costruzione finita è solida
+function inPlot(p){if(!p.fp)return false;const px=Math.floor(P.x/TS),py=Math.floor(P.y/TS);return px>=p.fp[0]&&px<p.fp[0]+p.fp[2]&&py>=p.fp[1]&&py<p.fp[1]+p.fp[3]}
+function plotEject(p){   // se il giocatore è dentro l'area appena costruita, lo porta sul bordo più vicino
+  if(!inPlot(p))return;const c=standCandidates(p);if(!c.length)return;
+  c.sort((a,b)=>hyp(a[0]+.5-P.x/TS,a[1]+.5-P.y/TS)-hyp(b[0]+.5-P.x/TS,b[1]+.5-P.y/TS));P.x=(c[0][0]+.5)*TS;P.y=(c[0][1]+.5)*TS}
 function startBuild(p){
   if(P.act)cancelAct();
   p.st=Math.max(p.st,1);
   const mk=()=>{P.act={e:p,kind:'build',t:0,dur:3.8*(1-p.prog)+.4,hits:0,tool:'hammer',per:.5,done:0,startProg:p.prog};P.tool='hammer'};
-  if(reachOK(p)){faceTo(p);mk()}
+  if(reachOK(p)&&!inPlot(p)){faceTo(p);mk()}
   else{goInteract2(p,mk)}
 }
 function startCook(f){
@@ -4347,6 +4354,12 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.6",d:"30 ott 2026",t:"Capitolo 2: La Baia dei Fuggiaschi",n:[
+    "Audio: quando metti l'app in background il suono si ferma, e riparte quando torni nel gioco.",
+    "Teaser iniziale: la nave resta sempre visibile sopra il riquadro del testo.",
+    "Piazzole di costruzione (falò, capanna, zattera…): si attraversano a piedi; diventano solide solo a costruzione finita. Se premi «Costruisci» stando sopra, il personaggio si sposta davanti e poi costruisce.",
+    "Toccando un materiale mancante (per esempio la corda) nei costi di costruzione e dei miglioramenti, compare dove trovarlo. Lo stesso toccando le risorse in alto.",
+    "Joystick spostato un po' verso il centro.",
+    "Le due battute del capitano all'inizio ora escono dopo il tutorial, senza coprire le istruzioni.",
     "Joystick fisso: sta sempre nello stesso punto e non si sposta più sotto il dito; si illumina quando lo usi.",
     "Tutorial: il joystick e il pulsante di interazione si illuminano e hanno una manina che li indica. Se salti il tutorial, la manina indica il joystick finché non ti muovi.",
     "«Capitolo 1» compare solo dopo il tutorial (finito o saltato).",
@@ -4565,7 +4578,7 @@ Ch2.decor=function(deco){
 
 const QDEF={
 m1:{kind:'main',title:"Sulla sabbia",blurb:"La tempesta è finita. Sei ancora qui.",
-  onStart(){UI.dlg([D('hero',"Sabbia. Sale in bocca. Il mare che va e viene, come se niente fosse."),D('hero',"Sono vivo. Il resto può aspettare un minuto.")])},
+  onStart(){},      // le due battute iniziali escono a fine tutorial (UI.tutEnd), per non coprire le istruzioni
   goals:[{k:'flag',done:()=>!!S.flags.moved,txt:()=>"Alzati e cammina: trascina il joystick a "+mvSide(),hint:()=>"Metti il pollice sul cerchio del joystick, a "+mvSide()+", e trascina."}],
   onDone(){UI.dlg([D('hero',"Il Cormorano è là, a pezzi. Frugherò tra i resti più tardi: la gola brucia."),D('hero',"L'acqua del mare non si beve. Serve un ruscello, un laghetto. Verso l'interno.")],()=>startQuest('m2'))}},
 m2:{kind:'main',title:"Acqua dolce",blurb:"Senza acqua non si arriva a domani.",
@@ -6247,8 +6260,16 @@ $('dlgBox').onclick=()=>UI.dlgAdvance();
 
 /* ---- costruzioni ---- */
 function costHtml(cost){
-  return'<div class="costs">'+Object.keys(cost).map(k=>{const have=S.res[k]||0,ok=have>=cost[k];return'<span class="cost '+(ok?'ok':'no')+'"><svg class="ic"><use href="#i-'+k+'"/></svg>'+have+'/'+cost[k]+'</span>'}).join('')+'</div>';
+  return'<div class="costs">'+Object.keys(cost).map(k=>{const have=S.res[k]||0,ok=have>=cost[k];return'<span class="cost '+(ok?'ok':'no')+'" data-k="'+k+'"><svg class="ic"><use href="#i-'+k+'"/></svg>'+have+'/'+cost[k]+'</span>'}).join('')+'</div>';
 }
+document.addEventListener('click',e=>{
+  const c=e.target.closest&&e.target.closest('.cost[data-k]');if(!c||!S)return;
+  const k=c.dataset.k,box=c.closest('.costs');if(!box)return;
+  const par=box.parentNode;par.querySelectorAll('.whr').forEach(x=>x.remove());
+  const d=document.createElement('div');d.className='whr';const b=document.createElement('b');b.textContent=RNAME[k]+': ';d.appendChild(b);d.appendChild(document.createTextNode(RWHERE[k]||''));
+  box.insertAdjacentElement('afterend',d);sfx('tap');
+});
+document.addEventListener('click',e=>{const c=e.target.closest&&e.target.closest('#res .chip');if(c&&S&&c.dataset.r)UI.toast(RNAME[c.dataset.r]+': '+(RWHERE[c.dataset.r]||''),3600)});
 function closeSheet(){uShow('sheet',false)}
 function sheetFor(h,wire){
   const c=$('sheetCard');c.innerHTML=h;uShow('sheet',true);
@@ -6702,7 +6723,9 @@ function drawIntro(t){
   for(let l=0;l<3;l++)wave(l,true);
   const spr=INTRO.step>=2?SP.wreck:SP.shipOur;
   if(spr){
-    const sc=Math.min(W/430*.7,H/330*.62),sx=W*.5+Math.sin(t*.7)*10*amp,sy=hy+H*.18+Math.sin(t*1.2)*9*amp;
+    const tx=$('introTxt'),dd=c.width/(c.clientWidth||c.width),cardTop=(tx&&tx.offsetHeight&&!$('intro').hidden)?tx.offsetTop*dd-10*dd:H;   // la nave resta sopra il riquadro del testo
+    const sc=Math.min(W/430*.7,H/330*.62,Math.max(.2,cardTop-8*dd)/(spr.h*1.22)),sx=W*.5+Math.sin(t*.7)*10*amp;let sy=hy+H*.18+Math.sin(t*1.2)*9*amp;
+    {const bot=sy+(spr.h-spr.ay)*sc+10*dd;if(bot>cardTop)sy-=bot-cardTop}
     g.save();g.translate(sx,sy);g.rotate(Math.sin(t*1.05)*.2*amp-(INTRO.step>=2?.08:0));drawSp(g,spr,0,0,sc);g.restore();
   }
   for(let l=3;l<6;l++)wave(l,true);
@@ -6759,7 +6782,7 @@ UI.tutNext=function(){
 UI.tutSkip=function(){if(!S)return;S.tutDone=1;S.tut=null;UI.tutShow();UI.tutEnd(true);saveGame()};
 /* a tutorial finito o saltato: compare «Capitolo 1»; se si salta, una freccia indica il joystick finché non ci si muove */
 UI.tutEnd=function(skipped){
-  if(WORLD===1&&!S.flags.ch1b){S.flags.ch1b=1;setTimeout(()=>UI.banner('Capitolo 1','Naufrago'),500)}
+  if(WORLD===1&&!S.flags.ch1b){S.flags.ch1b=1;setTimeout(()=>UI.banner('Capitolo 1','Naufrago'),500);setTimeout(()=>{if(!UI.dlgOpen())UI.dlg([D('hero',"Sabbia. Sale in bocca. Il mare che va e viene, come se niente fosse."),D('hero',"Sono vivo. Il resto può aspettare un minuto.")])},4200)}
   if(skipped&&!S.flags.moved){
     const j=$('joy');j.classList.add('tutHi','tutPt');const t0=performance.now();
     const iv=setInterval(()=>{if(S.flags.moved||performance.now()-t0>12000||!j.classList.contains('tutPt')){clearInterval(iv);j.classList.remove('tutHi','tutPt')}},400);
@@ -7138,7 +7161,11 @@ async function boot(){
   $('loading').hidden=true;
   requestAnimationFrame(frame);
 }
-document.addEventListener('visibilitychange',()=>{if(document.hidden)saveGame()});
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden){saveGame();try{if(AU.ctx&&AU.ctx.state==='running')AU.ctx.suspend()}catch(_){}}      // app in background: niente audio
+  else{try{if(AU.ctx&&AU.ctx.state==='suspended')AU.ctx.resume()}catch(_){}}
+});
+addEventListener('pagehide',()=>{try{if(AU.ctx&&AU.ctx.state==='running')AU.ctx.suspend()}catch(_){}});
 window.addEventListener('pagehide',saveGame);window.addEventListener('beforeunload',saveGame);
 window.Pirati={
   get S(){return S},P,E,EID,cam,UI,Story,QDEF,PAR,FIX,JOY,TANK,FOG,
