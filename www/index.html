@@ -65,7 +65,7 @@ button{font-family:inherit;color:inherit}
 #clock{display:flex;align-items:center;gap:5px;padding:5px 10px;font-weight:800;font-size:12.5px;font-variant-numeric:tabular-nums;height:30px}
 #mini{position:absolute;right:var(--gr);top:calc(5px + var(--st));width:132px;height:132px;display:block;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
 /* joystick */
-#joyGhost{position:absolute;right:calc(var(--gr) + 56px);bottom:calc(22px + var(--sb));width:104px;height:104px;border-radius:50%;border:3px dashed rgba(255,255,255,.28);background:radial-gradient(circle,rgba(255,255,255,.09),rgba(255,255,255,.02))}
+#joyGhost{position:absolute;right:calc(var(--gr) + 136px);bottom:calc(72px + var(--sb));width:104px;height:104px;border-radius:50%;border:3px dashed rgba(255,255,255,.28);background:radial-gradient(circle,rgba(255,255,255,.09),rgba(255,255,255,.02))}
 body[data-ctrl=tank] #joyGhost{display:none}
 #joy{position:absolute;width:128px;height:128px;margin:-64px 0 0 -64px;pointer-events:none;border-radius:50%;border:3px solid rgba(255,255,255,.55);background:radial-gradient(circle,rgba(255,255,255,.16),rgba(255,255,255,.05))}
 #joyKnob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#d8e6ee 60%,#a8bcc8);border:2px solid rgba(40,60,70,.7);box-shadow:0 3px 8px rgba(0,0,0,.4)}
@@ -93,7 +93,7 @@ body[data-ctrl=tank] #ctr{bottom:calc(104px + var(--sb))}
 .tk{width:76px;height:76px;border-radius:20px;border:3px solid var(--wood-d);background:linear-gradient(180deg,#f6e7be,#d4b070);color:var(--wood-d);display:grid;place-items:center;box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 2px 0 rgba(255,255,255,.55);touch-action:none;padding:0}
 .tk .ic{width:36px;height:36px}
 .tk.on{background:linear-gradient(180deg,#ffe58a,#e8aa24)}
-body[data-hand=left] #joyGhost{right:auto;left:calc(var(--gl) + 56px)}
+body[data-hand=left] #joyGhost{right:auto;left:calc(var(--gl) + 136px)}
 body[data-hand=left] #ctr{left:auto;right:var(--gr);flex-direction:row}
 body[data-hand=left] #tkL{right:auto;left:var(--gl)}
 body[data-hand=left] #tkR{left:auto;right:var(--gr)}
@@ -2158,7 +2158,7 @@ function genWorld(){
   // decorazioni fisse
   const deco=(id,spr,x,y,fp,o)=>{const e=ent(Object.assign({id,type:'deco',spr,x:x*TS,y:y*TS},o||{}));if(fp)addBlock(e,fp[0],fp[1],fp[2],fp[3]);return e};
   deco('mesa','mesa',MESA.x,MESA.y+MESA.ry*.92,null,{nohit:1});
-  const w=FIX.wreck;deco('wreck','wreck',w[0],w[1],[17,48,7,2],{k:.86,hitw:200,hith:120,label:'Il relitto del Cormorano',inter:'look'});
+  const w=FIX.wreck;deco('wreck','wreck',w[0],w[1],[18,48,5,2],{k:.86,hitw:200,hith:120,label:'Il relitto del Cormorano',inter:'look'});
   deco('feedback','sign',FIX.sign[0],FIX.sign[1],[Math.floor(FIX.sign[0]),Math.floor(FIX.sign[1]),1,1],{k:.9,hitw:64,hith:84,label:'Cartello dei capitani',inter:'sign'});
   deco('oldcamp','oldcamp',FIX.oldcamp[0],FIX.oldcamp[1],[27,15,3,1],{nohit:1});
   deco('lookout','lookout',FIX.lookout[0],FIX.lookout[1],[Math.floor(FIX.lookout[0]),Math.floor(FIX.lookout[1]),1,1],{k:.95,hitw:90,hith:160,inter:'climb',label:'Il Pino Alto'});
@@ -2172,7 +2172,7 @@ function genWorld(){
   RELICS.forEach(r=>lootE(r.id,r.kind,[r.pos[0]+.5,r.pos[1]+.5],'Qualcosa che luccica'));
   // relitto: barili e casse
   [[16.6,47.1,'barrel0'],[21.4,46.3,'barrel1'],[23.4,45.7,'crate'],[18.6,47.0,'coil'],[13.7,49.3,'barrel0']].forEach((p,i)=>{
-    const t=Math.floor(p[0]),u=Math.floor(p[1]);deco('rw'+i,p[2],p[0],p[1],p[2]==='coil'?null:[t,u,1,1],{nohit:1})});
+    const t=Math.floor(p[0]),u=Math.floor(p[1]-.2);deco('rw'+i,p[2],p[0],p[1],p[2]==='coil'?null:[t,u,1,1],{nohit:1})});
   // granchi
   for(let i=0;i<9;i++){const s=sand[((r()*sand.length)|0)];ent({id:'cr'+i,type:'crab',x:(s[0]+.5)*TS,y:(s[1]+.7)*TS,hx:(s[0]+.5)*TS,vx:0,ph:r()*6.28,t:r()*5})}
   // casse sparse per la mappa (una sola volta ciascuna)
@@ -3975,6 +3975,17 @@ function drawMini(){
       g.fillStyle=m==='!'?'#ffd23a':'#fff';g.strokeStyle='#2a1a0e';g.lineWidth=1.6;g.beginPath();g.arc(x,y,6,0,7);g.fill();g.stroke();g.fillStyle='#2a1a0e';g.font='800 10px Nunito,Arial,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(m,x,y+.5)}}
   }
   // la zattera: simbolo piccolo; se è lontana, resta sul bordo della minimappa e indica la direzione
+  for(const pid of['falo','banco','capanna']){   // le costruzioni finite compaiono sulla minimappa
+    const pe=EID['plot_'+pid];if(!pe||pe.st!==2||!pe.fp)continue;
+    let bx=mxw((pe.fp[0]+pe.fp[2]/2)*TS),by=myw((pe.fp[1]+pe.fp[3]/2)*TS);const dd=hyp(bx-cxm,by-cym),lim=R-9;
+    if(dd>lim){bx=cxm+(bx-cxm)/dd*lim;by=cym+(by-cym)/dd*lim}
+    g.save();g.translate(bx,by);g.globalAlpha=dd>lim?.85:1;
+    g.fillStyle='rgba(40,24,12,.9)';g.strokeStyle='#ffe9b0';g.lineWidth=1.6;g.beginPath();g.arc(0,0,7,0,7);g.fill();g.stroke();
+    if(pid==='falo'){g.fillStyle='#ff9a2a';g.beginPath();g.moveTo(0,-5);g.quadraticCurveTo(5,0,2.5,4);g.lineTo(-2.5,4);g.quadraticCurveTo(-5,0,0,-5);g.fill();g.fillStyle='#ffe27a';g.beginPath();g.ellipse(0,2,1.5,2.4,0,0,7);g.fill()}
+    else if(pid==='capanna'){g.fillStyle='#ffe9b0';g.beginPath();g.moveTo(-5,0);g.lineTo(0,-5);g.lineTo(5,0);g.closePath();g.fill();g.fillStyle='#c98a4a';g.fillRect(-3.4,0,6.8,4.6);g.fillStyle='#3a2410';g.fillRect(-1,1.6,2,3)}
+    else{g.fillStyle='#e0b070';g.fillRect(-5,-1.5,10,2.4);g.fillStyle='#8a5a2a';g.fillRect(-4,.9,1.8,4);g.fillRect(2.2,.9,1.8,4);g.fillStyle='#d8d8d8';g.fillRect(-2,-4.6,1.8,3.2);g.fillRect(-3,-4.8,3.8,1.6)}
+    g.restore();
+  }
   const rp=raftPos();
   if(rp){
     let rx=mxw(rp.x),ry=myw(rp.y);const dd=hyp(rx-cxm,ry-cym),lim=R-9;
@@ -4351,6 +4362,10 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.6",d:"30 ott 2026",t:"Capitolo 2: La Baia dei Fuggiaschi",n:[
+    "Copia di sicurezza: «Salva file» ora apre il menu di condivisione di Android (Drive, File, Telegram, WhatsApp…) e salva davvero il file; su iPhone usa il menu Condividi.",
+    "Minimappa: falò, banco da lavoro e capanna, una volta costruiti, hanno ciascuno il proprio simbolo.",
+    "Joystick (cerchio tratteggiato) spostato più al centro e più in alto.",
+    "Spiaggia del relitto: sistemati i muri invisibili. Il barile vicino al relitto bloccava la zona sotto di sé e lo scafo bloccava mezza tile oltre le estremità.",
     "Joystick di nuovo mobile (compare sotto il dito), con il cerchio sempre visibile un po' più verso il centro.",
     "Teaser iniziale: testi più piccoli e la nave resta nell'acqua.",
     "Aggiornamento dell'APK: ora l'app è firmata sempre con la stessa chiave, quindi si installa sopra la versione precedente.",
@@ -6008,7 +6023,7 @@ function openBackupImpl(){
   let code='Preparo il codice…';
   sheetFor('<h2>Copia di sicurezza</h2><p class="sm">Il salvataggio vive solo in questo browser. Copia il codice (o scarica il file) per ritrovare la tua partita su un altro telefono o con un altro link.</p>'
     +'<textarea id="bkTx" class="bkta" readonly></textarea>'
-    +'<div class="row"><button class="btn gold" id="bkCp">Copia</button><button class="btn" id="bkDl">Scarica file</button></div>'
+    +'<div class="row"><button class="btn gold" id="bkCp">Copia</button><button class="btn" id="bkDl">Salva file</button></div>'
     +'<h3>Ripristina</h3><textarea id="bkIn" class="bkta" placeholder="Incolla qui il codice"></textarea>'
     +'<input type="file" id="bkFile" accept=".txt,text/plain" style="margin:6px 0;max-width:100%">'
     +'<div class="row"><button class="btn" id="bkGo">Ripristina</button><button class="btn" id="shNo">Chiudi</button></div><p id="bkSt" class="sm"></p>',c=>{
@@ -6016,14 +6031,23 @@ function openBackupImpl(){
       tx.value=code;Extra.exportCode2().then(c2=>{code=c2;tx.value=c2});
       c.querySelector('#bkCp').onclick=async()=>{
         try{await navigator.clipboard.writeText(code);st.textContent='Codice copiato.'}
-        catch(_){tx.focus();tx.select();st.textContent='Seleziona il testo e copialo a mano.'}
+        catch(_){tx.focus();tx.select();try{document.execCommand('copy');st.textContent='Codice copiato.'}catch(__){st.textContent='Seleziona il testo e copialo a mano.'}}
       };
-      c.querySelector('#bkDl').onclick=()=>{
-        try{
+      c.querySelector('#bkDl').onclick=async()=>{
+        const name='sette-mari-salvataggio.txt',C=window.Capacitor,PL=C&&C.Plugins;
+        try{   // app Android: scrive il file e apre il menu «Condividi» (Salva su Drive/File, Telegram, WhatsApp…)
+          if(C&&C.isNativePlatform&&C.isNativePlatform()&&PL&&PL.Filesystem&&PL.Share){
+            const r=await PL.Filesystem.writeFile({path:name,data:code,directory:'CACHE',encoding:'utf8'});
+            try{await PL.Share.share({title:'Salvataggio Sette Mari',text:'Salvataggio di Sette Mari',files:[r.uri],dialogTitle:'Salva o invia il file'})}
+            catch(e){if(!/cancel/i.test(String(e&&e.message||e)))await PL.Share.share({title:'Salvataggio Sette Mari',text:code,dialogTitle:'Salva o invia il codice'})}
+            st.textContent='Scegli dove salvarlo (per esempio Drive o File) o a chi inviarlo.';return;
+          }
+          const f=new File([code],name,{type:'text/plain'});
+          if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Salvataggio Sette Mari'});st.textContent='Scegli dove salvarlo.';return}catch(e){if(e&&e.name==='AbortError')return}}
           const a=document.createElement('a'),b=new Blob([code],{type:'text/plain'});
-          a.href=URL.createObjectURL(b);a.download='sette-mari-salvataggio.txt';document.body.appendChild(a);a.click();a.remove();
+          a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();
           st.textContent='File scaricato (se il browser lo consente). In alternativa copia il codice.';
-        }catch(_){st.textContent='Download non disponibile: copia il codice.'}
+        }catch(_){st.textContent='Non riesco a salvare il file: copia il codice.'}
       };
       c.querySelector('#bkFile').onchange=e=>{
         const f=e.target.files&&e.target.files[0];if(!f)return;
@@ -7197,6 +7221,7 @@ window.Pirati={
   },
   AU,auThunder,dockSpot,forestF,exclTile,WORLD,Ch2,startContinue,newState,saveKey,elev,WL,boxFree,smallAt(x,y){return smallT[tIdx(x,y)]},
   boxFree:(x,y,rx,ry)=>boxFree(x,y,rx,ry),
+  toScreen:(x,y)=>toScreen(x,y),get VW(){return VW},get VH(){return VH},
   tileInfo(x,y){return{walk:walkT[tIdx(x,y)],block:blockT[tIdx(x,y)],sea:seaT[tIdx(x,y)],e:elevT[tIdx(x,y)],free:freeT(x,y)}}
 };
 (function(){
