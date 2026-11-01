@@ -3968,8 +3968,7 @@ function drawMini(){
   }
   const mxw=t=>cxm+(t/TS-pxt)*k,myw=t=>cym+(t/TS-pyt)*k;
   for(const e of E){
-    if(e.type==='plot'&&e.st<2&&e.pid!=='zattera'){g.fillStyle='rgba(255,226,120,.95)';g.fillRect(mxw((e.fp[0]+e.fp[2]/2)*TS)-2,myw((e.fp[1]+e.fp[3]/2)*TS)-2,4,4)}
-    else if(e.type==='plot'&&e.pid==='zattera'&&e.st<2&&!e.away&&FOG[tIdx(e.fp[0],e.fp[1])]){g.fillStyle='#ffd23a';g.fillRect(mxw((e.fp[0]+e.fp[2]/2)*TS)-2.5,myw((e.fp[1]+e.fp[3]/2)*TS)-2.5,5,5)}
+    if(e.type==='plot'&&e.pid==='zattera'&&e.st<2&&!e.away&&FOG[tIdx(e.fp[0],e.fp[1])]){g.fillStyle='#ffd23a';g.fillRect(mxw((e.fp[0]+e.fp[2]/2)*TS)-2.5,myw((e.fp[1]+e.fp[3]/2)*TS)-2.5,5,5)}
     else if(e.type==='bottle'&&!e.got&&S.flags.sawBottle&&FOG[tIdx(e.tx,e.ty)]){g.fillStyle='#fff';g.fillRect(mxw(e.x)-1.5,myw(e.y)-1.5,3,3)}
     else if(e.type==='npc'&&WORLD===2){const m=Ch2.npcMark(e);if(m){let x=mxw(e.x),y=myw(e.y);const dd=hyp(x-cxm,y-cym),lim=R-9;if(dd>lim){x=cxm+(x-cxm)/dd*lim;y=cym+(y-cym)/dd*lim}
       g.fillStyle=m==='!'?'#ffd23a':'#fff';g.strokeStyle='#2a1a0e';g.lineWidth=1.6;g.beginPath();g.arc(x,y,6,0,7);g.fill();g.stroke();g.fillStyle='#2a1a0e';g.font='800 10px Nunito,Arial,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(m,x,y+.5)}}
@@ -4301,7 +4300,7 @@ const hullSp=()=>S&&S.up&&S.up.hull?SP.raftHull2:SP.raftHull,sailSp=()=>S&&S.up&
 /* ---- 10_data.js ---- */
 /* ====== DATI: costruzioni, miglioramenti, capitoli, registro modifiche ====== */
 const PLOTS={
-  falo:{name:"Falò",desc:"Un fuoco per cuocere il pesce, scaldarti la notte e farti vedere da lontano.",cost:{legna:6},req:[],needFlag:'flint',needText:"Ti serve qualcosa per accendere il fuoco. Cerca nel relitto."},
+  falo:{name:"Falò",desc:"Un fuoco per cuocere il pesce, scaldarti la notte e farti vedere da lontano.",cost:{legna:6},req:[],needFlag:'flint',needText:"Ti serve un acciarino per accendere il fuoco. Cercalo nel barile del nostromo, sulla sabbia all'estremità est del relitto."},
   capanna:{name:"Capanna",desc:"Un tetto di legno e foglie. Dentro puoi dormire fino al mattino.",cost:{legna:10,corda:3},req:["falo"],reqText:"Costruisci prima il Falò."},
   banco:{name:"Banco da lavoro",desc:"Qui puoi migliorare i tuoi attrezzi con quello che trovi.",cost:{legna:8,pietra:4},req:["capanna"],reqText:"Costruisci prima la Capanna."},
   zattera:{name:"Zattera",desc:"Tronchi legati con la corda e una vela ricavata dal Cormorano. Basta per attraversare il mare, se non incontri scogli.",cost:{tela:1,legna:20,corda:6,rottami:4},req:[],needFlag:'lookout',needText:"Prima scopri dove andare: sali sul Pino Alto."}
@@ -4366,6 +4365,8 @@ const CHANGELOG=[
     "Minimappa: falò, banco da lavoro e capanna, una volta costruiti, hanno ciascuno il proprio simbolo.",
     "Joystick (cerchio tratteggiato) spostato più al centro e più in alto.",
     "Spiaggia del relitto: sistemati i muri invisibili. Il barile vicino al relitto bloccava la zona sotto di sé e lo scafo bloccava mezza tile oltre le estremità.",
+    "Minimappa: i quadratini gialli delle piazzole non si vedono più prima della costruzione.",
+    "Falò: il suggerimento ora dice dove trovare l'acciarino (barile del nostromo, all'estremità est del relitto).",
     "Joystick di nuovo mobile (compare sotto il dito), con il cerchio sempre visibile un po' più verso il centro.",
     "Teaser iniziale: testi più piccoli e la nave resta nell'acqua.",
     "Aggiornamento dell'APK: ora l'app è firmata sempre con la stessa chiave, quindi si installa sopra la versione precedente.",
@@ -4605,7 +4606,7 @@ m3:{kind:'main',title:"Qualcosa da mangiare",blurb:"Una noce di cocco, due bacch
    {k:'flag',done:()=>!!S.flags.ate,txt:"Mangia qualcosa (pulsante Mangia)",hint:"Il pulsante «Mangia» è in basso, accanto al pulsante giallo. Puoi anche toccare la barra della fame."}],
   onDone(){UI.dlg([D('hero',"Non è un banchetto, ma regge."),D('hero',"Ora il relitto. Se c'è ancora qualcosa di utile, è sulla spiaggia.")],()=>startQuest('m4'))}},
 m4:{kind:'main',title:"Cosa resta del Cormorano",blurb:"Una nave rotta è anche un magazzino, se sai dove cercare.",
-  goals:[{k:'flag',done:()=>!!(S.flags.axe&&S.flags.flint),txt:()=>"Fruga tra i resti: casse e bauli sulla spiaggia ("+((S.flags.axe?1:0)+(S.flags.flint?1:0))+"/2 trovati)",hint:"Il relitto è sulla spiaggia a sud-ovest. Vicino ci sono una cassa del carpentiere e un baule del nostromo.",
+  goals:[{k:'flag',done:()=>!!(S.flags.axe&&S.flags.flint),txt:()=>"Fruga tra i resti: casse e bauli sulla spiaggia ("+((S.flags.axe?1:0)+(S.flags.flint?1:0))+"/2 trovati)",hint:"Il relitto è sulla spiaggia a sud-ovest. Vicino ci sono una cassa del carpentiere (ascia e piccone) e un barile del nostromo con l'acciarino, sulla sabbia all'estremità est del relitto.",
     mark:()=>{const c=nearestE(['loot'],e=>!e.got&&(e.id==='lt_tools'||e.id==='lt_flint'));return c?pt(c,70):pt(EID.wreck,100)}}],
   onDone(){UI.dlg([D('hero',"Un'ascia, un piccone, un acciarino. Non sarà molto. Ma con questo si può cominciare a lavorare.")],()=>startQuest('m5'))}},
 m5:{kind:'main',title:"Il primo fuoco",blurb:"Cuocere, scaldarsi, farsi vedere.",
