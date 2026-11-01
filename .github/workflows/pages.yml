@@ -24,6 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Numero di versione (l'app si ricarica da sola quando cambia)
+        run: |
+          sed -i "s/__BUILD__/${GITHUB_SHA}/" www/index.html
+          printf '%s' "${GITHUB_SHA}" > www/v.txt
       - uses: actions/upload-pages-artifact@v3
         with:
           path: www
