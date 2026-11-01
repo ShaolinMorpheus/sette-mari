@@ -7074,7 +7074,13 @@ UI.climb=function(e,dn,cb){
   P.cl={ph:dn?2:0,t:0,bx,by,dn:!!dn,cb,dy:dn?-120:0,a:dn?0:1};
   if(dn){P.x=bx;P.y=by}
 };
+function syncRaftSolid(){      // la piazzola della zattera è solida solo quando la zattera è lì (non quando è salpata o ormeggiata altrove)
+  const z=EID.plot_zattera;if(!z||z.st!==2||!z.fp)return;
+  if(z.away){if(z.blocked)delBlock(z)}
+  else if(!z.blocked){const f=z.fp,tx=Math.floor(P.x/TS),ty=Math.floor(P.y/TS);if(!(tx>=f[0]-1&&tx<=f[0]+f[2]&&ty>=f[1]-1&&ty<=f[1]+f[3]))reBlock(z)}
+}
 function step(dt){
+  syncRaftSolid();
   if(P.cl)updateClimb(dt);
   if(!dl.open){if(!P.cl)updatePlayer(dt);updateTime(dt);updateVitals(dt);updateWeather(dt);updateChallenge(dt);Story.tick(dt)}
   updateEnts(dt);updateFx(dt);updateParrot(dt,RT);updateAmb(dt);
