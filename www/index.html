@@ -4241,18 +4241,37 @@ function campTile(dx,dy){
   for(let r=-6;r<=6;r++)for(let q=-6;q<=6;q++){
     const tx=Math.floor(cx+dx+q),ty=Math.floor(cy+dy+r);
     if(!freeT(tx,ty)||seaT[tIdx(tx,ty)]||elevT[tIdx(tx,ty)]<WL+.1)continue;
-    if(tall.some(e=>hyp((e.tx!=null?e.tx+.5:e.x/TS)-(tx+.5),(e.ty!=null?e.ty+.5:e.y/TS)-(ty+.5))<(e.type==='plot'?2.2:1.7)))continue;
+    if(tall.some(e=>hyp((e.tx!=null?e.tx+.5:e.x/TS)-(tx+.5),(e.ty!=null?e.ty+.5:e.y/TS)-(ty+.5))<(e.type==='plot'?2.2:e.type==='cdeco'?2.6:1.7)))continue;
     const d=hyp(tx+.5-(cx+dx),ty+.5-(cy+dy));if(d<bd){bd=d;best=[tx,ty]}
   }
   return best;
 }
-function campAdd(k,tx,ty){const n=E.filter(e=>e.type==='cdeco').length;return ent({id:'cd'+n+k,type:'cdeco',k,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty})}
+function campAdd(k,tx,ty){let n=E.filter(e=>e.type==='cdeco').length;while(EID['cd'+n+k])n++;return ent({id:'cd'+n+k,type:'cdeco',k,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty})}
 function campBuild(d){
   S.camp=S.camp||[];const placed=[];
   for(const a of d.at){const t=campTile(a[0],a[1]);if(!t)break;campAdd(d.k,t[0],t[1]);S.camp.push({k:d.k,tx:t[0],ty:t[1]});placed.push(t)}
   return placed.length;
 }
-function campRestore(){for(const o of(S.camp||[]))campAdd(o.k,o.tx,o.ty)}
+function campRestore(){
+  for(const o of(S.camp||[]))campAdd(o.k,o.tx,o.ty);
+  // salvataggi vecchi: le lanterne troppo vicine al cartello si spostano, e arrivano le due in più
+  try{
+    const L=DECOR.find(d=>d.k==='lanterne'),cam=S.camp||[];
+    if(!cam.some(o=>o.k==='lanterne'))return;
+    const sign=cam.filter(o=>o.k==='cartello');
+    for(const o of cam.filter(o=>o.k==='lanterne')){
+      if(sign.some(sg=>hyp(sg.tx-o.tx,sg.ty-o.ty)<2.6)){
+        const e=E.find(x=>x.type==='cdeco'&&x.k==='lanterne'&&x.tx===o.tx&&x.ty===o.ty);
+        if(e){delete EID[e.id];E.splice(E.indexOf(e),1)}
+        S.camp.splice(S.camp.indexOf(o),1);
+        const t=campTile(L.at[2][0],L.at[2][1])||campTile(L.at[1][0]+1,L.at[1][1]+1);
+        if(t){campAdd('lanterne',t[0],t[1]);S.camp.push({k:'lanterne',tx:t[0],ty:t[1]})}
+      }
+    }
+    let n=S.camp.filter(o=>o.k==='lanterne').length;
+    for(let i=n;i<L.cnt&&i<L.at.length;i++){const t=campTile(L.at[i][0],L.at[i][1]);if(!t)break;campAdd('lanterne',t[0],t[1]);S.camp.push({k:'lanterne',tx:t[0],ty:t[1]})}
+  }catch(_){}
+}
 function campClear(){for(let i=E.length-1;i>=0;i--)if(E[i].type==='cdeco'){delete EID[E[i].id];E.splice(i,1)}}
 function drawCDeco(g,e,t){
   const x=e.x,y=e.y;g.save();g.translate(x,y);g.lineJoin='round';
@@ -4322,7 +4341,7 @@ function phatImg(id){
   try{_phi[id]=cv.toDataURL()}catch(e){_phi[id]=''}return _phi[id];
 }
 const DECOR=[
-  {k:'lanterne',n:"Lanterne",d:"Due lanterne attorno al campo: all'imbrunire fanno luce.",cost:{legna:2,rottami:2,corda:1},cnt:2,at:[[-3.2,2.4],[3.6,-1.4]]},
+  {k:'lanterne',n:"Lanterne",d:"Quattro lanterne attorno al campo: all'imbrunire fanno luce.",cost:{legna:3,rottami:3,corda:2},cnt:4,at:[[-3.2,2.4],[3.6,-1.4],[-3.8,-2.8],[2.4,5.0]]},
   {k:'bandiera',n:"Bandiera pirata",d:"Un alto palo con la bandiera nera e il teschio.",cost:{legna:3,corda:2,rottami:1},cnt:1,at:[[0,-5]]},
   {k:'tavolo',n:"Tavolo con panche",d:"Per mangiare come si deve, almeno una volta al giorno.",cost:{legna:8,corda:2},cnt:1,at:[[4.2,3.2]]},
   {k:'amaca',n:"Amaca",d:"Un pisolino di due ore quando vuoi (costa un po' di sete e fame).",cost:{legna:5,corda:5},cnt:1,at:[[-4.2,3.8]]},
@@ -4989,7 +5008,7 @@ Ch2.look=function(e){
     return true}
   if(e.id==='cave'){
     if(c.parts.rudder){UI.dlg([D('hero',"La grotta è vuota. Il timone è fuori, dove serve.")]);return true}
-    if(!qAct('c8',2)){UI.dlg([D('hero',"Una grotta buia, muschio sulle pietre. Meglio non entrare senza motivo."),D('hero',"Magari Tito sa qualcosa di questo posto.")]);return true}
+    if(!qAct('c8',2)){UI.dlg(c.met.tito?[D('hero',"Una grotta buia, muschio sulle pietre. Meglio non entrare senza motivo."),D('hero',"Magari Tito sa qualcosa di questo posto.")]:[D('hero',"Una grotta buia, muschio sulle pietre. Meglio non entrare senza motivo."),D('hero',"Chissà chi conosce questi posti. Prima conviene conoscere chi vive al campo.")]);return true}
     if(!(S.up.torch&&S.torchOn)){UI.dlg([D('hero',"Buio pesto... forse è meglio che accenda una torcia. Si costruisce al Banco e si accende col pulsante a fiamma.")]);return true}
     c.parts.rudder=1;c.ch.note=1;sfx('quest');
     UI.dlg([D('hero',"Il timone, avvolto in un telo cerato. E sopra, un biglietto con la grafia di Ferro."),D('hero',"«Otto posti. Tre nomi. Gli altri aspetteranno la prossima nave. — F.»"),D('hero',"«La prossima nave». Non ci sarà nessuna prossima nave."),D('hero',"Ferro non ha mai pensato di portarli tutti.")],()=>{checkAll()});return true}
@@ -5247,11 +5266,11 @@ Ch2.ending=function(k){
   if(k==='all'&&Ch2.tr('ferro')<5)k='fire';
   const P_=Ch2.pre();
   const L={
-    ferro:[D('hero',"All'alba, la nave lascia la cala con Ferro al timone. Il cielo è pulito. Ogni ordine, eseguito."),D('hero',"Sulla riva, tre sagome immobili. Nives alza una mano. Non la abbassa finché non spariamo."),D('ferro',"Si sopravvive con la disciplina. Il resto sono storie."),D('hero',"Guardo la riva finché non diventa una linea. Una nave in ordine. Un campo vuoto.")],
-    ferro2:[D('hero',"All'alba, la nave lascia la cala con Ferro al timone. Sulla riva, tre sagome immobili. Nives alza una mano."),D('hero',"Poi, un barile si muove. Ne esce Tito, rosso fino alle orecchie."),D('tito',"Io non c'ero. Non ero lì. Ma adesso sono qui."),D('ferro',"Alle corde."),D('hero',"È la cosa più vicina a una concessione che Ferro abbia mai fatto. Tito sorride come un sole."),D('hero',"Una nave quasi in ordine. Un campo quasi vuoto.")],
-    all:[D('hero',"Alle prime luci, il ponte è pieno: Nives con il martello, Gnocco con il pentolone, Tito arrampicato sulle sartie."),D('ferro',"Un ponte pieno. Non l'avevo mai visto. Conto uno a uno."),D('ferro',"...Alle vele."),D('nives',"Hai sentito? Ha detto «alle vele» e non «silenzio». È un record."),D('gnocco',"Brodo per tutti. Oggi, doppio sale."),D('hero',"La baia si allontana. Nessuno è rimasto a riva."),D('nives',"Quando arriviamo, voglio un'officina vera. Con un tetto che non perde."),D('gnocco',"Io voglio una cucina grande, e un mercato dove il sale costi poco."),D('tito',"Io voglio vedere dove finisce il mare. Poi decido il resto."),D('hero',"Ognuno ha un desiderio. Il mare, per ora, è abbastanza grande per tutti.")],
-    fire:[D('hero',"All'alba, la nave è pronta con tutti a bordo, tranne uno."),D('ferro',"Una nave piena di indisciplinati non arriverà lontano."),D('hero',"Ferro resta sulla riva con la torcia in mano. La lascia cadere sul campo: le tende, la bancarella, la bandiera. Il fuoco sale."),D('nives',"Perché?!"),D('ferro',"Così nessuno tornerà."),D('hero',"Salpiamo con il fuoco alle spalle. Nives non gli rivolgerà più la parola. Gnocco cucinerà in silenzio, per giorni.")],
-    solo:[D('hero',"Nel buio, uno dopo l'altro, taglio gli ormeggi. La nave scivola via come se avesse aspettato questo da sempre."),D('hero',"Sulla riva, una sola luce: Ferro, con la lanterna. Non grida. Alza la lanterna una volta. Poi la spegne."),D('biscotto',"Cra... non ci voleva."),D('hero',(c.pages||0)>=4?"Sul fondo del timone ho scritto le parole di Giacomo: «Cerca la stella bassa a ovest». È dove andrò.":"Davanti a me, il mare. Dietro, tutto il resto.")]
+    ferro:[D('hero',"All'alba, la nave lascia la cala con Ferro al timone. Il cielo è pulito. Ogni ordine, eseguito."),D('hero',"Sulla riva, tre sagome immobili. Nives alza una mano. Non la abbassa finché non spariamo."),D('ferro',"Si sopravvive con la disciplina. Il resto sono storie."),D('hero',"Guardo la riva finché non diventa una linea. Una nave in ordine. Un campo vuoto."),D('hero',"All'orizzonte, una vela che non conosco. Ferro la guarda come se l'aspettasse.")],
+    ferro2:[D('hero',"All'alba, la nave lascia la cala con Ferro al timone. Sulla riva, tre sagome immobili. Nives alza una mano."),D('hero',"Poi, un barile si muove. Ne esce Tito, rosso fino alle orecchie."),D('tito',"Io non c'ero. Non ero lì. Ma adesso sono qui."),D('ferro',"Alle corde."),D('hero',"È la cosa più vicina a una concessione che Ferro abbia mai fatto. Tito sorride come un sole."),D('hero',"Una nave quasi in ordine. Un campo quasi vuoto."),D('hero',"Tito dorme sulle corde. Sul ponte, Ferro finge di non vederlo.")],
+    all:[D('hero',"Alle prime luci, il ponte è pieno: Nives con il martello, Gnocco con il pentolone, Tito arrampicato sulle sartie."),D('ferro',"Un ponte pieno. Non l'avevo mai visto. Conto uno a uno."),D('ferro',"...Alle vele."),D('nives',"Hai sentito? Ha detto «alle vele» e non «silenzio». È un record."),D('gnocco',"Brodo per tutti. Oggi, doppio sale."),D('hero',"La baia si allontana. Nessuno è rimasto a riva."),D('nives',"Quando arriviamo, voglio un'officina vera. Con un tetto che non perde."),D('gnocco',"Io voglio una cucina grande, e un mercato dove il sale costi poco."),D('tito',"Io voglio vedere dove finisce il mare. Poi decido il resto."),D('hero',"Ognuno ha un desiderio. Il mare, per ora, è abbastanza grande per tutti."),D('hero',"Lontano, un convoglio carico d'argento. Qualcuno ha già un piano.")],
+    fire:[D('hero',"All'alba, la nave è pronta con tutti a bordo, tranne uno."),D('ferro',"Una nave piena di indisciplinati non arriverà lontano."),D('hero',"Ferro resta sulla riva con la torcia in mano. La lascia cadere sul campo: le tende, la bancarella, la bandiera. Il fuoco sale."),D('nives',"Perché?!"),D('ferro',"Così nessuno tornerà."),D('hero',"Salpiamo con il fuoco alle spalle. Nives non gli rivolgerà più la parola. Gnocco cucinerà in silenzio, per giorni."),D('hero',"Dietro di noi il fumo sale. Davanti, un mare che ci aspetta senza fretta.")],
+    solo:[D('hero',"Nel buio, uno dopo l'altro, taglio gli ormeggi. La nave scivola via come se avesse aspettato questo da sempre."),D('hero',"Sulla riva, una sola luce: Ferro, con la lanterna. Non grida. Alza la lanterna una volta. Poi la spegne."),D('biscotto',"Cra... non ci voleva."),D('hero',(c.pages||0)>=4?"Sul fondo del timone ho scritto le parole di Giacomo: «Cerca la stella bassa a ovest». È dove andrò.":"Davanti a me, il mare. Dietro, tutto il resto."),D('hero',"«Cerca la stella bassa a ovest.» Ho una nave, un pappagallo e nessun posto dove tornare.")]
   }[k];
   c.endings=c.endings||{};
   UI.dlg(L,()=>{c.endings[k]=1;S.flags.ch2end=k;sfx('quest');setTimeout(()=>Ch2.endCard(k),700);checkAll();saveGame()});
@@ -6798,7 +6817,7 @@ UI.tick=function(dt,t){
 /* ---- 12b_tutorial.js ---- */
 /* ====== TUTORIAL: pochi passaggi, evidenziando i comandi veri ====== */
 const TUT=[
-  {hi:['joyGhost'],pt:1,txt:()=>"Benvenuto, "+nomeP()+"! Per muoverti appoggia il pollice sul cerchio a "+mvSide()+" e trascinalo nella direzione in cui vuoi andare.",wait:()=>!!S.flags.moved},
+  {hi:['joyGhost'],pt:1,txt:()=>"Benvenuto, "+nomeP()+"! Per muoverti trascina il pollice nella metà "+mvSide()+" dello schermo: compare un joystick sotto il dito. Il cerchio indica più o meno dove.",wait:()=>!!S.flags.moved},
   {hi:['act'],pt:1,txt:()=>"Questo è il pulsante di interazione: cambia a seconda di ciò che hai vicino: «Raccogli», «Taglia», «Bevi»… Avvicinati a un oggetto e premilo.",wait:()=>!!S.flags.acted},
   {hi:['vit'],txt:()=>"Le barre in alto a sinistra sono sete e fame: scendono col tempo. Tocca una barra per bere o mangiare quello che hai con te."},
   {hi:['obj'],txt:()=>"Qui in alto c'è la missione di adesso: dice cosa fare e in che direzione. Toccala per aprire il diario."},
@@ -6934,10 +6953,6 @@ function joyShow(on,x,y){
   const j=$('joy');j.hidden=!on;
   if(on){j.style.left=x+'px';j.style.top=y+'px'}
 }
-function joyHome(){      // centro del cerchio-guida fisso, in coordinate del canvas
-  const r=$('joyGhost').getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,c=cv.getBoundingClientRect();
-  return document.body.classList.contains('rot')?[cy-c.top,c.right-cx]:[cx-c.left,cy-c.top];
-}
 function joyKnob(dx,dy){$('joyKnob').style.transform='translate('+dx+'px,'+dy+'px)'}
 function joyReset(){JS.id=null;JS.tap=null;JOY.x=JOY.y=0;joyShow(false);joyKnob(0,0)}
 const lefty=()=>!!S&&S.hand==='left';
@@ -6962,10 +6977,9 @@ function initInput(){
     if(JS.id==null&&!JS.tap&&parrotHit(x,y)){JS.tap={id:e.pointerId,x,y};try{cv.setPointerCapture(e.pointerId)}catch(_){}return}
     if(ctrlMode()!=='joy'||JS.id!=null||JS.tap)return;
     if(lefty()?x>VW*.5:x<VW*.5)return;
-    const hm=joyHome();if(hyp(x-hm[0],y-hm[1])>96)return;   // pad fisso: si parte toccando il cerchio
-    JS.id=e.pointerId;JS.ox=hm[0];JS.oy=hm[1];
+    JS.id=e.pointerId;JS.ox=x;JS.oy=y;
     try{cv.setPointerCapture(e.pointerId)}catch(_){}
-    joyShow(true,JS.ox,JS.oy);joyKnob(0,0);
+    joyShow(true,x,y);joyKnob(0,0);
   });
   cv.addEventListener('pointermove',e=>{
     if(JS.tap&&e.pointerId===JS.tap.id){
@@ -6974,12 +6988,12 @@ function initInput(){
       if(hyp(q0[0]-JS.tap.x,q0[1]-JS.tap.y)<14)return;
       const t=JS.tap;JS.tap=null;
       if(ctrlMode()!=='joy'||(lefty()?t.x>VW*.5:t.x<VW*.5))return;
-      const hm=joyHome();if(hyp(t.x-hm[0],t.y-hm[1])>96)return;
-      JS.id=t.id;JS.ox=hm[0];JS.oy=hm[1];joyShow(true,hm[0],hm[1]);joyKnob(0,0);
+      JS.id=t.id;JS.ox=t.x;JS.oy=t.y;joyShow(true,t.x,t.y);joyKnob(0,0);
     }
     if(e.pointerId!==JS.id)return;
     const q=cvPt(e),dx=q[0]-JS.ox,dy=q[1]-JS.oy,d=hyp(dx,dy);
        // la base segue il dito se lo trascini lontano
+    if(d>JR*1.7){const k=(d-JR*1.7);JS.ox+=dx/d*k;JS.oy+=dy/d*k;joyShow(true,JS.ox,JS.oy)}   // la base segue il dito se lo trascini lontano
     const dd=Math.min(d,JR);
     const nx=d?dx/d:0,ny=d?dy/d:0;
     joyKnob(nx*dd,ny*dd);
