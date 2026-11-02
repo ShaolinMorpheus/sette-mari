@@ -6680,7 +6680,9 @@ UI.openFeedback=function(){
 UI.setCtrl=function(m){
   if(S)S.ctrl=m;document.body.dataset.ctrl=m;JOY.x=JOY.y=0;TANK.f=TANK.t=0;if(UI.inputReset)UI.inputReset();
 };
-UI.setHand=function(h){
+const HANDK='sette-mari-hand';
+function handPref(){try{return localStorage.getItem(HANDK)==='left'?'left':'right'}catch(e){return'right'}}
+UI.setHand=function(h){try{localStorage.setItem(HANDK,h)}catch(e){}
   if(S)S.hand=h;document.body.dataset.hand=h;JOY.x=JOY.y=0;TANK.f=TANK.t=0;if(UI.inputReset)UI.inputReset();
 };
 const CTRL_TXT=()=>{const l=S&&S.hand==='left',j=ctrlMode()==='joy';return'Comandi: '+(j?'joystick a '+(l?'sinistra':'destra'):'pulsanti, azione a '+(l?'destra':'sinistra'))};
@@ -6709,7 +6711,7 @@ UI.openMenu=function(){
   c.innerHTML='<div class="mhd"><h2>Menu</h2><button class="mxb" id="mX" aria-label="Chiudi">✕</button></div><div class="mwr"><div class="mnav">'
    +tabs.map(t=>'<button class="mn" data-mn="'+t[0]+'" aria-selected="'+(UI._mt===t[0])+'"><i>'+t[1]+'</i>'+t[2]+'</button>').join('')
    +'</div><div class="mpn">'
-   +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca'))
+   +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra'))
    +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+T('mJ','📖','Diario e novità',null)+(WORLD===2?T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
    +(hasP?pnl('pp','<div class="mhd2">Pappagallo</div>'+T('mPn','🦜','Nome',pn('Biscotto')+' · tocca per rinominare')+(hasH?T('mPh',curH?'<img alt="" src="'+phatImg(curH.id)+'">':'🚫','Cappellino',curH?curH.n:'Nessuno'):'<p class="sm">Troverai dei cappellini per il pappagallo durante il viaggio.</p>')):'')
    +pnl('ai',T('mHow','❓','Come si gioca',null)+T('mTut','🧭','Tutorial',null))
@@ -6719,6 +6721,7 @@ UI.openMenu=function(){
   c.querySelector('#mMus').onclick=()=>{auInit();muSet(!AU.mus);S.music=AU.mus;setT('mMus',AU.mus?'🎵':'🔕',AU.mus?'accesa':'spenta');c.querySelector('#mMus').classList.toggle('on',!!AU.mus);saveGame()};
   c.querySelector('#mSnd').onclick=()=>{auInit();auSet(!AU.on);S.sound=AU.on;setT('mSnd',AU.on?'🔊':'🔇',AU.on?'accesi':'spenti');c.querySelector('#mSnd').classList.toggle('on',!!AU.on)};
   c.querySelector('#mFs').onclick=()=>UI.toggleFs({set textContent(v){setT('mFs','⛶',v)}});
+  c.querySelector('#mHand').onclick=()=>{const h=S.hand==='left'?'right':'left';UI.setHand(h);setT('mHand','🕹',h==='left'?'a sinistra':'a destra');UI.toast(h==='left'?'Joystick a sinistra, azione a destra.':'Joystick a destra, azione a sinistra.')};
   c.querySelector('#mUnl').onclick=e=>{UI.unlock();uShow('menu',false);UI.toast('Comandi sbloccati.')};
   c.querySelector('#mHow').onclick=()=>UI.showHow();
   {const m2=c.querySelector('#mC2');if(m2)m2.onclick=()=>{uShow('menu',false);Ch2.openStatus()}}
@@ -7088,7 +7091,7 @@ function beginGame(){
   S.live=true;window.__hero=S.hero;S.seen=S.seen||{};
   P.x=S.px;P.y=S.py;P.hd=S.hd||0;P.mode=S.mode||'walk';P.path=null;P.go=null;P.act=null;P.tool=null;P.rv=0;
   EID.plot_zattera.away=P.mode==='raft';placeMoored();
-  S.ctrl='joy';S.hand='right';document.body.dataset.ctrl='joy';document.body.dataset.hand='right';
+  S.ctrl='joy';S.hand=handPref();document.body.dataset.ctrl='joy';document.body.dataset.hand=S.hand;
   Story.placeParrot();
   cam.uz=1;cam.x=P.x;cam.y=P.y;camClamp();PAR.x=P.x-30;PAR.y=P.y;
   $('start').hidden=true;$('hud').hidden=false;syncPause();
@@ -7111,7 +7114,7 @@ function startContinue(nm,hero){
   const s=loadSave();if(!s)return;
   S=s;if(nm)S.name=nm;if(hero)S.hero=hero;S.hints=S.hints||{};S.up=Object.assign({axe:0,boots:0,flask:0,torch:0,rod:0,net:0},S.up);S.wx=S.wx||{k:'clear',t:300};if(S.pond==null)S.pond=100;S.flags=S.flags||{};S.built=S.built||{};S.q=S.q||{};
   S.res=Object.assign(emptyRes(),S.res);S.stat=Object.assign({chopped:0,stone:0,days:1,built:0,fish:0,forage:0,bottles:0},S.stat);
-  S.vit=Object.assign({t:58,h:70},S.vit);S.said=S.said||{};S.hand='right';S.ctrl='joy';if(S.flags.parrot&&!S.pname)S.pname='Biscotto';if(S.xpt==null)S.xpt=xpFromStats();
+  S.vit=Object.assign({t:58,h:70},S.vit);S.said=S.said||{};S.hand=handPref();S.ctrl='joy';if(S.flags.parrot&&!S.pname)S.pname='Biscotto';if(S.xpt==null)S.xpt=xpFromStats();
   for(const k in S.q)S.q[k].busy=false;
   fogFromStr(S.fog);applyEnts(S.es||{});Story.restore();campClear();campRestore();
   if(!S.flags.hat&&EID.lt_isle1&&EID.lt_isle1.got){S.flags.isle1=1;EID.lt_isle1.got=false}   // chi aveva già aperto la cassa può riaprirla per trovare il cappello
