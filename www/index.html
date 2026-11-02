@@ -536,7 +536,7 @@ function elev(x,y){
 }
 /* scogliera (altopiano roccioso) a nord-est */
 const MESA=WORLD===2?{x:72.5,y:15.6,rx:4.6,ry:2.9,h:80}:{x:49.5,y:16.6,rx:3.8,ry:2.4,h:66};
-const MESA_PTS=(function(){const r=mulberry(11),p=[];for(let i=0;i<22;i++){const a=i/22*Math.PI*2;const k=1+(r()-.5)*.26+Math.sin(a*3)*.06;p.push([MESA.x+Math.cos(a)*MESA.rx*k,MESA.y+Math.sin(a)*MESA.ry*k])}return p})();
+const MESA_PTS=WORLD===2?[]:(function(){const r=mulberry(11),p=[];for(let i=0;i<22;i++){const a=i/22*Math.PI*2;const k=1+(r()-.5)*.26+Math.sin(a*3)*.06;p.push([MESA.x+Math.cos(a)*MESA.rx*k,MESA.y+Math.sin(a)*MESA.ry*k])}return p})();
 function inPoly(px,py,P){let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const a=P[i],b=P[j];if((a[1]>py)!==(b[1]>py)&&px<(b[0]-a[0])*(py-a[1])/(b[1]-a[1])+a[0])c=!c}return c}
 
 /* griglia di camminata del terreno */
@@ -893,7 +893,7 @@ function initNatureSprites(){
   SP.rubble=mkRubble();
   SP.bush=[mkBush(true,0),mkBush(true,1),mkBush(true,2)];SP.bush0=mkBush(false,0);
   SP.stump=mkStump();SP.debris=mkDebris();SP.shell=[0,1,2].map(mkShell);
-  SP.mesa=mkMesa();
+  SP.mesa=MESA_PTS.length?mkMesa():null;
 }
 
 /* ---- 04_sprites_struct.js ---- */
@@ -2372,7 +2372,6 @@ function genWorld2(){
   rp.forEach((p,i)=>{const e=ent({id:'m'+i,type:'rockpool',x:(p[0]+.5)*TS,y:(p[1]+.8)*TS,tx:p[0],ty:p[1],ready:true,t:0});addBlock(e,p[0],p[1],1,1)});
   // decorazioni fisse
   const deco=(id,spr,x,y,fp,o)=>{const e=ent(Object.assign({id,type:'deco',spr,x:x*TS,y:y*TS},o||{}));if(fp)addBlock(e,fp[0],fp[1],fp[2],fp[3]);return e};
-  deco('mesa','mesa',MESA.x,MESA.y+MESA.ry*.92,null,{nohit:1});
   deco('feedback','sign',FIX.sign[0],FIX.sign[1],[Math.floor(FIX.sign[0]),Math.floor(FIX.sign[1]),1,1],{k:.9,hitw:64,hith:84,label:'Cartello dei capitani',inter:'sign'});
   deco('lookout','lookout',FIX.lookout[0],FIX.lookout[1],[Math.floor(FIX.lookout[0]),Math.floor(FIX.lookout[1]),1,1],{k:.95,hitw:90,hith:160,inter:'climb',label:'La vedetta'});
   // piazzole di costruzione
@@ -2751,7 +2750,7 @@ function stopMove(){P.path=null;P.go=null}
 function entBox(e){
   switch(e.type){
     case'tree':return[e.x-34,e.y-118,e.x+34,e.y+4];
-    case'pine':return[e.x-28,e.y-122,e.x+28,e.y+4];
+    case'pine':return e.id==='mast'?[e.x-48,e.y-214,e.x+48,e.y+4]:[e.x-28,e.y-122,e.x+28,e.y+4];
     case'palm':return[e.x-24,e.y-150,e.x+78,e.y+4];
     case'rock':return[e.x-36,e.y-54,e.x+36,e.y+6];
     case'bush':case'berry':return[e.x-30,e.y-44,e.x+30,e.y+6];
@@ -2949,6 +2948,7 @@ function startAct(e){
   switch(e.type){
     case'tree':case'pine':
       if(treeLocked(e)){UI.toast("Un pappagallo è appollaiato lassù: meglio non disturbarlo.");sfx('no');return}
+      if(e.id==='mast'&&!qAct('c7',0)){UI.dlg([D('hero',"Un pino enorme, il più alto di tutti. Non lo abbatto senza un buon motivo."),D('hero',"Se serve un albero maestro, prima devo sapere per cosa.")]);sfx('no');return}
       if(!S.flags.axe){UI.toast("Servirebbe un'ascia. Forse nel relitto.");sfx('no');return}
       mk('chop',0,e.id==='mast'?(S.up.axe?7:10):(S.up.axe?2:3),'axe');P.act.per=AXE_T/actSpeed();break;
     case'palm':if(!e.coco){UI.toast('Questa palma non ha più noci. Torna più tardi.');return}mk('shake',0,2,null);P.act.per=.55;break;
@@ -3563,7 +3563,7 @@ function drawTree(g,e,t){
   if(!e.alive&&(!e.fall||e.fall>=1)){drawSp(g,SP.stump,e.x,e.y+2);return}
   if(!e.alive){drawSp(g,SP.stump,e.x,e.y+2)}
   g.save();g.translate(e.x,e.y);
-  const k=e.alive?(.35+.65*e.grow):1;
+  const k=(e.alive?(.35+.65*e.grow):1)*(e.id==='mast'?1.75:1);
   if(e.alive){shadow(g,10*k,2,(isPine?24:32)*k,11*k,.26)}
   let al=1;
   if(!e.alive){const f=e.fall;g.rotate(f*f*1.5*(e.fdir||1));al=1-clamp((f-.55)/.45,0,1)}
@@ -4717,7 +4717,7 @@ Ch2.st=function(){
 Ch2.tr=w=>Ch2.st().trust[w]||0;
 Ch2.addTrust=function(w,n,quiet){
   const c=Ch2.st(),o=c.trust[w]||0,v=clamp(o+n,0,10);c.trust[w]=v;
-  if(v>o){const ne=EID['npc_'+w];if(ne&&S&&S.live)try{float(ne.x,ne.y-(CH[w].tall||1)*128,'♥'.repeat(Math.min(3,v-o)),'#ff6b8a')}catch(_){}}
+  if(v>o){const ne=EID['npc_'+w];if(ne&&S&&S.live)try{float(ne.x,ne.y-(CH[w].tall||1)*118,'♥'.repeat(Math.min(3,v-o)),'#ff6b8a')}catch(_){}}
   if(!quiet&&v!==o)UI.toast((v>o?'Fiducia di ':'Fiducia di ')+Ch2.NPC[w].n+(v>o?' +':' ')+(v-o)+' ('+v+'/10)');
   saveGame(true);
 };
@@ -4739,7 +4739,7 @@ function drawNpc(g,e,t){
 function npcLabel(g,e,near){   // nome del personaggio e cuori della fiducia
   if(hyp(P.x-e.x,P.y-e.y)>TS*9)return;
   const c=Ch2.st(),w=e.who,tr=c.met[w]?Ch2.tr(w):0,nm=Ch2.NPC[w].n,hs=Math.ceil(tr/2);
-  const y=e.y-(CH[w].tall||1)*110;
+  const y=e.y-(CH[w].tall||1)*(Ch2.npcMark(e)?104:90);
   g.save();g.font='800 12px Nunito,Arial,sans-serif';g.textBaseline='middle';g.lineJoin='round';
   const nw=g.measureText(nm).width,hw=hs?hs*11+4:0,x0=e.x-(nw+hw)/2;
   g.textAlign='left';g.lineWidth=3.2;g.strokeStyle='rgba(30,16,6,.85)';g.fillStyle='#fff6dc';
@@ -7219,6 +7219,24 @@ function initStart(){
   $('verTxt').textContent='Bozza v'+CHANGELOG[0].v+' · '+CHANGELOG[0].d;
   try{if(sessionStorage.getItem('sette-mari-auto')&&save){sessionStorage.removeItem('sette-mari-auto');startContinue('',null);saveGame()}}catch(_){}
 }
+function unhideLoot(){      // un baule non può stare dietro ad alberi, rocce o edifici: sarebbe invisibile
+  const occ=E.filter(o=>o.type==='tree'||o.type==='pine'||o.type==='palm'||o.type==='rock'||(o.type==='deco'&&o.fp&&o.fp[2]*o.fp[3]>=2));
+  const hid=l=>{const b=entBox(l);if(!b)return false;return occ.some(o=>{if(o.alive===false||o.y<=l.y)return false;const c=entBox(o);if(!c)return false;return c[0]<b[2]&&c[2]>b[0]&&c[1]<b[3]-6&&c[3]>b[1]+6})};
+  const loots=E.filter(e=>e.type==='loot');
+  for(const l of loots){
+    if(!hid(l))continue;
+    const ox=l.x,oy=l.y,tx0=Math.floor(l.x/TS),ty0=Math.floor(l.y/TS);let best=null,bd=1e9;
+    for(let R=1;R<=4&&!best;R++)for(let dy=-R;dy<=R;dy++)for(let dx=-R;dx<=R;dx++){
+      if(Math.max(Math.abs(dx),Math.abs(dy))!==R)continue;
+      const tx=tx0+dx,ty=ty0+dy;if(!freeT(tx,ty)||seaT[tIdx(tx,ty)])continue;
+      l.x=(tx+.5)*TS;l.y=(ty+.8)*TS;
+      if(hid(l)||loots.some(o=>o!==l&&hyp(o.x-l.x,o.y-l.y)<TS*1.1))continue;
+      const d=dx*dx+dy*dy;if(d<bd){bd=d;best=[tx,ty]}
+    }
+    l.x=ox;l.y=oy;
+    if(best){const had=l.blocked;if(had)delBlock(l);l.tx=best[0];l.ty=best[1];l.x=(best[0]+.5)*TS;l.y=(best[1]+.8)*TS;if(had)addBlock(l,best[0],best[1],1,1)}
+  }
+}
 function pruneUnreachable(){
   P.x=FIX.spawn[0]*TS;P.y=FIX.spawn[1]*TS;
   const[sx,sy]=playerTile(),bf=bfsFrom(sx,sy);let n=0;
@@ -7246,7 +7264,7 @@ async function boot(){
   setP(.08,'Disegno il mare…');await nextTick();
   await bakeGround(p=>setP(.08+.84*p));
   setP(.95,'Popolo l\'isola…');await nextTick();
-  genWorld();pruneUnreachable();
+  genWorld();pruneUnreachable();unhideLoot();
   S=newState('','m');cam.uz=.9;
   resize();window.addEventListener('resize',resize);window.addEventListener('orientationchange',()=>setTimeout(resize,250));
   initInput();initStart();syncPause();
@@ -7279,7 +7297,7 @@ window.Pirati={
   walkTo(x,y){return walkToTile(x,y)},
   reachable(x,y){const[sx,sy]=playerTile(),bf=bfsFrom(sx,sy);return bf.dist[tIdx(x,y)]>=0},
   standOK(e){const[sx,sy]=playerTile(),bf=bfsFrom(sx,sy);return standCandidates(e).some(c=>bf.dist[tIdx(c[0],c[1])]>=0)},
-  Extra,EX,RELICS,FISHES,rollFish,shelterNow,startNew,startContinue,saveGame,raftOK,WX,SC,PQ,STM,chalStart,scoutTargets,setWeather,strikeBolt,skyLight,moonK,toggleTorch,pondEmpty,torchHours,auMusicTick,AU,get sfx(){return sfx},get say(){return say},hint,drawShip,drawChar,CH,PAL_OUR,addXp,lvOf,
+  startAct,entBox,Extra,EX,RELICS,FISHES,rollFish,shelterNow,startNew,startContinue,saveGame,raftOK,WX,SC,PQ,STM,chalStart,scoutTargets,setWeather,strikeBolt,skyLight,moonK,toggleTorch,pondEmpty,torchHours,auMusicTick,AU,get sfx(){return sfx},get say(){return say},hint,drawShip,drawChar,CH,PAL_OUR,addXp,lvOf,
   get quality(){return QL},get paused(){return PAUSED},get dlgOpen(){return dl.open},get ready(){return !!(S&&WATERC&&E.length)},
   ground(){return WATERC&&LANDC?{w:WATERC.width,h:WATERC.height}:null},
   prev(){return GPREV?GPREV.toDataURL('image/png'):null},
