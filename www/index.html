@@ -3113,7 +3113,7 @@ function chips(x,y,n,kind){
 }
 function sparkBurst(x,y,n){for(let i=0;i<n;i++){const a=Math.random()*6.283,v=50+Math.random()*120;FXL.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-40,age:0,life:.7+Math.random()*.6,kind:'spark',r:rnd(2,5),rot:0,g:90})}}
 function logFly(x,y){FXL.parts.push({x,y,vx:0,vy:0,age:0,life:.7,kind:'log',r:1,rot:0,g:0,sx:x,sy:y})}
-function say(e,txt,dur){FXL.bubbles=FXL.bubbles.filter(b=>b.e!==e);FXL.bubbles.push({e,txt:pn(txt),t:0,dur:(dur||3.2)*(e===PAR?1.7:1)+(e===PAR?.8:0)})}
+function say(e,txt,dur){if(e&&e.type==='npc')dur=Math.max((dur||3.2)*2,7.5);FXL.bubbles=FXL.bubbles.filter(b=>b.e!==e);FXL.bubbles.push({e,txt:pn(txt),t:0,dur:(dur||3.2)*(e===PAR?1.7:1)+(e===PAR?.8:0)})}
 function hint(id){if(S&&!S.hints[id]&&U.hintFn){U.hintFn(id)}}
 
 /* ---- movimento ---- */
@@ -3805,12 +3805,12 @@ function drawScreenFx(g){
   g.font='700 13px Nunito,Arial,sans-serif';
   for(const b of FXL.bubbles){
     const e=b.e;
-    const wy=e.alt!=null?e.y-e.alt-26:e.y-(e===P?72:76)-8;const[sx,sy]=toScreen(e.x,wy);
+    const isN=e.type==='npc',wy=e.alt!=null?e.y-e.alt-26:isN?e.y-(CH[e.who].tall||1)*(Ch2.npcMark(e)?112:98)-6:e.y-(e===P?72:76)-8;const[sx,sy]=toScreen(e.x,wy);
     const lines=wrapText(g,b.txt,190),w=Math.max(...lines.map(l=>g.measureText(l).width))+20,h=lines.length*17+14;
     const a=clamp(Math.min(b.t*5,(b.dur-b.t)*4),0,1);
     g.globalAlpha=a;g.fillStyle='#fff8e2';g.strokeStyle='#4a2c18';g.lineWidth=2;
-    const x=clamp(sx-w/2,8,VW-w-8);let y=Math.max(8,sy-h-8),below=false;
-    if(bubbleHit(x,y,w,h)){below=true;y=Math.min(VH-h-8,sy+26)}   // sotto i riquadri in alto: il fumetto va sotto al personaggio
+    const x=isN?sx-w/2:clamp(sx-w/2,8,VW-w-8);let y=isN?sy-h-8:Math.max(8,sy-h-8),below=false;
+    if(!isN&&bubbleHit(x,y,w,h)){below=true;y=Math.min(VH-h-8,sy+26)}   // sotto i riquadri in alto: il fumetto va sotto al personaggio
     rr(g,x,y,w,h,10);g.fill();g.stroke();
     const tx=clamp(sx,x+14,x+w-14);
     if(below){g.beginPath();g.moveTo(tx-6,y+1);g.lineTo(tx,y-8);g.lineTo(tx+6,y+1);g.closePath();g.fill();g.beginPath();g.moveTo(tx-6,y);g.lineTo(tx,y-8);g.lineTo(tx+6,y);g.stroke();g.fillStyle='#fff8e2';g.fillRect(tx-5,y-1,10,3)}
@@ -4606,7 +4606,7 @@ Ch2.decor=function(deco){
   deco('c2b0','barrel0',60.4,30.9,[60,30,1,1],{nohit:1});deco('c2b1','barrel1',56.2,32,[56,31,1,1],{nohit:1});
   deco('c2cr0','crate',57.1,27.4,[57,26,1,1],{nohit:1});deco('c2cr1','crate',64.8,30.6,[64,30,1,1],{nohit:1});
   deco('c2coil','coil',55.2,27.7,null,{nohit:1});
-  deco('c2boat','rowboat',66.4,35.4,null,{nohit:1,flip:true});
+  deco('c2boat','rowboat',68.6,34.6,null,{nohit:1,flip:true});
   deco('c2cannon','cannon',52.6,25.6,null,{nohit:1});
   // la cala della nave
   deco('nave','wreck2',CV2.ship[0],CV2.ship[1],[Math.floor(CV2.ship[0])-3,Math.floor(CV2.ship[1])-1,7,2],{k:.95,hitw:230,hith:130,label:'La nave dei Fuggiaschi',inter:'look',flip:true});
@@ -4717,7 +4717,7 @@ Ch2.st=function(){
 Ch2.tr=w=>Ch2.st().trust[w]||0;
 Ch2.addTrust=function(w,n,quiet){
   const c=Ch2.st(),o=c.trust[w]||0,v=clamp(o+n,0,10);c.trust[w]=v;
-  if(v>o){const ne=EID['npc_'+w];if(ne&&S&&S.live)try{float(ne.x,ne.y-(CH[w].tall||1)*118,'♥'.repeat(Math.min(3,v-o)),'#ff6b8a')}catch(_){}}
+  if(v>o){const ne=EID['npc_'+w];if(ne&&S&&S.live)try{float(ne.x,ne.y-(CH[w].tall||1)*112,'♥'.repeat(Math.min(3,v-o)),'#ff6b8a')}catch(_){}}
   if(!quiet&&v!==o)UI.toast((v>o?'Fiducia di ':'Fiducia di ')+Ch2.NPC[w].n+(v>o?' +':' ')+(v-o)+' ('+v+'/10)');
   saveGame(true);
 };
@@ -4739,7 +4739,7 @@ function drawNpc(g,e,t){
 function npcLabel(g,e,near){   // nome del personaggio e cuori della fiducia
   if(hyp(P.x-e.x,P.y-e.y)>TS*9)return;
   const c=Ch2.st(),w=e.who,tr=c.met[w]?Ch2.tr(w):0,nm=Ch2.NPC[w].n,hs=Math.ceil(tr/2);
-  const y=e.y-(CH[w].tall||1)*(Ch2.npcMark(e)?104:90);
+  const y=e.y-(CH[w].tall||1)*(Ch2.npcMark(e)?96:80);
   g.save();g.font='800 12px Nunito,Arial,sans-serif';g.textBaseline='middle';g.lineJoin='round';
   const nw=g.measureText(nm).width,hw=hs?hs*11+4:0,x0=e.x-(nw+hw)/2;
   g.textAlign='left';g.lineWidth=3.2;g.strokeStyle='rgba(30,16,6,.85)';g.fillStyle='#fff6dc';
@@ -5216,8 +5216,8 @@ Ch2.npcAI=function(dt){
     for(const pr of Ch2.PAIRS){
       const a=EID['npc_'+pr[0]],b=EID['npc_'+pr[1]];
       if(a&&b&&!a.mv&&!b.mv&&hyp(a.x-b.x,a.y-b.y)<3.4*TS){
-        Ch2._pc=150+Math.random()*120;Ch2._sc=50+Math.random()*30;say(a,pr[2],3.6);a.flip=b.x<a.x;b.flip=a.x<b.x;
-        setTimeout(()=>{if(S&&S.live)say(b,pr[3],3.6)},4200);break}
+        Ch2._pc=170+Math.random()*120;Ch2._sc=60+Math.random()*30;say(a,pr[2],3.6);a.flip=b.x<a.x;b.flip=a.x<b.x;
+        setTimeout(()=>{if(S&&S.live)say(b,pr[3],3.6)},8200);break}
     }
   }
 };
