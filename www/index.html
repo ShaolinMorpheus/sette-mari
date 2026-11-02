@@ -4368,7 +4368,7 @@ function canBuild(id){return reqOk(id)&&hasRes(PLOTS[id].cost)}
 const CHAPTERS=[
   {n:1,t:"Naufrago",d:"Una spiaggia, poca acqua e nessuno intorno. Prima si sopravvive, poi si costruisce, poi si parte su una zattera.",st:"Bozza giocabile"},
   {n:2,t:"La Baia dei Fuggiaschi",d:"Una seconda isola, con altra gente che il mare ha rifiutato. Alleanze, diffidenza e una nave da trovare. Si inizia dal Capitolo 1, sbarcando sull'isola dei fuggiaschi.",st:"Giocabile"},
-  {n:3,t:"Il Convoglio",d:"Una carovana di navi cariche d'argento attraversa lo stretto. Si prepara un colpo, con ciurma e piani.",st:"In programma"},
+  {n:3,t:"Il Convoglio",d:"Una carovana di navi cariche d'argento attraversa lo stretto. Si prepara un colpo, con ciurma e piani.",st:"A breve"},
   {n:4,t:"Il grande viaggio",d:"Oltre le isole conosciute, verso un mare che sulle carte non c'è ancora.",st:"In programma"}
 ];
 const COMING=[
@@ -6613,7 +6613,7 @@ function journalBody(){
   }
   if(jTab==='s'){
     let h='<div class="seas"><b>Stagione 1</b><span>Naufrago</span></div>';
-    h+=CHAPTERS.map(c=>{const st=(c.n===1&&S.flags.ch1)||(c.n===2&&S.flags.ch2end)?'Completato':c.st,lock=c.st==='In programma';return'<div class="chap"><b>'+c.n+'</b><div><h4>'+uEsc(c.t)+'</h4><p>'+uEsc(c.d)+'</p><span class="st'+(lock?' lock':'')+'">'+st+'</span></div></div>'}).join('');
+    h+=CHAPTERS.map(c=>{const st=(c.n===1&&S.flags.ch1)||(c.n===2&&S.flags.ch2end)?'Completato':c.st,lock=c.st==='In programma'||c.st==='A breve';return'<div class="chap"><b>'+c.n+'</b><div><h4>'+uEsc(c.t)+'</h4><p>'+uEsc(c.d)+'</p><span class="st'+(lock?' lock':'')+'">'+st+'</span></div></div>'}).join('');
     h+='<h3>Previsto nella Stagione 1</h3><p class="sm" style="margin:0 0 6px">Non ancora disponibile e senza una data.</p>'+COMING.map(c=>'<div class="chap"><b>\u2605</b><div><h4>'+uEsc(c.t)+'</h4><p>'+uEsc(c.d)+'</p><span class="st lock">'+c.st+'</span></div></div>').join('');
     h+='<div class="seas after"><b>Dopo la Stagione 1</b><span>Una cosa a parte</span></div>'+AFTER.map(c=>'<div class="chap"><b>\u2605</b><div><h4>'+uEsc(c.t)+'</h4><p>'+uEsc(c.d)+'</p><span class="st lock">'+c.st+'</span></div></div>').join('');
     return h;
