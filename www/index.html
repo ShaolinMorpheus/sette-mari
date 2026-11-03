@@ -201,7 +201,7 @@ body.rot{--gl:6px;--gr:6px;--st:0px;--sb:0px}   /* telefono in verticale: il gio
 .seas b{font-family:var(--f-d);font-weight:400;font-size:26px;display:block;line-height:1}
 .seas span{font:800 12px var(--f-b);letter-spacing:.8px;text-transform:uppercase}
 /* mappa del tesoro */
-#mapCard{max-width:none;width:100%;height:100%;max-height:100%;padding:0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0e3b5a;text-align:center}.mxr{position:absolute;right:8px;top:8px;width:38px;height:38px;border-radius:10px;border:2px solid #7a1f12;background:linear-gradient(#e86a55,#b83a28);color:#fff;font:800 19px var(--f-b);cursor:pointer;box-shadow:0 2px 0 #7a1f12;z-index:3;padding:0}#mapCard h2{position:absolute;left:10px;top:8px;margin:0;font-size:17px;padding:2px 10px;background:rgba(251,239,201,.9);border-radius:8px;z-index:2}#mapCard #mapTxt{position:absolute;left:10px;bottom:8px;max-width:min(210px,27%);margin:0;font-size:11.5px;line-height:1.25;text-align:left;padding:4px 9px;background:rgba(251,239,201,.92);color:var(--ink);border-radius:8px;z-index:2;cursor:pointer}#mapCard #mapTxt:empty{display:none}
+#mapCard{max-width:none;width:100%;height:100%;max-height:100%;padding:0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#0e3b5a;text-align:center}.mxr{position:absolute;right:8px;top:8px;width:38px;height:38px;border-radius:10px;border:2px solid #7a1f12;background:linear-gradient(#e86a55,#b83a28);color:#fff;font:800 19px var(--f-b);cursor:pointer;box-shadow:0 2px 0 #7a1f12;z-index:3;padding:0}#mapCard h2{position:absolute;left:10px;top:8px;margin:0;font-size:17px;padding:2px 10px;background:rgba(251,239,201,.9);border-radius:8px;z-index:2}#mapCard #mapTxt{position:absolute;left:50%;transform:translateX(-50%);top:8px;bottom:auto;max-width:calc(100% - 340px);margin:0;font-size:11px;line-height:1.25;text-align:center;padding:3px 9px;background:rgba(251,239,201,.8);color:var(--ink);border-radius:8px;z-index:2;cursor:pointer}#mapCard #mapTxt:empty{display:none}
 #mapCv{display:block;border:0;border-radius:0;margin:0}
 /* fine capitolo */
 #endCard{text-align:center;max-width:520px}
@@ -827,15 +827,17 @@ function mkBroadleaf(i){
     for(let k=0;k<4;k++){g.beginPath();g.moveTo(cx-5+k*3.2,by-3);g.lineTo(cx-3+k*2.4+(r()-.5)*2,by-56);g.stroke()}
     const cy=H-90,bl=[];
     for(let k=0;k<12;k++){const a=r()*6.283,d=Math.sqrt(r());bl.push([cx+Math.cos(a)*d*28,cy+Math.sin(a)*d*22,19+r()*9])}
+    for(let k=0;k<9;k++){const a=r()*6.283;bl.push([cx+Math.cos(a)*35,cy+Math.sin(a)*27+2,7+r()*5])}
     bl.sort((a,b)=>a[1]-b[1]);
     for(const b of bl)ball(g,b[0],b[1],b[2],hsl(hue,48,42),hsl(hue+4,52,32),hsl(hue+8,58,21),'rgba(12,40,14,.5)');
     for(const b of bl){g.save();g.beginPath();g.arc(b[0],b[1],b[2]-1,0,7);g.clip();ball(g,b[0]-b[2]*.3,b[1]-b[2]*.34,b[2]*.74,hsl(hue-8,66,64,.95),hsl(hue-3,60,50,.55),hsl(hue,50,40,0));g.restore()}
+    {const ug=g.createLinearGradient(0,cy-6,0,cy+34);ug.addColorStop(0,'rgba(6,26,10,0)');ug.addColorStop(1,'rgba(6,26,10,.30)');g.save();g.globalCompositeOperation='source-atop';g.fillStyle=ug;g.fillRect(cx-46,cy-6,92,46);g.restore()}
     for(let k=0;k<70;k++){const a=r()*6.283,d=Math.sqrt(r());const x=cx+Math.cos(a)*d*32,y=cy+Math.sin(a)*d*26-4;
       g.fillStyle=hsl(hue-10+r()*22,62,48+r()*24,.5);g.save();g.translate(x,y);g.rotate(r()*3);g.beginPath();g.ellipse(0,0,3.2,1.6,0,0,7);g.fill();g.restore()}
   },W/2,H-5);
 }
 function mkPine(i){
-  const r=mulberry(500+i*17),hue=146+r()*14,W=96,H=156;
+  const r=mulberry(500+i*17),hue=146+r()*14,W=96,H=172;
   return sp(W,H,g=>{
     const cx=W/2,by=H-5;
     const tg=g.createLinearGradient(cx-8,0,cx+8,0);tg.addColorStop(0,'#8a5c38');tg.addColorStop(1,'#43281a');
@@ -4280,6 +4282,7 @@ function render(t){
   if(S&&(S.flags.lookout||smN))drawSmoke(g,FIX.smoke[0]*TS,FIX.smoke[1]*TS,t,9,1.35);
   if(smN){g.save();g.translate(FIX.smoke[0]*TS,FIX.smoke[1]*TS);shadow(g,0,2,26,8,.3);drawFlame(g,0,-4,t,1.05);g.restore()}
   drawPondLevel(g,t);
+  drawSkyFx1(g,t,vx0,vy0,vx1,vy1);
   computeTarget();
   drawTargetRing(g,t);
   if(WORLD===4)Ch4.drawFloor(g,t);
@@ -4330,9 +4333,10 @@ function render(t){
     const hidden=list.some(e=>e!==P&&e!==PAR&&(e.type==='tree'||e.type==='pine'||e.type==='palm'||e.type==='plot'||e.id==='mesa'||e.id==='lookout')&&sortY(e)>P.y&&(()=>{const b=e.id==='mesa'?[e.x-190,e.y-290,e.x+190,e.y]:entBox(e);return b&&P.x>b[0]+14&&P.x<b[2]-14&&P.y-50>b[1]&&P.y-8<b[3]-30})());
     if(hidden){g.save();g.globalAlpha=.42;drawPlayer(g,t,.55);g.restore()}
   }
-  drawParts(g);drawAmbA(g,t);
+  ambLeaves(t,vx0,vy0,vx1,vy1);drawParts(g);drawAmbA(g,t);
   // luce del giorno
   const L=skyLight(S.tod);
+  drawSunRays(g,t,L);
   if(L.dark>.02){
     const lights=[];
     const falo=EID.plot_falo;if(falo.st===2)lights.push([(falo.fp[0]+.5)*TS,(falo.fp[1]+.2)*TS,250,1,true]);
@@ -4408,6 +4412,53 @@ function updateAmb(dt){
     if(AMB.croak<=0){AMB.croak=3+Math.random()*5;if(AMB.frog&&AMB.frog.length&&hyp(AMB.frog[0].x-P.x,AMB.frog[0].y-P.y)<13*TS){tone(210,150,.07,'square',.025);tone(230,160,.07,'square',.025,.1)}}
   }
   if(AMB.owl){AMB.owl.a+=((night?1:0)-AMB.owl.a)*Math.min(1,dt*1.5);AMB.owl.ph=Math.max(0,AMB.owl.ph-dt*1.4)}
+}
+/* dettagli ambientali: ombre di nuvole sul terreno, scintillii sul mare, foglie che cadono, raggi di sole */
+const CLD=[0,1,2,3,4,5,6].map(i=>({x:(i*977)%4000,y:(i*613)%2400,r:300+((i*137)%260),k:.7+((i*53)%30)/100,sp:6+(i%3)*3}));
+let ambLT=0,ambLN=0;
+function dayK(){const d=skyLight(S.tod).dark;return 1-clamp(d/.4,0,1)}
+function drawSkyFx1(g,t,vx0,vy0,vx1,vy1){
+  if(!S||!S.live||WORLD>=3)return;
+  const day=dayK(),sunny=1-clamp((WX&&WX.i||0)/.5,0,1);
+  if(day>.05){
+    const WWp=MW*TS,a0=.22*day*sunny;
+    if(a0>.01)for(const c of CLD){
+      for(const off of[0,-WWp]){
+        const x=((c.x+t*c.sp)%WWp)+off,y=c.y+Math.sin(t*.03+c.r)*70;
+        if(x<vx0-c.r*1.6||x>vx1+c.r*1.6||y<vy0-c.r||y>vy1+c.r)continue;
+        g.save();g.translate(x,y);g.scale(1.6,1);
+        const q=g.createRadialGradient(0,0,c.r*.1,0,0,c.r);q.addColorStop(0,`rgba(8,28,22,${a0*c.k})`);q.addColorStop(.65,`rgba(8,28,22,${a0*c.k*.55})`);q.addColorStop(1,'rgba(8,28,22,0)');
+        g.fillStyle=q;g.beginPath();g.arc(0,0,c.r,0,7);g.fill();g.restore()}
+    }
+  }
+  // scintillii sul mare
+  {const CS=120,x0=Math.floor(vx0/CS),x1=Math.floor(vx1/CS),y0=Math.floor(vy0/CS),y1=Math.floor(vy1/CS);g.save();g.lineCap='round';
+   for(let gx=x0;gx<=x1;gx++)for(let gy=y0;gy<=y1;gy++){const h=Math.sin(gx*127.1+gy*311.7)*43758.5453,f=h-Math.floor(h);if(f<.5)continue;
+     const x=gx*CS+f*CS,y=gy*CS+((f*7)%1)*CS,tx=Math.floor(x/TS),ty=Math.floor(y/TS);
+     if(tx<0||ty<0||tx>=MW||ty>=MH||!seaT[tIdx(tx,ty)])continue;
+     const tw=Math.sin(t*1.9+f*40);if(tw<.4)continue;const a=(tw-.4)*(.25+.65*day),l=3+f*4;
+     g.strokeStyle='rgba(255,255,255,'+a*.7+')';g.lineWidth=1.6;g.beginPath();g.moveTo(x-l,y);g.lineTo(x+l,y);g.moveTo(x,y-l*.6);g.lineTo(x,y+l*.6);g.stroke()}
+   g.restore()}
+}
+function ambLeaves(t,vx0,vy0,vx1,vy1){
+  if(!S||!S.live||WORLD>=3)return;
+  const dt=t-ambLT;ambLT=t;if(dt<=0||dt>.5)return;
+  ambLN-=dt;if(ambLN>0||dayK()<.3)return;ambLN=rnd(.45,1.1);
+  if(FXL.parts.length>260)return;
+  const c=[];for(const e of E)if(e.type==='tree'&&e.alive&&e.x>vx0&&e.x<vx1&&e.y>vy0&&e.y<vy1+120)c.push(e);
+  if(!c.length)return;const e=c[(Math.random()*c.length)|0];
+  FXL.parts.push({x:e.x+rnd(-24,24),y:e.y-rnd(60,110),vx:rnd(10,30),vy:rnd(8,18),age:0,life:rnd(4,6.5),kind:'leaf',r:rnd(1.8,3),rot:Math.random()*6,g:5});
+}
+function drawSunRays(g,t,L){
+  if(!S||!S.live||WORLD>=3||L.dark>.25||(WX&&WX.i>.3))return;
+  const a=(1-L.dark/.25)*.11,W=cv.width,H=cv.height;
+  g.save();g.setTransform(1,0,0,1,0,0);g.globalCompositeOperation='lighter';
+  for(let i=0;i<4;i++){
+    const x=(.05+i*.26+Math.sin(t*.05+i*1.7)*.025)*W,bw=W*(.07+.025*(i%2)),k=a*(.55+.45*Math.sin(t*.35+i*2.1));
+    g.save();g.translate(x,0);g.transform(1,0,.55,1,0,0);
+    const q=g.createLinearGradient(0,0,bw,0);q.addColorStop(0,'rgba(255,240,190,0)');q.addColorStop(.5,`rgba(255,238,185,${k})`);q.addColorStop(1,'rgba(255,240,190,0)');
+    g.fillStyle=q;g.fillRect(0,0,bw,H);g.restore()}
+  g.restore();
 }
 function drawAmbA(g,t){
   if(!S||!S.live)return;
@@ -4618,6 +4669,7 @@ const CHANGELOG=[
     "Banco da lavoro ridisegnato; le lanterne stanno più lontane dal cartello; vicino a bacche, liane e molluschi l'azione non è più «Taglia» sull'albero dietro.",
     "Capitolo 3: il galeone si abborda (non si affonda); suoni di grappini, passerella e urla; riparazioni al porto con martellate; suggerimento sul tasto «Abborda!»; se perdi dopo aver salvato Pip e Dodo puoi riprendere da lì.",
     "Capitolo 3 e nave spagnola ora sono dentro lo stesso gioco (un solo file), tradotti in inglese, tedesco, spagnolo e francese.",
+    "Isole più vive: ombre di nuvole che scorrono, raggi di sole, foglie che cadono dagli alberi, scintillii sul mare, chiome degli alberi più ricche; la punta del pino non è più tagliata; la didascalia della mappa dall'alto sta in alto e non copre la vista.",
     "Mare del Capitolo 3 più ricco: scie di spuma, ombre sull'acqua, riflessi, fumo dalle navi in avaria."]},
   {v:"0.7",d:"3 nov 2026",t:"Più lingue e nuova icona",n:[
     "Il gioco parla anche inglese, tedesco, spagnolo e francese: scegli la lingua nella schermata iniziale o dal menu (Audio e schermo → Lingua). Menu, comandi, tutorial, messaggi e istruzioni sono già tradotti; i dialoghi della storia arrivano nei prossimi aggiornamenti.",
