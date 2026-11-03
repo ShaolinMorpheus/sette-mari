@@ -450,7 +450,7 @@ var lt=0;d.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<320&
     <input id="inName" type="text" maxlength="14" placeholder="Capitano" autocomplete="off">
     <div class="seg" role="radiogroup" aria-label="Aspetto"><button class="on" id="hM" role="radio" aria-checked="true">Capitano</button><button id="hF" role="radio" aria-checked="false">Capitana</button></div>
     <div id="startBtns"><button class="btn gold big" id="bNew">Salpa!</button><button class="btn big" id="bCont" hidden>Continua</button></div>
-    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button><span>·</span><button id="bLang" class="lnk">Lingua</button></div>
+    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button><span>·</span><button id="bLang" class="lnk">Lingua</button><span>·</span><button id="bCap3" class="lnk">Capitolo 3 (bozza)</button></div>
     <p class="ver" id="verTxt"></p>
    </div>
   </div>
@@ -4463,7 +4463,7 @@ function canBuild(id){return reqOk(id)&&hasRes(PLOTS[id].cost)}
 const CHAPTERS=[
   {n:1,t:"Naufrago",d:"Una spiaggia, poca acqua e nessuno intorno. Prima si sopravvive, poi si costruisce, poi si parte su una zattera.",st:"Bozza giocabile"},
   {n:2,t:"La Baia dei Fuggiaschi",d:"Una seconda isola, con altra gente che il mare ha rifiutato. Alleanze, diffidenza e una nave da trovare. Si inizia dal Capitolo 1, sbarcando sull'isola dei fuggiaschi.",st:"Giocabile"},
-  {n:3,t:"Il Convoglio",d:"Una carovana di navi cariche d'argento attraversa lo stretto. Si prepara un colpo, con ciurma e piani.",st:"A breve"},
+  {n:3,t:"Il Convoglio",d:"Una carovana di navi cariche d'argento attraversa lo stretto. Si prepara un colpo, con ciurma e piani.",st:"Bozza giocabile"},
   {n:4,t:"Il grande viaggio",d:"Oltre le isole conosciute, verso un mare che sulle carte non c'è ancora.",st:"In programma"}
 ];
 const COMING=[
@@ -4475,6 +4475,9 @@ const AFTER=[
   {t:"Multigiocatore",d:"Salpare insieme ad altri capitani: un'isola condivisa, scambi e ciurme. Dopo la fine della Stagione 1, senza una data per ora.",st:"Coming soon"}
 ];
 const CHANGELOG=[
+  {v:"0.8",d:"3 nov 2026",t:"Capitolo 3: Il Convoglio (bozza)",n:[
+    "Nuovo Capitolo 3 in bozza giocabile: navigazione in mare, cannoni, pattuglie, il convoglio spagnolo con l'argento e l'abbordaggio del galeone con l'assalto alla nave (tre ponti). Si apre dalla schermata iniziale con «Capitolo 3 (bozza)».",
+    "In mare: avvisi singoli e compatti, musica che parte subito."]},
   {v:"0.7",d:"3 nov 2026",t:"Più lingue e nuova icona",n:[
     "Il gioco parla anche inglese, tedesco, spagnolo e francese: scegli la lingua nella schermata iniziale o dal menu (Audio e schermo → Lingua). Menu, comandi, tutorial, messaggi e istruzioni sono già tradotti; i dialoghi della storia arrivano nei prossimi aggiornamenti.",
     "Nuova icona dell'app: il pappagallo pirata."]},
@@ -7326,6 +7329,7 @@ function initStart(){
     {const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm,hero}))}catch(_){}startNew(nm,hero)}
   };
   $('bCont').onclick=()=>{const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm||(save&&save.name)||'',hero}))}catch(_){}startContinue(nm,hero);saveGame()};
+  $('bCap3').onclick=()=>{location.href='capitolo3.html'};
   $('bLang').onclick=()=>sheetFor('<h2>Lingua</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+I18N.langs.map(l=>'<button class="btn'+(l===I18N.lang?' gold':'')+'" data-lg="'+l+'">'+I18N.names[l]+'</button>').join('')+'<button class="btn" id="shNo">Chiudi</button></div>',cc=>{cc.querySelectorAll('[data-lg]').forEach(b=>b.onclick=()=>{I18N.set(b.dataset.lg);closeSheet()})});
   $('bHow').onclick=UI.showHow;$('bNews').onclick=()=>{if(!S.flags)S.flags={};UI.openJournal('n')};
   $('verTxt').textContent='Bozza v'+CHANGELOG[0].v+' · '+CHANGELOG[0].d;
