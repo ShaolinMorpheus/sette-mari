@@ -20,6 +20,8 @@ Sei un pirata naufragato dopo la notte più lunga della tua vita. Il tuo pappaga
 • Funziona anche senza internet. Salvataggi sul dispositivo (3 slot)
 • Italiano, English, Deutsch, Español, Français
 
+Al momento sono giocabili due capitoli; la storia continua ed è in sviluppo.
+
 Il gioco è gratuito. Contiene annunci: puoi scegliere di guardare un video facoltativo per ricevere una scorta in regalo.
 
 ## English
@@ -36,6 +38,8 @@ You are a pirate shipwrecked after the longest night of your life. Your parrot f
 • Simple controls with a single joystick, made for a phone held sideways
 • Works offline. Saves on your device (3 slots)
 • Italiano, English, Deutsch, Español, Français
+
+Two chapters are playable at the moment; the rest of the story is in development.
 
 The game is free. It contains ads: you can choose to watch an optional video to receive free supplies.
 
@@ -54,6 +58,8 @@ Du bist ein Pirat, der nach der längsten Nacht seines Lebens gestrandet ist. De
 • Funktioniert offline. Speichern auf dem Gerät (3 Plätze)
 • Italiano, English, Deutsch, Español, Français
 
+Derzeit sind zwei Kapitel spielbar; der Rest der Geschichte ist in Entwicklung.
+
 Das Spiel ist kostenlos. Es enthält Werbung: Du kannst ein freiwilliges Video ansehen und bekommst dafür einen Vorrat geschenkt.
 
 ## Español
@@ -71,6 +77,8 @@ Eres un pirata naufragado tras la noche más larga de tu vida. Tu loro te sigue 
 • Funciona sin conexión. Partidas guardadas en el dispositivo (3 ranuras)
 • Italiano, English, Deutsch, Español, Français
 
+Por ahora hay dos capítulos jugables; el resto de la historia está en desarrollo.
+
 El juego es gratuito. Contiene anuncios: puedes elegir ver un vídeo opcional para recibir suministros gratis.
 
 ## Français
@@ -87,5 +95,7 @@ Tu es un pirate naufragé après la nuit la plus longue de ta vie. Ton perroquet
 • Commandes simples avec un seul joystick, pensées pour le téléphone à l'horizontale
 • Fonctionne hors ligne. Sauvegardes sur l'appareil (3 emplacements)
 • Italiano, English, Deutsch, Español, Français
+
+Pour l'instant deux chapitres sont jouables ; le reste de l'histoire est en développement.
 
 Le jeu est gratuit. Il contient des publicités : tu peux choisir de regarder une vidéo facultative pour recevoir des provisions offertes.
