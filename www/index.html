@@ -2568,7 +2568,7 @@ function sfx(n){
   else if(n==='quest'){[392,523,659,784,1046].forEach((f,i)=>tone(f,0,.28,'triangle',.16,i*.1))}
   else if(n==='talk'){tone(300+Math.random()*120,0,.05,'square',.04)}
   else if(n==='tap'){tone(700,500,.05,'sine',.08)}
-  else if(n==='cra'){tone(900,500,.12,'sawtooth',.07);tone(700,420,.14,'sawtooth',.06,.1)}
+  else if(n==='cra'){const _n=performance.now();if(_n-(AU._craT||0)<450)return;AU._craT=_n;tone(900,500,.12,'sawtooth',.07);tone(700,420,.14,'sawtooth',.06,.1)}
   else if(n==='horn'){tone(110,106,1.2,'sawtooth',.2);tone(165,160,1.2,'sawtooth',.1)}
   else if(n==='thunder'){noiseBurst(1.4,160,.7);tone(60,30,1.2,'sawtooth',.2)}
   else if(n==='no'){tone(200,120,.2,'square',.1)}
@@ -3208,7 +3208,7 @@ function chips(x,y,n,kind){
 }
 function sparkBurst(x,y,n){for(let i=0;i<n;i++){const a=Math.random()*6.283,v=50+Math.random()*120;FXL.parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-40,age:0,life:.7+Math.random()*.6,kind:'spark',r:rnd(2,5),rot:0,g:90})}}
 function logFly(x,y){FXL.parts.push({x,y,vx:0,vy:0,age:0,life:.7,kind:'log',r:1,rot:0,g:0,sx:x,sy:y})}
-function say(e,txt,dur){if(e&&e.type==='npc')dur=Math.max((dur||3.2)*2,7.5);FXL.bubbles=FXL.bubbles.filter(b=>b.e!==e);FXL.bubbles.push({e,txt:pn(txt),t:0,dur:(dur||3.2)*(e===PAR?1.7:1)+(e===PAR?.8:0)})}
+function say(e,txt,dur){if(e===PAR&&typeof sfx==='function'){try{sfx('cra');PAR.hop=Math.max(PAR.hop||0,.45)}catch(_){}}if(e&&e.type==='npc')dur=Math.max((dur||3.2)*2,7.5);FXL.bubbles=FXL.bubbles.filter(b=>b.e!==e);FXL.bubbles.push({e,txt:pn(txt),t:0,dur:(dur||3.2)*(e===PAR?1.7:1)+(e===PAR?.8:0)})}
 function hint(id){if(S&&!S.hints[id]&&U.hintFn){U.hintFn(id)}}
 
 /* ---- movimento ---- */
@@ -4477,7 +4477,9 @@ const AFTER=[
 const CHANGELOG=[
   {v:"0.8",d:"3 nov 2026",t:"Capitolo 3: Il Convoglio (bozza)",n:[
     "Nuovo Capitolo 3 in bozza giocabile: navigazione in mare, cannoni, pattuglie, il convoglio spagnolo con l'argento e l'abbordaggio del galeone con l'assalto alla nave (tre ponti). Si apre dalla schermata iniziale con «Capitolo 3 (bozza)».",
-    "In mare: avvisi singoli e compatti, musica che parte subito."]},
+    "In mare: avvisi singoli e compatti, musica che parte subito.",
+    "Diario: la missione principale resta sempre la principale; le secondarie si seguono e si cambiano a piacere, e compaiono come seconda riga sotto l'obiettivo.",
+    "Il pappagallo fa il suo verso ogni volta che parla, oltre al fumetto."]},
   {v:"0.7",d:"3 nov 2026",t:"Più lingue e nuova icona",n:[
     "Il gioco parla anche inglese, tedesco, spagnolo e francese: scegli la lingua nella schermata iniziale o dal menu (Audio e schermo → Lingua). Menu, comandi, tutorial, messaggi e istruzioni sono già tradotti; i dialoghi della storia arrivano nei prossimi aggiornamenti.",
     "Nuova icona dell'app: il pappagallo pirata."]},
@@ -5473,7 +5475,7 @@ const curGoal=id=>{const q=S.q[id];return q&&QDEF[id].goals[q.gi]};
 function startQuest(id){
   const d=QDEF[id];S.q[id]={st:'active',gi:0,p:0};
   UI.toast((d.kind==='main'?"Nuova missione: ":"Nuova missione secondaria: ")+d.title,8000);sfx('quest');UI.dot(true);S.jnew=S.jnew||{};S.jnew[id]=1;
-  if(d.kind==='main'||!S.track||!S.q[S.track]||S.q[S.track].st!=='active')S.track=id;
+  if(d.kind==='main'){if(!S.track||!S.q[S.track]||S.q[S.track].st!=='active'||QDEF[S.track].kind!=='main')S.track=id}else{const hasMain=S.track&&S.q[S.track]&&S.q[S.track].st==='active'&&QDEF[S.track].kind==='main';if(!hasMain)S.track=id;if(!S.side||!S.q[S.side]||S.q[S.side].st!=='active')S.side=id}
   if(d.onStart)d.onStart();
   UI.syncObj();checkAll();saveGame();
 }
@@ -5486,7 +5488,8 @@ function completeGoal(id){
 function completeQuest(id){
   const q=S.q[id],d=QDEF[id];q.st='done';addXp(d.kind==='main'?40:25);
   UI.banner(d.kind==='main'?"Missione completata":"Missione secondaria completata",d.title);sfx('quest');
-  if(S.track===id){const nx=activeIds().find(i=>QDEF[i].kind==='main')||activeIds()[0];S.track=nx||null}
+  if(S.side===id){S.side=activeIds().find(i=>i!==id&&QDEF[i].kind==='side')||null}
+  if(S.track===id){const nx=activeIds().find(i=>i!==id&&QDEF[i].kind==='main')||activeIds().find(i=>i!==id)||null;S.track=nx}
   UI.syncObj();UI.dot(true);S.jnew=S.jnew||{};S.jnew[id]=2;
   if(d.onDone)d.onDone();
   saveGame();
@@ -6308,12 +6311,15 @@ UI.sync=function(){
 U.sync=UI.sync;U.hintFn=UI.hintFn;
 UI.syncObj=function(){
   if(!S)return;
+  {const mid=activeIds().find(i=>QDEF[i].kind==='main');if(mid&&S.track!==mid){if(S.track&&S.q[S.track]&&S.q[S.track].st==='active'&&QDEF[S.track].kind==='side')S.side=S.track;S.track=mid}if(S.side&&(!S.q[S.side]||S.q[S.side].st!=='active'))S.side=null}
   const o=Story.objective();let t,g;
   if(o){t=o.title;g=o.txt}
   else if(WORLD===2){t='Esplora la baia';g=S.flags.ch2end?'Il Capitolo 2 è concluso. Il Capitolo 3 è in arrivo: intanto puoi esplorare, pescare e completare le missioni secondarie.':'Parla con i fuggiaschi, esplora la baia e completa le missioni secondarie.'}
   else if(S.flags.ch1){t='Esplora l\'isola';g='Il Capitolo 2 è pronto: raggiungi l\'isola dei fuggiaschi con la zattera (a est) e sbarca. Intanto puoi pescare, cercare i messaggi in bottiglia e completare le missioni secondarie.'}
   else{t='Sopravvivi';g="Guardati intorno."}
+  {const sd=S.side&&S.q[S.side]&&S.q[S.side].st==='active'&&S.side!==S.track?S.side:null;if(sd){const sg=curGoal(sd);if(sg)g+='\n\u2192 '+QDEF[sd].title+': '+(typeof sg.txt==='function'?sg.txt(S.q[sd].p):sg.txt)}}
   t=pn(t);g=pn(g);
+  $('objG').style.whiteSpace='pre-line';
   $('objT').textContent=t;$('objG').textContent=g;objDStr='';
   const key=t+'|'+g;if(key!==objKey){objKey=key;UI.objOpen(true)}   // obiettivo nuovo: si apre per un attimo, poi si richiude da solo appena ti muovi
 };
@@ -6696,11 +6702,11 @@ function goalLi(id,g,i){
   return'<li class="'+(done?'dn':'')+'"><svg class="ic"><use href="#'+(done?'i-check':'i-flag')+'"/></svg><span>'+uEsc(txt)+'</span></li>';
 }
 function qCard(id){
-  const d=QDEF[id],q=S.q[id],tr=S.track===id&&q.st==='active';
-  let h='<div class="qc'+(tr?' tr':'')+'"><h4><span>'+uEsc(d.title)+(jSeen[id]?'<i class="rdot"></i><small class="rnew">'+(jSeen[id]===2?'completata':'nuova')+'</small>':'')+'</span><em class="'+(d.kind==='side'?'side':'')+'">'+(d.kind==='side'?'Secondaria':'Principale')+'</em></h4>';
+  const d=QDEF[id],q=S.q[id],tr=q.st==='active'&&(d.kind==='main'?S.track===id||!!QDEF[id]&&activeIds().filter(i=>QDEF[i].kind==='main')[0]===id:S.side===id);
+  let h='<div class="qc'+(tr?' tr':'')+'"><h4><span>'+uEsc(d.title)+(jSeen[id]?'<i class="rdot"></i><small class="rnew">'+(jSeen[id]===2?'completata':'nuova')+'</small>':'')+'</span><em class="'+(d.kind==='side'?'side':'')+'">'+(d.kind==='side'?(tr?'Secondaria · seguita':'Secondaria'):'Principale')+'</em></h4>';
   h+='<div class="bl">'+uEsc(d.blurb)+'</div><ul>'+d.goals.map((g,i)=>goalLi(id,g,i)).join('')+'</ul>';
   if(q.st==='active'){const g=curGoal(id);if(g&&g.hint)h+='<div class="bl" style="margin-top:6px">Suggerimento: '+uEsc(typeof g.hint==='function'?g.hint():g.hint)+'</div>'}
-  if(q.st==='active'&&!tr)h+='<button class="btn" data-track="'+id+'">Segui questa missione</button>';
+  if(q.st==='active'&&d.kind==='side'&&!tr)h+='<button class="btn" data-track="'+id+'">Segui questa missione</button>';
   return h+'</div>';
 }
 function journalBody(){
@@ -6732,7 +6738,7 @@ function journalDraw(){
   const go=c.querySelector('#nwGo');
   if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
   c.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{jTab=b.dataset.t;sfx('tap');journalDraw()});
-  c.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{S.track=b.dataset.track;sfx('tap');UI.syncObj();journalDraw()});
+  c.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{S.side=b.dataset.track;sfx('tap');UI.syncObj();journalDraw()});
 }
 let jSeen={};
 UI.openJournal=function(tab){
