@@ -268,7 +268,7 @@ body.portrait #startCard{grid-template-columns:1fr;width:min(430px,100%)}
 .mr.tgl.on::after{background:radial-gradient(circle at 32px 12px,var(--cream) 8px,transparent 9px),#58a83a}
 .mr.warn{background:#e9b5a6;border-color:#7a1f12}.mr.warn.on{background:#d8412f;color:#fff}
 .mpn .sm{margin:8px 0 0;text-align:center}
-.mpn{overflow:hidden}.mp:not([hidden]){display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;align-content:start}.mp .mr{margin:0;min-height:40px;padding:5px 8px}.mp .mr .ml{font-size:13px;line-height:1.15}.mp .sm,.mp .mhd2{grid-column:1/-1;margin:2px 0}.mpn{padding:8px 10px}
+.mpn{overflow:hidden}.mp:not([hidden]){display:grid;grid-template-columns:1fr 1fr;gap:6px 8px;align-content:start}.mp .mr{margin:0;min-height:40px;padding:5px 8px}.mp .mr .ml{font-size:13px;line-height:1.15}.mr.sel{background:#ffd964;box-shadow:inset 0 0 0 2px var(--wood-d)}.mp .sm,.mp .mhd2{grid-column:1/-1;margin:2px 0}.mpn{padding:8px 10px}
 .mhd2{font:800 11px var(--f-b);letter-spacing:.08em;text-transform:uppercase;color:#7a4c26;margin:2px 0 6px}
 .phs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .phs button{display:flex;flex-direction:column;align-items:center;gap:3px;width:92px;padding:6px 4px;border-radius:12px;border:3px solid var(--wood-d);background:#ead29a;color:var(--ink);font:800 12px var(--f-b);cursor:pointer}
@@ -450,8 +450,8 @@ var lt=0;d.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<320&
     <input id="inName" type="text" maxlength="14" placeholder="Capitano" autocomplete="off">
     <div class="seg" role="radiogroup" aria-label="Aspetto"><button class="on" id="hM" role="radio" aria-checked="true">Capitano</button><button id="hF" role="radio" aria-checked="false">Capitana</button></div>
     <div id="startBtns"><button class="btn gold big" id="bNew">Salpa!</button><button class="btn big" id="bCont" hidden>Continua</button></div>
-    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button></div>
-    <div class="seg" id="langSeg" role="radiogroup" aria-label="Lingua"></div><p class="ver" id="verTxt"></p>
+    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button><span>·</span><button id="bLang" class="lnk">Lingua</button></div>
+    <p class="ver" id="verTxt"></p>
    </div>
   </div>
  </div>
@@ -6804,15 +6804,15 @@ UI.openMenu=function(){
   const T=(id,ic,l,sub,cls)=>'<button class="mr'+(cls?' '+cls:'')+'" id="'+id+'"><i>'+ic+'</i><span class="mtx"><span class="ml">'+l+'</span>'+(sub!=null?'<small class="ms">'+sub+'</small>':'')+'</span></button>';
   const curH=PHATS.find(x=>x.id===S.phat);
   const pnl=(id,b)=>'<div class="mp" data-mp="'+id+'"'+(UI._mt===id?'':' hidden')+'>'+b+'</div>';
-  const tabs=[['au','🔊','Audio e schermo'],['pa','💾','Partita'],hasP?['pp','🦜','Pappagallo']:null,['ai','❓','Aiuto']].filter(Boolean);
+  const tabs=[['au','🔊','Audio e schermo'],['pa','💾','Partita'],hasP?['pp','🦜','Pappagallo']:null,['lg','🌐','Lingua'],['ai','❓','Aiuto']].filter(Boolean);
   if(!tabs.some(t=>t[0]===UI._mt))UI._mt='au';
   c.innerHTML='<div class="mhd"><h2>Menu</h2><button class="mxb" id="mX" aria-label="Chiudi">✕</button></div><div class="mwr"><div class="mnav">'
    +tabs.map(t=>'<button class="mn" data-mn="'+t[0]+'" aria-selected="'+(UI._mt===t[0])+'"><i>'+t[1]+'</i>'+t[2]+'</button>').join('')
    +'</div><div class="mpn">'
-   +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra')+T('mLang','🌐','Lingua',I18N.names[I18N.lang]))
+   +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra'))
    +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+(SMAds.available()?T('mAd','🎁','Guarda un video','scorta in regalo')+T('mPriv','🔒','Privacy',null):'')+T('mJ','📖','Diario e novità',null)+(WORLD===2?T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
    +(hasP?pnl('pp','<div class="mhd2">Pappagallo</div>'+T('mPn','🦜','Nome',pn('Biscotto')+' · tocca per rinominare')+(hasH?T('mPh',curH?'<img alt="" src="'+phatImg(curH.id)+'">':'🚫','Cappellino',curH?curH.n:'Nessuno'):'<p class="sm">Troverai dei cappellini per il pappagallo durante il viaggio.</p>')):'')
-   +pnl('ai',T('mHow','❓','Come si gioca',null)+T('mTut','🧭','Tutorial',null))
+   +pnl('lg',I18N.langs.map(l=>T('mLg_'+l,l.toUpperCase(),I18N.names[l],null,l===I18N.lang?'sel':'')).join(''))+pnl('ai',T('mHow','❓','Come si gioca',null)+T('mTut','🧭','Tutorial',null))
    +'</div></div>';
   c.querySelectorAll('.mn').forEach(b=>b.onclick=()=>{UI._mt=b.dataset.mn;c.querySelectorAll('.mn').forEach(x=>x.setAttribute('aria-selected',x===b));c.querySelectorAll('.mp').forEach(x=>x.hidden=x.dataset.mp!==UI._mt)});
   const setT=(id,ic,sub)=>{const b=c.querySelector('#'+id);b.querySelector('i').textContent=ic;const m=b.querySelector('.ms');if(m)m.textContent=sub};
@@ -6821,7 +6821,7 @@ UI.openMenu=function(){
   c.querySelector('#mFs').onclick=()=>UI.toggleFs({set textContent(v){setT('mFs','⛶',v)}});
   c.querySelector('#mHand').onclick=()=>{const h=S.hand==='left'?'right':'left';UI.setHand(h);setT('mHand','🕹',h==='left'?'a sinistra':'a destra');UI.toast(h==='left'?'Joystick a sinistra, azione a destra.':'Joystick a destra, azione a sinistra.')};
   c.querySelector('#mUnl').onclick=e=>{UI.unlock();uShow('menu',false);UI.toast('Comandi sbloccati.')};
-  c.querySelector('#mLang').onclick=()=>{uShow('menu',false);sheetFor('<h2>Lingua</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+I18N.langs.map(l=>'<button class="btn'+(l===I18N.lang?' gold':'')+'" data-lg="'+l+'">'+I18N.names[l]+'</button>').join('')+'<button class="btn" id="shNo">Chiudi</button></div>',cc=>{cc.querySelectorAll('[data-lg]').forEach(b=>b.onclick=()=>{I18N.set(b.dataset.lg);closeSheet();UI.openMenu()})})};
+  c.querySelectorAll('[id^=mLg_]').forEach(b=>b.onclick=()=>{I18N.set(b.id.slice(4));UI.openMenu()});
   {const ad=c.querySelector('#mAd');if(ad)ad.onclick=async()=>{
     const now=Date.now(),last=+(localStorage.getItem('sette-mari-adt')||0);
     if(now-last<480000){UI.toast('Un video alla volta: riprova tra qualche minuto.');return}
@@ -7326,7 +7326,7 @@ function initStart(){
     {const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm,hero}))}catch(_){}startNew(nm,hero)}
   };
   $('bCont').onclick=()=>{const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm||(save&&save.name)||'',hero}))}catch(_){}startContinue(nm,hero);saveGame()};
-  {const ls=$('langSeg');ls.innerHTML=I18N.langs.map(l=>'<button role="radio" data-l="'+l+'" class="'+(l===I18N.lang?'on':'')+'" aria-checked="'+(l===I18N.lang)+'" title="'+I18N.names[l]+'">'+l.toUpperCase()+'</button>').join('');ls.querySelectorAll('button').forEach(b=>b.onclick=()=>{I18N.set(b.dataset.l);ls.querySelectorAll('button').forEach(x=>{const on=x.dataset.l===I18N.lang;x.classList.toggle('on',on);x.setAttribute('aria-checked',on)})})}
+  $('bLang').onclick=()=>sheetFor('<h2>Lingua</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+I18N.langs.map(l=>'<button class="btn'+(l===I18N.lang?' gold':'')+'" data-lg="'+l+'">'+I18N.names[l]+'</button>').join('')+'<button class="btn" id="shNo">Chiudi</button></div>',cc=>{cc.querySelectorAll('[data-lg]').forEach(b=>b.onclick=()=>{I18N.set(b.dataset.lg);closeSheet()})});
   $('bHow').onclick=UI.showHow;$('bNews').onclick=()=>{if(!S.flags)S.flags={};UI.openJournal('n')};
   $('verTxt').textContent='Bozza v'+CHANGELOG[0].v+' · '+CHANGELOG[0].d;
   try{if(sessionStorage.getItem('sette-mari-auto')&&save){sessionStorage.removeItem('sette-mari-auto');startContinue('',null);saveGame()}}catch(_){}
