@@ -8012,6 +8012,11 @@ function step(dt){
   C.crates=C.crates.filter(c=>!c.got);
   for(const q of C.fx){q.t+=dt;if(q.vx!=null){q.x+=q.vx*dt;q.y+=q.vy*dt;if(q.k==='chip')q.vy+=300*dt}}
   C.fx=C.fx.filter(q=>q.t<q.life);
+  if(C.fx.length<420)for(const s of C.ships.concat([C.p])){
+    if(s.dead||s.sinking)continue;const sp1=SPEC[s.type];if(!sp1)continue;
+    if(Math.abs(s.v||0)>30&&Math.hypot(s.x-C.p.x,s.y-C.p.y)<1500){s.wkT=(s.wkT||0)-dt;if(s.wkT<=0){s.wkT=.1;const cc=Math.cos(s.hd),ss2=Math.sin(s.hd);C.fx.push({k:'foam',x:s.x-cc*sp1.L*.5+rr(-5,5),y:s.y+8-ss2*sp1.L*.5+rr(-5,5),r:rr(8,13)*(sp1.W/40+.6),t:0,life:1.5,vx:rr(-5,5),vy:rr(-5,5)})}}
+    if(s.disabled&&s!==C.p){s.smT=(s.smT||0)-dt;if(s.smT<=0){s.smT=.22;C.fx.push({k:'smoke',x:s.x+rr(-20,20),y:s.y-24,r:rr(12,20),t:0,life:2.2,vx:rr(-8,8),vy:rr(-34,-18)});if(Math.random()<.5)C.fx.push({k:'flash',x:s.x+rr(-26,26),y:s.y-10+rr(-8,8),r:7,t:0,life:.25})}}
+  }
   for(const s of C.ships)if(s.sinking){s.sink=Math.min(1,s.sink+dt/2.2);if(s.sink>=1)s.sinking=false}
   // fumo dallo scafo danneggiato
   for(const s of[p,...C.ships]){if(s.dead||s.hull>s.max*.4||s.disabled&&0)continue;if(Math.random()<dt*5)puff(s.x+rr(-30,30),s.y+rr(-10,10)-20,rr(8,14),rr(1,1.8))}
@@ -8085,7 +8090,8 @@ function drawShip(g,e,t){
   const c=Math.cos(s.hd),sn=Math.sin(s.hd),bob=Math.sin(t*1.5+s.seed)*1.6,sk=s.sink||0;
   g.save();
   if(sk>0)g.globalAlpha=1-sk*.9;
-  g.translate(s.x,s.y+8+bob+sk*26);g.rotate(s.hd+sk*.15);
+  if(sk<.3){g.save();g.translate(s.x+12,s.y+26);g.rotate(s.hd);g.fillStyle='rgba(4,24,44,.26)';g.beginPath();g.ellipse(0,0,sp0.L*.82,sp0.W*.7,0,0,7);g.fill();g.restore()}
+  g.translate(s.x,s.y+8+bob+sk*26);g.rotate(s.hd+sk*.15+Math.sin(t*1.1+s.seed)*.012);
   drawSp(g,hs(s.type),0,0,1);
   if(s.flash>0){g.globalAlpha=Math.min(1,s.flash*3.5);g.fillStyle='rgba(255,255,255,.7)';g.beginPath();g.ellipse(0,0,sp0.L*.85,sp0.W*.85,0,0,7);g.fill();g.globalAlpha=1}
   g.restore();
@@ -8128,6 +8134,12 @@ function drawPier(g,t){
 function galPath(){return C?ROUTE.slice():null}
 function drawFx(g,t){
   if(!C)return;
+  {const CS=230,x0=Math.floor((cam.x-1300)/CS),x1=Math.floor((cam.x+1300)/CS),y0=Math.floor((cam.y-850)/CS),y1=Math.floor((cam.y+850)/CS);
+   g.save();g.lineCap='round';
+   for(let gx=x0;gx<=x1;gx++)for(let gy=y0;gy<=y1;gy++){const h=Math.sin(gx*127.1+gy*311.7)*43758.5453,f=h-Math.floor(h);if(f<.45)continue;
+     const tw=Math.sin(t*1.7+f*40);if(tw<.35)continue;const x=gx*CS+f*CS,y=gy*CS+((f*7)%1)*CS,a=(tw-.35)*.9,l=5+f*6;
+     g.strokeStyle='rgba(255,255,255,'+a*.55+')';g.lineWidth=2;g.beginPath();g.moveTo(x-l,y);g.lineTo(x+l,y);g.moveTo(x,y-l*.6);g.lineTo(x,y+l*.6);g.stroke()}
+   g.restore()}
   drawPier(g,t);
   {const pts=galPath();if(pts&&pts.length>1){
     g.save();g.strokeStyle='rgba(255,214,90,.75)';g.lineWidth=5;g.setLineDash([22,16]);g.lineDashOffset=-t*30;g.lineCap='round';g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)g.lineTo(pts[i][0],pts[i][1]);g.stroke();g.setLineDash([]);
@@ -8140,7 +8152,9 @@ function drawFx(g,t){
   // palle
   for(const b of C.balls){g.fillStyle='rgba(0,0,0,.25)';g.beginPath();g.ellipse(b.x,b.y+14,6,3,0,0,7);g.fill();g.fillStyle='#1a1a1e';g.beginPath();g.arc(b.x,b.y-8,6,0,7);g.fill();g.fillStyle='rgba(255,255,255,.5)';g.beginPath();g.arc(b.x-2,b.y-10,2,0,7);g.fill()}
   for(const q of C.fx){const a=1-q.t/q.life;
-    if(q.k==='puff'){g.fillStyle='rgba(215,215,220,'+(.55*a)+')';g.beginPath();g.arc(q.x,q.y,q.r*(1+q.t*.9),0,7);g.fill()}
+    if(q.k==='foam'){g.fillStyle='rgba(235,248,255,'+(.32*a)+')';g.beginPath();g.ellipse(q.x,q.y,q.r*(1+q.t*.8),q.r*.55*(1+q.t*.8),0,0,7);g.fill()}
+    else if(q.k==='smoke'){g.fillStyle='rgba(50,50,56,'+(.5*a)+')';g.beginPath();g.arc(q.x,q.y,q.r*(1+q.t*.7),0,7);g.fill()}
+    else if(q.k==='puff'){g.fillStyle='rgba(215,215,220,'+(.55*a)+')';g.beginPath();g.arc(q.x,q.y,q.r*(1+q.t*.9),0,7);g.fill()}
     else if(q.k==='flash'){g.fillStyle='rgba(255,215,110,'+a+')';g.beginPath();g.arc(q.x,q.y,q.r*(1+q.t*3),0,7);g.fill();g.fillStyle='rgba(255,255,230,'+a+')';g.beginPath();g.arc(q.x,q.y,q.r*.5,0,7);g.fill()}
     else if(q.k==='splash'){g.strokeStyle='rgba(255,255,255,'+a+')';g.lineWidth=3;g.beginPath();g.ellipse(q.x,q.y,q.r*(1+q.t*4),q.r*.5*(1+q.t*4),0,0,7);g.stroke();g.fillStyle='rgba(255,255,255,'+(a*.7)+')';for(let i=0;i<4;i++)g.fillRect(q.x+Math.cos(i*1.6)*q.t*40,q.y-q.t*50+Math.sin(i)*6,3,3)}
     else if(q.k==='chip'){g.fillStyle='rgba(120,80,40,'+a+')';g.fillRect(q.x,q.y,4,4)}}
@@ -8389,6 +8403,7 @@ function battleTick(){
 }
 function boot(){
   buildHud();
+  {const ov=$('c3ov');if(ov&&!$('c3vig')){const v=document.createElement('div');v.id='c3vig';v.style.cssText='position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,rgba(0,0,0,0) 58%,rgba(4,14,30,.38) 100%)';ov.insertBefore(v,ov.firstChild)}}
   try{auInit()}catch(e){}
   if(!window.__c3au){window.__c3au=1;for(const ev of['pointerdown','touchstart','keydown'])document.addEventListener(ev,()=>{try{auInit()}catch(e){}},{capture:true,passive:true})}
   S=newState('Capitano',window.__hero||'m');
