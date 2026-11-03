@@ -1,0 +1,9 @@
+{
+  "appId": "it.settemari.game",
+  "appName": "Sette Mari",
+  "webDir": "www",
+  "backgroundColor": "#0b2a44",
+  "android": {
+    "allowMixedContent": false
+  }
+}

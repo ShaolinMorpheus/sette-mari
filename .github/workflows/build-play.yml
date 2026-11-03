@@ -1,0 +1,143 @@
+name: Crea AAB per Google Play
+
+# Si avvia a mano (Actions -> Crea AAB per Google Play -> Run workflow) oppure con un push sul ramo "play-build".
+# Senza i segreti qui sotto crea un AAB di PROVA (firmato con la chiave di debug, non caricabile su Play).
+# Con i segreti PLAY_KEYSTORE_B64, PLAY_KEYSTORE_PASS, PLAY_KEY_ALIAS, PLAY_KEY_PASS crea l'AAB firmato per il caricamento.
+on:
+  push:
+    branches: [play-build]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ADMOB_APP_ID: ca-app-pub-3940256099942544~3347511713   # ID di PROVA di Google: sostituire con il tuo dopo aver creato l'app in AdMob
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Configurazione per Play (Capacitor 8, gioco dentro l'app, AdMob)
+        run: |
+          cp package.play.json package.json
+          cp capacitor.play.config.json capacitor.config.json
+          printf '%s' 'window.SM_ADS={enabled:true,test:true};' > www/ads-config.js
+          rm -f www/v.txt
+          npm install
+
+      - name: Crea il progetto Android
+        run: npx cap add android
+
+      - name: Icona del gioco (pappagallo pirata)
+        run: |
+          find android/app/src/main/res -name 'ic_launcher*' -delete
+          cp -r android-icons/res/* android/app/src/main/res/
+
+      - name: Schermo intero
+        run: |
+          f=android/app/src/main/res/values/styles.xml
+          sed -i 's#</style>#<item name="android:windowFullscreen">true</item></style>#' "$f" || true
+
+      - name: ID dell'app AdMob nel manifest
+        run: |
+          f=android/app/src/main/AndroidManifest.xml
+          sed -i "s#</application>#<meta-data android:name=\"com.google.android.gms.ads.APPLICATION_ID\" android:value=\"$ADMOB_APP_ID\"/></application>#" "$f"
+          grep -n "APPLICATION_ID" "$f"
+
+      - name: Modalità immersiva (nasconde la barra di Android)
+        run: |
+          f=$(find android/app/src/main/java -name MainActivity.java | head -1)
+          pkg=$(grep -m1 '^package' "$f")
+          cat > "$f" <<'JAVA'
+          PKGLINE
+          import android.os.Bundle;
+          import androidx.core.view.WindowCompat;
+          import androidx.core.view.WindowInsetsCompat;
+          import androidx.core.view.WindowInsetsControllerCompat;
+          import com.getcapacitor.BridgeActivity;
+
+          public class MainActivity extends BridgeActivity {
+            @Override
+            public void onCreate(Bundle b) {
+              super.onCreate(b);
+              hideBars();
+            }
+            @Override
+            public void onWindowFocusChanged(boolean focus) {
+              super.onWindowFocusChanged(focus);
+              if (focus) hideBars();
+            }
+            @Override
+            public void onPause() {
+              super.onPause();
+              try { getBridge().getWebView().onPause(); getBridge().getWebView().pauseTimers(); } catch (Exception e) { }
+            }
+            @Override
+            public void onResume() {
+              super.onResume();
+              try { getBridge().getWebView().onResume(); getBridge().getWebView().resumeTimers(); } catch (Exception e) { }
+              hideBars();
+            }
+            private void hideBars() {
+              WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+              WindowInsetsControllerCompat c = new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
+              c.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+              c.hide(WindowInsetsCompat.Type.systemBars());
+            }
+          }
+          JAVA
+          sed -i "s|PKGLINE|$pkg|" "$f"
+          cat "$f"
+
+      - name: Versione e controllo API di destinazione
+        run: |
+          sed -i "s/versionCode 1/versionCode ${{ github.run_number }}/" android/app/build.gradle
+          sed -i "s/versionName \"1.0\"/versionName \"1.${{ github.run_number }}\"/" android/app/build.gradle
+          grep -n "versionCode\|versionName" android/app/build.gradle
+          cat android/variables.gradle
+          t=$(grep -oP 'targetSdkVersion\s*=\s*\K[0-9]+' android/variables.gradle)
+          echo "targetSdk = $t"
+          test "$t" -ge 36
+
+      - name: Compila l'AAB
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew bundleRelease --no-daemon
+
+      - name: Firma l'AAB
+        env:
+          KS_B64: ${{ secrets.PLAY_KEYSTORE_B64 }}
+          KS_PASS: ${{ secrets.PLAY_KEYSTORE_PASS }}
+          KS_ALIAS: ${{ secrets.PLAY_KEY_ALIAS }}
+          KS_KPASS: ${{ secrets.PLAY_KEY_PASS }}
+        run: |
+          aab=android/app/build/outputs/bundle/release/app-release.aab
+          if [ -n "$KS_B64" ]; then
+            echo "$KS_B64" | base64 -d > upload.keystore
+            jarsigner -keystore upload.keystore -storepass "$KS_PASS" -keypass "$KS_KPASS" "$aab" "$KS_ALIAS"
+            echo "AAB firmato con la chiave di caricamento" 
+            cp "$aab" sette-mari-play.aab
+          else
+            jarsigner -keystore debug.keystore -storepass android -keypass android "$aab" androiddebugkey
+            echo "AAB di PROVA (chiave di debug)"
+            cp "$aab" sette-mari-play-PROVA.aab
+          fi
+          ls -la *.aab
+
+      - name: Salva l'AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: sette-mari-aab
+          path: |
+            sette-mari-play.aab
+            sette-mari-play-PROVA.aab
+          if-no-files-found: ignore

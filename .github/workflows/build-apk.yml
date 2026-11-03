@@ -26,6 +26,12 @@ jobs:
       - name: Crea il progetto Android
         run: npx cap add android
 
+      - name: Icona del gioco (pappagallo pirata)
+        run: |
+          find android/app/src/main/res -name 'ic_launcher*' -delete
+          cp -r android-icons/res/* android/app/src/main/res/
+          ls android/app/src/main/res/mipmap-xxxhdpi
+
       - name: Schermo intero e orientamento libero
         run: |
           f=android/app/src/main/res/values/styles.xml
