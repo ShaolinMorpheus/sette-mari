@@ -5327,6 +5327,7 @@ const CHANGELOG=[
     "Capanna: ora ci si entra! Dentro ci sono tre stanze: camera con letto, comodino e armadio; sala con camino acceso, tavolo e libreria; stanza delle mappe con tavolo, telescopio e baule. Il letto serve per dormire (di notte), il tavolo delle mappe apre la mappa. Dentro la capanna sei al riparo dalle tempeste e la minimappa sparisce.",
     "Toccando un simbolo (risorse, sete, fame, pulsanti, scambi) compare un'etichetta con il suo nome.",
     "Capanna: i mobili si usano da ogni lato (baule, armadio, letto…) e l'armadio non sporge più sulla stanza. Il cannone del campo ora si può esaminare; l'indizio vicino alla tenda di Tito è stato spostato in un punto ben visibile.",
+    "Mare e nave spagnola: quando Biscotto parla si sente anche il suo verso registrato.",
     "Nuova voce Menu → Audio e schermo → Grafica: Auto, Bassa, Media o Alta (Alta non riduce mai la qualità da sola). Nel mare del Capitolo 3 la scelta si applica per intero al riavvio.",
     "Mare (Capitolo 3): meno scatti. Le immagini di sfondo del mare sono più leggere (circa 4 volte meno memoria) e la risoluzione parte più bassa.",
     "Dopo un finale, «Esamina» sulla nave permette di riprendere il mare e andare al Capitolo 3. La battaglia navale (Capitolo 3, con l'abbordaggio e l'interno del galeone) ora si raggiunge dalla schermata di fine Capitolo 2 con «Capitolo 3: la battaglia in mare».",
@@ -8458,7 +8459,7 @@ const T=TS,TAU=Math.PI*2;
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 const angD=(a,b)=>{let d=(b-a)%TAU;if(d>Math.PI)d-=TAU;if(d<-Math.PI)d+=TAU;return d};
 const rr=(a,b)=>a+Math.random()*(b-a);
-const toast=(h,ms)=>{const bx=$('toasts');if(bx)bx.innerHTML='';return UI.toast(String(h).replace(/<[^>]+>/g,''),ms||4200)};
+const toast=(h,ms)=>{if(/^<b>Biscotto/.test(String(h))&&AU.ctx&&AU.on)sfx('cra');const bx=$('toasts');if(bx)bx.innerHTML='';return UI.toast(String(h).replace(/<[^>]+>/g,''),ms||4200)};
 const css=document.createElement('style');
 css.textContent=`
 body.w3 #vit,body.w3 #clock,body.w3 #res,body.w3 #chal,body.w3 #ctr,body.w3 #mini,body.w3 #obj,body.w3 #tank,body.w3 #bJ{display:none!important}
@@ -8756,7 +8757,7 @@ const PEV={
 const pick=a=>a[(Math.random()*a.length)|0];
 function parSay(txt,ms){
   if(!C)return;const d=$('c3par');d.innerHTML='';const b=document.createElement('b');b.textContent='🦜 '+pn('Biscotto')+': ';d.appendChild(b);d.appendChild(document.createTextNode('«'+pn(txt)+'»'));
-  d.style.display='block';C.parUntil=C.t+(ms||5200);C.parCd=7;if(AU.ctx&&AU.on)sfx('bird');
+  d.style.display='block';C.parUntil=C.t+(ms||5200);C.parCd=7;if(AU.ctx&&AU.on)sfx('cra');
 }
 function parEv(k,force){if(!C||C.tut||C.over)return;if(!force&&(C.parCd>0||Math.random()>.65))return;parSay(pick(PEV[k]),4600)}
 function dirName(dx,dy){const a=Math.atan2(dy,dx)*180/Math.PI,n=['a est','a sud-est','a sud','a sud-ovest','a ovest','a nord-ovest','a nord','a nord-est'];return n[((Math.round(a/45)%8)+8)%8]}
@@ -9591,7 +9592,7 @@ function sayNow(){
   if(K.sayT>0){K.sayT-=K.dt;if(K.sayT<=0)d.style.display='none';return}
   if(!K.say.length)return;const s=K.say.shift();
   d.innerHTML='';const b=document.createElement('b');b.textContent=(s.who==='Biscotto'?'🦜 '+pn('Biscotto'):s.who)+': ';d.appendChild(b);d.appendChild(document.createTextNode('«'+pn(s.txt)+'»'));d.style.display='block';K.sayT=s.ms/1000;K.lastSay=K.t;
-  if(s.who==='Biscotto'&&AU.ctx&&AU.on)sfx('bird');
+  if(s.who==='Biscotto'&&AU.ctx&&AU.on)sfx('cra');
 }
 function dirName(dx,dy){const a=Math.atan2(dy,dx)*180/Math.PI,n=['a est','a sud-est','a sud','a sud-ovest','a ovest','a nord-ovest','a nord','a nord-est'];return n[((Math.round(a/45)%8)+8)%8]}
 function stairsGoal(want){const d=want>K.deck?'d':'u',st=STAIRS[K.deck][d];return[cx(st[0]),(OY+st[1])*T,want>K.deck?'Scendi: la scala è nel ponte aperto, vicino al grande albero a prua.':'Sali: la scala è nel ponte aperto, vicino al grande albero a prua.']}
