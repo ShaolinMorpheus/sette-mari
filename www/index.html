@@ -5326,7 +5326,7 @@ const CHANGELOG=[
     "Capanna: ora ci si entra! Dentro ci sono tre stanze: camera con letto, comodino e armadio; sala con camino acceso, tavolo e libreria; stanza delle mappe con tavolo, telescopio e baule. Il letto serve per dormire (di notte), il tavolo delle mappe apre la mappa. Dentro la capanna sei al riparo dalle tempeste e la minimappa sparisce.",
     "Toccando un simbolo (risorse, sete, fame, pulsanti, scambi) compare un'etichetta con il suo nome.",
     "Capanna: i mobili si usano da ogni lato (baule, armadio, letto…) e l'armadio non sporge più sulla stanza. Il cannone del campo ora si può esaminare; l'indizio vicino alla tenda di Tito è stato spostato in un punto ben visibile.",
-    "La battaglia navale (Capitolo 3, con l'abbordaggio e l'interno del galeone) ora si raggiunge dalla schermata di fine Capitolo 2 con «Capitolo 3: la battaglia in mare».",
+    "Dopo un finale, «Esamina» sulla nave permette di riprendere il mare e andare al Capitolo 3. La battaglia navale (Capitolo 3, con l'abbordaggio e l'interno del galeone) ora si raggiunge dalla schermata di fine Capitolo 2 con «Capitolo 3: la battaglia in mare».",
     "Finali del Capitolo 2: ora sono una scena animata a schermo intero (mare, riva che si allontana, fumo o lanterna), non più dialoghi accanto alla nave. Dopo aver ricostruito la nave si può salpare subito con «Esamina». Ritoccata una frase di Biscotto.",
     "Bandiera pirata: ora sta più vicina al falò (anche per chi l'aveva già messa); il pulsante azione si aggiorna anche dentro la grotta.",
     "Campo dei Fuggiaschi: tende ridisegnate (tela a spicchi, lembi legati, corde, bandierina), falò vero con cerchio di sassi, ciocchi, braci e scintille. Ora sono interattivi: puoi guardare dentro ogni tenda (la prima volta dà un po' di esperienza) e scaldarti al fuoco ascoltando chi è vicino (una volta al giorno dà fiducia). Il simbolo sulla vela della nave è la stella dei venti.",
@@ -6017,7 +6017,7 @@ Ch2.look=function(e){
     c.parts.rudder=1;c.ch.note=1;sfx('quest');
     UI.dlg([D('hero',"Il timone, avvolto in un telo cerato. E sopra, un biglietto con la grafia di Ferro."),D('hero',"«Otto posti. Tre nomi. Gli altri aspetteranno la prossima nave. — F.»"),D('hero',"«La prossima nave». Non ci sarà nessuna prossima nave."),D('hero',"Ferro non ha mai pensato di portarli tutti.")],()=>{checkAll()});return true}
   if(e.id==='nave'){
-    if(S.flags.ch2end){UI.dlg([D('hero',"La nave ha già compiuto il suo viaggio. Qui, ora, c'è solo la sua ombra.")]);return true}
+    if(S.flags.ch2end){let go=false;UI.dlg([D('hero',"La nave ha già compiuto il suo viaggio. Ma il mare è ancora là fuori."),D('hero',"Vuoi riprendere il mare?",{choices:[{t:"Sì: Capitolo 3, la battaglia in mare.",fn:()=>{go=true}},{t:"No, resto qui.",fn:()=>{}}]})],()=>{if(go){try{saveGame()}catch(_){}location.hash='#w3';location.reload()}});return true}
     if(qAct('c10',0)){
       const cost=C2COST.cantiere;
       if(!hasRes(cost)){UI.dlg([D('hero',"Lo scafo è da rimettere in sesto. Mi serve: "+costTxt(cost)+".")]);return true}
