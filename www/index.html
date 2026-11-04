@@ -5516,20 +5516,20 @@ Ch2.talk=function(e){
   let act=null;
   const choices=[];
   hs.sort((a,b)=>(a.offer?1:0)-(b.offer?1:0));
-  for(const h of hs.filter(h=>!h.x&&!h.offer))choices.push({t:h.label(),fn:()=>{act=h}});
-  const ex=hs.filter(h=>h.x||h.offer);
+  const qs=hs.filter(h=>!h.x&&!h.offer).map(h=>({t:h.label(),h}));
+  const oth=hs.filter(h=>h.x||h.offer).map(h=>({t:h.label(),h}));
+  if(w==='nives')oth.push({t:"Scambiare materiali",h:'trade'});
+  if(w==='gnocco')oth.push({t:"Fatti cucinare qualcosa",h:'cook'});
+  const grp=(L,name,q)=>{if(!L.length)return;choices.push({t:L.length===1?L[0].t:name,fn:()=>{act=L.length===1?L[0].h:{sub:L,q}}})};
+  grp(qs,"Missioni…","Di cosa si tratta?");
   choices.push({t:"Chiacchierare un po'",fn:()=>{act='chat'}});
-  if(w==='nives')choices.push({t:"Scambiare materiali",fn:()=>{act='trade'}});
-  if(w==='gnocco')choices.push({t:"Fatti cucinare qualcosa",fn:()=>{act='cook'}});
-  if(ex.length)choices.push({t:ex.length===1?ex[0].label():"Altro…",fn:()=>{act=ex.length===1?ex[0]:'extra'}});
+  grp(oth,"Altro…","Cosa facciamo?");
   choices.push({t:"Niente, a dopo",fn:()=>{}});
   const g=Ch2.GREET[w][(Math.random()*3)|0];
   UI.dlg([D(w,g+"  ("+HEARTS(Ch2.tr(w))+")",{choices})],()=>{
-    if(act==='trade')Ch2.openTrade();
-    else if(act==='cook')Ch2.openCook();
-    else if(act==='chat')Ch2.chat(w);
-    else if(act==='extra')UI.dlg([D(w,"Cosa facciamo?",{choices:ex.map(h=>({t:h.label(),fn:()=>{act=h}})).concat([{t:"Niente",fn:()=>{act=null}}])})],()=>{if(act&&act.run)act.run()});
-    else if(act&&act.run)act.run();
+    const go=x=>{if(x==='trade')Ch2.openTrade();else if(x==='cook')Ch2.openCook();else if(x==='chat')Ch2.chat(w);else if(x&&x.run)x.run()};
+    if(act&&act.sub){const L=act.sub,Q=act.q;act=null;UI.dlg([D(w,Q||"Cosa facciamo?",{choices:L.map(o=>({t:o.t,fn:()=>{act=o.h}})).concat([{t:"Niente",fn:()=>{act=null}}])})],()=>go(act))}
+    else go(act);
   });
 };
 Ch2.chat=function(w){
