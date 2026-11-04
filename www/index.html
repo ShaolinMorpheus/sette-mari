@@ -5320,11 +5320,13 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.8",d:"3 nov 2026",t:"Capitolo 3: Il Convoglio (bozza)",n:[
+    "Messaggi e pagine come storia principale: nel Capitolo 1 «Il campo abbandonato» chiede 2 messaggi in bottiglia su 4; nel Capitolo 2 nasce la tappa «Chi era J.?» (almeno 2 pagine su 4). Ogni messaggio dà un indizio, il pappagallo ti incoraggia, il finale cambia in base alle pagine lette. Nuovo Diario → Archivio per rileggerli.",
     "Nuovo Capitolo 3 in bozza giocabile: navigazione in mare, cannoni, pattuglie, il convoglio spagnolo con l'argento e l'abbordaggio del galeone con l'assalto alla nave (tre ponti). Si apre dalla schermata iniziale con «Capitolo 3 (bozza)».",
     "In mare: avvisi singoli e compatti, musica che parte subito.",
     "Capanna: ora ci si entra! Dentro ci sono tre stanze: camera con letto, comodino e armadio; sala con camino acceso, tavolo e libreria; stanza delle mappe con tavolo, telescopio e baule. Il letto serve per dormire (di notte), il tavolo delle mappe apre la mappa. Dentro la capanna sei al riparo dalle tempeste e la minimappa sparisce.",
     "Toccando un simbolo (risorse, sete, fame, pulsanti, scambi) compare un'etichetta con il suo nome.",
     "Capanna: i mobili si usano da ogni lato (baule, armadio, letto…) e l'armadio non sporge più sulla stanza. Il cannone del campo ora si può esaminare; l'indizio vicino alla tenda di Tito è stato spostato in un punto ben visibile.",
+    "La battaglia navale (Capitolo 3, con l'abbordaggio e l'interno del galeone) ora si raggiunge dalla schermata di fine Capitolo 2 con «Capitolo 3: la battaglia in mare».",
     "Finali del Capitolo 2: ora sono una scena animata a schermo intero (mare, riva che si allontana, fumo o lanterna), non più dialoghi accanto alla nave. Dopo aver ricostruito la nave si può salpare subito con «Esamina». Ritoccata una frase di Biscotto.",
     "Bandiera pirata: ora sta più vicina al falò (anche per chi l'aveva già messa); il pulsante azione si aggiorna anche dentro la grotta.",
     "Campo dei Fuggiaschi: tende ridisegnate (tela a spicchi, lembi legati, corde, bandierina), falò vero con cerchio di sassi, ciocchi, braci e scintille. Ora sono interattivi: puoi guardare dentro ogni tenda (la prima volta dà un po' di esperienza) e scaldarti al fuoco ascoltando chi è vicino (una volta al giorno dà fiducia). Il simbolo sulla vela della nave è la stella dei venti.",
@@ -5613,8 +5615,9 @@ m8:{kind:'main',title:"Il campo abbandonato",blurb:"Chi c'era prima di te? Forse
   goals:[
    {k:'reach',x:FIX.oldcamp[0]*TS,y:FIX.oldcamp[1]*TS+TS*1.2,r:4.8*TS,txt:"Cerca tracce di un vecchio campo, a nord sulla baia",hint:"Segui la costa verso nord, oltre il laghetto: c'è una baia riparata.",mark:()=>({x:FIX.oldcamp[0]*TS,y:FIX.oldcamp[1]*TS+TS,r:4*TS,up:10}),
     dlg:()=>[D('hero',"Una tenda sfondata. Un fuoco spento da anni. Qualcuno è stato qui, e non per poco."),D('hero',"Quella cassetta di ottone sembra ancora chiusa.")]},
-   {k:'flag',done:()=>!!S.flags.compass,txt:"Apri la cassetta di ottone",hint:"È accanto alla tenda.",mark:()=>pt(EID.lt_old,60)}],
-  onDone(){startQuest('m9')}},
+   {k:'flag',done:()=>!!S.flags.compass,txt:"Apri la cassetta di ottone",hint:"È accanto alla tenda.",mark:()=>pt(EID.lt_old,60)},
+   {k:'flag',done:()=>S.stat.bottles>=2,txt:()=>"Trova i messaggi in bottiglia: "+Math.min(2,S.stat.bottles)+"/2 (sull'isola ce ne sono 4)",hint:"Le bottiglie luccicano sulle spiagge. Chi le ha lasciate voleva essere letto: ogni messaggio dà un indizio.",mark:()=>pt(nearestE(['bottle'],b=>!b.got),50)}],
+  onDone(){UI.dlg([D('hero',"Due messaggi, una sola mano: J. Qualcuno ha vissuto qui prima di me, e voleva essere trovato."),D('hero',"Li ritrovo sempre nel Diario, in «Archivio».")],()=>startQuest('m9'))}},
 m9:{kind:'main',title:"Il Pino Alto",blurb:"Dall'alto si capisce dove si è.",
   goals:[{k:'flag',done:()=>!!S.flags.lookout,txt:"Raggiungi il Pino Alto e arrampicati in cima",hint:"È il pino più alto, a ovest del campo base: si vede sopra tutti gli altri alberi.",mark:()=>pt(EID.lookout,170)}],
   onDone(){startQuest('m10')}},
@@ -5877,7 +5880,7 @@ c6:{kind:'main',title:"La nave senza nome",blurb:"Ferro custodisce un segreto in
   onDone(){startQuest('c7')}},
 c7:{kind:'main',title:"L'albero maestro",blurb:"Un pino alto, dritto, antico. Ci vorrà un'ascia buona e molto fiato.",
   goals:[{k:'flag',done:()=>!!C().parts.mast,txt:"Abbatti il Pino Maestro (collina a nord-est): servono molti colpi",hint:"È sulle alture a nord-est. Con l'ascia affilata ci vuole meno tempo.",mark:()=>pt(EID.mast,150)}],
-  onDone(){UI.dlg([D('hero',"Cade con un tonfo che si sente in tutta l'isola. Il pezzo più grande è andato."),D('hero',"Restano il timone e le vele.")],()=>startQuest('c8'))}},
+  onDone(){UI.dlg([D('hero',"Cade con un tonfo che si sente in tutta l'isola. Il pezzo più grande è andato."),D('hero',"Restano il timone e le vele.")],()=>startQuest('j1'))}},
 c8:{kind:'main',title:"Il timone nascosto",blurb:"Il timone non è sulla nave. Qualcuno sa dove l'hanno messo.",
   goals:[{k:'flag',done:()=>Ch2.tr('tito')>=3,txt:()=>"Guadagnati la fiducia di Tito ("+Math.min(3,Ch2.tr('tito'))+"/3): parlagli, aiutalo",hint:"Chiacchiera con lui (una volta al giorno dà fiducia) e fai le sue richieste.",mark:()=>pt(EID.npc_tito,110)},
          {k:'flag',done:()=>!!C().said.rudder,txt:"Chiedi a Tito del timone",hint:"Parla con Tito: «Chiedi del timone».",mark:()=>pt(EID.npc_tito,110)},
@@ -5923,6 +5926,9 @@ n7:{kind:'side',title:"L'isola orientale",blurb:"A est, oltre il canale, un'isol
 n9:{kind:'side',title:"I tesori dei Fuggiaschi",blurb:"Si dice che i vecchi abitanti abbiano nascosto casse sulle isolette e in cima alla collina.",avail:()=>qDone('c5'),
   goals:[{k:'flag',done:()=>(C().tre||0)>=5,txt:()=>"Trova le casse nascoste ("+Math.min(5,C().tre||0)+"/5): quattro isolette e la collina a nord-est",hint:"Le isolette si raggiungono con la zattera (ai quattro angoli della mappa). Biscotto può indicarti dove guardare: apri la mappa grande."}],
   onDone(){UI.dlg([D('hero',"Cinque casse. I vecchi fuggiaschi avevano più fiducia nel mare che nelle persone."),D('biscotto',"Cra! Ricchi! Quasi!")],()=>{gain('tela',3,P.x,P.y);gain('corda',4,P.x,P.y-20);S.phats=S.phats||{};const m=PHATS.find(h=>!S.phats[h.id]);if(m){S.phats[m.id]=1;UI.banner('Cappellino per il pappagallo',m.n)}})}},
+j1:{kind:'main',title:"Chi era J.?",blurb:"Le bottiglie e le pagine hanno la stessa mano. Qualcuno ha lasciato la verità in pezzi.",
+  goals:[{k:'flag',done:()=>(C().pages||0)>=2,txt:()=>"Trova almeno 2 pagine del diario di J. ("+Math.min(2,C().pages||0)+"/2, in tutto sono 4)",hint:"Brillano di giorno e di notte in punti lontani dell'isola grande. Ogni pagina dà un indizio, e il pappagallo ti aiuta.",mark:()=>{const e=nearestE(['loot'],l=>l.kind===11&&!l.got);return pt(e,50)}}],
+  onDone(){UI.dlg([D('hero',"Giacomo Marrone, capitano della Sirena. Lo stesso J. delle bottiglie."),D('hero',"Ferro lo conosceva. E ha deciso chi poteva salire a bordo, e chi no.")],()=>startQuest('c8'))}},
 n8:{kind:'side',title:"Il diario di J.",blurb:"Quattro pagine sparse, strappate, della stessa mano.",avail:()=>!!S.q.c3||(C().pages||0)>0,
   goals:[{k:'flag',done:()=>(C().pages||0)>=4,txt:()=>"Trova le pagine del diario ("+(C().pages||0)+"/4)",hint:"Sono nascoste in quattro punti lontani dell'isola: brillano di giorno e di notte.",mark:()=>{const e=nearestE(['loot'],l=>l.kind===11&&!l.got);return pt(e,50)}}],
   onDone(){UI.dlg([D('hero',"Le pagine confermano tutto: Giacomo Marrone, capitano della Sirena. Lo stesso J. delle bottiglie dell'isola dove sono approdato."),D('hero',"Ferro lo conosceva. Ha cancellato i nomi che non gli servivano, e si è tenuto la nave."),D('hero',"Non era un naufrago: ha lasciato un segnale per chi sarebbe arrivato dopo."),D('biscotto',"Cra! Un segnale! Per noi!")])}}
@@ -5973,8 +5979,10 @@ Ch2.onLoot=function(e){
   if(e.id==='lt_knife'){c.knife=1;UI.dlg([D('hero',"Un coltello da marinaio con il manico intagliato. Sul legno, una «T» incisa male."),D('hero',"Ha l'aria di essere stato lasciato qui di proposito.")],()=>checkAll());return true}
   if(e.id&&e.id.indexOf('lt_pg')===0){
     const i=+e.id.slice(5);c.pages=(c.pages||0)+1;
-    const T=["«Sirena, giorno 3. Il capitano sono io, ma è l'equipaggio che tiene a galla la barca. Non dimenticarlo, Giacomo.»","«Ho incontrato un uomo, Ferro, sull'isola grande. Dice di essere l'unico sopravvissuto del suo equipaggio. I conti non tornano: la sua nave aveva trenta uomini.»","«Ferro conta i posti, non le persone. Ho visto il suo quaderno: otto posti, nove nomi. Ha cancellato quelli che non gli servono.»","«Se leggi questo, sono già in mare. Sulla Sirena c'è ancora posto. Cerca la stella bassa a ovest e non dire a Ferro dove vai. — Giacomo M.»"];
-    sfx('ok');UI.dlg([D('hero',"Pagina "+(c.pages)+"/4 del diario di J."),D('hero',T[i%4])],()=>checkAll());return true}
+    const T=Ch2.PG;
+    c.pgread=c.pgread||{};c.pgread[i%4]=1;
+    if(i%4===1){try{const ce=EID.cave;if(ce)revealAll(Math.max(0,Math.floor(ce.x/TS)-9),Math.max(0,Math.floor(ce.y/TS)-9),Math.floor(ce.x/TS)+9,Math.floor(ce.y/TS)+9)}catch(_){}}
+    sfx('ok');UI.dlg([D('hero',"Pagina "+(c.pages)+"/4 del diario di J."),D('hero',T[i%4]),D('hero',Ch2.PGCLUE[i%4]),D('biscotto',c.pages<4?"Cra! Cerca le altre pagine: la storia è a pezzi!":"Cra! Tutta la storia, finalmente!")],()=>checkAll());return true}
   if(e.id==='lt_east'){
     c.east=1;gain('tela',3,e.x,e.y);gain('corda',3,e.x,e.y-20);
     S.phats=S.phats||{};const miss=PHATS.find(h=>!S.phats[h.id]);if(miss)S.phats[miss.id]=1;
@@ -6260,6 +6268,8 @@ Ch2.launch=function(){
   });
 };
 
+Ch2.PG=["«Sirena, giorno 3. Il capitano sono io, ma è l'equipaggio che tiene a galla la barca. Non dimenticarlo, Giacomo.»","«Ho incontrato un uomo, Ferro, sull'isola grande. Dice di essere l'unico sopravvissuto del suo equipaggio. I conti non tornano: la sua nave aveva trenta uomini.»","«Ferro conta i posti, non le persone. Ho visto il suo quaderno: otto posti, nove nomi. Ha cancellato quelli che non gli servono.»","«Se leggi questo, sono già in mare. Sulla Sirena c'è ancora posto. Cerca la stella bassa a ovest e non dire a Ferro dove vai. — Giacomo M.»"];
+Ch2.PGCLUE=["Indizio: chi ha costruito la nave sa dove sono finiti i pezzi. Tito li vede, anche se non lo ammette.","Indizio: Ferro nasconde ciò che gli serve in una grotta a sud-ovest del campo. Ora la zona è segnata sulla mappa.","Indizio: Nives sa cucire le vele meglio di chiunque. Ha solo bisogno di tela e fiducia.","Indizio: di notte, a ovest, c'è una stella bassa. È la rotta di J."];
 Ch2.ENDS={
   ferro:{t:"L'Ordine di Ferro",n:1},ferro2:{t:"Il passeggero clandestino",n:2},all:{t:"Tutti a bordo",n:3},fire:{t:"Il fuoco di Ferro",n:4},solo:{t:"La fuga",n:5}
 };
@@ -6275,6 +6285,8 @@ Ch2.ending=function(k){
     fire:[D('hero',"All'alba, la nave è pronta con tutti a bordo, tranne uno."),D('ferro',"Una nave piena di indisciplinati non arriverà lontano."),D('hero',"Ferro resta sulla riva con la torcia in mano. La lascia cadere sul campo: le tende, la bancarella, la bandiera. Il fuoco sale."),D('nives',"Perché?!"),D('ferro',"Così nessuno tornerà."),D('hero',"Salpiamo con il fuoco alle spalle. Nives non gli rivolgerà più la parola. Gnocco cucinerà in silenzio, per giorni."),D('hero',"Dietro di noi il fumo sale. Davanti, un mare che ci aspetta senza fretta.")],
     solo:[D('hero',"Nel buio, uno dopo l'altro, taglio gli ormeggi. La nave scivola via come se avesse aspettato questo da sempre."),D('hero',"Sulla riva, una sola luce: Ferro, con la lanterna. Non grida. Alza la lanterna una volta. Poi la spegne."),D('biscotto',"Cra... non ci voleva."),D('hero',(c.pages||0)>=4?"Sul fondo del timone ho scritto le parole di Giacomo: «Cerca la stella bassa a ovest». È dove andrò.":"Davanti a me, il mare. Dietro, tutto il resto."),D('hero',"«Cerca la stella bassa a ovest.» Ho una nave, un pappagallo e nessun posto dove tornare.")]
   }[k];
+  {const pg=c.pages||0;
+   L.push(pg>=4?D('hero',"Ho tutte le pagine di Giacomo. So chi era, so cosa ha fatto Ferro. Qualunque rotta prenda, la porterò come una promessa."):pg>=2?D('hero',"Di Giacomo ho solo qualche pagina. Il resto resterà un mistero, in mare."):D('hero',"Chi era J.? Non lo so davvero. Resterà un nome su una bottiglia."))}
   c.endings=c.endings||{};
   UI.cine(L,k,()=>{c.endings[k]=1;S.flags.ch2end=k;sfx('quest');setTimeout(()=>Ch2.endCard(k),700);checkAll();saveGame()});
 };
@@ -6283,7 +6295,8 @@ Ch2.pre=function(){try{saveGame();localStorage.setItem(saveKey()+'-preend',JSON.
 Ch2.endCard=function(k){
   const c=C(),e=Ch2.ENDS[k],n=Object.keys(c.endings||{}).length;
   const heart=w=>'<div><b>'+HEARTS(Ch2.tr(w))+'</b>'+Ch2.NPC[w].n+'</div>';
-  $('endCard').innerHTML='<div class="seas"><b>Capitolo 2</b><span>La Baia dei Fuggiaschi · completato</span></div><h2>'+e.t+'</h2><p>La baia resta alle spalle. Davanti, il mare aperto.</p><div class="stats">'+['ferro','nives','tito','gnocco'].map(heart).join('')+'<div><b>'+(c.pages||0)+'/4</b>pagine</div><div><b>'+n+'/5</b>finali visti</div></div><p class="sm">Il Capitolo 3 è in arrivo. Intanto puoi tornare indietro e provare un altro finale: ogni scelta e ogni fiducia contano.</p><div class="row"><button class="btn gold" id="eGo">Continua a esplorare</button><button class="btn" id="eRe">Rigioca la partenza</button></div>';
+  $('endCard').innerHTML='<div class="seas"><b>Capitolo 2</b><span>La Baia dei Fuggiaschi · completato</span></div><h2>'+e.t+'</h2><p>La baia resta alle spalle. Davanti, il mare aperto.</p><div class="stats">'+['ferro','nives','tito','gnocco'].map(heart).join('')+'<div><b>'+(c.pages||0)+'/4</b>pagine</div><div><b>'+n+'/5</b>finali visti</div></div><p class="sm">Il Capitolo 3 è in arrivo. Intanto puoi tornare indietro e provare un altro finale: ogni scelta e ogni fiducia contano.</p><div class="row"><button class="btn gold" id="eC3">Capitolo 3: la battaglia in mare</button><button class="btn" id="eGo">Continua a esplorare</button><button class="btn" id="eRe">Rigioca la partenza</button></div>';
+  $('endCard').querySelector('#eC3').onclick=()=>{try{saveGame()}catch(_){}location.hash='#w3';location.reload()};
   $('endCard').querySelector('#eGo').onclick=()=>uShow('endcard',false);
   $('endCard').querySelector('#eRe').onclick=()=>{
     try{const k0=saveKey(),raw=localStorage.getItem(k0+'-preend');if(!raw)return;const s=JSON.parse(raw);s.flags.ch2end=0;s.c2.endings=Object.assign({},c.endings);localStorage.setItem(k0,JSON.stringify(s));sessionStorage.setItem('sette-mari-auto','1');S.live=false;location.reload()}catch(e){}
@@ -6301,7 +6314,7 @@ Ch2.share=function(d,s0){
   d.res=Object.assign({},d.res,s0.res);d.up=Object.assign({},d.up);for(const k in (s0.up||{}))d.up[k]=Math.max(d.up[k]||0,s0.up[k]||0);
   for(const k of['phats','phat','rec','xpt','cOpen','pname','hints','sound','music'])if(s0[k]!=null)d[k]=s0[k];
   d.stat=Object.assign({},d.stat);for(const k in (s0.stat||{}))if(typeof s0.stat[k]==='number')d.stat[k]=Math.max(d.stat[k]||0,s0.stat[k]);
-  d.vit=Object.assign({},s0.vit);if(s0.day!=null)d.day=s0.day;if(s0.tod!=null)d.tod=s0.tod;d.flags=d.flags||{};for(const k of['parrot','hat','compass','lenza','axe','pick','flint'])if(s0.flags&&s0.flags[k])d.flags[k]=1;
+  d.vit=Object.assign({},s0.vit);if(s0.day!=null)d.day=s0.day;if(s0.tod!=null)d.tod=s0.tod;d.flags=d.flags||{};for(const k of['parrot','hat','compass','lenza','axe','pick','flint'])if(s0.flags&&s0.flags[k])d.flags[k]=1;if(s0.flags&&s0.flags.bread)d.flags.bread=Object.assign({},d.flags.bread,s0.flags.bread);
   return d;
 };
 Ch2.swap=function(toCh2){
@@ -6393,7 +6406,9 @@ Story.onCrab=function(){if(hyp(P.x/TS-FIX.isl2[0],P.y/TS-FIX.isl2[1])<8)S.flags.
 Story.onBottle=function(e){
   const i=+e.id.slice(2);S.flags.sawBottle=1;
   if(!S.q.s2)startQuest('s2');
-  UI.dlg([D('hero',BOTTLES[i%4])],()=>{UI.syncObj();checkAll()});
+  S.flags.bread=S.flags.bread||{};S.flags.bread[i%4]=1;const n=Object.keys(S.flags.bread).length;
+  UI.dlg([D('hero',"Un messaggio in bottiglia ("+n+"/4)."),D('hero',BOTTLES[i%4])],()=>{UI.syncObj();checkAll();
+    if(S.flags.parrot&&n<4)setTimeout(()=>{if(!UI.dlgOpen()){say(PAR,n<2?"Cra! Ce ne sono altri. Cerca dove luccica!":"Cra! Ne manca ancora qualcuno. Io dico: spiagge!",4.2);sfx('cra')}},900)});
 };
 Story.onLoot=function(e){
   if(WORLD===2&&Ch2.onLoot(e))return;
@@ -7640,6 +7655,12 @@ function journalBody(){
     h+='<div class="seas after"><b>Dopo la Stagione 1</b><span>Una cosa a parte</span></div>'+AFTER.map(c=>'<div class="chap"><b>\u2605</b><div><h4>'+uEsc(c.t)+'</h4><p>'+uEsc(c.d)+'</p><span class="st lock">'+c.st+'</span></div></div>').join('');
     return h;
   }
+  if(jTab==='a'){
+    const br=(S.flags&&S.flags.bread)||{},pr=(WORLD===2||S.c2)?((S.c2&&S.c2.pgread)||{}):{};
+    let h='<h3>Messaggi in bottiglia ('+Object.keys(br).length+'/4)</h3>';
+    for(let i=0;i<4;i++)h+='<p class="sm">'+(br[i]?uEsc(BOTTLES[i]):'— non ancora trovato —')+'</p>';
+    if(S.c2||WORLD===2){h+='<h3>Pagine del diario di J. ('+Object.keys(pr).length+'/4)</h3>';for(let i=0;i<4;i++)h+='<p class="sm">'+(pr[i]?uEsc(Ch2.PG[i]):'— non ancora trovata —')+'</p>'}
+    return h}
   if(jTab==='r')return Extra.collectionHtml();
   if(!newsOK)return'<div class="news"><h4>Area riservata</h4><p style="font-weight:700;font-size:13.5px">Solo l\'admin può accedere.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn" id="nwGo">Entra</button></div><p id="nwErr" style="color:#b3261e;font-weight:800;font-size:13px;min-height:18px;margin:6px 0 0"></p></div>';
   return'<div class="news">'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
@@ -7648,7 +7669,7 @@ let newsOK=false;
 const pwHash=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return h};
 function journalDraw(){
   const c=$('jCard');
-  c.innerHTML='<div class="jh"><h2>'+(S.hero==='f'?'Diario della Capitana':'Diario del Capitano')+'</h2><button class="btn" id="jx">Chiudi</button></div><div class="tabs">'+[['q','Missioni'],['s','Stagione 1'],['r','Raccolta'],['n','Novità']].map(t=>'<button class="tab'+(jTab===t[0]?' on':'')+'" data-t="'+t[0]+'">'+t[1]+(t[0]==='q'&&Object.keys(jSeen).length?'<i class="rdot tabdot"></i>':'')+'</button>').join('')+'</div><div class="jbody">'+journalBody()+'</div>';
+  c.innerHTML='<div class="jh"><h2>'+(S.hero==='f'?'Diario della Capitana':'Diario del Capitano')+'</h2><button class="btn" id="jx">Chiudi</button></div><div class="tabs">'+[['q','Missioni'],['s','Stagione 1'],['r','Raccolta'],['a','Archivio'],['n','Novità']].map(t=>'<button class="tab'+(jTab===t[0]?' on':'')+'" data-t="'+t[0]+'">'+t[1]+(t[0]==='q'&&Object.keys(jSeen).length?'<i class="rdot tabdot"></i>':'')+'</button>').join('')+'</div><div class="jbody">'+journalBody()+'</div>';
   c.querySelector('#jx').onclick=()=>uShow('journal',false);
   const go=c.querySelector('#nwGo');
   if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
