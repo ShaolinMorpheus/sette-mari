@@ -6288,7 +6288,7 @@ Ch2.ending=function(k){
   {const pg=c.pages||0;
    L.push(pg>=4?D('hero',"Ho tutte le pagine di Giacomo. So chi era, so cosa ha fatto Ferro. Qualunque rotta prenda, la porterò come una promessa."):pg>=2?D('hero',"Di Giacomo ho solo qualche pagina. Il resto resterà un mistero, in mare."):D('hero',"Chi era J.? Non lo so davvero. Resterà un nome su una bottiglia."))}
   c.endings=c.endings||{};
-  UI.cine(L,k,()=>{c.endings[k]=1;S.flags.ch2end=k;sfx('quest');setTimeout(()=>Ch2.endCard(k),700);checkAll();saveGame()});
+  UI.cine(L,k,()=>{c.cineSeen=1;c.endings[k]=1;S.flags.ch2end=k;sfx('quest');setTimeout(()=>Ch2.endCard(k),700);checkAll();saveGame()});
 };
 const t_=(c,w)=>(c.trust&&c.trust[w])||0;
 Ch2.pre=function(){try{saveGame();localStorage.setItem(saveKey()+'-preend',JSON.stringify(S))}catch(e){}};
@@ -8205,6 +8205,7 @@ function beginGame(){
   S.live=true;window.__hero=S.hero;S.seen=S.seen||{};
   P.x=S.px;P.y=S.py;P.hd=S.hd||0;P.mode=S.mode||'walk';P.path=null;P.go=null;P.act=null;P.tool=null;P.rv=0;
   EID.plot_zattera.away=P.mode==='raft';placeMoored();
+  try{if(WORLD===2){const c=C();if(c&&c.parts&&S.flags&&S.flags.ch2end&&!c.cineSeen&&!c.cineMig){c.cineMig=1;S.flags.ch2end=0;c.endings={};Object.assign(c.parts,{mast:1,rudder:1,sails:1,yard:1})}}}catch(e){}
   try{if(WORLD===2){const c=C();if(c&&c.parts&&c.parts.rudder&&!c.cvSeen&&!c.cvMig&&!c.parts.yard){c.cvMig=1;c.parts.rudder=0}}}catch(e){}
   S.ctrl='joy';S.hand=handPref();document.body.dataset.ctrl='joy';document.body.dataset.hand=S.hand;
   Story.placeParrot();
