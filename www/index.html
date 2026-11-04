@@ -566,7 +566,7 @@ setTimeout(function(){try{init()}catch(e){}},2500);
 /* ====== COSTANTI E UTILITÀ ====== */
 const WORLD=(function(){try{if(window.__W3)return 3;if(window.__W4)return 4;if(window.__W2)return 2;const K='sette-mari-e-mezzo-s1-v2',sl=+localStorage.getItem('sette-mari-slot')||1,k=sl===2||sl===3?K+'-s'+sl:K;const j=localStorage.getItem(k);if(!j)return 1;const o=JSON.parse(j);return o&&o.v===2&&o.ch===2?2:1}catch(e){return 1}})();
 const I2=9;                              // distanza extra dell'isola dei fuggiaschi (tile)
-const TS=44, MW=WORLD===4?72:WORLD===3?210:99, MH=WORLD===4?46:WORLD===3?126:60, GS=1, SS=2, FS=.5, WW=MW*TS, WH=MH*TS, WL=0.18;
+const TS=44, MW=WORLD===4?72:WORLD===3?210:99, MH=WORLD===4?46:WORLD===3?126:60, GS=WORLD===3?.6:1, SS=2, FS=WORLD===3?.3:.5, WW=MW*TS, WH=MH*TS, WL=0.18;
 const $=id=>document.getElementById(id);
 const pn=s=>{const n=(typeof S!=='undefined'&&S&&S.pname)||'Pappagallo';return String(s).replace(/Biscotto/g,()=>n)};   // il nome del pappagallo lo sceglie il giocatore
 const clamp=(v,a,b)=>v<a?a:v>b?b:v;
@@ -4286,7 +4286,7 @@ function drawTorchHand(g,t){
 
 /* ---- 09_render.js ---- */
 /* ====== DISEGNO DEL MONDO ====== */
-let LCV=null;let cv,ctx,VW=0,VH=0,DPR=1,RT=0,DPRMAX=1.6,QL=0;   // QL: livello di qualità (si abbassa da solo sui telefoni lenti)
+let LCV=null;let cv,ctx,VW=0,VH=0,DPR=1,RT=0,DPRMAX=WORLD===3?1.25:1.6,QL=0;   // QL: livello di qualità (si abbassa da solo sui telefoni lenti)
 const cam={x:FIX.spawn[0]*TS,y:FIX.spawn[1]*TS,uz:1,base:1};
 const PAR={type:'parrot',x:0,y:0,alt:50,ph:0,flip:false,perch:false,fl:0};
 const camZoom=()=>cam.base*cam.uz;
@@ -5326,6 +5326,7 @@ const CHANGELOG=[
     "Capanna: ora ci si entra! Dentro ci sono tre stanze: camera con letto, comodino e armadio; sala con camino acceso, tavolo e libreria; stanza delle mappe con tavolo, telescopio e baule. Il letto serve per dormire (di notte), il tavolo delle mappe apre la mappa. Dentro la capanna sei al riparo dalle tempeste e la minimappa sparisce.",
     "Toccando un simbolo (risorse, sete, fame, pulsanti, scambi) compare un'etichetta con il suo nome.",
     "Capanna: i mobili si usano da ogni lato (baule, armadio, letto…) e l'armadio non sporge più sulla stanza. Il cannone del campo ora si può esaminare; l'indizio vicino alla tenda di Tito è stato spostato in un punto ben visibile.",
+    "Mare (Capitolo 3): meno scatti. Le immagini di sfondo del mare sono più leggere (circa 4 volte meno memoria) e la risoluzione parte più bassa.",
     "Dopo un finale, «Esamina» sulla nave permette di riprendere il mare e andare al Capitolo 3. La battaglia navale (Capitolo 3, con l'abbordaggio e l'interno del galeone) ora si raggiunge dalla schermata di fine Capitolo 2 con «Capitolo 3: la battaglia in mare».",
     "Finali del Capitolo 2: ora sono una scena animata a schermo intero (mare, riva che si allontana, fumo o lanterna), non più dialoghi accanto alla nave. Dopo aver ricostruito la nave si può salpare subito con «Esamina». Ritoccata una frase di Biscotto.",
     "Bandiera pirata: ora sta più vicina al falò (anche per chi l'aveva già messa); il pulsante azione si aggiorna anche dentro la grotta.",
