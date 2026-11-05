@@ -5327,6 +5327,7 @@ const CHANGELOG=[
     "Capanna: ora ci si entra! Dentro ci sono tre stanze: camera con letto, comodino e armadio; sala con camino acceso, tavolo e libreria; stanza delle mappe con tavolo, telescopio e baule. Il letto serve per dormire (di notte), il tavolo delle mappe apre la mappa. Dentro la capanna sei al riparo dalle tempeste e la minimappa sparisce.",
     "Toccando un simbolo (risorse, sete, fame, pulsanti, scambi) compare un'etichetta con il suo nome.",
     "Capanna: i mobili si usano da ogni lato (baule, armadio, letto…) e l'armadio non sporge più sulla stanza. Il cannone del campo ora si può esaminare; l'indizio vicino alla tenda di Tito è stato spostato in un punto ben visibile.",
+    "Mare: le vele ora girano piano da un lato all'altro quando vira la nave (prima scattavano).",
     "Mare e nave spagnola: quando Biscotto parla si sente anche il suo verso registrato.",
     "Nuova voce Menu → Audio e schermo → Grafica: Auto, Bassa, Media o Alta (Alta non riduce mai la qualità da sola). Nel mare del Capitolo 3 la scelta si applica per intero al riavvio.",
     "Mare (Capitolo 3): meno scatti. Le immagini di sfondo del mare sono più leggere (circa 4 volte meno memoria) e la risoluzione parte più bassa.",
@@ -8970,10 +8971,12 @@ function drawShip(g,e,t){
   // vele (cartelloni che guardano il vento)
   const lvl=s===C.p?C.sail:(s.disabled?0:2),k=lvl===0?.38:.5+.17*lvl;
   const sw=Math.sin(t*1.8+s.seed)*.03+(s.v?.05*(s.v/120):0)*(c>0?-1:1);
+  if(s.sg==null)s.sg=c<0?-1:1;if(c>.25)s.sg=1;else if(c<-.25)s.sg=-1;
+  s.sf=s.sf==null?s.sg:s.sf+(s.sg-s.sf)*Math.min(1,Math.max(0,t-(s.sfT||t))*4);s.sfT=t;   // la vela gira piano da un lato all'altro, senza scatto
   const ms=sp0.masts.slice().sort((a,b)=>(a-b)*sn);
   for(const m of ms){
     g.save();g.translate(s.x+c*m*sp0.L,s.y+sn*m*sp0.L+8+bob);
-    g.transform(1,0,sw,1,0,0);if(c<0)g.scale(-1,1);
+    g.transform(1,0,sw,1,0,0);g.scale(s.sf,1);
     if(sk>0)g.globalAlpha=1-sk*1.4;
     g.scale(1,k);const spr=ss(s.type);drawSp(g,spr,0,0,1);g.restore()
   }
