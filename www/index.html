@@ -10425,7 +10425,7 @@ function swordFx(g,x,y,a,len,col,skin){
   g.restore()}
 /* sciabola in mano: la mano è quella disegnata da drawChar (braccio articolato fino all'elsa) */
 function bladeAt(g,sb,len,col,e){const h=sb&&sb.out;if(!h)return;swordFx(g,h.x,h.y,sb.a,len,col,e.skin||(CH[e.who]&&CH[e.who].skin))}
-function sabIdle(flip){return flip?Math.PI-1.25:1.25}
+function sabIdle(flip){return -Math.PI/2+(flip?-.28:.28)}
 function sabSwing(face,p){const sd=Math.cos(face)<0?-1:1;return face+sd*(-1.2+2.4*p)}
 function sabParry(face){const sd=Math.cos(face)<0?-1:1;return face-sd*1.3}
 function swingA(base,dir,p){return base+dir*(-1.15+2.3*p)}
@@ -10442,7 +10442,7 @@ function drawEnt(g,e,t){
     const ko=e.ko>0;
     if(ko){drawLying(g,e,t,'z z z');return}
     if(e.flash>0){g.save();g.globalAlpha=.55+.45*Math.sin(t*60)}
-    const fa=e.face!=null?e.face:(e.flip?Math.PI:0),sb=e.swing>0?{a:sabSwing(fa,1-e.swing/.32),r:.95}:{a:sabIdle(e.flip),r:0};
+    const fa=e.face!=null?e.face:(e.flip?Math.PI:0),sb=e.swing>0?{a:sabSwing(fa,1-e.swing/.32),r:.95}:{a:sabIdle(e.flip),r:.3};
     drawChar(g,e.x,e.y,charO(e,t,e.st==='chase'?{emote:'!',sab:sb}:{sab:sb}));
     bladeAt(g,sb,24,null,e);
     if(e.flash>0)g.restore();
@@ -10452,7 +10452,7 @@ function drawEnt(g,e,t){
     if(e.flash>0){g.save();g.globalAlpha=.55+.45*Math.sin(t*60)}
     try{
     const jit=Math.sin(t*9+e.ph)*(e.sw>0?2.2:.8);
-    const a0=e.flip?Math.PI:0,p=e.sw>0?1-e.sw/.34:0,sb=e.sw>0?{a:sabSwing(a0,p),r:.95}:{a:a0+(e.flip?-1:1)*.35-.25,r:.6};
+    const a0=e.flip?Math.PI:0,p=e.sw>0?1-e.sw/.34:0,sb=e.sw>0?{a:sabSwing(a0,p),r:.95}:{a:sabIdle(e.flip),r:.3};
     drawChar(g,e.x+jit*(e.flip?-1:1),e.y,charO(e,t,{moving:false,sab:sb}));
     bladeAt(g,sb,22,null,e);if(e.hp!=null&&e.hp<3)allyHpPips(g,{x:e.x,y:e.y,hp:e.hp,maxhp:3,flash:0,ally:0});
     }finally{if(e.flash>0)g.restore()}
@@ -10461,7 +10461,7 @@ function drawEnt(g,e,t){
   if(e.ally&&e.hp<=0){drawLying(g,e,t,'✚');return}
   if(e.ally){
     if(e.flash>0){g.save();g.globalAlpha=.55+.45*Math.sin(t*60)}
-    const fa=e.face!=null?e.face:(e.flip?Math.PI:0),sb=e.swing>0?{a:sabSwing(fa,1-e.swing/.32),r:.95}:{a:sabIdle(e.flip),r:0};
+    const fa=e.face!=null?e.face:(e.flip?Math.PI:0),sb=e.swing>0?{a:sabSwing(fa,1-e.swing/.32),r:.95}:{a:sabIdle(e.flip),r:.3};
     drawChar(g,e.x,e.y,charO(e,t,{sab:sb}));
     bladeAt(g,sb,22,null,e);
     if(e.flash>0)g.restore();
@@ -10532,7 +10532,7 @@ function playerSab(){
   if(!K)return null;const f=Math.atan2(K.fdy,K.fdx);let sb;
   if(K.parry)sb={a:sabParry(f),r:.5};
   else if(K.swingT>0)sb={a:sabSwing(f,1-K.swingT/.32),r:.95};
-  else sb={a:sabIdle(P.flip),r:0};
+  else sb={a:sabIdle(P.flip),r:.3};
   K.sb=sb;return sb}
 window.Ch4={sab:playerSab,mtick:(t,b)=>assaultTick(t,b),auInit:()=>auInit(),setDeck,bfsFrom,GP_BY,cx,cy,OX,OY,T,DECKS,get MW(){return MW},get MH(){return MH},get P(){return P},get cam(){return cam},get AU(){return AU},mood:()=>musicMood(),tp(gx,gy){P.x=cx(gx);P.y=cy(gy);cam.x=P.x;cam.y=P.y;K.tr=[{x:P.x,y:P.y}]},use:useBtn,atk:attack,boot,step,drawFloor,drawTop,drawEnt,get K(){return K},dump(){return G.map(r=>r.join('')).join('\n')}};
 })();
