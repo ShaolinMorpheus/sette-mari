@@ -1,4 +1,4 @@
-<!doctype html><html><head><script>(function(){if(location.hash==='#w4')window.__W4=1;else if(location.hash==='#w3')window.__W3=1})();</script><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script>(function(){try{var B='__BUILD__';if(B.indexOf('__')===0||location.protocol==='file:')return;fetch('v.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(v){v=(v||'').trim();if(!/^[0-9a-f]{40}$/.test(v)||v===B)return;var k='sm_rl';if(sessionStorage.getItem(k)===v)return;sessionStorage.setItem(k,v);location.replace(location.pathname+'?b='+v.slice(0,8))}).catch(function(){})}catch(e){}})();</script></head><body>
+<!doctype html><html><head><script>(function(){try{var g=localStorage.getItem('sm_goto');if(g){localStorage.removeItem('sm_goto');history.replaceState(null,'',g)}}catch(e){}window.__go=function(h){try{localStorage.setItem('sm_goto',h)}catch(e){}try{location.hash=h}catch(e){}};if(location.hash==='#w4')window.__W4=1;else if(location.hash==='#w3')window.__W3=1})();</script><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script>(function(){try{var B='__BUILD__';if(B.indexOf('__')===0||location.protocol==='file:')return;fetch('v.txt?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).then(function(v){v=(v||'').trim();if(!/^[0-9a-f]{40}$/.test(v)||v===B)return;var k='sm_rl';if(sessionStorage.getItem(k)===v)return;sessionStorage.setItem(k,v);location.replace(location.pathname+'?b='+v.slice(0,8))}).catch(function(){})}catch(e){}})();</script></head><body>
 <title>Sette Mari</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5331,6 +5331,7 @@ const CHANGELOG=[
     "Mare: gli alberi delle vele restano sempre dello stesso spessore e le due vele non si sovrappongono più di colpo quando vira la nave.",
     "Mare: le vele ora girano piano da un lato all'altro quando vira la nave (prima scattavano).",
     "Mare e nave spagnola: quando Biscotto parla si sente anche il suo verso registrato.",
+    "Cambio di capitolo (mare, galeone, ritorno) più robusto sul telefono: non dipende più solo dal cambio di indirizzo, che su Android a volte si perdeva e riportava alla prima isola.",
     "Schermata iniziale: nuovo link «Assalto al galeone (prova)» per giocare subito la bozza dell'abbordaggio (interno della nave spagnola: chiavi, cella, stiva con l'argento, guardie) senza rifare tutta la battaglia in mare.",
     "Nuova voce Menu → Audio e schermo → Grafica: Auto, Bassa, Media o Alta (Alta non riduce mai la qualità da sola). Nel mare del Capitolo 3 la scelta si applica per intero al riavvio.",
     "Mare (Capitolo 3): meno scatti. Le immagini di sfondo del mare sono più leggere (circa 4 volte meno memoria) e la risoluzione parte più bassa.",
@@ -6025,7 +6026,7 @@ Ch2.look=function(e){
     c.parts.rudder=1;c.ch.note=1;sfx('quest');
     UI.dlg([D('hero',"Il timone, avvolto in un telo cerato. E sopra, un biglietto con la grafia di Ferro."),D('hero',"«Otto posti. Tre nomi. Gli altri aspetteranno la prossima nave. — F.»"),D('hero',"«La prossima nave». Non ci sarà nessuna prossima nave."),D('hero',"Ferro non ha mai pensato di portarli tutti.")],()=>{checkAll()});return true}
   if(e.id==='nave'){
-    if(S.flags.ch2end){let go=false;UI.dlg([D('hero',"La nave ha già compiuto il suo viaggio. Ma il mare è ancora là fuori."),D('hero',"Vuoi riprendere il mare?",{choices:[{t:"Sì: Capitolo 3, la battaglia in mare.",fn:()=>{go=true}},{t:"No, resto qui.",fn:()=>{}}]})],()=>{if(go){try{saveGame()}catch(_){}location.hash='#w3';location.reload()}});return true}
+    if(S.flags.ch2end){let go=false;UI.dlg([D('hero',"La nave ha già compiuto il suo viaggio. Ma il mare è ancora là fuori."),D('hero',"Vuoi riprendere il mare?",{choices:[{t:"Sì: Capitolo 3, la battaglia in mare.",fn:()=>{go=true}},{t:"No, resto qui.",fn:()=>{}}]})],()=>{if(go){try{saveGame()}catch(_){}__go('#w3');location.reload()}});return true}
     if(qAct('c10',0)){
       const cost=C2COST.cantiere;
       if(!hasRes(cost)){UI.dlg([D('hero',"Lo scafo è da rimettere in sesto. Mi serve: "+costTxt(cost)+".")]);return true}
@@ -6304,7 +6305,7 @@ Ch2.endCard=function(k){
   const c=C(),e=Ch2.ENDS[k],n=Object.keys(c.endings||{}).length;
   const heart=w=>'<div><b>'+HEARTS(Ch2.tr(w))+'</b>'+Ch2.NPC[w].n+'</div>';
   $('endCard').innerHTML='<div class="seas"><b>Capitolo 2</b><span>La Baia dei Fuggiaschi · completato</span></div><h2>'+e.t+'</h2><p>La baia resta alle spalle. Davanti, il mare aperto.</p><div class="stats">'+['ferro','nives','tito','gnocco'].map(heart).join('')+'<div><b>'+(c.pages||0)+'/4</b>pagine</div><div><b>'+n+'/5</b>finali visti</div></div><p class="sm">Il Capitolo 3 è in arrivo. Intanto puoi tornare indietro e provare un altro finale: ogni scelta e ogni fiducia contano.</p><div class="row"><button class="btn gold" id="eC3">Capitolo 3: la battaglia in mare</button><button class="btn" id="eGo">Continua a esplorare</button><button class="btn" id="eRe">Rigioca la partenza</button></div>';
-  $('endCard').querySelector('#eC3').onclick=()=>{try{saveGame()}catch(_){}location.hash='#w3';location.reload()};
+  $('endCard').querySelector('#eC3').onclick=()=>{try{saveGame()}catch(_){}__go('#w3');location.reload()};
   $('endCard').querySelector('#eGo').onclick=()=>uShow('endcard',false);
   $('endCard').querySelector('#eRe').onclick=()=>{
     try{const k0=saveKey(),raw=localStorage.getItem(k0+'-preend');if(!raw)return;const s=JSON.parse(raw);s.flags.ch2end=0;s.c2.endings=Object.assign({},c.endings);localStorage.setItem(k0,JSON.stringify(s));sessionStorage.setItem('sette-mari-auto','1');S.live=false;location.reload()}catch(e){}
@@ -8346,8 +8347,8 @@ function initStart(){
     {const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm,hero}))}catch(_){}startNew(nm,hero)}
   };
   $('bCont').onclick=()=>{const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm||(save&&save.name)||'',hero}))}catch(_){}startContinue(nm,hero);saveGame()};
-  $('bCap3').onclick=()=>{location.hash='#w3';location.reload()};
-  $('bCap4').onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}location.hash='#w4';location.reload()};
+  $('bCap3').onclick=()=>{__go('#w3');location.reload()};
+  $('bCap4').onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go('#w4');location.reload()};
   $('bLang').onclick=()=>sheetFor('<h2>Lingua</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+I18N.langs.map(l=>'<button class="btn'+(l===I18N.lang?' gold':'')+'" data-lg="'+l+'">'+I18N.names[l]+'</button>').join('')+'<button class="btn" id="shNo">Chiudi</button></div>',cc=>{cc.querySelectorAll('[data-lg]').forEach(b=>b.onclick=()=>{I18N.set(b.dataset.lg);closeSheet()})});
   $('bHow').onclick=UI.showHow;$('bNews').onclick=()=>{if(!S.flags)S.flags={};UI.openJournal('n')};
   $('verTxt').textContent='Bozza v'+CHANGELOG[0].v+' · '+CHANGELOG[0].d;
@@ -8951,7 +8952,7 @@ function board(){
   if(s.type==='galeone'){
     C.over=true;boardSfx();toast('<b>Abbordaggio!</b> Tutti sul galeone spagnolo!',2500);
     try{localStorage.setItem('sm_c34',JSON.stringify({pris:C.pris,silver:C.silver,hull:C.p.hull,max:C.p.max,kills:C.kills,t:C.t,shots:C.shots,hits:C.hits}))}catch(e){}
-    setTimeout(()=>{try{location.hash='#w4'}catch(e){}location.reload()},1100);return}
+    setTimeout(()=>{try{__go('#w4')}catch(e){}location.reload()},1100);return}
   s.ally=true;s.conv=false;s.disabled=false;s.hull=s.max;C.pris=2;boardSfx();parEv('board',1);saveCP();
   toast('<b>Pip:</b> «Capitano! Sapevo che saresti venuto!» · <b>Dodo:</b> «Ho ancora il cucchiaio!»');
   for(let i=0;i<8;i++)C.fx.push({k:'flash',x:s.x+rr(-60,60),y:s.y+rr(-30,30),r:18,t:0,life:.6});
@@ -9687,7 +9688,7 @@ function leave(){
   if(K.carry){K.over=true;
     try{const c0=K.carry;localStorage.setItem('sm_c34r',JSON.stringify({silver:(c0.silver||0)+K.silver,pris:K.pris||c0.pris||0,hull:c0.hull,max:c0.max,kills:(c0.kills||0)+K.kos,t:c0.t}));localStorage.removeItem('sm_c34')}catch(e){}
     toast('Tutti sulla passerella! Si torna sulla Sirena.',2500);sfx('quest');
-    setTimeout(()=>{try{location.hash='#w3'}catch(e){}location.reload()},1200);return}const full=K.cell&&K.silver>=1;
+    setTimeout(()=>{try{__go('#w3')}catch(e){}location.reload()},1200);return}const full=K.cell&&K.silver>=1;
   K.over=true;
   const bad=!K.cell?'Pip e Dodo sono ancora prigionieri.':K.silver===0?'La stiva è rimasta piena d\'argento.':'';
   const title=K.cell&&K.silver>=6?'Colpo perfetto':K.cell&&K.silver>0?'Bottino e salvataggio':K.cell?'Solo salvataggio':K.silver>0?'Solo argento':'Niente da portare a casa';
