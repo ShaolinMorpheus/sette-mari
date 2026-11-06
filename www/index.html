@@ -454,7 +454,7 @@ var lt=0;d.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<320&
     <input id="inName" type="text" maxlength="14" placeholder="Capitano" autocomplete="off">
     <div class="seg" role="radiogroup" aria-label="Aspetto"><button class="on" id="hM" role="radio" aria-checked="true">Capitano</button><button id="hF" role="radio" aria-checked="false">Capitana</button></div>
     <div id="startBtns"><button class="btn gold big" id="bNew">Salpa!</button><button class="btn big" id="bCont" hidden>Continua</button></div>
-    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button><span>·</span><button id="bLang" class="lnk">Lingua</button><span>·</span><button id="bCap3" class="lnk">Capitolo 3 (bozza)</button></div>
+    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button><span>·</span><button id="bLang" class="lnk">Lingua</button><span>·</span><button id="bCap3" class="lnk">Capitolo 3 (bozza)</button><span>·</span><button id="bCap4" class="lnk">Assalto al galeone (prova)</button></div>
     <p class="ver" id="verTxt"></p>
    </div>
   </div>
@@ -5331,6 +5331,7 @@ const CHANGELOG=[
     "Mare: gli alberi delle vele restano sempre dello stesso spessore e le due vele non si sovrappongono più di colpo quando vira la nave.",
     "Mare: le vele ora girano piano da un lato all'altro quando vira la nave (prima scattavano).",
     "Mare e nave spagnola: quando Biscotto parla si sente anche il suo verso registrato.",
+    "Schermata iniziale: nuovo link «Assalto al galeone (prova)» per giocare subito la bozza dell'abbordaggio (interno della nave spagnola: chiavi, cella, stiva con l'argento, guardie) senza rifare tutta la battaglia in mare.",
     "Nuova voce Menu → Audio e schermo → Grafica: Auto, Bassa, Media o Alta (Alta non riduce mai la qualità da sola). Nel mare del Capitolo 3 la scelta si applica per intero al riavvio.",
     "Mare (Capitolo 3): meno scatti. Le immagini di sfondo del mare sono più leggere (circa 4 volte meno memoria) e la risoluzione parte più bassa.",
     "Dopo un finale, «Esamina» sulla nave permette di riprendere il mare e andare al Capitolo 3. La battaglia navale (Capitolo 3, con l'abbordaggio e l'interno del galeone) ora si raggiunge dalla schermata di fine Capitolo 2 con «Capitolo 3: la battaglia in mare».",
@@ -8346,6 +8347,7 @@ function initStart(){
   };
   $('bCont').onclick=()=>{const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm||(save&&save.name)||'',hero}))}catch(_){}startContinue(nm,hero);saveGame()};
   $('bCap3').onclick=()=>{location.hash='#w3';location.reload()};
+  $('bCap4').onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}location.hash='#w4';location.reload()};
   $('bLang').onclick=()=>sheetFor('<h2>Lingua</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+I18N.langs.map(l=>'<button class="btn'+(l===I18N.lang?' gold':'')+'" data-lg="'+l+'">'+I18N.names[l]+'</button>').join('')+'<button class="btn" id="shNo">Chiudi</button></div>',cc=>{cc.querySelectorAll('[data-lg]').forEach(b=>b.onclick=()=>{I18N.set(b.dataset.lg);closeSheet()})});
   $('bHow').onclick=UI.showHow;$('bNews').onclick=()=>{if(!S.flags)S.flags={};UI.openJournal('n')};
   $('verTxt').textContent='Bozza v'+CHANGELOG[0].v+' · '+CHANGELOG[0].d;
