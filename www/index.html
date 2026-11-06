@@ -5344,6 +5344,7 @@ const CHANGELOG=[
     "Galeone spagnolo rifatto: tre ponti con stanze tutte diverse (cabina del comandante, alloggi ufficiali, armeria, sala delle carte, dormitorio, mensa, cucina, dispensa, cella, santabarbara, stiva), pavimenti e tappeti diversi, quadri, bandiere, lanterne alle pareti e arredi disegnati da zero: letti, armadi, librerie, tavoli, sedie, panche, stufa, rastrelliere, armature.",
     "Intelligenza artificiale sistemata: gli alleati ti seguono in formazione senza più scappare quando ti avvicini, ti raggiungono anche da lontano e restano al loro posto quando sono di guardia. Le guardie hanno un campo visivo davanti a sé, sentono i rumori, perlustrano l'ultimo punto dove ti hanno visto e poi tornano in ronda.",
     "Nuove cose da fare nel galeone: sciabola spagnola nell'armeria (ogni colpo vale doppio), colpo alle spalle che stende una guardia in un attimo, carta delle ronde che mostra i percorsi e lo sguardo delle guardie, cannone-diversivo per attirarle altrove, cassetta del medico, stufato di Dodo, 9 dobloni d'oro nascosti e una campana d'allarme che scatta al primo argento.",
+    "Dalla pagina Novità (con password) il pulsante «Prova: assalto al galeone» avvia la missione da qualsiasi punto del gioco; la visuale nel galeone è più ravvicinata, come sulle isole.",
     "Nuova musica del galeone: un'habanera furtiva in La minore con tre livelli (calma, sospetto, inseguimento) e una variante diversa per ogni ponte.",
     "Messaggi e pagine come storia principale: nel Capitolo 1 «Il campo abbandonato» chiede 2 messaggi in bottiglia su 4; nel Capitolo 2 nasce la tappa «Chi era J.?» (almeno 2 pagine su 4). Ogni messaggio dà un indizio, il pappagallo ti incoraggia, il finale cambia in base alle pagine lette. Nuovo Diario → Archivio per rileggerli.",
     "Nuovo Capitolo 3 in bozza giocabile: navigazione in mare, cannoni, pattuglie, il convoglio spagnolo con l'argento e l'abbordaggio del galeone con l'assalto alla nave (tre ponti). Si apre dalla schermata iniziale con «Capitolo 3 (bozza)».",
@@ -7696,7 +7697,7 @@ function journalBody(){
     return h}
   if(jTab==='r')return Extra.collectionHtml();
   if(!newsOK)return'<div class="news"><h4>Area riservata</h4><p style="font-weight:700;font-size:13.5px">Solo l\'admin può accedere.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn" id="nwGo">Entra</button></div><p id="nwErr" style="color:#b3261e;font-weight:800;font-size:13px;min-height:18px;margin:6px 0 0"></p></div>';
-  return'<div class="news">'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
+  return'<div class="news"><div class="row" style="margin:4px 0 10px"><button class="btn" id="nwC4">Prova: assalto al galeone</button></div>'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
 }
 let newsOK=false;
 const pwHash=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return h};
@@ -7704,6 +7705,7 @@ function journalDraw(){
   const c=$('jCard');
   c.innerHTML='<div class="jh"><h2>'+(S.hero==='f'?'Diario della Capitana':'Diario del Capitano')+'</h2><button class="btn" id="jx">Chiudi</button></div><div class="tabs">'+[['q','Missioni'],['s','Stagione 1'],['r','Raccolta'],['a','Archivio'],['n','Novità']].map(t=>'<button class="tab'+(jTab===t[0]?' on':'')+'" data-t="'+t[0]+'">'+t[1]+(t[0]==='q'&&Object.keys(jSeen).length?'<i class="rdot tabdot"></i>':'')+'</button>').join('')+'</div><div class="jbody">'+journalBody()+'</div>';
   c.querySelector('#jx').onclick=()=>uShow('journal',false);
+  const nc=c.querySelector('#nwC4');if(nc)nc.onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go('#w4');location.reload()};
   const go=c.querySelector('#nwGo');
   if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
   c.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{jTab=b.dataset.t;sfx('tap');journalDraw()});
@@ -10461,7 +10463,7 @@ function boot(){
   $('start').hidden=true;
   try{beginGame()}catch(e){console.error('beginGame',e)}
   S.flags.parrot=1;P.mode='walk';S.mode='walk';
-  FOG.fill(1);FOGDIRTY=true;cam.uz=.56;
+  FOG.fill(1);FOGDIRTY=true;cam.uz=1;
   K={hp:6,maxhp:6,key1:false,key2:false,cell:false,hold:false,silver:0,pris:0,kos:0,caught:0,t:0,inv:0,atk:0,over:false,notes:{},tr:[],fol:[],gd:[],objs:[],say:[],sayT:0,parN:20,lastProg:0,fx:[],fdx:1,fdy:0,field:null,fieldT:0,rooms:{},readDesk:false,dt:.016,lastSay:0,dob:0,sword:false,medUsed:false,stew:false,alarm:false,lureCd:0,routesT:0,mLv:0,mHold:0,back:0,readPlan:false};
   P.x=sp[0];P.y=sp[1];P.dir='f';cam.x=P.x;cam.y=P.y;K.tr=[{x:P.x,y:P.y}];
   let car=null;try{const q=localStorage.getItem('sm_c34');if(q)car=JSON.parse(q)}catch(e){}
