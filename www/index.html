@@ -5358,6 +5358,7 @@ const CHANGELOG=[
     "Dalla pagina Novità (con password) il pulsante «Prova: assalto al galeone» avvia la missione da qualsiasi punto del gioco; la visuale nel galeone è più ravvicinata, come sulle isole.",
     "Galeone, aggiustamenti dopo la prova sul telefono: gli alleati sono solo due (Tito e Nives) e restano fermi accanto a te finché nessuna guardia ti insegue da vicino; Pip e Dodo, una volta liberati, ti aspettano alla passerella invece di seguirti.",
     "Galeone: tasti invertiti (Attacca grande dove prima c'era Usa, Usa più piccolo) e nuovo tasto «Para» da tenere premuto: ti mette in guardia davanti a te (rallenta il passo), blocca i colpi frontali e, se premuto appena prima del colpo, lascia la guardia spiazzata. Alle spalle e di lato si viene colpiti.",
+    "Galeone: gli alleati sono meno aggressivi: aiutano solo se una guardia ti attacca da vicino, colpiscono di rado e non danno mai l'ultimo colpo, che spetta a te.",
     "Galeone: la sciabola ora è impugnata davvero, con braccio e mano che la reggono in tutte le direzioni (a riposo, nei fendenti e in parata), anche per guardie e compagni.",
     "Galeone: nella sala delle carte la libreria è stata spostata e il globo tolto, così non resta più un angolo chiuso; i mobili alti (armadi, librerie, armature) diventano trasparenti quando ci passi dietro.",
     "Nuova musica del galeone: un'habanera furtiva in La minore con tre livelli (calma, sospetto, inseguimento) e una variante diversa per ogni ponte.",
@@ -10007,7 +10008,7 @@ function stepAllies(dt){
     let best=null,bd=1e9;
     for(const g of K.gd){if(g.ko>0)continue;const d=Math.hypot(g.x-f.x,g.y-f.y),dgp=Math.hypot(g.x-P.x,g.y-P.y);
       const hunting=g.st==='chase'||g.fight===f||g.react>0&&g.st!=='patrol';
-      const near=post?(hunting&&d<130):(hunting&&((d<210&&dPl<340)||dgp<170));
+      const near=post?(hunting&&d<80):(hunting&&dgp<115&&d<190);
       if(near&&d<bd){bd=d;best=g}}
     f.tgt=best;
     if(!best)continue;
@@ -10018,8 +10019,8 @@ function stepAllies(dt){
       const ex=tx-f.x,ey=ty-f.y,ed=Math.hypot(ex,ey)||1;
       f.mv=moveEnt(f,ex/ed*150*dt,ey/ed*150*dt);f.wk+=dt*8;if(Math.abs(ex)>3)f.flip=ex<0;
     }else f.mv=false;
-    if(d<=50&&f.hitCd<=0){f.hitCd=1.5;f.swing=.32;g.fight=f;g.fightT=Math.max(g.fightT,.6);
-      hitGuard(g,1,dx/d,dy/d);if(g.ko>0)say(CH[f.who].name,pick(['Sistemato!','Uno in meno!','Dormi bene, casacca rossa.']),2600)}
+    if(d<=50&&f.hitCd<=0){f.hitCd=2.8;f.swing=.32;g.fight=f;g.fightT=Math.max(g.fightT,.6);
+      if(g.hp>1)hitGuard(g,1,dx/d,dy/d);else moveEnt(g,dx/d*14,dy/d*14); /* l'ultimo colpo spetta a te */if(g.ko>0)say(CH[f.who].name,pick(['Sistemato!','Uno in meno!','Dormi bene, casacca rossa.']),2600)}
   }}
 function sepAll(dt){
   const A=[{e:P,p:1}];for(const f of allies())if(f.hp>0)A.push({e:f});for(const g of K.gd)if(g.ko<=0)A.push({e:g});for(const dl2 of K.duels)for(const q of dl2)if(q.ko<=0&&q.duel)A.push({e:q,fx:1});
