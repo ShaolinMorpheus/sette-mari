@@ -5421,7 +5421,8 @@ const CHANGELOG=[
     "Banco da lavoro: se mancano materiali per orto e decorazioni compare «Ti mancano dei materiali» (l'orto vuole 4 corde); se non c'è spazio nel campo, il messaggio compare dentro la finestra.",
     "Nella capanna il quadretto della mappa è stato spostato sul muro libero, non più dietro i barili.",
     "Le tracce di zampe sono state ridisegnate: ora sono vere impronte con cuscinetto e quattro dita.",
-    "Orto ed essiccatore: se il campo è molto pieno (seconda isola) ora cercano un posto più lontano invece di dire «non c'è spazio»."
+    "Orto ed essiccatore: se il campo è molto pieno (seconda isola) ora cercano un posto più lontano invece di dire «non c'è spazio».",
+    "Orto ed essiccatore: con la finestra aperta il tempo ora scorre in diretta (barra e conto alla rovescia), senza dover chiudere e riaprire."
   ]},
   {v:"0.8",d:"3 nov 2026",t:"Capitolo 3: Il Convoglio (bozza)",n:[
     "Galeone spagnolo rifatto: tre ponti con stanze tutte diverse (cabina del comandante, alloggi ufficiali, armeria, sala delle carte, dormitorio, mensa, cucina, dispensa, cella, santabarbara, stiva), pavimenti e tappeti diversi, quadri, bandiere, lanterne alle pareti e arredi disegnati da zero: letti, armadi, librerie, tavoli, sedie, panche, stufa, rastrelliere, armature.",
@@ -7601,7 +7602,7 @@ function farmAdvance(sec,sleepy){      // sec = tempo di gioco trascorso
   if(g&&g.pl&&hasFarm('orto')){const r=rain?2.4:1;for(const p of g.pl)if(p&&GC[p.c]&&p.p<GC[p.c].t)p.p=Math.min(GC[p.c].t,p.p+sec*r)}
   if(d&&d.sl&&hasFarm('essic')&&!rain){const r=sleepy?.5:(skyLight(S.tod).dark>.3?.5:1);for(const s of d.sl)if(s&&s.p<s.t)s.p=Math.min(s.t,s.p+sec*r)}
 }
-let _fT=0,_rainWarn=false,_wT=0;
+let _fT=0,_rainWarn=false,_wT=0,_ivT=0;
 function farmNotify(k,name){
   UI.toast(k==='orto'?'Nell\'orto è pronto: '+name+'.':'Essiccazione finita: '+name+'.');sfx('ok');
   const e=E.find(x=>x.type==='cdeco'&&x.k===k);if(e&&typeof sparkBurst==='function')sparkBurst(e.x,e.y-40,8);
@@ -7662,7 +7663,7 @@ function dryLine(r){      // ingressi (hai/serve) → uscite, con il tempo: pill
   const out=Object.keys(r.out).map(k=>pill(k,'+'+r.out[k],true,' style="background:rgba(236,190,84,.3);border-color:#b8862a"')).join('');
   return'<div class="costs" style="align-items:center;margin:6px 0 2px">'+inp+'<b style="color:#6a4424">→</b>'+out+'<span class="sm" style="margin:0 0 0 4px">⏱ '+fmtT(r.t)+'</span></div>';
 }
-UI.openGarden=function(){
+UI.openGarden=function(){_ivT=performance.now();
   farmInit();let iv=0;
   const draw=()=>{
     const g=S.gard,crops=gardCrops(),nx=gardNext();
@@ -7694,6 +7695,7 @@ UI.openGarden=function(){
   draw();
   clearInterval(UI._gIv);UI._gIv=iv=setInterval(()=>{
     const sh=$('sheet');if(!sh||sh.hidden||!document.querySelector('#sheetCard [data-z]')){clearInterval(iv);return}
+    {const n=performance.now(),dt=_ivT?Math.min(2,(n-_ivT)/1000):0;_ivT=n;if(typeof PAUSED!=='undefined'&&PAUSED&&dt>0)farmAdvance(dt)}
     let ch=false;
     for(let i=0;i<4;i++){const p=S.gard.pl[i],bar=document.querySelector('#sheetCard [data-pg="'+i+'"]');
       if(p&&GC[p.c]){const C=GC[p.c];if(p.p>=C.t&&bar)ch=true;else if(bar){bar.style.width=Math.round(p.p/C.t*100)+'%';const tm=document.querySelector('#sheetCard [data-tm="'+i+'"]');if(tm)tm.textContent=fmtT((C.t-p.p)/(isRain()?2.4:1))}}}
@@ -7701,7 +7703,7 @@ UI.openGarden=function(){
   },1000);
 };
 UI.openDryer=function(){
-  farmInit();let iv=0;
+  farmInit();_ivT=performance.now();let iv=0;
   const draw=()=>{
     const d=S.dry;
     let h='<h2>L\'essiccatore</h2><p>Il sole asciuga pesce e frutta e li rende scorte che non vanno a male. Di notte ci mette il doppio, con la pioggia si ferma.</p>';
@@ -7727,6 +7729,7 @@ UI.openDryer=function(){
   draw();
   clearInterval(UI._dIv);UI._dIv=iv=setInterval(()=>{
     const sh=$('sheet');if(!sh||sh.hidden||!document.querySelector('#sheetCard [data-z]')){clearInterval(iv);return}
+    {const n=performance.now(),dt=_ivT?Math.min(2,(n-_ivT)/1000):0;_ivT=n;if(typeof PAUSED!=='undefined'&&PAUSED&&dt>0)farmAdvance(dt)}
     let ch=false;
     for(let i=0;i<3;i++){const s=S.dry.sl[i],bar=document.querySelector('#sheetCard [data-pg="'+i+'"]');
       if(s){if(s.p>=s.t&&bar)ch=true;else if(bar){bar.style.width=Math.round(s.p/s.t*100)+'%';const tm=document.querySelector('#sheetCard [data-tm="'+i+'"]');if(tm)tm.textContent=fmtT((s.t-s.p)/(skyLight(S.tod).dark>.3?.5:1))}}}
