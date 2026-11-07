@@ -1608,8 +1608,8 @@ function mkBottle(){
   },17,24);
 }
 function mkOldCamp(){
-  return sp(240,150,g=>{
-    shadowEll(g,120,128,100,12,.26);
+  return sp(272,150,g=>{
+    shadowEll(g,134,128,114,12,.26);
     // tenda a falda, mezza crollata: tela rattoppata, palo spezzato, corde allentate
     g.lineCap='round';g.lineJoin='round';
     g.strokeStyle='#8a7448';g.lineWidth=1.6;
@@ -1645,6 +1645,7 @@ function mkOldCamp(){
     // pentolino arrugginito e tazza accanto all'ingresso
     g.fillStyle='#4a4038';g.beginPath();g.ellipse(26,128,8,3,0,0,7);g.fill();g.fillStyle='#6a5a4a';g.beginPath();g.moveTo(18,124);g.lineTo(34,124);g.lineTo(32,130);g.lineTo(20,130);g.closePath();g.fill();g.strokeStyle='#2a2018';g.lineWidth=1;g.stroke();
     g.fillStyle='#8a8f98';g.fillRect(36,126,6,6);g.strokeRect(36,126,6,6);
+    g.save();g.translate(28,0);
     // cerchio di sassi con la cenere
     g.fillStyle='#3c342e';g.beginPath();g.ellipse(168,112,30,11,0,0,7);g.fill();
     for(let i=0;i<10;i++){const a=i/10*6.283,x=168+Math.cos(a)*32,y=112+Math.sin(a)*12;ball(g,x,y-2,6.6,'#c9c6bc','#99978f','#5e6068','rgba(30,30,36,.5)')}
@@ -1658,6 +1659,7 @@ function mkOldCamp(){
     g.strokeStyle='#5a4630';g.lineWidth=5;g.beginPath();g.moveTo(206,112);g.lineTo(206,70);g.moveTo(194,84);g.lineTo(218,84);g.stroke();
     g.strokeStyle='#8a7050';g.lineWidth=2;g.beginPath();g.moveTo(206,112);g.lineTo(206,70);g.moveTo(194,84);g.lineTo(218,84);g.stroke();
     g.strokeStyle='#3a3226';g.lineWidth=1.4;g.beginPath();g.moveTo(206,76);g.quadraticCurveTo(212,84,206,96);g.stroke();
+    g.restore();
   },120,134);
 }
 function mkLookoutPine(){
@@ -2282,7 +2284,7 @@ const FIX_1={
   plots:{falo:{tx:32,ty:27,w:1,h:1},capanna:{tx:27,ty:25,w:3,h:2},banco:{tx:36,ty:26,w:2,h:1},zattera:{tx:56,ty:30,w:3,h:2}},
   lookout:[24.3,25.4],
   parrotTree:[18.5,33.4],        // un grande albero fisso (ora è solo uno dei possibili posatoi)
-  oldcamp:[29.2,15.9],oldChest:[31.6,16.6],
+  oldcamp:[29.2,15.9],oldChest:[31.7,17.4],
   quarry:[48.4,21.8],
   boulders:[[45.5,20.5],[48.5,20.9],[51.5,20.4],[46.6,22.8],[49.6,23.1],[52.2,22.6],[44.4,23.4],[47.4,24.4],[50.8,24.6]],
   raftLaunch:[61.2,31.4],
@@ -4622,7 +4624,7 @@ function drawPlot(g,e,t){
     if(e.shake>0)g.translate(Math.sin(e.shake*90)*1.2,0);
     g.translate(0,Math.sin(t*1.3)*1.2);
     g.save();g.beginPath();g.rect(-90,-70,180*k,140);g.clip();drawSp(g,hullSp(),0,0,.92);g.restore();
-    if(e.st===2){g.save();g.translate(15,8);drawSailProc(g,0,0,sailState(e,0,t,1),t,!!(S&&S.up&&S.up.sail));g.restore()}
+    if(e.st===2){g.save();g.translate(14.3,Math.sin(t*1.3)*1.2);drawSailProc(g,0,0,sailState(e,0,t,1),t,!!(S&&S.up&&S.up.sail));g.restore()}
     g.restore();return;
   }
   const spr=SP[id];
@@ -4653,7 +4655,7 @@ function drawMoored(g,e,t){
   if(e.x<-900)return;
   g.save();g.translate(e.x,e.y+8+Math.sin(t*1.3+e.x)*1.2);g.rotate(e.hd||0);drawSp(g,hullSp(),0,0,.86);g.restore();
   const c=Math.cos(e.hd||0),s=Math.sin(e.hd||0);
-  drawSailProc(g,e.x+c*14,e.y+s*7+6,sailState(e,e.hd||0,t,1),t,!!(S&&S.up&&S.up.sail));
+  drawSailProc(g,e.x+c*13.3,e.y+8+Math.sin(t*1.3+e.x)*1.2+s*13.3,sailState(e,e.hd||0,t,1),t,!!(S&&S.up&&S.up.sail));
 }
 function drawRaftHull(g,t){
   g.save();g.translate(P.x,P.y+8+Math.sin(t*1.6)*1.5);g.rotate(P.hd);
@@ -4732,7 +4734,7 @@ function drawSailProc(g,mx,my,o,t,red){
 }
 function drawRaftSail(g,t){
   const c=Math.cos(P.hd),s=Math.sin(P.hd);
-  drawSailProc(g,P.x+c*14,P.y+s*7+6,sailState('P',P.hd,t),t,!!(S&&S.up&&S.up.sail));
+  drawSailProc(g,P.x+c*13.3,P.y+8+Math.sin(t*1.6)*1.5+s*13.3,sailState('P',P.hd,t),t,!!(S&&S.up&&S.up.sail));
 }
 function drawParrotEnt(g,t){
   const e=PAR;
@@ -5586,7 +5588,8 @@ const CHANGELOG=[
     "Zattera rifatta: tronchi con corteccia e teste tagliate, schiuma, base dell'albero, corda e barilotto. La vela ora gira attorno all'albero con la direzione e rimane un po' indietro quando vira (rossa con teschio dopo il potenziamento).",
     "Banco da lavoro, orto ed essiccatore non si attraversano più; sotto l'essiccatore, in mezzo ai due montanti, si può passare.",
     "Alberi, cespugli e rocce non coprono più banco, orto ed essiccatore: vengono spostati poco più in là.",
-    "Vecchio campo abbandonato: tenda rifatta (tela rattoppata, palo spezzato, corde e picchetti), con pentolino e tazza accanto."
+    "Vecchio campo abbandonato: tenda rifatta (tela rattoppata, palo spezzato, corde e picchetti), con pentolino e tazza accanto.",
+    "Zattera: l'albero ora resta fermo sulla sua base mentre giri. Vecchio campo: falò e croce più a destra della tenda, forziere un po' più in basso."
   ]},
   {v:"0.8",d:"3 nov 2026",t:"Capitolo 3: Il Convoglio (bozza)",n:[
     "Galeone spagnolo rifatto: tre ponti con stanze tutte diverse (cabina del comandante, alloggi ufficiali, armeria, sala delle carte, dormitorio, mensa, cucina, dispensa, cella, santabarbara, stiva), pavimenti e tappeti diversi, quadri, bandiere, lanterne alle pareti e arredi disegnati da zero: letti, armadi, librerie, tavoli, sedie, panche, stufa, rastrelliere, armature.",
