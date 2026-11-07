@@ -5628,7 +5628,7 @@ const CHANGELOG=[
   {v:"0.11.1",d:"7 nov 2026",t:"Lanterne sull'isola e viaggio più scorrevole",n:[
     "Lanterne sull'isola: una vicino all'acqua, a nord del laghetto, e due file lungo i sentieri, fino al relitto sulla spiaggia e fino alla zattera. Di notte fanno luce e si cammina senza torcia.",
     "Il grande viaggio: «Voga!» e «Perlustra» ora stanno accanto al tasto di fuoco, sul lato delle azioni (con i comandi invertiti passano a destra, insieme a «Fuoco!»).",
-    "Galeone: tra una stanza e l'altra ci sono porte a battente stile saloon, a un'anta sola, che si aprono lontano da chi arriva e poi oscillano finché si richiudono. Le zone lontane dal tuo personaggio sono un po' più scure, con un anello d'ombra sfumato, ora più visibile. Le porte non si invertono più a metà passaggio e si chiudono dolcemente dopo che sei passato. Le ante delle porte sono solide: si aprono solo se le spingi, più larghe per non restare attaccate a te; se dietro c'è un npc lo spingi via con l'anta, e l'obiettivo resta sempre visibile in alto. Nuove scale: gradini in legno con fianchi, corrimano e pali d'ottone.",
+    "Galeone: tra una stanza e l'altra ci sono porte a battente stile saloon, a un'anta sola, che si aprono lontano da chi arriva e poi oscillano finché si richiudono. Le zone lontane dal tuo personaggio sono un po' più scure, con un anello d'ombra sfumato, ora più visibile. Le porte non si invertono più a metà passaggio e si chiudono dolcemente dopo che sei passato. Le ante delle porte sono solide: si aprono solo se le spingi, che si aprono di più (oltre 90°) per non restare attaccate a te; se dietro c'è un npc lo spingi via con l'anta, e l'obiettivo resta sempre visibile in alto. Nuove scale: gradini in legno con fianchi, corrimano e pali d'ottone.",
     "Menu: dai sotto-menu (cappellino del pappagallo, guardaroba, partite) c'è «← Indietro» che torna al menu, senza chiuderlo tutto.",
     "Il grande viaggio: tolti i muri invisibili e rimessi a posto gli scontri con la costa.",
     "Il grande viaggio: nei Sargassi la nave va più veloce, anche sulle alghe; «Voga!» dura più a lungo e si ricarica prima."
@@ -11638,12 +11638,12 @@ function drawFloor(g,t){
       if(st.a<.08&&near<R)st.dir=dir; // il verso si decide solo a porta chiusa: poi non si inverte piu'
       // l'anta si apre solo se qualcuno la tocca (anta attuale o linea della porta chiusa): la si spinge
       const Lc=(horiz?T:n*T)-2,cs=horiz?[X+1,my,X+1+Lc,my]:[mx,Y+1,mx,Y+1+Lc],sgm=(px,py,q)=>{const vx=q[2]-q[0],vy=q[3]-q[1],u=Math.max(0,Math.min(1,((px-q[0])*vx+(py-q[1])*vy)/(vx*vx+vy*vy||1)));return Math.hypot(px-q[0]-vx*u,py-q[1]-vy*u)};
-      let touch=false;for(const a of act){if(sgm(a.x,a.y,cs)<16||(st.seg&&sgm(a.x,a.y,st.seg)<16)){touch=true;break}}
-      const tgt=touch?1.5:0;
-      const w0=tgt>st.a?6.5:8; // apre svelta, richiude piu' dolce
+      let touch=false;for(const a of act){{const rr=st.a>.2?34:16;if(sgm(a.x,a.y,cs)<rr||(st.seg&&sgm(a.x,a.y,st.seg)<rr)){touch=true;break}}}
+      const tgt=touch?1.72:0;
+      const w0=tgt>st.a?9:8; // apre svelta, richiude piu' dolce
       st.v+=((tgt-st.a)*w0*w0-2*w0*st.v)*dtS;st.a=Math.max(0,st.a+st.v*dtS);
       const rest=horiz?0:Math.PI/2,sg=horiz?1:-1;
-      let ang=Math.min(1.55,st.a)*st.dir;
+      let ang=Math.min(1.8,st.a)*st.dir;
       if(st.a>(st.pa||0)+1e-4){ // aprendosi, l'anta spinge via gli npc che ha davanti; solo il giocatore la ferma
         const A=rest+ang*sg,sx=(horiz?X+1:mx),sy=(horiz?my:Y+1),Lq=(horiz?T:n*T)-2,q=[sx,sy,sx+Math.cos(A)*Lq,sy+Math.sin(A)*Lq];
         const vx=q[2]-q[0],vy=q[3]-q[1],ll=vx*vx+vy*vy||1;let hit=false;
@@ -11654,7 +11654,7 @@ function drawFloor(g,t){
           const nx=dd>.5?(a.x-qx)/dd:(horiz?0:st.dir),ny=dd>.5?(a.y-qy)/dd:(horiz?st.dir:0),k=12-dd;
           window.__noLeaf=1;const ox=a.x,oy=a.y;moveEnt(a,nx*k,ny*k);window.__noLeaf=0;
           if(Math.hypot(a.x-ox,a.y-oy)<.5)moveEnt(a,horiz?0:st.dir*k,horiz?st.dir*k:0)}
-        if(hit){st.a=st.pa||0;st.v=0;ang=Math.min(1.55,st.a)*st.dir}}
+        if(hit){st.a=st.pa||0;st.v=0;ang=Math.min(1.8,st.a)*st.dir}}
       st.pa=st.a;
       g.save();
       let hx,hy;
