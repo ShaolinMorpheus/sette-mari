@@ -5237,15 +5237,15 @@ function drawAmbB(g,t){   // le lucciole brillano sopra al buio
   g.restore();
 }
 /* ---- decorazioni del campo ---- */
-function campTile(dx,dy,fp){
+function campTile(dx,dy,fp,rx){
   const f=EID.plot_falo,cx=f?f.fp[0]+.5:FIX.camp[0],cy=f?f.fp[1]+.5:FIX.camp[1];
   const tall=E.filter(e=>e.type==='tree'||e.type==='pine'||e.type==='palm'||e.type==='rock'||e.type==='plot'||e.type==='cdeco');
   let best=null,bd=1e9;
-  for(let r=-6;r<=6;r++)for(let q=-6;q<=6;q++){
+  for(let r=-(rx?13:6);r<=(rx?13:6);r++)for(let q=-(rx?13:6);q<=(rx?13:6);q++){
     const tx=Math.floor(cx+dx+q),ty=Math.floor(cy+dy+r);
     if(!freeT(tx,ty)||seaT[tIdx(tx,ty)]||elevT[tIdx(tx,ty)]<WL+.1)continue;
     if(fp){let bad=false;for(let j=1-fp[1];j<=0&&!bad;j++)for(let i=-fp[0];i<=fp[0];i++){const x=tx+i,y=ty+j;if(!freeT(x,y)||seaT[tIdx(x,y)]||elevT[tIdx(x,y)]<WL+.1){bad=true;break}}if(bad)continue}
-    if(tall.some(e=>hyp((e.tx!=null?e.tx+.5:e.x/TS)-(tx+.5),(e.ty!=null?e.ty+.5:e.y/TS)-(ty+.5))<(e.type==='plot'?2.8:e.type==='cdeco'?3.4:1.7)+(fp?.7:0)))continue;
+    if(tall.some(e=>hyp((e.tx!=null?e.tx+.5:e.x/TS)-(tx+.5),(e.ty!=null?e.ty+.5:e.y/TS)-(ty+.5))<(rx?(e.type==='plot'||e.type==='cdeco'?2.4:1.4):(e.type==='plot'?2.8:e.type==='cdeco'?3.4:1.7))+(fp?.7:0)))continue;
     const d=hyp(tx+.5-(cx+dx),ty+.5-(cy+dy));if(d<bd){bd=d;best=[tx,ty]}
   }
   return best;
@@ -5260,7 +5260,8 @@ function flagTile(){   // la bandiera sta il più vicino possibile al falò, sen
 function campAdd(k,tx,ty){let n=E.filter(e=>e.type==='cdeco').length;while(EID['cd'+n+k])n++;return ent({id:'cd'+n+k,type:'cdeco',k,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty})}
 function campBuild(d){
   S.camp=S.camp||[];const placed=[];
-  if(d.alt){const f=EID.plot_falo,cx=f?f.fp[0]+.5:FIX.camp[0],cy=f?f.fp[1]+.5:FIX.camp[1];let bt=null,bd=1e9;for(const a of d.alt){const t=campTile(a[0],a[1],[1,2]);if(!t)continue;const dv=hyp(t[0]+.5-(cx+a[0]),t[1]+.5-(cy+a[1]));if(dv<=2.6){bt=t;break}if(dv<bd){bd=dv;bt=t}}if(bt){campAdd(d.k,bt[0],bt[1]);S.camp.push({k:d.k,tx:bt[0],ty:bt[1]});return 1}return 0}
+  if(d.alt){const f=EID.plot_falo,cx=f?f.fp[0]+.5:FIX.camp[0],cy=f?f.fp[1]+.5:FIX.camp[1];let bt=null,bd=1e9;for(const a of d.alt){const t=campTile(a[0],a[1],[1,2]);if(!t)continue;const dv=hyp(t[0]+.5-(cx+a[0]),t[1]+.5-(cy+a[1]));if(dv<=2.6){bt=t;break}if(dv<bd){bd=dv;bt=t}}if(!bt)for(const a of d.alt){const t=campTile(a[0],a[1],[1,2],1);if(t){bt=t;break}}
+    if(bt){campAdd(d.k,bt[0],bt[1]);S.camp.push({k:d.k,tx:bt[0],ty:bt[1]});return 1}return 0}
   for(const a of d.at){const t=d.best?(flagTile()||campTile(a[0],a[1])):campTile(a[0],a[1]);if(!t)break;campAdd(d.k,t[0],t[1]);S.camp.push({k:d.k,tx:t[0],ty:t[1]});placed.push(t)}
   return placed.length;
 }
@@ -5419,7 +5420,8 @@ const CHANGELOG=[
     "Tolta la voce «App per Android» dal Diario.",
     "Banco da lavoro: se mancano materiali per orto e decorazioni compare «Ti mancano dei materiali» (l'orto vuole 4 corde); se non c'è spazio nel campo, il messaggio compare dentro la finestra.",
     "Nella capanna il quadretto della mappa è stato spostato sul muro libero, non più dietro i barili.",
-    "Le tracce di zampe sono state ridisegnate: ora sono vere impronte con cuscinetto e quattro dita."
+    "Le tracce di zampe sono state ridisegnate: ora sono vere impronte con cuscinetto e quattro dita.",
+    "Orto ed essiccatore: se il campo è molto pieno (seconda isola) ora cercano un posto più lontano invece di dire «non c'è spazio»."
   ]},
   {v:"0.8",d:"3 nov 2026",t:"Capitolo 3: Il Convoglio (bozza)",n:[
     "Galeone spagnolo rifatto: tre ponti con stanze tutte diverse (cabina del comandante, alloggi ufficiali, armeria, sala delle carte, dormitorio, mensa, cucina, dispensa, cella, santabarbara, stiva), pavimenti e tappeti diversi, quadri, bandiere, lanterne alle pareti e arredi disegnati da zero: letti, armadi, librerie, tavoli, sedie, panche, stufa, rastrelliere, armature.",
