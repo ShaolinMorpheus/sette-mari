@@ -3563,6 +3563,7 @@ function hint(id){if(S&&!S.hints[id]&&U.hintFn){U.hintFn(id)}}
 /* ---- movimento ---- */
 /* collisione del giocatore: scatola (rettangolo) contro le tile; i tronchi di alberi e palme bloccano solo il tronco, non tutta la tile */
 function boxFree(x,y,rx,ry){
+  if(window.__leafHit&&window.__leafHit(x,y))return false;
   const x0=Math.floor((x-rx)/TS),x1=Math.floor((x+rx)/TS),y0=Math.floor((y-ry)/TS),y1=Math.floor((y+ry)/TS);
   for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++){
     if(!inMap(tx,ty))return false;
@@ -11183,11 +11184,11 @@ function leafD(x,y){ // distanza minima dalle ante saloon del ponte corrente
   for(const k in SALOON){const q=SALOON[k];if(!q||!q.seg||k.indexOf(pre)!==0)continue;const[ax,ay,bx,by]=q.seg,vx=bx-ax,vy=by-ay;
     const u=Math.max(0,Math.min(1,((x-ax)*vx+(y-ay)*vy)/(vx*vx+vy*vy||1)));m=Math.min(m,Math.hypot(x-ax-vx*u,y-ay-vy*u))}
   return m}
+window.__leafHit=(x,y)=>{try{return !!K&&!K.over&&leafD(x,y)<9}catch(e){return false}};
 function moveEnt(e,dx,dy,r){r=r||9;
-  const d0=leafD(e.x,e.y),ok=(x,y)=>inFree(x,y)&&(d0>9||leafD(x,y)>=Math.min(9,d0+.01)||leafD(x,y)>=d0);
-  if(ok(e.x+dx,e.y+dy)){e.x+=dx;e.y+=dy;return true}
-  if(dx&&ok(e.x+dx,e.y)){e.x+=dx;return true}
-  if(dy&&ok(e.x,e.y+dy)){e.y+=dy;return true}
+  if(inFree(e.x+dx,e.y+dy)){e.x+=dx;e.y+=dy;return true}
+  if(dx&&inFree(e.x+dx,e.y)){e.x+=dx;return true}
+  if(dy&&inFree(e.x,e.y+dy)){e.y+=dy;return true}
   return false}
 function los(ax,ay,bx,by){
   const d=Math.hypot(bx-ax,by-ay),n=Math.ceil(d/18);
@@ -11641,10 +11642,16 @@ function drawFloor(g,t){
       const tgt=touch?1.1:0;
       const w0=tgt>st.a?6.5:8; // apre svelta, richiude piu' dolce
       st.v+=((tgt-st.a)*w0*w0-2*w0*st.v)*dtS;st.a=Math.max(0,st.a+st.v*dtS);
-      const ang=Math.min(1.3,st.a)*st.dir;
+      const rest=horiz?0:Math.PI/2,sg=horiz?1:-1;
+      let ang=Math.min(1.3,st.a)*st.dir;
+      if(st.a>(st.pa||0)+1e-4){ // aprendosi non deve passare sopra a nessuno: se l'anta urterebbe qualcuno, si ferma li'
+        const A=rest+ang*sg,sx=(horiz?X+1:mx),sy=(horiz?my:Y+1),Lq=(horiz?T:n*T)-2,q=[sx,sy,sx+Math.cos(A)*Lq,sy+Math.sin(A)*Lq];
+        let hit=false;for(const a of act){if(((horiz?a.y-my:a.x-mx)*st.dir)>4&&sgm(a.x,a.y,q)<10){hit=true;break}}
+        if(hit){st.a=st.pa||0;st.v=0;ang=Math.min(1.3,st.a)*st.dir}}
+      st.pa=st.a;
       g.save();
-      let hx,hy,rest,sg;
-      if(horiz){hx=X+1;hy=my;rest=0;sg=1}else{hx=mx;hy=Y+1;rest=Math.PI/2;sg=-1}
+      let hx,hy;
+      if(horiz){hx=X+1;hy=my}else{hx=mx;hy=Y+1}
       g.translate(hx,hy);g.rotate(rest+ang*sg);
       const L=(horiz?T:n*T)-2,w=9;
       {const A=rest+ang*sg;st.seg=[hx,hy,hx+Math.cos(A)*L,hy+Math.sin(A)*L]}
