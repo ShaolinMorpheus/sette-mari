@@ -2542,6 +2542,54 @@ function fixOccluded(nearSea){
     }else if(e.type!=='debris'){e.ready=false;e.t=1e9;e.hid=1;hidden++}
   }
   FIX.occFix={moved,hidden};
+  if(WORLD===1)genLamps();
+}
+// lanterne sull'isola: una vicino all'acqua del laghetto e una fila lungo i sentieri fino al relitto e fino alla zattera
+function genLamps(){
+  const lamps=[];
+  const nearE=(x,y,r)=>E.some(o=>o.type!=='crab'&&o.type!=='mraft'&&o.type!=='wparrot'&&o.type!=='reef'&&o.x>0&&hyp(o.x/TS-x,o.y/TS-.55-y)<r);
+  const okT=(tx,ty,wet)=>{
+    if(!inMap(tx,ty)||!walkT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)]||elevT[tIdx(tx,ty)]<WL+.1)return false;
+    const x=tx+.5,y=ty+.5;
+    if(hyp((x-POND.x)/(POND.rx+(wet?.55:.9)),(y-POND.y)/(POND.ry+(wet?.55:.9)))<1)return false;
+    if(pathDist(x,y)<.95)return false;
+    for(const o of E)if(o.type==='plot'&&o.fp&&tx>=o.fp[0]-1&&tx<=o.fp[0]+o.fp[2]&&ty>=o.fp[1]-1&&ty<=o.fp[1]+o.fp[3])return false;
+    if(nearE(x,y,1.05))return false;
+    for(const l of lamps)if(hyp(l[0]-tx,l[1]-ty)<3.4)return false;
+    return true;
+  };
+  const put=(x,y,wet)=>{
+    let best=null,bd=1e9;
+    for(let j=-3;j<=3;j++)for(let i=-3;i<=3;i++){
+      const tx=Math.floor(x)+i,ty=Math.floor(y)+j,d=hyp(tx+.5-x,ty+.5-y);
+      if(d<bd&&d<=2.6&&okT(tx,ty,wet)){bd=d;best=[tx,ty]}
+    }
+    if(!best)return;
+    lamps.push(best);
+    const e=ent({id:'lamp'+lamps.length,type:'deco',spr:'lamp',x:(best[0]+.5)*TS,y:(best[1]+.8)*TS,nohit:1});
+    e.lk={x:e.x,y:e.y,k:'lanterne'};
+    addBlock(e,best[0],best[1],1,1);
+  };
+  const along=(pts,s0,step,gap,side)=>{
+    let tot=0;for(let i=0;i<pts.length-1;i++)tot+=hyp(pts[i+1][0]-pts[i][0],pts[i+1][1]-pts[i][1]);
+    let acc=0,next=s0;
+    for(let i=0;i<pts.length-1;i++){
+      const a=pts[i],b=pts[i+1],len=hyp(b[0]-a[0],b[1]-a[1]);
+      while(next<=acc+len&&next<=tot-gap){
+        const u=(next-acc)/len,nx=-(b[1]-a[1])/len,ny=(b[0]-a[0])/len;
+        put(a[0]+(b[0]-a[0])*u+nx*side*1.55,a[1]+(b[1]-a[1])*u+ny*side*1.55,false);
+        side=-side;next+=step;
+      }
+      acc+=len;
+    }
+  };
+  // vicino all'acqua, a nord del laghetto
+  put(POND.x+.9,POND.y-POND.ry-.85,true);
+  // verso il relitto del Cormorano (sud-ovest) e verso la zattera (est)
+  along([[33.5,27.6],[31,29.5],[27,34],[22,39],[17.6,43.4],[15.4,46.2]],4.2,5.4,.6,1);
+  put(23.6,46.9,false);
+  along([[33.5,27.6],[40,30],[48,31.4],[55.5,31]],4.6,5.4,.6,-1);
+  FIX.lamps=lamps.length;
 }
 
 /* ====== CAPITOLO 2 — il mondo: la Baia dei Fuggiaschi ====== */
@@ -4496,6 +4544,7 @@ function drawCrab(g,e,t){
 }
 function drawDeco(g,e,t){
   if(e.hidden)return;
+  if(e.spr==='lamp'){drawCDeco(g,e.lk,t);return}
   if(e.spr==='pit'){
     g.save();g.translate(e.x,e.y);shadow(g,0,3,26,8,.25);
     const lit=S&&S.flags.pitLit;
@@ -5101,7 +5150,7 @@ function render(t){
     const lights=[];
     const falo=EID.plot_falo;if(falo.st===2)lights.push([(falo.fp[0]+.5)*TS,(falo.fp[1]+.2)*TS,250,1,true]);
     const cap=EID.plot_capanna;if(cap.st===2)lights.push([(cap.fp[0]+2.3)*TS,(cap.fp[1]+1.1)*TS,100,.5]);
-    for(const e of E)if(e.type==='cdeco'&&e.k==='lanterne')lights.push([e.x,e.y-38,150,.75,true]);
+    for(const e of E)if((e.type==='cdeco'&&e.k==='lanterne')||(e.type==='deco'&&e.spr==='lamp'))lights.push([e.x,e.y-38,150,.75,true]);
     const ban=EID.plot_banco;if(ban.st===2)lights.push([(ban.fp[0]+1)*TS,(ban.fp[1])*TS-18,70,.3]);
     lights.push([FIX.smoke[0]*TS,FIX.smoke[1]*TS+20,180,.6,true]);
     if(S.flags.pitLit&&EID.isle_pit)lights.push([EID.isle_pit.x,EID.isle_pit.y,200,.9,true]);
@@ -5575,6 +5624,12 @@ const AFTER=[
   {t:"Multigiocatore",d:"Salpare insieme ad altri capitani: un'isola condivisa, scambi e ciurme. Dopo la fine della Stagione 1, senza una data per ora.",st:"Coming soon"}
 ];
 const CHANGELOG=[
+  {v:"0.11.1",d:"7 nov 2026",t:"Lanterne sull'isola e viaggio più scorrevole",n:[
+    "Lanterne sull'isola: una vicino all'acqua, a nord del laghetto, e due file lungo i sentieri, fino al relitto sulla spiaggia e fino alla zattera. Di notte fanno luce e si cammina senza torcia.",
+    "Il grande viaggio: «Voga!» e «Perlustra» ora stanno accanto al tasto di fuoco, sul lato delle azioni (con i comandi invertiti passano a destra, insieme a «Fuoco!»).",
+    "Il grande viaggio: tolti i muri invisibili e rimessi a posto gli scontri con la costa.",
+    "Il grande viaggio: nei Sargassi la nave va più veloce, anche sulle alghe; «Voga!» dura più a lungo e si ricarica prima."
+  ]},
   {v:"0.11",d:"7 nov 2026",t:"Il grande viaggio (bozza)",n:[
     "Capitolo 4: «Il grande viaggio». Dal menu iniziale, «Il grande viaggio (prova)»; dal Capitolo 3 si arriva anche dalla schermata finale con «Continua: Il grande viaggio». Una traversata verso ovest, con la nave e il pappagallo, in sei mari uno diverso dall'altro.",
     "Mare di Calvara: si salpa dalla costa, con le ultime pattuglie da seminare. Mare dei Sargassi: acqua piatta e alghe che frenano la nave; il pulsante «Voga!» dà una spinta a remi. Mare delle Tempeste: pioggia, vortici che tirano e fulmini segnalati da un cerchio sull'acqua, da evitare. Mare di Nebbia: si vede a pochi passi, ci si orienta con le boe accese e il pulsante «Perlustra» del pappagallo. Mare dei Relitti: notte, una nave fantasma che ti segue e il relitto del Gabbiano con il diario di Ferro. Mare della Stella: una stella bassa da seguire fino al faro.",
@@ -9185,7 +9240,9 @@ body.w3 #vit,body.w3 #clock,body.w3 #res,body.w3 #chal,body.w3 #ctr,body.w3 #min
 #c3tut p{margin:4px 0 6px}#c3tut .ttb{display:flex;gap:8px;justify-content:flex-end}
 #c3tut button{border:2px solid #3a200c;border-radius:10px;background:#f0dfb4;color:#3a200c;font:900 12px var(--f-b,Nunito,sans-serif);padding:6px 12px;cursor:pointer}#c3tut button.go{background:linear-gradient(#ffd98a,#e19a26)}
 body.w3 #trow{left:auto!important;right:12px;top:8px}
-#c3act{right:16px;bottom:26px;width:96px;height:96px;font-size:16px;background:radial-gradient(circle at 35% 30%,#d4f4ff,#3aa6cf)}
+#c3act{left:180px;right:auto;bottom:26px;width:84px;height:84px;font-size:15px;background:radial-gradient(circle at 35% 30%,#d4f4ff,#3aa6cf)}
+body[data-hand=left] #c3fire{left:auto;right:76px}
+body[data-hand=left] #c3act{left:auto;right:180px}
 #c3act[disabled]{filter:grayscale(.6) brightness(.85)}
 #c3zn{position:absolute;left:50%;transform:translateX(-50%);top:8px;max-width:34%;text-align:center;white-space:nowrap;font-size:13px}
 `;
@@ -9306,6 +9363,7 @@ function moveShip(s,dt,tv){
   if(shipOK(s,nx,ny,s.hd)){s.x=nx;s.y=ny}
   else if(shipOK(s,nx,s.y,s.hd))s.x=nx;
   else if(shipOK(s,s.x,ny,s.hd))s.y=ny;
+  else if(VOY&&s===C.p&&voySlide(s,dt)){}
   else{
     if(s===C.p){if(s.v>40){s.v*=.35;if((s.bump||0)<=0){s.bump=1.2;if(!C.easy)hurt(s,.4);toast('Scogli! Gira il timone.');sfx('thud')}}else s.v*=.5}else s.v*=.5;
     // riporta in acqua libera se incastrata
@@ -10008,7 +10066,7 @@ const _newRun=newRun;
 const VKEY='sm_c5';
 const VZ=[
  {n:'Mare di Calvara',  tod:7.8, wx:0,   fog:0, spd:1,   jit:.22,tint:[0,0,0,0],        sub:'I mari che conosci. Ancora per poco.'},
- {n:'Mare dei Sargassi',tod:12,  wx:0,   fog:0, spd:.2,  jit:.08,tint:[150,190,80,.10],  sub:'Bonaccia: il vento è sparito.'},
+ {n:'Mare dei Sargassi',tod:12,  wx:0,   fog:0, spd:.3,  jit:.08,tint:[150,190,80,.10],  sub:'Bonaccia: il vento è sparito.'},
  {n:'Mare delle Tempeste',tod:16.4,wx:1,  fog:0, spd:1,   jit:1.15,tint:[40,52,84,.22],   sub:'Il cielo si chiude. Occhio ai gorghi e ai lampi.'},
  {n:'Mare di Nebbia',   tod:18.9,wx:.22, fog:1, spd:.8,  jit:.25,tint:[205,214,224,.10], sub:'Non si vede a un palmo. Cerca le luci di Giacomo.'},
  {n:'Mare dei Relitti', tod:23.2,wx:0,   fog:0, spd:1,   jit:.35,tint:[10,52,62,.16],    sub:'Navi spezzate. Qualcosa ci osserva.'},
@@ -10287,7 +10345,7 @@ function voyOverlay(g,w,h){
   const p=C.p,[px,py]=toS(p.x,p.y),z=camZoom();
   // nebbia: densa tutt'intorno, tranne un cerchio attorno alla nave
   if(V.fog>.02){
-    const vis=(V.scout>0?980:400)*z,f=V.fog;
+    const vis=(V.scout>0?980:480)*z,f=V.fog;
     const rg=g.createRadialGradient(px,py,vis*.32,px,py,vis*1.15);
     rg.addColorStop(0,'rgba(220,229,236,0)');rg.addColorStop(.45,'rgba(220,229,236,'+(.72*f)+')');rg.addColorStop(1,'rgba(214,224,233,'+(.97*f)+')');
     g.fillStyle=rg;g.fillRect(0,0,w,h);
@@ -10295,6 +10353,22 @@ function voyOverlay(g,w,h){
     g.save();g.globalAlpha=.16*f;g.fillStyle='#eaf1f6';
     for(let i=0;i<6;i++){const x=((i*337+V.t*(14+i*3))%(w+500))-250,y=(i*173)%h;g.beginPath();g.ellipse(x,y,260,46,0,0,7);g.fill()}
     g.restore();
+  }
+  // bordi del mare: una foschia che si infittisce, cosi' il confine si vede
+  {
+    const night=(S.tod<5.5||S.tod>20.5),col=night?'18,30,52':'205,219,231',B=15*T,sides=[];
+    const sx0=toS(0,p.y)[0],sx1=toS(WW,p.y)[0],sy0=toS(p.x,0)[1],sy1=toS(p.x,WH)[1],bw=B*z;
+    if(sx0>-bw)sides.push([0,0,Math.min(w,sx0+bw*.35),h,sx0,sx0+bw,0]);
+    if(sx1<w+bw)sides.push([Math.max(0,sx1-bw*.35),0,w,h,sx1,sx1-bw,0]);
+    if(sy0>-bw)sides.push([0,0,w,Math.min(h,sy0+bw*.35),sy0,sy0+bw,1]);
+    if(sy1<h+bw)sides.push([0,Math.max(0,sy1-bw*.35),w,h,sy1,sy1-bw,1]);
+    for(const s of sides){
+      const gr=s[6]?g.createLinearGradient(0,s[4],0,s[5]):g.createLinearGradient(s[4],0,s[5],0);
+      gr.addColorStop(0,'rgba('+col+',.94)');gr.addColorStop(.35,'rgba('+col+',.78)');gr.addColorStop(1,'rgba('+col+',0)');
+      g.save();g.beginPath();g.rect(0,0,w,h);g.clip();g.fillStyle=gr;
+      if(s[6]){g.fillRect(0,Math.min(s[4],s[5])-4,w,Math.abs(s[5]-s[4])+8)}else{g.fillRect(Math.min(s[4],s[5])-4,0,Math.abs(s[5]-s[4])+8,h)}
+      g.restore();
+    }
   }
   // luci delle boe accese e della prossima
   if(V.zi===3||V.zi===4){
@@ -10396,7 +10470,7 @@ function voyBoot(){
     else{UI.banner(VZ[V.zi].n,VZ[V.zi].sub);if(V.zi===0)V.patrolT=7;if(V.zi===4&&!V.flags.book)spawnGhost()}
   },700);
 }
-function voyAPI(){return{get V(){return V},get C(){return C},LEGS,VZ,CPS,XLIM,enterZone,reachLeg,lighthouse,voyStep,saveV,inWeed,newVoy,voyAct}}
+function voyAPI(){return{get V(){return V},get C(){return C},LEGS,VZ,CPS,XLIM,enterZone,reachLeg,lighthouse,voyStep,saveV,inWeed,newVoy,voyAct,shipOK,seaOK,clearAt,toScreen,elev,seaFreePx,blockT,seaT,elevT,WL,MW,MH,TS}}
 
 /* ---------- zone ---------- */
 function enterZone(z,silent){
@@ -10529,14 +10603,14 @@ function voyTv(tv,go,dt){
   const E=VZ[V.zi];
   let k=E.spd;
   const wd=inWeed(C.p);
-  if(wd){k*=.5;if(!V.notes.weed){V.notes.weed=1;say('Pip','I sargassi si attaccano allo scafo! Giriamo al largo, capitano.',5200)}}
+  if(wd){k*=.72;if(!V.notes.weed){V.notes.weed=1;say('Pip','I sargassi si attaccano allo scafo! Giriamo al largo, capitano.',5200)}}
   tv*=k*.9;
-  if(V.row>0)tv=Math.max(tv,wd?66:104);
+  if(V.row>0)tv=Math.max(tv,wd?138:168);
   return tv;
 }
 function voyAct(){
   if(!V||V.over||V.busy||PAUSED||dl.open)return;
-  if(V.zi===1&&V.rowCd<=0){V.row=3.4;V.rowCd=7.5;sfx('tap');if(AU.ctx&&AU.on)noiseBurst(.12,900,.2)}
+  if(V.zi===1&&V.rowCd<=0){V.row=4.2;V.rowCd=5.5;sfx('tap');if(AU.ctx&&AU.on)noiseBurst(.12,900,.2)}
   else if(V.zi===3&&V.scoutCd<=0){
     V.scout=6;V.scoutCd=15;sfx('cra');
     const L=LEGS[V.leg],p=C.p;
@@ -10548,6 +10622,14 @@ function objText(){
   if(L.k==='buoy')return BUOY_T+' ('+(V.leg-BU0+1)+'/'+NB+')';
   if(L.k==='wreck'&&V.flags.book)return 'Prosegui verso ovest';
   return L.t;
+}
+function voySlide(s,dt){
+  const d=Math.max(s.v,50)*dt*.85;
+  for(const a of[.4,-.4,.8,-.8,1.25,-1.25]){
+    const h=s.hd+a,nx=s.x+Math.cos(h)*d,ny=s.y+Math.sin(h)*d;
+    if(shipOK(s,nx,ny,s.hd)){s.x=nx;s.y=ny;s.v*=Math.max(.9,1-dt*1.5);return true}
+  }
+  return false;
 }
 function voyHud(){
   if(!V)return;
@@ -10600,7 +10682,6 @@ function voyStep(dt){
   V.rowCd=Math.max(0,V.rowCd-dt);V.scoutCd=Math.max(0,V.scoutCd-dt);V.scout=Math.max(0,V.scout-dt);
   if(V.row>0){V.row-=dt;V.rowFx=(V.rowFx||0)-dt;if(V.rowFx<=0){V.rowFx=.42;for(const sd of[-1,1]){const a=p.hd+sd*Math.PI/2;C.fx.push({k:'splash',x:p.x+Math.cos(a)*40-Math.cos(p.hd)*10,y:p.y+Math.sin(a)*34+8,r:9,t:0,life:.5})}if(AU.ctx&&AU.on)noiseBurst(.07,1200,.12)}}
   // confine di zona: non si aggira la rotta
-  {const lim=XLIM[V.zi]*T;if(p.x<lim){p.x=lim;p.v*=.6;V.xmsg-=dt;if(V.xmsg<=0){V.xmsg=6;say('Biscotto','Capitano, la rotta non passa di qui: segui la freccia!',4200)}}else V.xmsg=Math.max(0,V.xmsg-dt)}
   // tappa
   if(!V.busy){const L=LEGS[V.leg];if(L){const R=L.k==='wreck'?240:L.k==='buoy'?170:L.k==='dock'?135:190;if(Math.hypot(L.x*T-p.x,L.y*T-p.y)<R)reachLeg()}}
   // pattuglie spagnole all'inizio
@@ -10611,8 +10692,8 @@ function voyStep(dt){
   if(V.zi===2){
     for(const v of V.W.vort){
       const dx=v.x-p.x,dy=v.y-p.y,d=Math.hypot(dx,dy);
-      if(d<320&&d>1){const f=Math.pow(1-d/320,1.4),ux=dx/d,uy=dy/d;
-        const nx=p.x+(ux*34-uy*62)*f*dt,ny=p.y+(uy*34+ux*62)*f*dt;
+      if(d<250&&d>1){const f=Math.pow(1-d/250,1.4),ux=dx/d,uy=dy/d;
+        const nx=p.x+(ux*16-uy*30)*f*dt,ny=p.y+(uy*16+ux*30)*f*dt;
         if(shipOK(p,nx,ny,p.hd)){p.x=nx;p.y=ny}
         if(!V.notes.vort){V.notes.vort=1;say('Tito','Un gorgo! Ti tira dentro: gira verso l\'esterno e dai tutta la vela!',5200)}}
       if(d<90&&(V.vCd||0)<=0){V.vCd=1.4;hurt(p,.5);p.v*=.5;toast('Il gorgo ti scuote! Scafo danneggiato.',2600);sfx('thud');for(let i=0;i<6;i++)C.fx.push({k:'splash',x:p.x+rr(-50,50),y:p.y+rr(-30,30),r:rr(10,18),t:0,life:.6})}
