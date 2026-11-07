@@ -5627,6 +5627,7 @@ const CHANGELOG=[
   {v:"0.11.1",d:"7 nov 2026",t:"Lanterne sull'isola e viaggio più scorrevole",n:[
     "Lanterne sull'isola: una vicino all'acqua, a nord del laghetto, e due file lungo i sentieri, fino al relitto sulla spiaggia e fino alla zattera. Di notte fanno luce e si cammina senza torcia.",
     "Il grande viaggio: «Voga!» e «Perlustra» ora stanno accanto al tasto di fuoco, sul lato delle azioni (con i comandi invertiti passano a destra, insieme a «Fuoco!»).",
+    "Galeone: tra una stanza e l'altra ci sono porte a battente stile saloon, che si spalancano al tuo passaggio (e a quello dei marinai) e poi oscillano finché si richiudono.",
     "Il grande viaggio: tolti i muri invisibili e rimessi a posto gli scontri con la costa.",
     "Il grande viaggio: nei Sargassi la nave va più veloce, anche sulle alghe; «Voga!» dura più a lungo e si ricarica prima."
   ]},
@@ -10874,7 +10875,7 @@ const propAt=(tx,ty)=>{const gx=tx-OX,gy=ty-OY;return PROPS.some(p=>gx>=p[1]&&gx
 /* ---------------- stato ---------------- */
 let K=null,SHIPC=null;
 const SPR4={};
-const DOORS=[];
+const DOORS=[];const SALOON={};
 /* ---------------- mondo: terreno + blocchi ---------------- */
 function setupWorld(){
   // tutta la nave calpestabile, i muri e i mobili bloccano
@@ -11589,6 +11590,33 @@ function drawFloor(g,t){
     for(const[x,y]of d.cells){const X=wx(x),Y=wy(y);
       if(d.id==='cell'){g.fillStyle='rgba(20,14,8,.55)';g.fillRect(X+12,Y,20,T);g.strokeStyle='#8a8a92';g.lineWidth=3;for(let i=0;i<3;i++){g.beginPath();g.moveTo(X+14+i*8,Y);g.lineTo(X+14+i*8,Y+T);g.stroke()}g.strokeStyle='#5a5a62';g.beginPath();g.moveTo(X+10,Y+8);g.lineTo(X+34,Y+8);g.moveTo(X+10,Y+T-8);g.lineTo(X+34,Y+T-8);g.stroke()}
       else{g.fillStyle='#4a2c14';g.fillRect(X,Y+10,T,T-20);g.strokeStyle='#241208';g.lineWidth=2;g.strokeRect(X+1,Y+11,T-2,T-22);g.fillStyle='#8a8a92';g.fillRect(X+T/2-4,Y+T/2-5,8,10);g.fillStyle='#f2c04a';g.beginPath();g.arc(X+T/2,Y+T/2+9,5,0,7);g.fill()}}}
+  // porte a battente stile saloon: si aprono al passaggio, poi ondeggiano
+  {
+    const act=[P].concat(K.gd||[],K.fol||[]).filter(a=>a&&isFinite(a.x)&&isFinite(a.y));
+    const dtS=Math.min(.05,Math.max(0,t-(SALOON.t||t)));SALOON.t=t;
+    for(let y=0;y<SH;y++)for(let x=0;x<SW;x++){
+      if(G[y][x]!=='D')continue;
+      const X=wx(x),Y=wy(y),mx=X+T/2,my=Y+T/2,horiz=G[y][x-1]==='#'&&G[y][x+1]==='#'; // muro orizzontale: si passa da nord a sud
+      const key=K.deck+':'+x+','+y,st=SALOON[key]||(SALOON[key]={a:0,v:0,dir:1});
+      let near=1e9,dir=st.dir;
+      for(const a of act){const d=Math.hypot(a.x-mx,a.y-my);if(d<near){near=d;dir=horiz?(a.y<my?1:-1):(a.x<mx?1:-1)}}
+      const tgt=near<T*.95?Math.min(1,1.25-near/(T*.95))*1.15:0;
+      if(near<T*.95)st.dir=dir;
+      // molla smorzata: si apre spinta, poi oscilla fino a chiudersi
+      st.v+=((tgt*st.dir)-st.a)*38*dtS;st.v*=Math.max(0,1-3.6*dtS);st.a+=st.v*dtS*8;
+      const ang=Math.max(-1.25,Math.min(1.25,st.a));
+      const leaf=(hx,hy,bx,by,sg)=>{ // cerniera in (hx,hy), a riposo la anta punta verso (bx,by)
+        g.save();g.translate(hx,hy);g.rotate(Math.atan2(by,bx)+ang*sg*(horiz?1:-1));
+        const L=T*.52,w=9;
+        g.fillStyle='rgba(10,6,4,.3)';g.fillRect(2,w/2-1,L,w);
+        g.fillStyle='#8a5a2c';g.fillRect(0,-w/2,L,w);g.strokeStyle='#2a1508';g.lineWidth=1.6;g.strokeRect(0,-w/2,L,w);
+        g.strokeStyle='#b88650';g.lineWidth=1;for(let i=1;i<4;i++){g.beginPath();g.moveTo(L*i/4,-w/2+1);g.lineTo(L*i/4,w/2-1);g.stroke()}
+        g.fillStyle='#3a3a42';g.beginPath();g.arc(0,0,2.6,0,7);g.fill();
+        g.restore()};
+      if(horiz){leaf(X+1,my,1,0,1);leaf(X+T-1,my,-1,0,-1)}
+      else{leaf(mx,Y+1,0,1,-1);leaf(mx,Y+T-1,0,-1,1)}
+    }
+  }
   // la Sirena attraccata sul lato nord e la passerella
   if(K.deck===0){
   const bob=Math.sin(t*1.3)*2,sx=cx(35);
