@@ -5627,7 +5627,7 @@ const CHANGELOG=[
   {v:"0.11.1",d:"7 nov 2026",t:"Lanterne sull'isola e viaggio più scorrevole",n:[
     "Lanterne sull'isola: una vicino all'acqua, a nord del laghetto, e due file lungo i sentieri, fino al relitto sulla spiaggia e fino alla zattera. Di notte fanno luce e si cammina senza torcia.",
     "Il grande viaggio: «Voga!» e «Perlustra» ora stanno accanto al tasto di fuoco, sul lato delle azioni (con i comandi invertiti passano a destra, insieme a «Fuoco!»).",
-    "Galeone: tra una stanza e l'altra ci sono porte a battente stile saloon, a un'anta sola, che si aprono lontano da chi arriva e poi oscillano finché si richiudono. Le zone lontane dal tuo personaggio sono un po' più scure, con un anello d'ombra sfumato.",
+    "Galeone: tra una stanza e l'altra ci sono porte a battente stile saloon, a un'anta sola, che si aprono lontano da chi arriva e poi oscillano finché si richiudono. Le zone lontane dal tuo personaggio sono un po' più scure, con un anello d'ombra sfumato, ora più visibile. Le porte non si invertono più a metà passaggio e si chiudono dolcemente dopo che sei passato. Nuove scale: gradini in legno con fianchi, corrimano e pali d'ottone.",
     "Menu: dai sotto-menu (cappellino del pappagallo, guardaroba, partite) c'è «← Indietro» che torna al menu, senza chiuderlo tutto.",
     "Il grande viaggio: tolti i muri invisibili e rimessi a posto gli scontri con la costa.",
     "Il grande viaggio: nei Sargassi la nave va più veloce, anche sulle alghe; «Voga!» dura più a lungo e si ricarica prima."
@@ -10901,14 +10901,33 @@ const FC={'.':['#cda46a','#c19659'],c:['#b8883a','#a8782e'],q:['#a98258','#9a744
 const FDARK={'.':0,c:.1,q:.28,k:.2,p:.42,s:.32,t:.14,a:.3,m:.12,z:.46};
 function rrect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
 function drawStairs(g,gx,gy,up){
-  const x0=gx*T+4,y0=gy*T+6,w=3*T-8,h=2*T-12;
-  g.fillStyle='#2a160a';g.fillRect(x0-4,y0-4,w+8,h+8);
-  for(let i=0;i<6;i++){
-    if(up){g.fillStyle=i%2?'#c09458':'#a67a42';g.fillRect(x0,y0+h-(i+1)*h/6,w,h/6);g.fillStyle='rgba(255,240,200,.22)';g.fillRect(x0,y0+h-(i+1)*h/6,w,3)}
-    else{const k=i/5;g.fillStyle='rgb('+((130-k*105)|0)+','+((88-k*76)|0)+','+((44-k*40)|0)+')';g.fillRect(x0,y0+i*h/6,w,h/6);g.fillStyle='rgba(0,0,0,.35)';g.fillRect(x0,y0+(i+1)*h/6-3,w,3)}}
-  g.strokeStyle='#5a3a1c';g.lineWidth=5;g.beginPath();g.moveTo(x0,y0);g.lineTo(x0,y0+h);g.moveTo(x0+w,y0);g.lineTo(x0+w,y0+h);g.stroke();
-  g.fillStyle='#e0b04a';for(const px of[x0,x0+w])for(const py of[y0,y0+h]){g.beginPath();g.arc(px,py,4,0,7);g.fill()}
-  g.fillStyle='rgba(255,246,220,.9)';g.font='900 22px Nunito,Arial';g.textAlign='center';g.fillText(up?'▲':'▼',x0+w/2,y0+h/2+8)}
+  const x0=gx*T+4,y0=gy*T+6,w=3*T-8,h=2*T-12,N=7,sh=h/N,rw=11;
+  // ombra e buca
+  g.fillStyle='rgba(0,0,0,.35)';g.fillRect(x0-5,y0-3,w+10,h+10);
+  g.fillStyle=up?'#3a2412':'#07040a';g.fillRect(x0,y0,w,h);
+  // gradini: in salita chiari verso l'alto, in discesa si perdono nel buio
+  for(let i=0;i<N;i++){
+    const y=up?y0+h-(i+1)*sh:y0+i*sh,k=i/(N-1);
+    let c1,c2;
+    if(up){c1=[196-k*20,150-k*18,88-k*14];c2=[120,84,44]}
+    else{const d=1-k*.82;c1=[176*d,128*d,72*d];c2=[96*d,64*d,34*d]}
+    g.fillStyle='rgb('+(c1[0]|0)+','+(c1[1]|0)+','+(c1[2]|0)+')';g.fillRect(x0+rw,y,w-2*rw,sh*.68);
+    g.fillStyle='rgb('+(c2[0]|0)+','+(c2[1]|0)+','+(c2[2]|0)+')';g.fillRect(x0+rw,y+sh*.68,w-2*rw,sh*.32);
+    g.fillStyle='rgba(255,236,190,'+(up?.35:.18*(1-k))+')';g.fillRect(x0+rw,up?y:y,w-2*rw,1.6);
+    g.strokeStyle='rgba(40,20,8,.45)';g.lineWidth=1;g.beginPath();g.moveTo(x0+w/2,y);g.lineTo(x0+w/2,y+sh*.68);g.stroke()}
+  // fianchi in legno con corrimano e pali d'ottone
+  for(const sx of[x0,x0+w-rw]){
+    g.fillStyle='#5a3618';g.fillRect(sx,y0-2,rw,h+4);
+    g.fillStyle='#7a4c22';g.fillRect(sx+(sx===x0?1:3),y0-2,4,h+4);
+    g.strokeStyle='#1e0e04';g.lineWidth=2;g.strokeRect(sx,y0-2,rw,h+4);
+    g.fillStyle='#e8b84c';g.strokeStyle='#5a3c0a';g.lineWidth=1;
+    for(let i=0;i<=3;i++){const py=y0+i*h/3;g.beginPath();g.arc(sx+rw/2,py,3.6,0,7);g.fill();g.stroke()}
+    g.strokeStyle='#f6d878';g.lineWidth=2;g.beginPath();g.moveTo(sx+rw/2,y0);g.lineTo(sx+rw/2,y0+h);g.stroke()}
+  // cartello freccia sul pianerottolo
+  const cx0=x0+w/2,cy0=up?y0+h+1:y0-1;
+  g.fillStyle='rgba(255,246,220,.95)';g.strokeStyle='rgba(30,16,6,.85)';g.lineWidth=2;
+  const ay=y0+h/2,d=up?-1:1;
+  g.beginPath();g.moveTo(cx0,ay+d*11);g.lineTo(cx0-10,ay-d*6);g.lineTo(cx0+10,ay-d*6);g.closePath();g.stroke();g.fill()}
 function floorTile(g,ch,x,y,rnd){
   const X=x*T,Y=y*T,col=FC[ch];
   g.fillStyle=col[(x+(ch==='.'?y:0))%2];g.fillRect(X,Y,T,T);
@@ -11609,10 +11628,11 @@ function drawFloor(g,t){
       let near=1e9,dir=st.dir;
       for(const a of act){const d=Math.hypot(a.x-mx,a.y-my);if(d<near){near=d;dir=horiz?(a.y<my?1:-1):(a.x<mx?1:-1)}}
       const R=T*(.5+.45*n);
-      const tgt=near<R?Math.min(1,1.25-near/R)*1.15:0;
-      if(near<R)st.dir=dir;
-      st.v+=((tgt*st.dir)-st.a)*38*dtS;st.v*=Math.max(0,1-6*dtS);st.a+=st.v*dtS*8;
-      let ang=Math.max(-1.3,Math.min(1.3,st.a));if(ang*st.dir<0)ang*=.25; // mai davvero verso chi arriva
+      if(st.a<.08&&near<R)st.dir=dir; // il verso si decide solo a porta chiusa: poi non si inverte piu'
+      const tgt=near<R?Math.min(1,1.4-near/R)*1.1:0;
+      const w0=tgt>st.a?15:9; // apre svelta, richiude piu' dolce
+      st.v+=((tgt-st.a)*w0*w0-2*w0*st.v)*dtS;st.a=Math.max(0,st.a+st.v*dtS);
+      const ang=Math.min(1.3,st.a)*st.dir;
       g.save();
       let hx,hy,rest,sg;
       if(horiz){hx=X+1;hy=my;rest=0;sg=1}else{hx=mx;hy=Y+1;rest=Math.PI/2;sg=-1}
@@ -11914,8 +11934,8 @@ function drawEnt(g,e,t){
 function drawTop(g,t){
   if(!K)return;
   // anello d'ombra sfocato: lontano dal personaggio la nave e' un po' piu' scura
-  {const R=980,q=g.createRadialGradient(P.x,P.y,170,P.x,P.y,R);
-   q.addColorStop(0,'rgba(8,5,16,0)');q.addColorStop(.28,'rgba(8,5,16,.07)');q.addColorStop(.55,'rgba(8,5,16,.22)');q.addColorStop(.8,'rgba(8,5,16,.38)');q.addColorStop(1,'rgba(8,5,16,.46)');
+  {const R=820,q=g.createRadialGradient(P.x,P.y,110,P.x,P.y,R);
+   q.addColorStop(0,'rgba(8,5,16,0)');q.addColorStop(.25,'rgba(8,5,16,.14)');q.addColorStop(.5,'rgba(8,5,16,.36)');q.addColorStop(.78,'rgba(8,5,16,.58)');q.addColorStop(1,'rgba(8,5,16,.66)');
    g.fillStyle=q;g.fillRect(P.x-R-40,P.y-R-40,R*2+80,R*2+80)}
   // riflesso caldo delle lanterne (sopra al pavimento e ai personaggi, leggero)
   for(const[lx,ly]of LAMPS){const X=cx(lx),Y=cy(ly),fl=1+.05*Math.sin(t*7+lx);
