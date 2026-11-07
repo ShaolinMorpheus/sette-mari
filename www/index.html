@@ -5627,7 +5627,7 @@ const CHANGELOG=[
   {v:"0.11.1",d:"7 nov 2026",t:"Lanterne sull'isola e viaggio più scorrevole",n:[
     "Lanterne sull'isola: una vicino all'acqua, a nord del laghetto, e due file lungo i sentieri, fino al relitto sulla spiaggia e fino alla zattera. Di notte fanno luce e si cammina senza torcia.",
     "Il grande viaggio: «Voga!» e «Perlustra» ora stanno accanto al tasto di fuoco, sul lato delle azioni (con i comandi invertiti passano a destra, insieme a «Fuoco!»).",
-    "Galeone: tra una stanza e l'altra ci sono porte a battente stile saloon, a un'anta sola, che si aprono lontano da chi arriva e poi oscillano finché si richiudono. Le zone lontane dal tuo personaggio sono un po' più scure, con un anello d'ombra sfumato, ora più visibile. Le porte non si invertono più a metà passaggio e si chiudono dolcemente dopo che sei passato. Nuove scale: gradini in legno con fianchi, corrimano e pali d'ottone.",
+    "Galeone: tra una stanza e l'altra ci sono porte a battente stile saloon, a un'anta sola, che si aprono lontano da chi arriva e poi oscillano finché si richiudono. Le zone lontane dal tuo personaggio sono un po' più scure, con un anello d'ombra sfumato, ora più visibile. Le porte non si invertono più a metà passaggio e si chiudono dolcemente dopo che sei passato. Le ante delle porte ora hanno collisione, e l'obiettivo resta sempre visibile in alto. Nuove scale: gradini in legno con fianchi, corrimano e pali d'ottone.",
     "Menu: dai sotto-menu (cappellino del pappagallo, guardaroba, partite) c'è «← Indietro» che torna al menu, senza chiuderlo tutto.",
     "Il grande viaggio: tolti i muri invisibili e rimessi a posto gli scontri con la costa.",
     "Il grande viaggio: nei Sargassi la nave va più veloce, anche sulle alghe; «Voga!» dura più a lungo e si ricarica prima."
@@ -11178,10 +11178,16 @@ function takeStairs(dir){
 function allies(){return K.stay?K.fol.concat(K.stay.filter(e=>e.dk===K.deck)):K.fol}
 function initAlly(f){Object.assign(f,{ally:1,hp:3,maxhp:3,downT:0,hitCd:rr(0,.8),swing:0,flash:0,busy:false,tgt:null,sdir:1})}
 function inFree(x,y){return boxFree(x,y,9,5)}
+function leafD(x,y){ // distanza minima dalle ante saloon del ponte corrente
+  let m=1e9;const pre=K.deck+':';
+  for(const k in SALOON){const q=SALOON[k];if(!q||!q.seg||k.indexOf(pre)!==0)continue;const[ax,ay,bx,by]=q.seg,vx=bx-ax,vy=by-ay;
+    const u=Math.max(0,Math.min(1,((x-ax)*vx+(y-ay)*vy)/(vx*vx+vy*vy||1)));m=Math.min(m,Math.hypot(x-ax-vx*u,y-ay-vy*u))}
+  return m}
 function moveEnt(e,dx,dy,r){r=r||9;
-  if(inFree(e.x+dx,e.y+dy)){e.x+=dx;e.y+=dy;return true}
-  if(dx&&inFree(e.x+dx,e.y)){e.x+=dx;return true}
-  if(dy&&inFree(e.x,e.y+dy)){e.y+=dy;return true}
+  const d0=leafD(e.x,e.y),ok=(x,y)=>inFree(x,y)&&(d0>9||leafD(x,y)>=Math.min(9,d0+.01)||leafD(x,y)>=d0);
+  if(ok(e.x+dx,e.y+dy)){e.x+=dx;e.y+=dy;return true}
+  if(dx&&ok(e.x+dx,e.y)){e.x+=dx;return true}
+  if(dy&&ok(e.x,e.y+dy)){e.y+=dy;return true}
   return false}
 function los(ax,ay,bx,by){
   const d=Math.hypot(bx-ax,by-ay),n=Math.ceil(d/18);
@@ -11569,7 +11575,7 @@ function step(dt){
   $('c4hh').innerHTML='Scafo '.replace('Scafo','Vita')+h;$('c4key').textContent=(K.key1?'🗝 cella ':'')+(K.key2?'🗝 stiva':'')||'🗝 –';
   if(!K.key1&&!K.key2)$('c4key').textContent='🗝 nessuna';
   $('c4sv').textContent=K.silver;$('c4db').textContent=K.dob;
-  const oj=$('c4obj'),tx=objText();if(tx!==K.lastObj){K.lastObj=tx;K.objT=7}K.objT=Math.max(0,(K.objT||0)-dt);oj.textContent=tx;oj.style.display=(K.objT>0||!mv)&&!K.over?'block':'none';
+  const oj=$('c4obj'),tx=objText();if(tx!==K.lastObj){K.lastObj=tx;K.objT=7}K.objT=Math.max(0,(K.objT||0)-dt);oj.textContent=tx;oj.style.display=!K.over?'block':'none';
 }
 /* ---------------- disegno ---------------- */
 function drawSilverChest(g,x,y,t,i,taken){
@@ -11638,6 +11644,7 @@ function drawFloor(g,t){
       if(horiz){hx=X+1;hy=my;rest=0;sg=1}else{hx=mx;hy=Y+1;rest=Math.PI/2;sg=-1}
       g.translate(hx,hy);g.rotate(rest+ang*sg);
       const L=(horiz?T:n*T)-2,w=9;
+      {const A=rest+ang*sg;st.seg=[hx,hy,hx+Math.cos(A)*L,hy+Math.sin(A)*L]}
       g.fillStyle='rgba(10,6,4,.3)';g.fillRect(2,w/2-1,L,w);
       g.fillStyle='#8a5a2c';g.fillRect(0,-w/2,L,w);g.strokeStyle='#2a1508';g.lineWidth=1.6;g.strokeRect(0,-w/2,L,w);
       g.strokeStyle='#b88650';g.lineWidth=1;for(let i=1;i<5;i++){g.beginPath();g.moveTo(L*i/5,-w/2+1);g.lineTo(L*i/5,w/2-1);g.stroke()}
