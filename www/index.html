@@ -579,9 +579,9 @@ setTimeout(function(){try{init()}catch(e){}},2500);
 'use strict';
 /* ====== COSTANTI E UTILITÀ ====== */
 const WORLD=(function(){try{if(window.__W3)return 3;if(window.__W4)return 4;if(window.__W2)return 2;const K='sette-mari-e-mezzo-s1-v2',sl=+localStorage.getItem('sette-mari-slot')||1,k=sl===2||sl===3?K+'-s'+sl:K;const j=localStorage.getItem(k);if(!j)return 1;const o=JSON.parse(j);return o&&o.v===2&&o.ch===2?2:1}catch(e){return 1}})();
-const I2=9;                              // distanza extra dell'isola dei fuggiaschi (tile)
+const I2=70;                              // distanza extra dell'isola dei fuggiaschi (tile)
 const GFX=(()=>{try{return localStorage.getItem('sette-mari-gfx')||'auto'}catch(e){return'auto'}})();
-const TS=44, MW=WORLD===4?72:WORLD===3?(VOY?260:210):99, MH=WORLD===4?46:WORLD===3?(VOY?110:126):60, GS=WORLD===3?(GFX==='alta'?.8:GFX==='bassa'?.4:.6):1, SS=2, FS=WORLD===3?(GFX==='alta'?.4:GFX==='bassa'?.2:.3):.5, WW=MW*TS, WH=MH*TS, WL=0.18;
+const TS=44, MW=WORLD===4?72:WORLD===3?(VOY?260:210):WORLD===1?174:99, MH=WORLD===4?46:WORLD===3?(VOY?110:126):WORLD===1?72:60, GS=WORLD===3?(GFX==='alta'?.8:GFX==='bassa'?.4:.6):1, SS=2, FS=WORLD===3?(GFX==='alta'?.4:GFX==='bassa'?.2:.3):.5, WW=MW*TS, WH=MH*TS, WL=0.18;
 const $=id=>document.getElementById(id);
 const NM_BK={};
 let NMAP=Object.assign({},NM_BK);try{Object.assign(NMAP,JSON.parse(localStorage.getItem('sm_edit_names')||'{}'))}catch(e){}
@@ -615,9 +615,7 @@ function hsl(h,s,l,a){return a==null?`hsl(${h|0},${s|0}%,${l|0}%)`:`hsla(${h|0},
 const BLOBS_1=[
   [33,30,17,12],[19,35,9,8],[21,45,8,4.6],[24,41,6,4],[28,40,6,4],[42,38,8.5,4.2],[36,18,11,6.5],[49,20,7,6],[51,32,8,7],[37,43,10,5],[47,43,6,4],
   [13,21,4.5,4],[60,11,4,3],[63,50,3.6,3],
-  [79+I2,31,8,9],[82+I2,22,5,4],[74+I2,40,5,4.5],
-  ...[4,7.5,11,14.5,18,21.5,25,28.5,32,35.5,39].map(y=>[64.8,y,2.1,2.7]),    /* dorsale ovest: chiusa a nord, aperta a sud */
-  ...[22,25.5,29,32.5,36,39.5,43,46.5,50,53.5,57].map(y=>[73.3,y,2.1,2.7])    /* dorsale est: chiusa a sud, aperta a nord */
+  ...[[24.6,30.6,4.6,5],[30,31,8,7],[36,21,11,8],[38,42,10,6],[44,31,5,9]].map(b=>[b[0]+51+I2,b[1]+1.6,b[2],b[3]])
 ];
 /* capitolo 2: la grande isola della Baia dei Fuggiaschi (molto più grande della prima) */
 const BLOBS_2=[
@@ -631,7 +629,7 @@ const BLOBS=WORLD===4?[]:WORLD===3?(VOY?BLOBS_5:BLOBS_3):WORLD===2?BLOBS_2:BLOBS
 const EDT_BK=({"2": [], "1": []})[WORLD]||[];
 const EDT=EDT_BK.concat((function(){try{const o=JSON.parse(localStorage.getItem('sm_edits_w'+WORLD)||'null');return(o&&o.t)||[]}catch(e){return[]}})());
 let EDTON=false;
-const BEACH_1=[[13.8,44.2,3.4,3.8],[19.5,48.6,8,3.6],[57.2,30.8,3.6,4.2],[71.8+I2,33,3.2,3.6],[30,15.6,4.2,2.2]];
+const BEACH_1=[[13.8,44.2,3.4,3.8],[19.5,48.6,8,3.6],[57.2,30.8,3.6,4.2],[22.6+51+I2,32.6,3.6,4.2],[29+51+I2,46.6,5,2.2],[30,15.6,4.2,2.2]];
 const BEACH_3=[[22.45,45,2.6,5],[40.4,21,2,2.4],[62.1,36,2,1.8],[96.4,49,2.5,1.6]];const BEACH=WORLD===4?[]:WORLD===3?(VOY?[]:BEACH_3):WORLD===2?[[22.6,31,3.6,4.2],[66,50.4,7,3],[48,11.4,6,2.2],[80,36.5,3,3.5],[29,45,5,2.2]]:BEACH_1;
 const POND=WORLD===4?{x:1.5,y:1.5,rx:.2,ry:.2}:WORLD===3?{x:1.5,y:1.5,rx:.2,ry:.2}:WORLD===2?{x:31,y:25.2,rx:3.4,ry:2.2}:{x:34,y:22.6,rx:2.7,ry:1.8};
 const C0=WORLD===4?{x:30,y:23}:WORLD===3?{x:17.15,y:45}:WORLD===2?{x:31.5,y:30}:{x:33.5,y:27.6};                       // centro del campo base
@@ -701,7 +699,7 @@ function blockRect(tx,ty,w,h,d){for(let j=0;j<h;j++)for(let i=0;i<w;i++)if(inMap
 /* ---- 02_ground.js ---- */
 /* ====== TERRENO: acqua, terra, schiuma, caustiche, dettagli (tutto precalcolato) ====== */
 const FORESTS_2=[[40,33,11,8,.9],[47,22,11,6,.95],[34,39,8,5,.8],[61,21,9,5,.9],[73,22,8,5.5,.95],[66,37,8,5,.8],[51,41,9,5,.7],[28,18,7,4,.7],[44,28,8,4,.6],[56,16,9,4,.9],[38,15,7,4,.8],[76,31,5,6,.7],[58,34,6,4,.5]];
-const FORESTS_1=[[24,29,8.5,7.5,1],[41,16.5,8,3.8,.85],[52,33,5.5,5,.6],[37,40.5,8,2.8,.55],[28,18.5,5,3,.55],[13,21,3.4,3,.8],[80+I2,30,5,6,.7],[82+I2,22,3,2.5,.6]];
+const FORESTS_1=[[24,29,8.5,7.5,1],[41,16.5,8,3.8,.85],[52,33,5.5,5,.6],[37,40.5,8,2.8,.55],[28,18.5,5,3,.55],[13,21,3.4,3,.8],[34+51+I2,40.6,8,5,.8],[28+51+I2,19.6,7,4,.7],[44+51+I2,29.6,8,4,.6],[38+51+I2,16.6,7,4,.8],[40+51+I2,34.6,9,7,.9]];
 const FORESTS_3=[[10,30,6,5,.9],[26,12,4.5,3,.8],[24,47,5,3.5,.9],[46,40,5,3.5,.9],[63,30,4.5,3.5,.9],[60,50,4.5,2.8,.9],[78,16,4.5,3,.8],[80,42,6,3.5,.9],[90,28,2.8,2.8,.8],[34,31,2.5,2,.7],[72,32,2.2,1.7,.7]].map(SC3).concat([[165,25,5.5,4,.8],[188,52,7,5,.9],[170,78,5,3.5,.8],[196,104,5.5,4,.8],[150,108,6,4,.9],[118,112,5.5,3.5,.8],[84,110,7,4,.9],[46,106,5.5,3.5,.8],[20,102,5,3.5,.8]]);
 const FORESTS_5=[[262,28,7.0200000000000005,7.800000000000001,0.85],[262,86,7.0200000000000005,7.800000000000001,0.85],[238,16,7.0200000000000005,4.68,0.85],[236,96,7.800000000000001,4.68,0.85],[204,16,6.24,3.9000000000000004,0.85],[196,94,7.0200000000000005,4.68,0.85],[184,18,3.9000000000000004,2.73,0.85],[182,84,3.9000000000000004,3.12,0.85],[166,12,6.24,3.9000000000000004,0.85],[160,96,7.800000000000001,4.68,0.85],[143,17,4.68,3.12,0.85],[140,92,5.46,3.9000000000000004,0.85],[124,20,3.9000000000000004,2.652,0.85],[122,86,3.9000000000000004,2.8080000000000003,0.85],[104,96,3.9000000000000004,2.652,0.85],[78,14,5.46,3.5100000000000002,0.85],[80,92,6.24,3.9000000000000004,0.85],[40,14,4.68,3.12,0.85],[42,92,6.24,3.9000000000000004,0.85],[24,18,3.9000000000000004,3.12,0.85],[22,88,4.68,3.12,0.85],[10,50,7.41,7.0200000000000005,0.85],[6,22,3.9000000000000004,3.12,0.85],[5,84,4.68,3.12,0.85]];
 const FORESTS=WORLD===3?(VOY?FORESTS_5:FORESTS_3):WORLD===2?FORESTS_2:FORESTS_1;
@@ -2367,6 +2365,7 @@ function exclTile(tx,ty){
   if(hyp(x-FIX.lookout[0],y-FIX.lookout[1])<3.4)return true;
   if(hyp(x-FIX.parrotTree[0],y-FIX.parrotTree[1])<2.4)return true;
   if(x>67+I2&&x<75+I2&&y>28&&y<38)return true;
+  if(WORLD===1&&x>76+I2&&x<90+I2&&y>21&&y<30)return true;
   for(const b of FIX.bottles)if(hyp(x-b[0],y-b[1])<1.6)return true;
   if(inPoly(x,y,MESA_PTS.map(p=>[MESA.x+(p[0]-MESA.x)*1.35,MESA.y+(p[1]-MESA.y)*1.5])))return true;
   if(hyp((x-POND.x)/(POND.rx+1.3),(y-POND.y)/(POND.ry+1.3))<1)return true;
@@ -2478,7 +2477,7 @@ function genWorld(){
   const rpath=[[61.2,31.4],[63.8,24.5],[69.5,23.2],[76,25],[79.4,33.2]],dPath=(x,y)=>{let m=1e9;for(let i=0;i<rpath.length-1;i++){const[ax,ay]=rpath[i],[bx,by]=rpath[i+1],vx=bx-ax,vy=by-ay,u=clamp(((x-ax)*vx+(y-ay)*vy)/(vx*vx+vy*vy),0,1);m=Math.min(m,Math.hypot(x-ax-vx*u,y-ay-vy*u))}return m};
   {let w=0;const blob=(cx,cy,rx,ry)=>{for(let ty=Math.floor(cy-ry);ty<=Math.ceil(cy+ry);ty++)for(let tx=Math.floor(cx-rx);tx<=Math.ceil(cx+rx);tx++){const d=((tx+.5-cx)/rx)**2+((ty+.5-cy)/ry)**2;if(d>1||(d>.55&&((tx*5+ty*11)%4===0)))continue;if(!seaT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)])continue;const e=ent({id:'rw'+(w++),type:'reef',v:(tx*7+ty*3)%5,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty});addBlock(e,tx,ty,1,1)}};
    }
-  for(let tries=0;tries<2400&&k<0;tries++){
+  for(let tries=0;tries<2400&&k<10;tries++){
     const tx=58+((rr2()*(19+I2))|0),ty=15+((rr2()*44)|0);
     if(!seaT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)])continue;
     if(dPath(tx+.5,ty+.5)<3.4)continue;
@@ -2487,7 +2486,7 @@ function genWorld(){
     const e=ent({id:'rf'+k,type:'reef',v:k%5,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty});addBlock(e,tx,ty,1,1);k++;
   }
   // accampamento dei fuggiaschi (solo scenografia): tende, barili, casse intorno al fuoco
-  [['tent',80.9,25.5,0],['tent',84.3,25.3,1],['barrel0',83.7,26.5,0],['crate',81.3,26.7,0],['barrel1',84.9,26.6,0],['coil',80.2,24.4,0]].forEach((c,i)=>deco('fg'+i,c[0]+I2,c[1],c[2],null,{nohit:1,flip:!!c[3]}));
+  [['tent',80.9,25.5,0],['tent',84.3,25.3,1],['barrel0',83.7,26.5,0],['crate',81.3,26.7,0],['barrel1',84.9,26.6,0],['coil',80.2,24.4,0]].forEach((c,i)=>deco('fg'+i,c[0],c[1]+I2,c[2],null,{nohit:1,flip:!!c[3]}));
   deco('fgboat','rowboat',72.1+I2,33.0,null,{nohit:1,flip:true});
   // palme e cespugli sull'isola dei fuggiaschi
   const p2=[];
@@ -3143,7 +3142,7 @@ function newState(name,hero){
 }
 /* ---- nebbia dell'esplorazione ---- */
 function fogToStr(){let s='';for(let i=0;i<FOG.length;i++)s+=FOG[i]?'1':'0';return s}
-function fogFromStr(s){FOG.fill(0);if(s&&s.length===90*MH){const o=new Uint8Array(MW*MH);for(let y=0;y<MH;y++)for(let x=0;x<90;x++)o[y*MW+x]=s.charCodeAt(y*90+x)===49?1:0;FOG.set(o);FOGDIRTY=true;return}if(s)for(let i=0;i<FOG.length&&i<s.length;i++)FOG[i]=s.charCodeAt(i)===49?1:0;FOGDIRTY=true}
+function fogFromStr(s){FOG.fill(0);if(s&&MW!==99&&s.length===99*MH){for(let y=0;y<MH;y++)for(let x=0;x<99;x++)FOG[y*MW+x]=s.charCodeAt(y*99+x)===49?1:0;FOGDIRTY=true;return}if(s&&MW!==99&&s.length===99*60){for(let y=0;y<60;y++)for(let x=0;x<99;x++)FOG[y*MW+x]=s.charCodeAt(y*99+x)===49?1:0;FOGDIRTY=true;return}if(s&&s.length===90*MH){const o=new Uint8Array(MW*MH);for(let y=0;y<MH;y++)for(let x=0;x<90;x++)o[y*MW+x]=s.charCodeAt(y*90+x)===49?1:0;FOG.set(o);FOGDIRTY=true;return}if(s)for(let i=0;i<FOG.length&&i<s.length;i++)FOG[i]=s.charCodeAt(i)===49?1:0;FOGDIRTY=true}
 function revealFog(cx,cy,R){
   const tx=Math.floor(cx/TS),ty=Math.floor(cy/TS);let ch=false;
   for(let j=-R;j<=R;j++)for(let i=-R;i<=R;i++){
@@ -5697,7 +5696,7 @@ const CHANGELOG=[
     "Il grande viaggio: la nave fantasma ora ti insegue da lontano, senza sparare. Quando punti la prua verso di lei si dissolve fino a diventare attraversabile, poi sparisce e ricompare dietro di te. Ha uno scafo squarciato, l'albero spezzato e alghe appese.",
     "Il grande viaggio: percorsi nuovi, più vari e senza ripassare negli stessi punti. Nel mare delle Tempeste una rotta a curve larghe con i gorghi ai lati; nel mare di Nebbia le nove boe di Giacomo disegnano una serpentina con un passaggio stretto tra due isolotti.",
     "Zattera: non si può più costruire subito. Prima servono falò, capanna, banco da lavoro e torcia, e bisogna aver portato avanti le missioni dell\'isola (fino al Pino Alto). I link di prova (Capitolo 3, galeone, Il grande viaggio) non sono più nel menu iniziale: si trovano in Diario → Novità, con la password.",
-    "Prima traversata più lunga: due dorsali di terra tra la prima isola e la Baia obbligano a un giro largo (circa il quadruplo della strada) sotto la tempesta, con frecce che indicano la rotta; tolti gli scogli sparsi inutili.","Zattera: l'omino resta sempre sul ponte, fisso a prua, anche quando giri.","Editor mappa v3: «Anteprima costa» ridisegna subito sabbia/erba/mare; nuovi editor per galeone (rotta del convoglio e caratteristiche delle navi), interno della nave (mobili, lanterne, decorazioni, dobloni su tutti e tre i ponti) e grande viaggio (tappe, boe, punti di ripresa), dal menu con password.","Editor mappa v2: pennello «Terreno» (sabbia, erba, mare: allarga la spiaggia o scava il mare, si applica quando esci), pannello «Nomi» per cambiare i nomi dei personaggi nei dialoghi, «Scarica file» per mandare la mappa a Claude.","Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
+    "Prima traversata: la Baia dei Fuggiaschi è molto più lontana (mare aperto, circa 4 volte la strada di prima) e si raggiunge sotto la tempesta coi fulmini; la Baia ha la forma della costa ovest dell'isola vera del Capitolo 2; pochi scogli sparsi.","Zattera: l'omino resta sempre sul ponte, fisso a prua, anche quando giri.","Editor mappa v3: «Anteprima costa» ridisegna subito sabbia/erba/mare; nuovi editor per galeone (rotta del convoglio e caratteristiche delle navi), interno della nave (mobili, lanterne, decorazioni, dobloni su tutti e tre i ponti) e grande viaggio (tappe, boe, punti di ripresa), dal menu con password.","Editor mappa v2: pennello «Terreno» (sabbia, erba, mare: allarga la spiaggia o scava il mare, si applica quando esci), pannello «Nomi» per cambiare i nomi dei personaggi nei dialoghi, «Scarica file» per mandare la mappa a Claude.","Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
     "Mappa dell'isola dei Relitti (seconda isola): oggetti e palme spostati o aggiunti con l'editor, come li hai disegnati tu.",
     "Il grande viaggio: Biscotto commenta con battute la nave fantasma.",
     "Lanterne: non ce ne sono più all\'inizio, né sulla prima né sulla seconda isola. Compaiono solo con la miglioria «Lanterne» del banco da lavoro, nei punti che hai disegnato con l\'editor.",
@@ -6071,7 +6070,7 @@ m10:{kind:'main',title:"La zattera",blurb:"Se c'è fumo, c'è qualcuno. Se c'è 
    {k:'flag',done:()=>matsOk(),txt:()=>matsTxt(),hint:"Tela: dalla vela strappata sul relitto. Legna dagli alberi, corda dalle liane, rottami dalla sabbia e dal relitto.",
     mark:()=>{if(!S.res.tela&&!S.built.zattera&&!EID.lt_sail.got)return pt(EID.lt_sail,60);return pt(plotE('zattera'),90)}},
    {k:'build',id:'zattera',txt:"Costruisci la Zattera sulla spiaggia, oltre il campo",hint:"La piazzola tratteggiata è sulla spiaggia: segui il sentiero oltre il campo.",mark:()=>pt(plotE('zattera'),90)},
-   {k:'flag',done:()=>!!S.flags.sailed,txt:"Salpa seguendo il fumo",hint:"Avvicinati alla zattera e premi «Salpa». Sterza con il joystick, segui le frecce attorno alle due dorsali di terra e schiva i fulmini.",mark:()=>rwMark()||({x:FIX.landing[0]*TS,y:FIX.landing[1]*TS,r:4*TS,up:20})}],
+   {k:'flag',done:()=>!!S.flags.sailed,txt:"Salpa seguendo il fumo",hint:"Avvicinati alla zattera e premi «Salpa». Sterza con il joystick, segui la freccia verso est e schiva i fulmini.",mark:()=>rwMark()||({x:FIX.landing[0]*TS,y:FIX.landing[1]*TS,r:4*TS,up:20})}],
   onDone(){Story.endChapter()}},
 c0:{kind:'main',title:"Il mare aperto",blurb:"Una costa da seguire fino alla baia.",
   goals:[{k:'flag',done:()=>!(S.c2&&S.c2.sea),txt:"Segui la costa fino alla baia dei Fuggiaschi",hint:"Naviga con la zattera tenendo la costa vicina e aggira gli scogli. La baia è sulla spiaggia ad ovest dell'isola.",mark:()=>({x:19.4*TS,y:31.2*TS,r:4*TS,up:20})}]},
@@ -7163,8 +7162,8 @@ function drawScoutMark(g,t){
 
 /* ---- 11c_storm.js ---- */
 /* ====== SFIDA DI FINE CAPITOLO: la tempesta in mare aperto ====== */
-const STM={on:false,hp:3,inv:0,warn:[],bt:2,t:0,fails:0};
-const RW=[[61.5,36],[63,43.5],[67.5,43],[67.6,36],[69.5,28],[68.6,22],[70,15],[76.8,15],[77,22],[77,30],[79.4,33.2]];   // tappe del giro lungo
+const STM={on:false,hp:3,inv:0,warn:[],bt:2,t:0,fails:0};window.__STM=STM;
+const RW=[[70.4+I2,33.2]];   // tappe del giro lungo
 let RW_I=0;
 function rwMark(){
   if(WORLD!==1||S.flags.sailed||P.mode!=='raft'){RW_I=0;return null}
@@ -7183,7 +7182,7 @@ function chalStart(){
   STM.on=true;STM.max=S.up.hull?4:3;STM.hp=STM.max;STM.inv=0;STM.warn=[];STM.bt=2.4;STM.t=0;
   WX.lock=true;S.wx.k='storm';S.wx.t=999;WX.boltT=99;
   UI.banner('Tempesta!','Schiva i lampi: il cerchio rosso dice dove cadono');sfx('horn');
-  setTimeout(()=>UI.toast('Segui le frecce: le due dorsali di terra obbligano a un giro largo.'),1800);
+  setTimeout(()=>UI.toast('Segui la freccia: la Baia è lontana, sempre verso est.'),1800);
   chalHud();
 }
 function chalEnd(ok){
@@ -7193,14 +7192,14 @@ function chalEnd(ok){
   chalHud();
 }
 function chalHit(){
-  STM.hp--;STM.inv=1.6;sfx('thud');P.rv*=.25;P.bump=.5;
+  STM.hp--;STM.rg=0;STM.inv=1.6;sfx('thud');P.rv*=.25;P.bump=.5;
   FXL.floats.push({x:P.x,y:P.y-60,t:0,txt:'Colpo!',col:'#ffd0c0'});
   chalHud();
   if(STM.hp<=0)chalFail();
 }
 function chalFail(){
   STM.fails++;S.chalFails=STM.fails;chalEnd(false);
-  P.x=FIX.raftLaunch[0]*TS;P.y=FIX.raftLaunch[1]*TS;P.hd=0;P.rv=0;
+  {const k=Math.max(0,Math.min(3,Math.floor(((STM.maxX||0)-FIX.raftLaunch[0]*TS)/(20*TS))));P.x=(FIX.raftLaunch[0]+k*20)*TS;P.y=FIX.raftLaunch[1]*TS}P.hd=0;P.rv=0;
   UI.dlg([D('hero',"La zattera regge a malapena e la corrente mi riporta indietro."),D('hero',"Calma. Ho visto dove cadono i lampi: la prossima volta passo di lato.")]);
 }
 function updateChallenge(dt){
@@ -7208,16 +7207,16 @@ function updateChallenge(dt){
   if(!S.flags.sailed&&!STM.on&&P.mode==='raft'&&hyp(P.x-FIX.raftLaunch[0]*TS,P.y-FIX.raftLaunch[1]*TS)>4.5*TS)chalStart();
   if(!STM.on)return;
   if(P.mode!=='raft'){chalEnd(false);return}
-  STM.t+=dt;STM.inv=Math.max(0,STM.inv-dt);
+  STM.t+=dt;STM.inv=Math.max(0,STM.inv-dt);STM.maxX=Math.max(STM.maxX||0,P.x);STM.rg=(STM.rg||0)+dt;if(STM.hp>0&&STM.hp<STM.max&&STM.rg>16){STM.hp++;STM.rg=0;chalHud()}
   // corrente contraria e onde che spostano di lato
-  const wob=Math.sin(STM.t*.9)*30,cur=-24;
+  const wob=Math.sin(STM.t*.9)*30,cur=-16;
   if(raftOK(P.x+cur*dt,P.y))P.x+=cur*dt;
   if(raftOK(P.x,P.y+wob*dt))P.y+=wob*dt;
   if(Math.random()<dt*10)FXL.parts.push({x:P.x+rnd(-40,40),y:P.y+rnd(-20,20),vx:-30,vy:0,age:0,life:.9,kind:'wake',r:rnd(5,10),rot:0,g:0});
   // fulmini con avviso
   STM.bt-=dt;
   if(STM.bt<=0){
-    STM.bt=(STM.fails?3.8:2.8)+Math.random()*1.5;
+    STM.bt=(STM.fails?4.6:3.6)+Math.random()*1.8;
     const a=P.hd+(Math.random()-.5)*1.5,d=(.9+Math.random()*3.3)*TS;
     STM.warn.push({x:P.x+Math.cos(a)*d,y:P.y+Math.sin(a)*d*.75,t:0,dur:1.2});
   }
@@ -9142,7 +9141,7 @@ function frameErr(err){   // un errore in un singolo passo non deve congelare tu
 }
 /* ===== EDITOR MAPPA (solo admin: Diario → Novità → «Editor mappa») ===== */
 const ED={on:false,sel:null,drag:null,pan:null,pt:new Map(),pinch0:0,ed:{mv:{},del:[],add:[],vv:{},t:[]},undo:[],grid:true,bound:false,brush:null,size:2.5,paint:null,dirty:false};
-const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}},"1":{"mv":{"b12":[2178,1492],"q4":[3850,1712],"fgboat":[3510,1398],"plot_falo":[1474,1230],"plot_banco":[1628,1230],"lamp7":[1826,1223],"plot_capanna":[1342,1186],"lookout":[1201,1118],"lamp2":[1122,1135],"rw4":[603,2125],"lt_old":[1380,810],"oldcamp":[1329,744],"lamp1":[1518,915],"b2":[1386,876],"t4":[1260,1712],"lamp3":[1210,1575],"lamp5":[946,1883],"t51":[1656,1624],"lamp8":[1738,1399]},"del":["feedback"],"add":[{"t":"deco","s":"lamp","f":0,"x":1738,"y":1047,"id":"ed1"},{"t":"deco","s":"lamp","f":0,"x":1078,"y":1487,"id":"ed2"},{"t":"deco","s":"lamp","f":0,"x":770,"y":2103,"id":"ed3"},{"t":"deco","s":"lamp","f":0,"x":1034,"y":2191,"id":"ed4"},{"t":"deco","s":"lamp","f":0,"x":1430,"y":1487,"id":"ed5"},{"t":"deco","s":"lamp","f":0,"x":2002,"y":1443,"id":"ed6"},{"t":"deco","s":"lamp","f":0,"x":2574,"y":1311,"id":"ed7"},{"t":"deco","s":"lamp","f":0,"x":1254,"y":871,"id":"ed8"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
+const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}},"1":{"mv":{"b12":[2178,1492],"plot_falo":[1474,1230],"plot_banco":[1628,1230],"lamp7":[1826,1223],"plot_capanna":[1342,1186],"lookout":[1201,1118],"lamp2":[1122,1135],"lt_old":[1380,810],"oldcamp":[1329,744],"lamp1":[1518,915],"b2":[1386,876],"t4":[1260,1712],"lamp3":[1210,1575],"lamp5":[946,1883],"t51":[1656,1624],"lamp8":[1738,1399]},"del":["feedback"],"add":[{"t":"deco","s":"lamp","f":0,"x":1738,"y":1047,"id":"ed1"},{"t":"deco","s":"lamp","f":0,"x":1078,"y":1487,"id":"ed2"},{"t":"deco","s":"lamp","f":0,"x":770,"y":2103,"id":"ed3"},{"t":"deco","s":"lamp","f":0,"x":1034,"y":2191,"id":"ed4"},{"t":"deco","s":"lamp","f":0,"x":1430,"y":1487,"id":"ed5"},{"t":"deco","s":"lamp","f":0,"x":2002,"y":1443,"id":"ed6"},{"t":"deco","s":"lamp","f":0,"x":2574,"y":1311,"id":"ed7"},{"t":"deco","s":"lamp","f":0,"x":1254,"y":871,"id":"ed8"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
 const EDKEY='sm_edits_w'+WORLD;
 const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{},t:(o&&o.t)||[]});
 function edStore(){try{localStorage.setItem(EDKEY,JSON.stringify(ED.ed))}catch(e){}}
