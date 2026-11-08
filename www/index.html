@@ -5700,6 +5700,10 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
+    "Mare: una cala tranquilla dove i pesci saltano e lo scafo si ripara da solo; due forzieri sulle spiagge (si aprono avvicinandosi con la nave) e un banco di nebbia dove le pattuglie ti vedono solo da vicino, con qualche cassa nascosta dentro.",
+    "Mare: ogni tanto una bottiglia galleggia in acqua. Dentro c'è la mappa del tesoro: la X su una spiaggia lontana, con una freccia color pergamena, la distanza e il segno sulla minimappa.",
+    "Mare: il brigantino dalle vele viola è veloce e scappa, ma si stanca. Se lo affondi lascia 3 casse d'argento.",
+    "Aspetto della nave: nuove vele viola e bandiera del tesoro da sbloccare.",
     "Mare: le battute di Tito non finiscono più nascoste sotto la scheda del tutorial.",
     "Mare: frecce sul bordo dello schermo con la distanza (in caselle) per la nave bersaglio, il galeone, la nave dei prigionieri e la pattuglia più vicina.",
     "Mare: dopo la prima nave nemica affondata arriva una scorta armata, con più scafo e più cannoni delle pattuglie.",
@@ -10164,6 +10168,7 @@ const YD=(function(){
     {id:'blu',n:'Vele blu mare',hint:'Salva Pip e Dodo.',c:['#8ccdf2','#3b78b8'],emb:'#fff3d2',own:s=>s.pris>=1},
     {id:'strisce',n:'Vele a strisce',hint:'Porta 10 casse d\'argento al cantiere.',c:['#fff3d2','#d8c79a'],emb:'#c8402e',pat:'stripes',pc:'#5b8fd0',own:(s,y)=>y.tot>=10},
     {id:'nere',n:'Vele nere',hint:'Abborda il galeone spagnolo.',c:['#5a5a6c','#262632'],emb:'#e8e8f2',own:s=>s.gal>=1},
+    {id:'viola',n:'Vele viola',hint:'Affonda il brigantino dalle vele viola.',c:['#d2aef6','#7a46c0'],emb:'#ffe08a',own:s=>s.brig>=1},
     {id:'oro',n:'Vele dorate',hint:'Compra tutte le migliorie del cantiere.',c:['#ffeaa6','#d9a528'],emb:'#8a2a1c',own:(s,y)=>y.h>=4&&y.g>=3&&y.s>=3}
   ];
   Y.FLAG=[
@@ -10171,6 +10176,7 @@ const YD=(function(){
     {id:'stella',n:'Bandiera con la stella',hint:'Affonda la tua prima nave nemica.',col:'#2f6fc0',sym:'star',own:s=>s.kills>=1},
     {id:'scacchi',n:'Bandiera a scacchi',hint:'Torna in porto 3 volte dal mare.',col:'#f4f4f4',sym:'check',own:s=>s.runs>=3},
     {id:'perla',n:'Bandiera della sirena',hint:'Compra una miglioria al cantiere.',col:'#1f9aa8',sym:'pearl',own:(s,y)=>y.h+y.g+y.s>=1},
+    {id:'mappa',n:'Bandiera del tesoro',hint:'Trova 2 tesori con le mappe delle bottiglie.',col:'#ead7a4',sym:'x',own:s=>s.maps>=2},
     {id:'teschio',n:'Bandiera del teschio',hint:'Affonda 15 navi nemiche.',col:'#202028',sym:'skull',own:s=>s.kills>=15}
   ];
   Y.FIG=[
@@ -10183,7 +10189,7 @@ const YD=(function(){
   const KINDS=[['sail','Vele',Y.SAIL],['flag','Bandiera',Y.FLAG],['fig','Polena',Y.FIG]];
 
   /* ---------- aspetto: stato (statistiche, scelta, novità) ---------- */
-  const SH0=()=>({sel:{sail:'crema',flag:'rossa',fig:'nessuna'},st:{kills:0,pris:0,gal:0,runs:0,perfect:0},seen:{'sail:crema':1,'flag:rossa':1,'fig:nessuna':1}});
+  const SH0=()=>({sel:{sail:'crema',flag:'rossa',fig:'nessuna'},st:{kills:0,pris:0,gal:0,runs:0,perfect:0,maps:0,brig:0},seen:{'sail:crema':1,'flag:rossa':1,'fig:nessuna':1}});
   Y.ship=()=>{const o=rd(KS,null),b=SH0();if(!o)return b;return{sel:Object.assign(b.sel,o.sel||{}),st:Object.assign(b.st,o.st||{}),seen:Object.assign(b.seen,o.seen||{})}};
   Y.shipPut=o=>{wr(KS,o);_sel=null};
   Y.stat=(k,n)=>{const o=Y.ship();o.st[k]=(o.st[k]|0)+(n==null?1:n);Y.shipPut(o);return o.st[k]};
@@ -10216,6 +10222,7 @@ const YD=(function(){
     if(sym==='check'){g.save();fp();g.clip();g.fillStyle='#1c1c24';for(let i=0;i<5;i++)for(let j=0;j<2;j++)if((i+j)%2===0)g.fillRect(i*6-2,j*6-4,6,6);g.restore()}
     else if(sym==='star'){g.fillStyle='#ffd23a';star(g,12,2.4,4,1.7)}
     else if(sym==='pearl'){g.fillStyle='#fff';g.beginPath();g.arc(12,2.2,3.1,0,7);g.fill();g.fillStyle='rgba(120,200,220,.9)';g.beginPath();g.arc(11.2,1.4,1,0,7);g.fill()}
+    else if(sym==='x'){g.strokeStyle='#c8402e';g.lineWidth=2.4;g.lineCap='round';g.beginPath();g.moveTo(8.6,-.6);g.lineTo(15.4,5.4);g.moveTo(15.4,-.6);g.lineTo(8.6,5.4);g.stroke()}
     else if(sym==='skull'){g.fillStyle='#f4f4f4';g.beginPath();g.arc(12,1.5,3.3,0,7);g.fill();g.fillRect(10.4,3.2,3.2,2.1);g.fillStyle='#202028';g.beginPath();g.arc(10.8,1.1,.95,0,7);g.arc(13.2,1.1,.95,0,7);g.fill()}
     fp();g.strokeStyle='rgba(40,25,10,.65)';g.lineWidth=1;g.stroke();
     g.restore()};
@@ -11123,7 +11130,8 @@ const SPEC={
   scorta:{L:92,W:28,hull:5,spd:135,name:'Scorta',hc:'#6a1a1a',dk:'#340a0a',trim:'#d6a46a',sail:['#f6ead0','#d0bc90'],emb:'#2a0a0a',masts:[.32,-.18],mh:138,cannons:4},
   galeone:{L:122,W:37,hull:8,spd:34,name:"Galeone d'argento",hc:'#4a3320',dk:'#241508',trim:'#f2c04a',sail:['#faf1d6','#d8c698'],emb:'#e0a820',masts:[.42,.02,-.34],mh:170,cannons:6},
   prigionieri:{L:112,W:34,hull:8,spd:70,name:'Nave dei prigionieri',hc:'#3a3a44',dk:'#16161c',trim:'#cfcfd8',sail:['#ffffff','#d0d4dc'],emb:'#888',masts:[.4,0,-.36],mh:160,cannons:2},
-  fantasma:{L:112,W:34,hull:6,spd:104,name:'Il Gabbiano',hc:'#52706c',dk:'#27403e',trim:'#a8e0d0',sail:['#d6efe8','#9cc4ba'],emb:'#9fe8d0',masts:[.38,-.3],mh:132,cannons:0}
+  fantasma:{L:112,W:34,hull:6,spd:104,name:'Il Gabbiano',hc:'#52706c',dk:'#27403e',trim:'#a8e0d0',sail:['#d6efe8','#9cc4ba'],emb:'#9fe8d0',masts:[.38,-.3],mh:132,cannons:0},
+  brigantino:{L:78,W:23,hull:3,spd:172,name:'Brigantino',hc:'#4e3a6c',dk:'#241a38',trim:'#e6d3a0',sail:['#e2c6ff','#8f5fd0'],emb:'#ffe08a',masts:[.3,-.22],mh:128,cannons:2}
 };
 const SAILSPD=[0,62,118,170];
 if(!VOY)for(const k in EXS.st.spec)if(SPEC[k])Object.assign(SPEC[k],EXS.st.spec[k]);
@@ -11256,17 +11264,17 @@ function hurt(s,n){
   if(s.type==='galeone'&&!s.ally&&s.hull-n<3){s.hull=3;s.flash=.2;if(!s.disabled){s.disabled=true;s.v=0;toast('<b>Tito:</b> «Il galeone è in avaria! Avvicinati e abborda: l\'argento è a bordo!»',7000)}return}
   s.hull-=n;s.flash=.2;
   if(s===C.p&&s.hull<=0){s.hull=0;return}
-  if(s.hull<=0){s.dead=true;s.sinking=true;C.kills++;if(s.type!=='mercante')C.ekills=(C.ekills||0)+1;if(s.type==='pattuglia'||s.type==='scorta'||s.type==='galeone'){try{YD.stat('kills');yAnn(2600)}catch(e){}}sink(s);if(s.type==='prigionieri'){C.prisLost=true;toast('La nave dei prigionieri è affondata. Il piano non copriva questo rischio.',6000)}}
+  if(s.hull<=0){s.dead=true;s.sinking=true;const bg=s.type==='brigantino';if(!bg)C.kills++;if(s.type!=='mercante'&&!bg)C.ekills=(C.ekills||0)+1;if(bg){try{YD.stat('brig');yAnn(2600)}catch(e){}}if(s.type==='pattuglia'||s.type==='scorta'||s.type==='galeone'){try{YD.stat('kills');yAnn(2600)}catch(e){}}sink(s);if(s.type==='prigionieri'){C.prisLost=true;toast('La nave dei prigionieri è affondata. Il piano non copriva questo rischio.',6000)}}
 }
 function yAnn(ms){setTimeout(()=>{try{const n=YD.announce();if(n.length)toast('Nuovo per la nave: <b>'+n.map(x=>x.it.n).join(', ')+'</b>. Lo scegli dal Menu › Guardaroba › Nave.',6500)}catch(e){}},ms||1800)}
 function sink(s){
   for(let i=0;i<10;i++)puff(s.x+rr(-30,30),s.y+rr(-20,20),rr(10,22),rr(1,2));
   if(s===C.p)return;
-  const n=s.type==='galeone'?8:s.type==='mercante'?1:s.type==='scorta'?1:0;
-  for(let i=0;i<n;i++)C.crates.push({x:s.x+rr(-60,60),y:s.y+rr(-50,50),t:rr(0,9),v:s.type==='galeone'?'silver':'food'});
+  const bg=s.type==='brigantino',n=s.type==='galeone'?8:bg?3:s.type==='mercante'?1:s.type==='scorta'?1:0;
+  for(let i=0;i<n;i++)C.crates.push({x:s.x+rr(-60,60),y:s.y+rr(-50,50),t:rr(0,9),v:(s.type==='galeone'||bg)?'silver':'food',opt:bg});
   if(s.type==='galeone')C.sunkSilver++;
   parEv('kill');
-  toast(s.type==='galeone'?"Galeone affondato: casse d'argento in acqua!":'Nave affondata.');
+  toast(s.type==='galeone'?"Galeone affondato: casse d'argento in acqua!":bg?"Brigantino affondato: 3 casse d'argento in acqua!":'Nave affondata.');
   sfx('fall');
 }
 function puff(x,y,r,life){C.fx.push({k:'puff',x,y,r,t:0,life,vx:rr(-14,14),vy:rr(-24,-6)})}
@@ -11336,6 +11344,7 @@ function newRun(easy,plan,cp){
   for(const s of C.ships)if(s.type==='pattuglia'){const dx=s.x-C.p.x,dy=s.y-C.p.y,d=Math.hypot(dx,dy)||1;if(d<3000){const k=(3000+rr(0,900))/d;s.x=C.p.x+dx*k;s.y=C.p.y+dy*k;s.x=cl(s.x,300,WW-300);s.y=cl(s.y,300,WH-300)}}
   for(const s of C.ships)if(!s.conv&&!clearAt(s.x,s.y,70)){const r2=findSea(s.x,s.y);s.x=r2[0];s.y=r2[1]}
   if(cp&&cp.pris>=2){C.pris=2;C.ekills=3;const al=mkShip('prigionieri',C.p.x-260,C.p.y+120,0,{});al.ally=true;al.conv=false;C.ships.push(al);C.notes.start=1;C.notes.found=1;toast('<b>Tito:</b> «Pip e Dodo sono con noi. Ora il galeone!»',5000)}
+  if(!VOY)poiPlace();
 }
 function objVis(dt){
   const o=$('c3obj'),t=o.textContent;
@@ -11357,7 +11366,10 @@ const QUIPS=[
  'Pip e Dodo contano su di noi. Non dimenticarlo.',
  'Le pattuglie si mettono di fianco per sparare: tienile di prua o di poppa.',
  'Sparare da vicino fa più danni.',
- 'Lo scafo regge, ma non è eterno. In porto il carpentiere ripara tutto.'
+ 'Lo scafo regge, ma non è eterno. In porto il carpentiere ripara tutto.',
+ 'Le bottiglie in mare hanno sempre dentro qualcosa. Di solito una mappa. A volte un calzino.',
+ 'Nella nebbia nessuno ti vede. Nemmeno io, ma io vedo poco comunque.',
+ 'Il brigantino viola è veloce, ma anche lui si stanca. Pazienza, capitano.'
 ];
 const PEV={
   hit:['Ahi! Ci sparano! Rispondi al fuoco!','Giù la testa! Anzi, giù la nave!','Crack! Quello mi ha scompigliato le penne.'],
@@ -11380,6 +11392,12 @@ function parHint(){
   if(p.hull<=p.max*.4){const pt=TPp(21,30);return 'Lo scafo scricchiola! Il porto è '+dirName(pt[0]-p.x,pt[1]-p.y)+': là ti riparano.'}
   if(C.silver>=5)return 'L\'argento ci rende pesanti: più casse, meno velocità.';
   const cr=C.crates.find(c=>Math.hypot(c.x-p.x,c.y-p.y)<900);if(cr)return 'Casse in acqua '+dirName(cr.x-p.x,cr.y-p.y)+'! Prendile prima che affondino.';
+  {const P0=C.poi;
+   if(P0&&!C.tut){
+     if(C.map)return 'La mappa segna una spiaggia '+dirName(C.map.x-p.x,C.map.y-p.y)+': segui la freccia color pergamena!';
+     const bt=P0.bottles[0];if(bt&&Math.hypot(bt.x-p.x,bt.y-p.y)<1800)return 'Cra! Una bottiglia in acqua '+dirName(bt.x-p.x,bt.y-p.y)+'. Prendila!';
+     const ch=P0.chests.find(c=>!c.open&&c.k==='chest'&&Math.hypot(c.x-p.x,c.y-p.y)<1800);if(ch)return 'Vedo un forziere sulla spiaggia '+dirName(ch.x-p.x,ch.y-p.y)+'. Avvicinati con la nave!';
+     if(P0.cove&&p.hull<p.max*.75)return 'C\'è una cala tranquilla '+dirName(P0.cove.x-p.x,P0.cove.y-p.y)+': lì lo scafo si ripara da solo.'}}
   if(windK(p.hd)<.8)return 'Il vento è contro: gira di lato e le vele ti ringrazieranno.';
   if(C.convoy){const g=C.ships.find(s=>s.type==='galeone'&&!s.dead);if(g)return 'Il galeone spagnolo è '+dirName(g.x-p.x,g.y-p.y)+'. Attento alla scorta attorno.'}
   let b=null,bd=1e9;for(const s of C.ships){if(s.dead||s.conv||s.ally)continue;const d=Math.hypot(s.x-p.x,s.y-p.y);if(d<bd){bd=d;b=s}}
@@ -11412,6 +11430,273 @@ function spawnEscort(){      // seconda uscita: una scorta armata (più scafo e 
 function findSea(x,y){for(let R=1;R<30;R++)for(let j=-R;j<=R;j++)for(let i=-R;i<=R;i++){if(Math.max(Math.abs(i),Math.abs(j))!==R)continue;const cx=x+i*40,cy=y+j*40;if(clearAt(cx,cy,80))return[cx,cy]}return[x,y]}
 function randSea(){for(let k=0;k<60;k++){const x=rr(300,WW-300),y=rr(300,WH-300);if(clearAt(x,y,90))return[x,y]}return [WW/2,WH/2]}
 
+/* ---------------- B2: tratti di calma, forzieri, nebbia, bottiglie con mappa, brigantino ---------------- */
+const inV=(x,y,m)=>{const z=camZoom();return Math.abs(x-cam.x)<VW/2/z+(m||0)&&Math.abs(y-cam.y)<VH/2/z+(m||0)};
+function routeD(x,y){let m=1e9;for(const q of ROUTE){const d=Math.hypot(q[0]-x,q[1]-y);if(d<m)m=d}return m}
+function pT(key,html,ms){if(C.notes[key]||C.t-(C.lastPT||-99)<16)return;C.notes[key]=1;C.lastPT=C.t;toast(html,ms)}   // avvisi facoltativi: mai due di seguito
+function poiSpot(minD,maxD,r,gap,coast,avoidRoute){      // un punto di mare libero, lontano dal porto e dagli altri punti d'interesse
+  const pt=TPp(21,30),used=C.poi.all;
+  for(let k=0;k<500;k++){
+    const x=rr(400,WW-400),y=rr(400,WH-400),dp=Math.hypot(x-pt[0],y-pt[1]);
+    if(dp<minD||dp>maxD||!clearAt(x,y,r))continue;
+    if(coast===1&&clearAt(x,y,r+300))continue;        // sulla costa: poco più in là c'è terra
+    if(coast===0&&!clearAt(x,y,r+170))continue;       // in mare aperto
+    if(avoidRoute&&routeD(x,y)<avoidRoute)continue;
+    if(used.some(u=>Math.hypot(u[0]-x,u[1]-y)<gap))continue;
+    return[x,y]
+  }
+  return null
+}
+function beachSpot(cx,cy,minD,maxD,gap){      // una casella di sabbia sulla riva con mare libero davanti: [x forziere, y forziere, x mare, y mare]
+  const used=C.poi.all,pt=TPp(21,30);
+  for(let k=0;k<5000;k++){
+    const a=rr(0,TAU),d=rr(minD,maxD),x=cx+Math.cos(a)*d,y=cy+Math.sin(a)*d;
+    if(x<300||y<300||x>WW-300||y>WH-300)continue;
+    const tx=Math.floor(x/T),ty=Math.floor(y/T);if(tx<5||ty<5||tx>=MW-5||ty>=MH-5)continue;
+    const i=tIdx(tx,ty);
+    if(seaT[i]||blockT[i]||!walkT[i]||elevT[i]<SAND_LO||elevT[i]>SAND_HI)continue;
+    const bx=(tx+.5)*T,by=(ty+.5)*T;
+    if(Math.hypot(bx-pt[0],by-pt[1])<1500||used.some(u=>Math.hypot(u[0]-bx,u[1]-by)<gap))continue;
+    for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){
+      for(let s=1;s<=3;s++){
+        const jx=tx+dx*s,jy=ty+dy*s,j=tIdx(jx,jy);
+        if(walkT[j]||blockT[j])break;                  // altra terra o scoglio: non è la riva
+        if(seaT[j]===1){
+          const sx=(jx+dx+.5)*T,sy=(jy+dy+.5)*T;
+          if(clearAt(sx,sy,40))return[bx-dx*14,by-dy*14,sx,sy];
+          break
+        }
+      }
+    }
+  }
+  return null
+}
+function poiPlace(){
+  const P0=C.poi={all:[],chests:[],bottles:[],brigs:0,brigT:rr(34,58),botT:rr(55,85),nb:0,cove:null,fog:null};
+  const pt=TPp(21,30);
+  let q=poiSpot(1700,5600,100,1500,1,0);
+  if(q){P0.cove={x:q[0],y:q[1],r:250,t:0,sT:2};P0.all.push(q)}
+  for(let k=0;k<2;k++){
+    const b=beachSpot(pt[0],pt[1],1900,5600,1500);
+    if(b){P0.chests.push({k:'chest',x:b[0],y:b[1],sx:b[2],sy:b[3],n:2,open:0,t:rr(0,9),seed:rr(0,9)});P0.all.push([b[0],b[1]])}
+  }
+  q=poiSpot(2200,5600,100,1500,0,900);
+  if(q){
+    const f=P0.fog={x:q[0],y:q[1],r:520,blobs:[]};P0.all.push(q);
+    for(let i=0;i<16;i++){const a=rr(0,TAU),d=Math.sqrt(Math.random())*f.r*.8;f.blobs.push({x:Math.cos(a)*d,y:Math.sin(a)*d,r:rr(170,250),ph:rr(0,TAU),sp:rr(.12,.28)})}
+    for(let i=0,n=0;i<40&&n<2;i++){const a=rr(0,TAU),d=rr(60,240),x=f.x+Math.cos(a)*d,y=f.y+Math.sin(a)*d;if(!clearAt(x,y,40))continue;C.crates.push({x,y,t:rr(0,9),v:'silver',opt:true,fog:true});n++}
+  }
+}
+function openChest(c){
+  c.open=1;c.ot=0;
+  for(let i=0;i<(c.n||2);i++)C.crates.push({x:c.sx+rr(-30,30),y:c.sy+rr(-30,30),t:rr(0,9),v:'silver',opt:true});
+  for(let i=0;i<10;i++)C.fx.push({k:'flash',x:c.x+rr(-26,26),y:c.y+rr(-28,8),r:9,t:0,life:.6});
+  sfx('quest');C.lastPT=C.t;
+  if(c.k==='map'){
+    if(C.map===c)C.map=null;
+    toast('<b>Tesoro trovato!</b> Il forziere è pieno: raccogli le casse d\'argento che galleggiano in acqua.',6500);
+    try{YD.stat('maps');yAnn(3200)}catch(e){}
+    setTimeout(()=>{if(C&&!C.over)parEv('crate',1)},2200)
+  }else toast('<b>Tito:</b> «Il forziere era pieno d\'argento! Raccogli le casse in acqua.»',6000)
+}
+function spawnBottle(){
+  const p=C.p;
+  for(let k=0;k<80;k++){
+    const a=p.hd+rr(-1.3,1.3),d=rr(650,1150),x=p.x+Math.cos(a)*d,y=p.y+Math.sin(a)*d;
+    if(x<300||y<300||x>WW-300||y>WH-300||!clearAt(x,y,70))continue;
+    C.poi.bottles.push({x,y,t:rr(0,9),vx:rr(-6,6),vy:rr(-6,6)});C.poi.nb++;
+    toast('<b>Biscotto:</b> «Cra! Una bottiglia in acqua '+dirName(x-p.x,y-p.y)+'! C\'è qualcosa dentro!»',6500);C.lastPT=C.t;
+    return
+  }
+  C.poi.botT=10
+}
+function takeBottle(b){
+  b.got=1;const p=C.p;
+  sfx('pick');for(let i=0;i<6;i++)C.fx.push({k:'flash',x:b.x+rr(-20,20),y:b.y+rr(-16,10),r:8,t:0,life:.45});
+  const m=beachSpot(p.x,p.y,1700,3600,1100);
+  if(!m){C.crates.push({x:b.x+30,y:b.y,t:0,v:'silver',opt:true});toast('<b>Nella bottiglia</b> c\'è solo un biglietto: «Buon vento, capitano!» E una cassa d\'argento che galleggia lì accanto.',6000);return}
+  C.map={k:'map',x:m[0],y:m[1],sx:m[2],sy:m[3],n:3,open:0,t:0,seed:rr(0,9)};C.poi.chests.push(C.map);C.poi.all.push([m[0],m[1]]);
+  toast('<b>Tito:</b> «Una mappa del tesoro! La X è su una spiaggia '+dirName(m[0]-p.x,m[1]-p.y)+', a '+Math.round(Math.hypot(m[0]-p.x,m[1]-p.y)/T)+' caselle. Segui la freccia color pergamena.»',8000);C.lastPT=C.t
+}
+function spawnBrig(){
+  const p=C.p;
+  for(let k=0;k<80;k++){
+    const a=rr(0,TAU),d=rr(1900,2600),x=p.x+Math.cos(a)*d,y=p.y+Math.sin(a)*d;
+    if(x<300||y<300||x>WW-300||y>WH-300||!clearAt(x,y,90))continue;
+    const s=mkShip('brigantino',x,y,a,{});C.ships.push(s);C.brig=s;C.poi.brigs++;
+    toast('<b>Tito:</b> «Una vela viola '+dirName(x-p.x,y-p.y)+'! È un brigantino veloce: scappa appena ti vede. Se lo affondi porta casse d\'argento.»',7500);C.lastPT=C.t;
+    return
+  }
+  C.poi.brigT=15
+}
+function brigAI(s,dt,dp){      // il brigantino scappa dal giocatore; dopo un po' si stanca e rallenta
+  const p=C.p,sp0=SPEC.brigantino;
+  if(dp>4600){s.dead=true;s.sinking=false;if(C.brig===s)C.brig=null;return}
+  s.wpT=(s.wpT||0)-dt;
+  if(!s.wp||s.wpT<=0||Math.hypot(s.wp[0]-s.x,s.wp[1]-s.y)<260){
+    let best=null,bs=-1;
+    for(let k=0;k<14;k++){const a=rr(0,TAU),d=rr(900,2000),x=s.x+Math.cos(a)*d,y=s.y+Math.sin(a)*d;if(x<300||y<300||x>WW-300||y>WH-300||!clearAt(x,y,90))continue;const sc=Math.hypot(x-p.x,y-p.y)+rr(0,500);if(sc>bs){bs=sc;best=[x,y]}}
+    s.wp=best||randSea();s.wpT=rr(9,16)
+  }
+  const chase=dp<1500;
+  if(chase&&!(s.tire>0))s.fl=(s.fl||0)+dt;else if(!chase)s.fl=Math.max(0,(s.fl||0)-dt*.5);
+  if(s.tire>0)s.tire-=dt;
+  else if(s.fl>12){s.tire=6.5;s.fl=0;if(dp<1400)toast('<b>Biscotto:</b> «Cra! Il brigantino rallenta, è stanco! Sotto, capitano!»',4500)}
+  steerTo(s,s.wp[0],s.wp[1],dt,1.25);s.hd=avoid(s,s.hd);
+  const hk=.55+.45*cl(s.hull/s.max,0,1);
+  moveShip(s,dt,sp0.spd*windK(s.hd)*(chase?1:.55)*(s.tire>0?.45:1)*hk)
+}
+function poiStep(dt){
+  const P0=C.poi;if(!P0)return;const p=C.p;
+  // --- cala tranquilla ---
+  const cv=P0.cove;
+  if(cv){
+    cv.t+=dt;const d=Math.hypot(p.x-cv.x,p.y-cv.y);
+    if(d<cv.r){
+      pT('cove','<b>Tito:</b> «Una cala tranquilla! Qui il mare è calmo e i pesci saltano. Fermati un po\': lo scafo si ripara da solo.»',6500);
+      if(p.hull<p.max){p.hull=Math.min(p.max,p.hull+dt*.35);cv.hT=(cv.hT||0)-dt;if(cv.hT<=0){cv.hT=1.2;tone(880,0,.22,'triangle',.05);C.fx.push({k:'heal',x:p.x+rr(-70,70),y:p.y+rr(-34,20),vx:0,vy:-34,t:0,life:1.1})}}
+    }else if(d<1500)pT('coveNear','<b>Tito:</b> «C\'è una cala tranquilla '+dirName(cv.x-p.x,cv.y-p.y)+'. Se lo scafo è rovinato, fermati lì.»',5500);
+    cv.sT-=dt;if(cv.sT<=0){cv.sT=rr(2.4,5);if(d<1000&&AU.ctx&&AU.on){noiseBurst(.1,1500,.045);tone(520,260,.09,'sine',.03)}}
+  }
+  // --- forzieri sulla spiaggia e tesoro della mappa ---
+  for(const c of P0.chests){
+    c.t+=dt;if(c.open){c.ot=(c.ot||0)+dt;continue}
+    const d=Math.hypot(p.x-c.x,p.y-c.y);
+    if(d<200)openChest(c);
+    else if(c.k==='chest'&&d<1500)pT('chestNear','<b>Tito:</b> «Un forziere sulla spiaggia '+dirName(c.x-p.x,c.y-p.y)+'! Avvicinati con la nave per aprirlo.»',6000)
+  }
+  // --- bottiglie ---
+  if(!C.map&&P0.bottles.length===0&&P0.nb<3){P0.botT-=dt;if(P0.botT<=0){P0.botT=rr(75,115);spawnBottle()}}
+  for(const b of P0.bottles){
+    b.t+=dt;const nx=b.x+b.vx*dt,ny=b.y+b.vy*dt;if(seaOK(nx,ny)){b.x=nx;b.y=ny}else{b.vx=-b.vx;b.vy=-b.vy}
+    const d=Math.hypot(p.x-b.x,p.y-b.y);
+    if(d<95)takeBottle(b);else if(d>3600)b.got=2
+  }
+  if(P0.bottles.some(b=>b.got))P0.bottles=P0.bottles.filter(b=>!b.got);
+  // --- nebbia: le pattuglie ti vedono solo da vicino ---
+  const f=P0.fog;let inF=false;
+  if(f){
+    const d=Math.hypot(p.x-f.x,p.y-f.y);inF=d<f.r*.9;
+    if(inF)pT('fog','<b>Tito:</b> «Nebbia fitta! Le pattuglie ti vedono solo da vicino. E qui in giro potrebbe esserci qualcosa…»',6500);
+    else if(d<1500)pT('fogNear','<b>Biscotto:</b> «Cra! Un banco di nebbia '+dirName(f.x-p.x,f.y-p.y)+'. Nascondersi lì è facile!»',5500)
+  }
+  C.inFog=inF;C.fogA=(C.fogA||0)+((inF?1:0)-(C.fogA||0))*Math.min(1,dt*2);
+  // --- brigantino viola (solo prima dell'arrivo del convoglio) ---
+  if(C.brig&&C.brig.dead)C.brig=null;
+  if(P0.brigs<2&&!C.brig&&!C.convoy){P0.brigT-=dt;if(P0.brigT<=0){P0.brigT=rr(70,110);spawnBrig()}}
+}
+/* ---- disegno ---- */
+function glint(g,x,y,r){g.beginPath();g.moveTo(x-r,y);g.lineTo(x,y-r*.35);g.lineTo(x+r,y);g.lineTo(x,y+r*.35);g.closePath();g.moveTo(x,y-r);g.lineTo(x+r*.35,y);g.lineTo(x,y+r);g.lineTo(x-r*.35,y);g.closePath();g.fill()}
+function coveDraw(g,cv,t){
+  g.save();g.translate(cv.x,cv.y);g.lineCap='round';
+  for(let i=0;i<24;i++){      // luccichio calmo
+    const a=i*2.399+.7,d=Math.sqrt((i+.5)/24)*cv.r*.94,x=Math.cos(a)*d,y=Math.sin(a)*d,ph=Math.sin(t*1.1+i*1.7),al=.2+.34*Math.max(0,ph),l=14+((i*7)%3)*6;
+    g.strokeStyle='rgba(236,255,250,'+al+')';g.lineWidth=3;g.beginPath();g.moveTo(x-l,y);g.quadraticCurveTo(x,y-3-ph*2.4,x+l,y);g.stroke()}
+  for(let k=0;k<3;k++){const u=(t*.2+k/3)%1;g.strokeStyle='rgba(190,255,245,'+(.26*(1-u))+')';g.lineWidth=3;g.beginPath();g.arc(0,0,cv.r*(.25+.75*u),0,7);g.stroke()}
+  g.setLineDash([12,14]);g.lineDashOffset=-t*8;g.strokeStyle='rgba(205,255,248,.45)';g.lineWidth=3;g.beginPath();g.arc(0,0,cv.r,0,7);g.stroke();g.setLineDash([]);
+  const ring=(x,y,k)=>{g.strokeStyle='rgba(255,255,255,'+(.7*(1-k))+')';g.lineWidth=2.2;g.beginPath();g.ellipse(x,y+6,6+k*22,2.4+k*8,0,0,7);g.stroke()};
+  for(let i=0;i<5;i++){      // pesci che saltano
+    const per=3.2+i*.55,tt=t+i*1.9,ph=tt%per,dur=1;if(ph>dur+.7)continue;
+    const sd=Math.floor(tt/per)*7.31+i*3.7,f1=Math.abs(Math.sin(sd*12.9898)*43758.5453)%1,f2=Math.abs(Math.sin(sd*78.233)*12345.678)%1;
+    const a0=f1*TAU,d0=Math.sqrt(f2)*cv.r*.72,dir=f1>.5?1:-1,cx0=Math.cos(a0)*d0,cy0=Math.sin(a0)*d0;
+    if(ph<.5)ring(cx0-dir*42,cy0,ph/.5);
+    if(ph>=dur){ring(cx0+dir*42,cy0,(ph-dur)/.7);continue}
+    const u=ph/dur,hh=Math.sin(u*Math.PI)*40,x=cx0+dir*(u-.5)*84,y=cy0-hh,ang=Math.atan2(-Math.cos(u*Math.PI)*Math.PI*40,dir*84);
+    g.fillStyle='rgba(0,40,70,.16)';g.beginPath();g.ellipse(x,cy0+8,10*(1-hh/70),3,0,0,7);g.fill();
+    g.save();g.translate(x,y);g.rotate(ang);if(dir<0)g.scale(1,-1);
+    g.fillStyle='#86b9e6';g.beginPath();g.ellipse(0,0,12,4.8,0,0,7);g.fill();
+    g.fillStyle='#e8f4ff';g.beginPath();g.ellipse(1,1.5,9,2.5,0,0,Math.PI);g.fill();
+    g.fillStyle='#4f8fd0';g.beginPath();g.moveTo(-10,0);g.lineTo(-18,-6);g.lineTo(-18,6);g.closePath();g.fill();
+    g.fillStyle='#1a2a3a';g.beginPath();g.arc(7,-1,1.2,0,7);g.fill();
+    g.restore()
+  }
+  if(Math.hypot(C.p.x-cv.x,C.p.y-cv.y)<1300){g.textAlign='center';g.font='800 15px Nunito,Arial';g.lineWidth=4;g.strokeStyle='rgba(10,22,34,.85)';g.fillStyle='#c8fff2';g.strokeText('Cala tranquilla',0,-cv.r*.6);g.fillText('Cala tranquilla',0,-cv.r*.6)}
+  g.restore()
+}
+function chestDraw(g,c,t){
+  const op=c.open?Math.min(1,(c.ot||0)*3):0;
+  g.save();g.translate(c.x,c.y);
+  g.fillStyle='rgba(50,34,10,.3)';g.beginPath();g.ellipse(2,13,24,8,0,0,7);g.fill();
+  if(c.k==='map'&&!c.open){      // la X rossa sulla sabbia
+    const pl=.5+.5*Math.sin(t*3);
+    g.strokeStyle='#b8321f';g.lineWidth=8;g.lineCap='round';g.beginPath();g.moveTo(-17,-17);g.lineTo(17,17);g.moveTo(17,-17);g.lineTo(-17,17);g.stroke();
+    g.strokeStyle='rgba(255,236,170,'+(.3+.45*pl)+')';g.lineWidth=3;g.beginPath();g.arc(0,0,32+pl*7,0,7);g.stroke();
+    g.fillStyle='rgba(255,246,190,'+(.4+.5*pl)+')';glint(g,-26,-22,8);glint(g,24,-12,6)
+  }else{
+    for(const[rx,ry,a,b2]of[[-29,5,15,10],[28,7,12,8],[-8,19,10,6]]){      // i sassi attorno al forziere
+      g.fillStyle='#7d7a78';g.beginPath();g.ellipse(rx,ry,a,b2,0,0,7);g.fill();g.fillStyle='#a8a5a2';g.beginPath();g.ellipse(rx-2,ry-2,a*.7,b2*.6,0,0,7);g.fill();
+      g.strokeStyle='#4a4846';g.lineWidth=1.6;g.beginPath();g.ellipse(rx,ry,a,b2,0,0,7);g.stroke()}
+    g.fillStyle='#8a5a2a';g.strokeStyle='#2a1a0e';g.lineWidth=2.4;g.fillRect(-17,-8,34,22);g.strokeRect(-17,-8,34,22);
+    g.fillStyle='#e8b730';g.fillRect(-17,-1,34,4);g.fillRect(-12,-8,4,22);g.fillRect(8,-8,4,22);
+    if(!op){
+      g.fillStyle='#9a6a34';g.beginPath();g.moveTo(-17,-8);g.quadraticCurveTo(0,-30,17,-8);g.closePath();g.fill();g.stroke();
+      g.fillStyle='#e8b730';g.fillRect(-12,-17,4,9);g.fillRect(8,-17,4,9);g.fillRect(-3,-11,6,7);
+      const s=.5+.5*Math.sin(t*4+c.seed);g.fillStyle='rgba(255,246,190,'+(.35+.55*s)+')';glint(g,13,-19,5+s*3)
+    }else{
+      g.fillStyle='#2a1608';g.fillRect(-15,-8,30,5);
+      if((c.ot||0)<5){g.fillStyle='#e6ebf5';for(let i=0;i<5;i++){g.beginPath();g.arc(-11+i*5.5,-8,2.6,0,7);g.fill()}}
+      g.fillStyle='#7a4c22';g.beginPath();g.moveTo(-17,-8);g.lineTo(-14,-30);g.quadraticCurveTo(0,-38,14,-30);g.lineTo(17,-8);g.closePath();g.fill();g.stroke();
+      g.fillStyle='#e8b730';g.fillRect(-11,-26,4,14);g.fillRect(7,-26,4,14)
+    }
+  }
+  g.restore();
+  if(!c.open&&c.k==='chest'&&Math.hypot(C.p.x-c.x,C.p.y-c.y)<800){g.save();g.textAlign='center';g.font='800 14px Nunito,Arial';g.lineWidth=4;g.strokeStyle='rgba(10,22,34,.85)';g.fillStyle='#ffe9a0';g.strokeText('Forziere',c.x,c.y-48);g.fillText('Forziere',c.x,c.y-48);g.restore()}
+}
+function bottleDraw(g,b,t){
+  const bob=Math.sin(b.t*2)*3;
+  g.save();g.translate(b.x,b.y+bob);g.scale(1.3,1.3);
+  const gl=g.createRadialGradient(0,0,4,0,0,60);gl.addColorStop(0,'rgba(190,255,230,.34)');gl.addColorStop(1,'rgba(190,255,230,0)');g.fillStyle=gl;g.fillRect(-60,-60,120,120);
+  const u=(b.t*.5)%1;g.strokeStyle='rgba(255,255,255,'+(.5*(1-u))+')';g.lineWidth=2;g.beginPath();g.ellipse(0,12,16+u*24,6+u*8,0,0,7);g.stroke();
+  g.rotate(-.5+Math.sin(b.t*1.3)*.12);
+  g.fillStyle='rgba(150,225,200,.88)';g.strokeStyle='#2a5a50';g.lineWidth=2;
+  g.beginPath();g.moveTo(-18,-7);g.lineTo(8,-7);g.quadraticCurveTo(14,-7,17,-3);g.lineTo(26,-3);g.lineTo(26,3);g.lineTo(17,3);g.quadraticCurveTo(14,7,8,7);g.lineTo(-18,7);g.quadraticCurveTo(-23,7,-23,0);g.quadraticCurveTo(-23,-7,-18,-7);g.closePath();g.fill();g.stroke();
+  g.fillStyle='#f0e0b0';g.fillRect(-14,-3.5,20,7);g.strokeStyle='#a87a3a';g.lineWidth=1;g.strokeRect(-14,-3.5,20,7);
+  g.fillStyle='#b98a55';g.fillRect(26,-3.4,6,6.8);
+  g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=2;g.beginPath();g.moveTo(-16,-4.6);g.lineTo(6,-4.6);g.stroke();
+  g.restore();
+  const s=.5+.5*Math.sin(t*5+b.t);g.fillStyle='rgba(255,255,255,'+(.4+.5*s)+')';glint(g,b.x+16,b.y-18+bob,6+s*3)
+}
+function poiDraw(g,t){
+  const P0=C.poi;if(!P0)return;
+  const cv=P0.cove;if(cv&&inV(cv.x,cv.y,cv.r+150))coveDraw(g,cv,t);
+  for(const c of P0.chests)if(inV(c.x,c.y,200))chestDraw(g,c,t);
+  for(const b of P0.bottles)if(inV(b.x,b.y,150))bottleDraw(g,b,t)
+}
+let fogSpr=null;
+function fogSprite(){return fogSpr||(fogSpr=sp(420,420,g=>{const q=g.createRadialGradient(210,210,10,210,210,205);q.addColorStop(0,'rgba(238,244,250,.86)');q.addColorStop(.55,'rgba(232,240,248,.5)');q.addColorStop(1,'rgba(230,238,248,0)');g.fillStyle=q;g.fillRect(0,0,420,420)},210,210))}
+function poiFog(g,t){      // il banco di nebbia copre le navi, ma si dirada attorno al giocatore
+  const f=C.poi&&C.poi.fog;if(!f||!inV(f.x,f.y,f.r+320))return;
+  const spr=fogSprite(),p=C.p;
+  for(const b of f.blobs){
+    const x=f.x+b.x+Math.cos(t*b.sp+b.ph)*34,y=f.y+b.y+Math.sin(t*b.sp*.8+b.ph*1.3)*22,dpx=Math.hypot(x-p.x,y-p.y),thin=cl((dpx-90)/(b.r+130),.18,1);
+    drawSp(g,spr,x,y,b.r*2/420,.94*thin)
+  }
+}
+function poiMini(c,p,sc){
+  const P0=C.poi;if(!P0)return;
+  const put=(x,y,fn)=>{const dx=(x-p.x)*sc,dy=(y-p.y)*sc;if(dx*dx+dy*dy>106*106)return;c.save();c.translate(dx,dy);fn();c.restore()};
+  if(P0.fog)put(P0.fog.x,P0.fog.y,()=>{c.fillStyle='rgba(235,242,250,.42)';c.beginPath();c.arc(0,0,Math.max(6,P0.fog.r*sc),0,7);c.fill()});
+  if(P0.cove)put(P0.cove.x,P0.cove.y,()=>{c.strokeStyle='rgba(130,240,228,.95)';c.lineWidth=2.4;c.beginPath();c.arc(0,0,Math.max(5,P0.cove.r*sc),0,7);c.stroke()});
+  for(const h of P0.chests){
+    if(h.open)continue;
+    if(h.k==='map'){let dx=(h.x-p.x)*sc,dy=(h.y-p.y)*sc;const d=Math.hypot(dx,dy),far=d>98,pl=.5+.5*Math.sin(C.t*6);if(far){dx=dx/d*98;dy=dy/d*98}
+      c.save();c.translate(dx,dy);c.fillStyle='#ead7a4';c.strokeStyle='#2a1a0e';c.lineWidth=2;c.beginPath();c.arc(0,0,7.5+pl,0,7);c.fill();c.stroke();c.strokeStyle='#b8321f';c.lineWidth=2.6;c.beginPath();c.moveTo(-3.6,-3.6);c.lineTo(3.6,3.6);c.moveTo(3.6,-3.6);c.lineTo(-3.6,3.6);c.stroke();c.restore()}
+    else put(h.x,h.y,()=>{c.fillStyle='#ffd23a';c.strokeStyle='#3a2410';c.lineWidth=1.6;c.fillRect(-4,-3,8,6);c.strokeRect(-4,-3,8,6)})
+  }
+  for(const b of P0.bottles)put(b.x,b.y,()=>{c.fillStyle='#9fe8d0';c.strokeStyle='#1a4a40';c.lineWidth=1.6;c.beginPath();c.arc(0,0,3.6,0,7);c.fill();c.stroke()})
+}
+function poiOverlay(g,w,h){
+  const P0=C.poi;if(!P0||C.over||C.tut||C.go5)return;
+  const out=(x,y)=>!(x>26&&x<w-26&&y>40&&y<h-26),m=C.map;
+  if(m&&!m.open){
+    const[x,y]=toScreen(m.x,m.y);
+    if(out(x,y))edgeArrow(g,w,h,x,y,'#ead7a4',Math.hypot(m.x-C.p.x,m.y-C.p.y));
+    else{g.save();g.translate(x,y-56-Math.abs(Math.sin(C.t*4))*9);g.fillStyle='#ead7a4';g.strokeStyle='#2a1a0e';g.lineWidth=2.5;g.beginPath();g.moveTo(0,16);g.lineTo(-12,-7);g.lineTo(12,-7);g.closePath();g.fill();g.stroke();g.restore()}
+  }
+  for(const b of P0.bottles){const[x,y]=toScreen(b.x,b.y);if(out(x,y))edgeArrow(g,w,h,x,y,'#9fe8d0',Math.hypot(b.x-C.p.x,b.y-C.p.y))}
+  if((C.fogA||0)>.02){g.fillStyle='rgba(226,236,244,'+(C.fogA*.2)+')';g.fillRect(0,0,w,h)}
+}
+
 /* ---------------- passo ---------------- */
 function step(dt){
   if(!C||C.over)return;
@@ -11438,7 +11723,7 @@ function step(dt){
   // porto: ripara
   const pt=TPp(21,30);
   if(!VOY&&Math.hypot(p.x-pt[0],p.y-pt[1])<320&&p.hull<p.max){p.hull=Math.min(p.max,p.hull+dt*.8);C.repT=(C.repT||0)-dt;if(C.repT<=0){C.repT=.7;repairTap();C.fx.push({k:'flash',x:p.x+rr(-60,60),y:p.y+rr(-30,30),r:10,t:0,life:.35})};if(!C.notes.port){C.notes.port=1;toast('Il carpentiere del porto ripara lo scafo.')}}
-  if(!C.tut&&!VOY)convoy(dt);
+  if(!C.tut&&!VOY){convoy(dt);poiStep(dt)}
   // IA: al massimo 3 pattuglie attaccano insieme, le altre aspettano
   C.eng=new Set(C.ships.filter(q=>!q.dead&&q.type==='pattuglia'&&q.hostile).sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y)).slice(0,3));
   for(const s of C.ships){
@@ -11447,6 +11732,7 @@ function step(dt){
     if(C.tut||s.still){s.v*=.9;continue}
     const dp=Math.hypot(p.x-s.x,p.y-s.y);
     if(s.type==='fantasma'){voyGhostAI(s,dt,dp);continue}
+    if(s.type==='brigantino'){brigAI(s,dt,dp);continue}
     if((s.type==='scorta'||s.type==='galeone')&&s.conv&&!s.alert&&dp<850)alertConvoy();
     if(s.ally){ // la nave liberata ti segue
       const bx=p.x-Math.cos(p.hd)*260+Math.sin(p.hd)*120,by=p.y-Math.sin(p.hd)*260-Math.cos(p.hd)*120,d=Math.hypot(bx-s.x,by-s.y);
@@ -11458,8 +11744,9 @@ function step(dt){
       s.hd=avoid(s,s.hd);moveShip(s,dt,SPEC.mercante.spd*(flee?1.15:.65)*windK(s.hd));
     }else if(s.type==='pattuglia'||s.free||(s.type==='scorta'&&s.alert&&!s.guard)){
       const sp0=SPEC[s.type];
-      if((s.type==='pattuglia'||s.free)&&!s.hostile&&dp<(s.free?560:330)*(C.plan?C.plan.detect:1)){s.hostile=true;if(!C.notes.patr&&!s.free){C.notes.patr=1;toast('<b>Tito:</b> «Una pattuglia! Ci ha visti!»')}}
+      if((s.type==='pattuglia'||s.free)&&!s.hostile&&dp<(s.free?560:330)*(C.plan?C.plan.detect:1)*(C.inFog?.35:1)){s.hostile=true;if(!C.notes.patr&&!s.free){C.notes.patr=1;toast('<b>Tito:</b> «Una pattuglia! Ci ha visti!»')}}
       if((s.type==='pattuglia'||s.free)&&s.hostile&&dp>(s.hit?1600:(s.free?900:620)))s.hostile=false;
+      if(C.inFog&&(s.type==='pattuglia'||s.free)&&s.hostile&&dp>(s.hit?560:320))s.hostile=false;
       if(s.type==='scorta'&&s.alert&&dp>1500)s.alert=false;
       if((s.hostile&&(s.type!=='pattuglia'||C.eng.has(s)))||s.alert){
         const want=Math.atan2(p.y-s.y,p.x-s.x);
@@ -11535,7 +11822,7 @@ function step(dt){
      if(f>.85&&!C.notes.esc2){C.notes.esc2=1;toast('<b>Biscotto:</b> «Sta per scappare! Colpiscilo e abbordalo, presto!»',6000)}}}
   const alive=C.ships.filter(s=>s.conv&&!s.dead);
   const gal=alive.filter(s=>s.type==='galeone');
-  if(!C.over&&!C.go5&&C.convoy&&(C.pris===2||C.prisLost)&&gal.length===0&&C.crates.length===0)endRun('completo');
+  if(!C.over&&!C.go5&&C.convoy&&(C.pris===2||C.prisLost)&&gal.length===0&&!C.crates.some(c=>!c.opt))endRun('completo');
   if(!C.over&&!C.go5&&C.escapes>0&&!C.ships.some(x=>x.conv&&!x.dead&&!x.ally&&x.type!=='scorta'))endRun('fuga');
   }
   tutStep();
@@ -11636,7 +11923,7 @@ function drawShip0(g,e,t){
   if(!s.isP){
     g.save();g.textAlign='center';g.font='800 14px Nunito,Arial';
     const near=Math.hypot(P.x-s.x,P.y-s.y)<1100||s.type==='prigionieri'&&!s.ally;
-    if(near){const lab=s.ally?'Nave di Pip e Dodo':(s.nm||sp0.name)+(s.disabled?' · in avaria':'');g.lineWidth=4;g.strokeStyle='rgba(10,22,34,.85)';g.fillStyle=s.type==='prigionieri'?'#fff':s.type==='galeone'?'#ffe08a':s.type==='mercante'?'#e8e0c8':s.ally?'#b9f0b0':'#ffb0a0';g.strokeText(lab,s.x,hy-10);g.fillText(lab,s.x,hy-10)}
+    if(near){const lab=s.ally?'Nave di Pip e Dodo':(s.nm||sp0.name)+(s.disabled?' · in avaria':'');g.lineWidth=4;g.strokeStyle='rgba(10,22,34,.85)';g.fillStyle=s.type==='prigionieri'?'#fff':s.type==='galeone'?'#ffe08a':s.type==='mercante'?'#e8e0c8':s.type==='brigantino'?'#e2c4ff':s.ally?'#b9f0b0':'#ffb0a0';g.strokeText(lab,s.x,hy-10);g.fillText(lab,s.x,hy-10)}
     if(s.hull<s.max||s.type==='galeone'||s.type==='prigionieri'){const bw=70;g.fillStyle='rgba(10,22,34,.75)';g.fillRect(s.x-bw/2,hy,bw,7);g.fillStyle=s.type==='prigionieri'?'#b9d4ff':s.ally?'#8fe08a':'#ff6a5a';g.fillRect(s.x-bw/2+1,hy+1,(bw-2)*cl(s.hull/s.max,0,1),5)}
     g.restore();
   }
@@ -11668,6 +11955,7 @@ function drawFx(g,t){
   {const pts=galPath();if(pts&&pts.length>1){
     g.save();g.strokeStyle='rgba(255,214,90,.75)';g.lineWidth=5;g.setLineDash([22,16]);g.lineDashOffset=-t*30;g.lineCap='round';g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)g.lineTo(pts[i][0],pts[i][1]);g.stroke();g.setLineDash([]);
     const e=pts[pts.length-1];g.fillStyle='#3a2410';g.strokeStyle='#ffd23a';g.lineWidth=4;g.beginPath();g.arc(e[0],e[1],34,0,7);g.fill();g.stroke();g.fillStyle='#ffd23a';g.font='900 18px Nunito,Arial';g.textAlign='center';g.fillText('USCITA',e[0],e[1]+6);g.restore()}}
+  poiDraw(g,t);
   // casse
   for(const c of C.crates){const x=c.x,y=c.y+Math.sin(c.t*2)*3;g.save();g.translate(x,y);
     g.strokeStyle='rgba(255,255,255,.45)';g.lineWidth=2;g.beginPath();g.ellipse(0,6,22+Math.sin(c.t*2)*3,9,0,0,7);g.stroke();
@@ -11681,10 +11969,12 @@ function drawFx(g,t){
     else if(q.k==='puff'){g.fillStyle='rgba(215,215,220,'+(.55*a)+')';g.beginPath();g.arc(q.x,q.y,q.r*(1+q.t*.9),0,7);g.fill()}
     else if(q.k==='flash'){g.fillStyle='rgba(255,215,110,'+a+')';g.beginPath();g.arc(q.x,q.y,q.r*(1+q.t*3),0,7);g.fill();g.fillStyle='rgba(255,255,230,'+a+')';g.beginPath();g.arc(q.x,q.y,q.r*.5,0,7);g.fill()}
     else if(q.k==='splash'){g.strokeStyle='rgba(255,255,255,'+a+')';g.lineWidth=3;g.beginPath();g.ellipse(q.x,q.y,q.r*(1+q.t*4),q.r*.5*(1+q.t*4),0,0,7);g.stroke();g.fillStyle='rgba(255,255,255,'+(a*.7)+')';for(let i=0;i<4;i++)g.fillRect(q.x+Math.cos(i*1.6)*q.t*40,q.y-q.t*50+Math.sin(i)*6,3,3)}
-    else if(q.k==='chip'){g.fillStyle='rgba(120,80,40,'+a+')';g.fillRect(q.x,q.y,4,4)}}
+    else if(q.k==='chip'){g.fillStyle='rgba(120,80,40,'+a+')';g.fillRect(q.x,q.y,4,4)}
+    else if(q.k==='heal'){g.fillStyle='rgba(160,255,196,'+a+')';g.strokeStyle='rgba(20,90,50,'+a*.8+')';g.lineWidth=2;g.beginPath();g.moveTo(q.x-3,q.y-9);g.lineTo(q.x+3,q.y-9);g.lineTo(q.x+3,q.y-3);g.lineTo(q.x+9,q.y-3);g.lineTo(q.x+9,q.y+3);g.lineTo(q.x+3,q.y+3);g.lineTo(q.x+3,q.y+9);g.lineTo(q.x-3,q.y+9);g.lineTo(q.x-3,q.y+3);g.lineTo(q.x-9,q.y+3);g.lineTo(q.x-9,q.y-3);g.lineTo(q.x-3,q.y-3);g.closePath();g.fill();g.stroke()}}
   if(VOY)voyFx(g,t);
   // zona del porto
   const pt=TPp(21,30);if(!VOY){g.save();g.strokeStyle='rgba(255,230,150,'+(.35+.15*Math.sin(t*2))+')';g.lineWidth=3;g.setLineDash([14,12]);g.beginPath();g.ellipse(pt[0],pt[1]+10,320,150,0,0,7);g.stroke();g.restore();}
+  poiFog(g,t);
 }
 
 /* ---------------- HUD ---------------- */
@@ -11757,12 +12047,13 @@ function overlay(){
   {let near=null,nd=1e9;      // nel primo tratto: freccia verso la pattuglia più vicina, se è fuori schermo
    if(!VOY&&!C.convoy&&!C.tut&&!C.go5&&!C.over)for(const s of C.ships){if(s.dead||s.sinking||s.ally||s.conv||!(s.type==='pattuglia'||s.free))continue;const d=Math.hypot(s.x-C.p.x,s.y-C.p.y);if(d<nd){nd=d;near=s}}
    for(const s of C.ships){
-    const kd=s.dead?0:s.tutT?'t':(s.type==='galeone'&&s.conv&&!C.tut)?'g':(s.type==='prigionieri'&&!s.ally&&!C.tut)?'p':s===near?'e':0;
+    const kd=s.dead?0:s.tutT?'t':(s.type==='galeone'&&s.conv&&!C.tut)?'g':(s.type==='prigionieri'&&!s.ally&&!C.tut)?'p':(s.type==='brigantino'&&!C.tut&&Math.hypot(s.x-C.p.x,s.y-C.p.y)<2800)?'b':s===near?'e':0;
     if(!kd)continue;
     const[x,y]=toScreen(s.x,s.y);
     if(x>26&&x<w-26&&y>40&&y<h-26)continue;
-    edgeArrow(g,w,h,x,y,kd==='t'?'#7be3ff':kd==='p'?'#ffffff':kd==='e'?'#ff8a7a':'#ffd23a',Math.hypot(s.x-C.p.x,s.y-C.p.y))
+    edgeArrow(g,w,h,x,y,kd==='t'?'#7be3ff':kd==='p'?'#ffffff':kd==='e'?'#ff8a7a':kd==='b'?'#c79cff':'#ffd23a',Math.hypot(s.x-C.p.x,s.y-C.p.y))
    }}
+  if(!VOY)poiOverlay(g,w,h);
   // lato illuminato verso i nemici + ricarica
   const p=C.p,[px,py]=toScreen(p.x,p.y),z=camZoom(),l=C.lit;
   for(const sd of[-1,1]){const cd=sd<0?p.cdL:p.cdR,an=p.hd+(sd>0?Math.PI/2:-Math.PI/2),isLit=l&&l.side===sd;
@@ -11785,7 +12076,8 @@ function miniMap(){
   c.fillStyle='#6fbf5a';
   const step=3,ptx=p.x/T,pty=p.y/T,R=Math.ceil(112/(sc*T))+2;
   for(let ty=Math.max(0,Math.floor(pty)-R);ty<Math.min(MH,Math.floor(pty)+R);ty+=1)for(let tx=Math.max(0,Math.floor(ptx)-R);tx<Math.min(MW,Math.floor(ptx)+R);tx+=1){if(!seaT[tIdx(tx,ty)]){c.fillRect((tx*T-p.x)*sc,(ty*T-p.y)*sc,T*sc+1,T*sc+1)}}
-  for(const s of C.ships){if(s.dead)continue;const x=(s.x-p.x)*sc,y=(s.y-p.y)*sc;c.fillStyle=s.ally?'#8fe08a':s.type==='prigionieri'?'#fff':s.type==='galeone'?'#ffd23a':s.type==='mercante'?'#d8c8a0':'#ff6a5a';c.beginPath();c.arc(x,y,s.type==='galeone'||s.type==='prigionieri'?6:4,0,7);c.fill()}
+  if(!VOY)poiMini(c,p,sc);
+  for(const s of C.ships){if(s.dead)continue;const x=(s.x-p.x)*sc,y=(s.y-p.y)*sc;c.fillStyle=s.ally?'#8fe08a':s.type==='prigionieri'?'#fff':s.type==='galeone'?'#ffd23a':s.type==='mercante'?'#d8c8a0':s.type==='brigantino'?'#c79cff':'#ff6a5a';c.beginPath();c.arc(x,y,s.type==='galeone'||s.type==='prigionieri'?6:4,0,7);c.fill()}
   {const pts=galPath();if(pts&&pts.length>1){
     c.save();c.strokeStyle='rgba(255,214,90,.85)';c.lineWidth=2;c.setLineDash([5,4]);c.beginPath();c.moveTo((pts[0][0]-p.x)*sc,(pts[0][1]-p.y)*sc);for(let i=1;i<pts.length;i++)c.lineTo((pts[i][0]-p.x)*sc,(pts[i][1]-p.y)*sc);c.stroke();c.setLineDash([]);
     const e=pts[pts.length-1];let ex=(e[0]-p.x)*sc,ey=(e[1]-p.y)*sc;const ed=Math.hypot(ex,ey),fr=ed>98;if(fr){ex=ex/ed*98;ey=ey/ed*98}
@@ -11815,7 +12107,7 @@ function miniMap(){
 
 /* ---------------- dopo il galeone: verso il grande viaggio ---------------- */
 function go5Init(){
-  C.ships=C.ships.filter(s=>s.ally);C.crates=[];C.balls=[];C.pend=[];C.convoy=true;C.notes.start=1;C.notes.found=1;C.notes.gal=1;
+  C.ships=C.ships.filter(s=>s.ally);C.crates=[];C.balls=[];C.pend=[];C.poi=null;C.brig=null;C.map=null;C.convoy=true;C.notes.start=1;C.notes.found=1;C.notes.gal=1;
   const e=ROUTE[ROUTE.length-1],t=findSea(e[0],e[1]);C.go5={x:t[0],y:t[1]};
 }
 function go5Start(){
@@ -12714,7 +13006,7 @@ function voyMusic(){
   }
 }
 
-window.Ch3={voy:voyAPI,drawFloor:voyFloor,mkShip,onScr,dump(){let o='';for(let ty=0;ty<MH;ty+=2){for(let tx=0;tx<MW;tx++){o+=seaT[tIdx(tx,ty)]?(blockT[tIdx(tx,ty)]?'B':'.'):'#'}o+='\n'}return MW+' '+MH+'\n'+o},music:battleTick,boot,step,drawShip,drawFx,vis:()=>C?C.ships.concat([C.p]).filter(s=>!s.dead||s.sinking).map(s=>s.ent):[],get C(){return C},fire,board,endRun,newRun:(e,pl,cp)=>{newRun(e,pl,cp);sailUI()},route:ROUTE,seaOK,clearAt,ROUTE};
+window.Ch3={b2:{poiPlace,spawnBrig,spawnBottle,takeBottle,openChest,beachSpot,poiSpot,brigAI,poiStep},voy:voyAPI,drawFloor:voyFloor,mkShip,onScr,dump(){let o='';for(let ty=0;ty<MH;ty+=2){for(let tx=0;tx<MW;tx++){o+=seaT[tIdx(tx,ty)]?(blockT[tIdx(tx,ty)]?'B':'.'):'#'}o+='\n'}return MW+' '+MH+'\n'+o},music:battleTick,boot,step,drawShip,drawFx,vis:()=>C?C.ships.concat([C.p]).filter(s=>!s.dead||s.sinking).map(s=>s.ent):[],get C(){return C},fire,board,endRun,newRun:(e,pl,cp)=>{newRun(e,pl,cp);sailUI()},route:ROUTE,seaOK,clearAt,ROUTE};
 })();
 
 /* ====== LA NAVE SPAGNOLA – mappa interna (stile isola) ====== */
