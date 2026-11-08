@@ -4549,6 +4549,7 @@ function lightAt(h){
 }
 /* ---- ordinamento e visibilità ---- */
 function sortY(e){
+  if(e.sy!=null)return e.sy;
   if(e.type==='plot')return(e.fp[1]+e.fp[3])*TS;
   if(e.type==='wparrot')return e.y+2;
   return e.y;
@@ -4608,6 +4609,7 @@ function drawCrab(g,e,t){
 }
 function drawDeco(g,e,t){
   if(e.hidden)return;
+  if(typeof NVDX!=='undefined'&&NVDX[e.spr]){NVDX[e.spr](g,e,t);return}
   if(e.spr==='lamp'){if(!e.hid)drawCDeco(g,e.lk,t);return}
   if(e.spr==='pit'){
     g.save();g.translate(e.x,e.y);shadow(g,0,3,26,8,.25);
@@ -5215,6 +5217,7 @@ function render(t){
     const falo=EID.plot_falo;if(falo.st===2)lights.push([(falo.fp[0]+.5)*TS,(falo.fp[1]+.2)*TS,250,1,true]);
     const cap=EID.plot_capanna;if(cap.st===2)lights.push([(cap.fp[0]+2.3)*TS,(cap.fp[1]+1.1)*TS,100,.5]);
     for(const e of E)if((e.type==='cdeco'&&e.k==='lanterne')||(e.type==='deco'&&e.spr==='lamp'&&!e.hid))lights.push([e.x,e.y-38,150,.75,true]);
+    for(const e of E)if(e.type==='deco'&&e.spr==='nv_lant')lights.push([e.x+15,e.y-68,150,.8,true]);
     const ban=EID.plot_banco;if(ban.st===2)lights.push([(ban.fp[0]+1)*TS,(ban.fp[1])*TS-18,70,.3]);
     lights.push([FIX.smoke[0]*TS,FIX.smoke[1]*TS+20,180,.6,true]);
     if(S.flags.pitLit&&EID.isle_pit)lights.push([EID.isle_pit.x,EID.isle_pit.y,200,.9,true]);
@@ -5696,6 +5699,12 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
+    "Corretto: «Chiacchierare un po'» con i personaggi del campo non faceva nulla. Ora funziona e fa crescere la fiducia, una volta al giorno per ciascuno.",
+    "La Baia prende vita: bucato che ondeggia, pentola che fuma, Nives che martella sull'incudine e scintille del fuoco la sera.",
+    "Richieste del giorno con una scena: il personaggio controlla, assaggia e commenta. Il cibo secco, ben fatto, dà più fiducia. Nuove richieste: pesce secco per Nives, zucca per Gnocco. Per i rifornimenti, pesce secco e frutta secca valgono come arrosto e noci.",
+    "Scene di amicizia a 2 e 4 cuori con Ferro, Nives, Gnocco e Tito, ognuna con un premio: cappelli, abiti, una ricetta, l'insegna del banco, la barchetta di Tito.",
+    "Nives a 3 cuori, con la tela, ti cuce un abito e un cappello per il guardaroba.",
+    "Il campo cresce con la fiducia media: bandierine, lanterne e una tavolata lunga. Ogni pagina del diario di J. porta un oggetto sul suo tavolino e una nuova battuta di Ferro.",
     "La marea: ogni alba (dal secondo giorno) porta tre cose sulla riva, con un luccichio da trovare: bottiglie con un biglietto, conchiglie rare, cassette, legni di mare.",
     "Scheda dell'alba: svegliandoti compare il riepilogo del giorno prima (pesci, reliquie, costruzioni, ricette), il cielo, la luna, l'orto, l'essiccatore e ciò che ha portato la marea.",
     "Quaderno delle collezioni (Diario › Raccolta): conchiglie, piume, sassi colorati e avvistamenti di creature, con premi per il guardaroba. Piccole cose brillanti lungo i sentieri finiscono nelle collezioni.",
@@ -6255,19 +6264,21 @@ Ch2.talk=function(e){
   let act=null;
   const choices=[];
   hs.sort((a,b)=>(a.offer?1:0)-(b.offer?1:0));
-  const qs=hs.filter(h=>!h.x&&!h.offer).map(h=>({t:h.label(),h}));
-  const oth=hs.filter(h=>h.x||h.offer).map(h=>({t:h.label(),h}));
+  const qs=hs.filter(h=>!h.x&&!h.offer&&!h.g).map(h=>({t:h.label(),h}));
+  const oth=hs.filter(h=>(h.x||h.offer)&&!h.g).map(h=>({t:h.label(),h}));
+  const amc=hs.filter(h=>h.g).map(h=>({t:h.label(),h}));
   if(w==='nives')oth.push({t:"Scambiare materiali",h:'trade'});
   if(w==='gnocco')oth.push({t:"Fatti cucinare qualcosa",h:'cook'});
   const grp=(L,name,q)=>{if(!L.length)return;choices.push({t:L.length===1?L[0].t:name,fn:()=>{act=L.length===1?L[0].h:{sub:L,q}}})};
   grp(qs,"Missioni…","Di cosa si tratta?");
+  grp(amc,"Una parola in privato…","Di cosa vuoi parlare?");
   choices.push({t:"Chiacchierare un po'",fn:()=>{act='chat'}});
   grp(oth,"Altro…","Cosa facciamo?");
   choices.push({t:"Niente, a dopo",fn:()=>{}});
   const g=Ch2.GREET[w][(Math.random()*3)|0];
   UI.dlg([D(w,g+"  ("+HEARTS(Ch2.tr(w))+")",{choices})],()=>{
     const go=x=>{if(x==='trade')Ch2.openTrade();else if(x==='cook')Ch2.openCook();else if(x==='chat')Ch2.chat(w);else if(x&&x.run)x.run()};
-    if(act&&act.sub){const L=act.sub,Q=act.q;act=null;UI.dlg([D(w,Q||"Cosa facciamo?",{choices:L.map(o=>({t:o.t,fn:()=>{act=o.h}})).concat([{t:"Niente",fn:()=>{act=null}}])})],()=>go(act))}
+    if(act&&typeof act==='object'&&Array.isArray(act.sub)){const L=act.sub,Q=act.q;act=null;UI.dlg([D(w,Q||"Cosa facciamo?",{choices:L.map(o=>({t:o.t,fn:()=>{act=o.h}})).concat([{t:"Niente",fn:()=>{act=null}}])})],()=>go(act))}
     else go(act);
   });
 };
@@ -6525,7 +6536,7 @@ Ch2.openCook=function(){
   if(!c.gn){UI.dlg([D('gnocco',"Cucinare per te? Con quello che hai? Portami prima un vero banchetto.")]);return}
   const draw=()=>{
     let h='<h2>La cucina di Gnocco</h2><p>«Mangia, e poi dimmi se ho esagerato col sale.»</p>';
-    for(const r of Ch2.GN){const ok=hasRes(r.cost);
+    for(const r of Ch2.GN){if(r.gate&&!r.gate())continue;const ok=hasRes(r.cost);
       h+='<div class="upg"><h3>'+r.n+'</h3><p class="sm">'+r.d+' (+'+r.h+' fame, +'+r.t+' sete)</p>'+costHtml(r.cost)+'<button class="btn gold" data-g="'+r.id+'"'+(ok?'':' disabled')+'>Mangia</button></div>'}
     h+='<div class="row"><button class="btn" id="shNo">Chiudi</button></div>';
     sheetFor(h,cc=>{cc.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{
@@ -9277,6 +9288,7 @@ NV.sight=function(){
 /* ---- passo periodico (ogni mezzo secondo) ---- */
 NV.tick=function(dt){
   if(!S||!S.live||WORLD>2)return;
+  if(WORLD===2&&typeof NV2!=='undefined'){try{NV2.tick(dt)}catch(err){frameErr(err)}}
   NV._t=(NV._t||0)-dt;if(NV._t>0)return;NV._t=.5;
   const n=NV.st();
   if(P.mode==='walk'&&!inRoom()&&!P.cl){
@@ -9293,6 +9305,7 @@ NV.tick=function(dt){
 NV.onBegin=function(){
   NV._t=0;NV._pz=0;NV.rmGlints();
   try{NV.st()}catch(e){}
+  if(WORLD===2&&typeof NV2!=='undefined')NV2.onBegin();
 };
 /* ---- premi di livello ---- */
 NV.LVR={
@@ -9438,6 +9451,489 @@ DECOR_QUIPS.stendardo="Cra! Uno stendardo! Adesso siamo un vero equipaggio.";
   }
   return _lk.call(Story,e,back);
  }}
+
+/* ====== v0.12f · La Baia prende vita: dettagli vivi, richieste con scena, amicizie, abiti di Nives, campo che cresce, oggetti di J. ====== */
+const NV2={};
+NV2.cp=()=>{const n=NV.st();return n.cp=n.cp||{b:0,l:0,t:0,j:0,fr:{},sew:{},fj:{}}};
+NV2.fr=(w,h)=>{try{return !!NV2.cp().fr[w+h]}catch(e){return false}};
+NV2.pages=()=>Math.min(4,(S&&S.c2&&S.c2.pages)||0);
+
+/* ---- disegni (tutti in coordinate locali: x,y = punto a terra) ---- */
+const NVDX={};
+NVDX.nv_laundry=(g,e,t)=>{
+  g.save();g.translate(e.x,e.y);
+  shadow(g,0,3,80,8,.2);
+  g.strokeStyle='#5a3d22';g.lineWidth=5;g.lineCap='round';
+  for(const px of[-68,68]){g.beginPath();g.moveTo(px,3);g.lineTo(px,-80);g.stroke()}
+  const y0=-76,sag=9,ry=x=>y0+sag*(1-(x/68)*(x/68));
+  g.strokeStyle='#cbb892';g.lineWidth=1.6;g.beginPath();g.moveTo(-68,y0);g.quadraticCurveTo(0,y0+sag*2,68,y0);g.stroke();
+  const sw=(x,k)=>Math.sin(t*1.5+x*.09)*.07*k+Math.sin(t*3.1+x)*.012;
+  const hang=(x,fn)=>{g.save();g.translate(x,ry(x));g.rotate(sw(x,1));fn();g.restore();
+    g.fillStyle='#2a1c10';g.beginPath();g.arc(x-6,ry(x-6),1.5,0,7);g.arc(x+6,ry(x+6),1.5,0,7);g.fill()};
+  g.lineJoin='round';
+  hang(-46,()=>{                                  // camicia azzurra
+    g.fillStyle='#4f86c6';g.strokeStyle='rgba(20,30,60,.6)';g.lineWidth=1;
+    g.beginPath();g.moveTo(-9,0);g.lineTo(9,0);g.lineTo(19,12);g.lineTo(14,17);g.lineTo(9,12);g.lineTo(9,32);g.lineTo(-9,32);g.lineTo(-9,12);g.lineTo(-14,17);g.lineTo(-19,12);g.closePath();g.fill();g.stroke();
+    g.strokeStyle='rgba(255,255,255,.45)';g.beginPath();g.moveTo(0,2);g.lineTo(0,30);g.stroke()});
+  hang(-16,()=>{                                  // pantaloni
+    g.fillStyle='#b99a64';g.strokeStyle='rgba(60,40,10,.6)';g.lineWidth=1;
+    g.beginPath();g.moveTo(-9,0);g.lineTo(9,0);g.lineTo(10,36);g.lineTo(2,36);g.lineTo(0,14);g.lineTo(-2,36);g.lineTo(-10,36);g.closePath();g.fill();g.stroke()});
+  hang(20,()=>{                                   // lenzuolo
+    g.fillStyle='#f4f1e6';g.strokeStyle='rgba(90,90,100,.5)';g.lineWidth=1;
+    const w=Math.sin(t*2+1)*2;
+    g.beginPath();g.moveTo(-15,0);g.lineTo(15,0);g.lineTo(15+w,38);g.quadraticCurveTo(5,41+w,0,37);g.quadraticCurveTo(-6,41-w,-15+w,38);g.closePath();g.fill();g.stroke();
+    g.strokeStyle='rgba(180,180,200,.5)';g.beginPath();g.moveTo(-8,3);g.lineTo(-7+w*.3,35);g.moveTo(8,3);g.lineTo(7+w*.3,35);g.stroke()});
+  hang(50,()=>{                                   // sciarpa rossa
+    g.fillStyle='#d8412f';g.strokeStyle='rgba(80,10,6,.6)';g.lineWidth=1;
+    g.beginPath();g.moveTo(-5,0);g.lineTo(5,0);g.lineTo(6,22);g.lineTo(0,19);g.lineTo(-6,22);g.closePath();g.fill();g.stroke();
+    g.fillStyle='#f0c43a';g.fillRect(-5,7,10,2.6)});
+  g.restore();
+};
+NVDX.nv_pot=(g,e,t)=>{
+  g.save();g.translate(e.x,e.y);
+  shadow(g,0,4,32,8,.28);
+  g.fillStyle='#8a867c';for(let i=0;i<9;i++){const a=i/9*6.283;g.beginPath();g.ellipse(Math.cos(a)*23,Math.sin(a)*8.6,5.2,3.7,a,0,7);g.fill()}
+  g.fillStyle='#3a2216';g.beginPath();g.ellipse(0,0,18,6.6,0,0,7);g.fill();
+  drawFlame(g,0,-1,t,.72);
+  g.strokeStyle='#4a2e18';g.lineWidth=3.2;g.lineCap='round';
+  g.beginPath();g.moveTo(-24,3);g.lineTo(-2,-54);g.moveTo(24,3);g.lineTo(2,-54);g.moveTo(0,6);g.lineTo(0,-54);g.stroke();
+  g.strokeStyle='#2a2a2e';g.lineWidth=1.6;g.beginPath();g.moveTo(0,-54);g.lineTo(0,-40);g.stroke();
+  g.fillStyle='#2a2a32';g.beginPath();g.ellipse(0,-26,15,13,0,0,7);g.fill();g.strokeStyle='#0c0c10';g.lineWidth=1.2;g.stroke();
+  g.fillStyle='rgba(255,255,255,.12)';g.beginPath();g.ellipse(-5,-30,4,7,.4,0,7);g.fill();
+  g.fillStyle='#16161c';g.beginPath();g.ellipse(0,-37,15,4.8,0,0,7);g.fill();
+  g.fillStyle='#9a5e2a';g.beginPath();g.ellipse(0,-37.4,12.2,3.2,0,0,7);g.fill();
+  const meal=(S.tod>=11.5&&S.tod<14.2)||(S.tod>=18&&S.tod<21);
+  for(let i=0;i<5;i++){
+    const ph=(t*(meal?.5:.34)+i*.2)%1,a=(meal?.42:.26)*(1-ph);
+    g.fillStyle='rgba(255,255,255,'+a.toFixed(3)+')';
+    g.beginPath();g.arc(Math.sin(t*1.2+i*2.1)*5+ph*7,-40-ph*(meal?64:48),5+ph*(meal?13:9),0,7);g.fill();
+  }
+  g.restore();
+};
+NVDX.nv_anvil=(g,e,t)=>{
+  g.save();g.translate(e.x,e.y);
+  shadow(g,0,3,26,6,.28);
+  g.fillStyle='#6a4a2a';g.beginPath();g.moveTo(-14,3);g.lineTo(-12,-15);g.lineTo(12,-15);g.lineTo(14,3);g.quadraticCurveTo(0,7,-14,3);g.closePath();g.fill();g.strokeStyle='#2a1a0e';g.lineWidth=1.3;g.stroke();
+  g.fillStyle='#8a6a42';g.beginPath();g.ellipse(0,-15,12,3.6,0,0,7);g.fill();g.stroke();
+  g.fillStyle='#555a64';g.strokeStyle='#1e2026';g.lineWidth=1.3;
+  g.beginPath();g.moveTo(-17,-31);g.lineTo(13,-31);g.lineTo(27,-26);g.lineTo(13,-23);g.lineTo(10,-23);g.lineTo(8,-18);g.lineTo(-8,-18);g.lineTo(-10,-23);g.lineTo(-17,-23);g.closePath();g.fill();g.stroke();
+  g.strokeStyle='#9aa0ac';g.lineWidth=1.4;g.beginPath();g.moveTo(-15,-30);g.lineTo(12,-30);g.stroke();
+  const d=t-(e.hit||-9);
+  if(d>=0&&d<.45){
+    const k=d/.45;
+    g.save();g.globalCompositeOperation='lighter';
+    for(let i=0;i<7;i++){
+      const an=-Math.PI*(.12+.76*i/6),r=6+k*(18+(i%3)*5),x=-2+Math.cos(an)*r,y=-31+Math.sin(an)*r+k*k*14;
+      g.strokeStyle='rgba(255,'+(190-i*8)+',90,'+(1-k).toFixed(2)+')';g.lineWidth=1.8;
+      g.beginPath();g.moveTo(x,y);g.lineTo(x-Math.cos(an)*3,y-Math.sin(an)*3);g.stroke();
+    }
+    g.fillStyle='rgba(255,230,150,'+(.7*(1-k)).toFixed(2)+')';g.beginPath();g.arc(-2,-32,5*(1-k)+1,0,7);g.fill();
+    g.restore();
+  }
+  g.restore();
+};
+NVDX.nv_sparks=(g,e,t)=>{
+  const tod=S.tod;if(!(tod>=17||tod<5.5))return;
+  const k=tod>=17?clamp((tod-17)/1.2,0,1):1;
+  g.save();g.translate(e.x,e.y);g.globalCompositeOperation='lighter';
+  for(let i=0;i<14;i++){
+    const ph=(t*.27+i*.0714+((i*37)%11)*.061)%1;
+    const x=Math.sin(i*7.3+t*.8)*9+ph*8*Math.sin(i*2.1+1),y=-26-ph*92;
+    const a=(1-ph)*.9*k;
+    g.fillStyle='rgba(255,'+(150+((i*29)%80))+',60,'+a.toFixed(3)+')';
+    g.beginPath();g.arc(x,y,.9+((i*13)%5)*.34*(1-ph),0,7);g.fill();
+  }
+  g.restore();
+};
+NVDX.nv_bunt=(g,e,t)=>{
+  const cols=['#d8412f','#f0c43a','#3e8ecb','#f4efe0','#4aa86a'];
+  g.save();g.lineJoin='round';
+  (e.seg||[]).forEach((s,si)=>{
+    const x1=s[0],y1=s[1],x2=s[2],y2=s[3],sag=s[4];
+    g.strokeStyle='#cbb892';g.lineWidth=1.5;g.beginPath();g.moveTo(x1,y1);g.quadraticCurveTo((x1+x2)/2,(y1+y2)/2+sag*2,x2,y2);g.stroke();
+    const n=Math.max(5,Math.round(hyp(x2-x1,y2-y1)/24));
+    for(let i=1;i<n;i++){
+      const u=i/n,px=x1+(x2-x1)*u,py=y1+(y2-y1)*u+sag*4*u*(1-u);
+      g.save();g.translate(px,py);g.rotate(Math.sin(t*2.1+i*1.7+si)*.13);
+      g.fillStyle=cols[(i+si)%5];g.beginPath();g.moveTo(-6,0);g.lineTo(6,0);g.lineTo(0,14);g.closePath();g.fill();
+      g.strokeStyle='rgba(30,16,6,.55)';g.lineWidth=.8;g.stroke();g.restore();
+    }
+  });
+  g.restore();
+};
+NVDX.nv_lant=(g,e,t)=>{
+  g.save();g.translate(e.x,e.y);shadow(g,0,3,14,5,.26);
+  g.strokeStyle='#5a3d22';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(0,3);g.lineTo(0,-88);g.stroke();
+  g.lineWidth=3.4;g.beginPath();g.moveTo(0,-88);g.lineTo(15,-88);g.stroke();
+  g.save();g.translate(15,-88);g.rotate(Math.sin(t*1.4+e.x*.02)*.05);
+  g.strokeStyle='#2a2a30';g.lineWidth=1.2;g.beginPath();g.moveTo(0,0);g.lineTo(0,5);g.stroke();
+  const night=skyLight(S.tod).dark>.04;
+  g.fillStyle='#2e2e36';g.fillRect(-6.5,5,13,3);g.fillRect(-6.5,25,13,3);
+  g.fillStyle=night?'rgba(255,222,140,.95)':'rgba(255,226,160,.7)';g.fillRect(-5,8,10,17);
+  g.strokeStyle='#2e2e36';g.lineWidth=1.3;g.strokeRect(-5,8,10,17);g.beginPath();g.moveTo(0,8);g.lineTo(0,25);g.stroke();
+  g.fillStyle='#ffb43a';g.beginPath();g.ellipse(0,19,2.2,3.6+Math.sin(t*9+e.x)*.5,0,0,7);g.fill();
+  if(night){g.globalCompositeOperation='lighter';const q=g.createRadialGradient(0,17,2,0,17,40);q.addColorStop(0,'rgba(255,190,90,.45)');q.addColorStop(1,'rgba(255,150,50,0)');g.fillStyle=q;g.fillRect(-42,-24,84,84)}
+  g.restore();g.restore();
+};
+NVDX.nv_table=(g,e,t)=>{
+  g.save();g.translate(e.x,e.y);shadow(g,0,5,92,12,.26);
+  g.lineJoin='round';
+  g.fillStyle='#6e4c2a';g.strokeStyle='#2a1a0e';g.lineWidth=1.3;
+  rr(g,-74,-27,148,8,3);g.fill();g.stroke();                                     // panca dietro
+  g.fillStyle='#5a3d22';for(const px of[-66,60])g.fillRect(px,-20,5,18);
+  g.fillStyle='#5a3d22';for(const px of[-70,64])g.fillRect(px,-17,5,17);
+  const tp=g.createLinearGradient(0,-38,0,-20);tp.addColorStop(0,'#b88c58');tp.addColorStop(1,'#946a3a');
+  g.fillStyle=tp;rr(g,-80,-38,160,18,4);g.fill();g.stroke();
+  g.strokeStyle='rgba(60,36,14,.45)';g.lineWidth=1;for(const px of[-40,0,40]){g.beginPath();g.moveTo(px,-37);g.lineTo(px,-21);g.stroke()}
+  // piatti, tazze, pane, ciotola, candela
+  for(const px of[-58,-30,-2,26,54]){g.fillStyle='#f4f0e4';g.strokeStyle='#8a7a5a';g.lineWidth=1;g.beginPath();g.ellipse(px,-30,7,3.4,0,0,7);g.fill();g.stroke()}
+  for(const px of[-46,-16,40,66]){g.fillStyle='#b8452f';g.fillRect(px-2.5,-37,5,6);g.fillStyle='#e8c8a0';g.fillRect(px-2.5,-37,5,1.6)}
+  g.fillStyle='#d9a45a';g.strokeStyle='#7a4a1a';g.lineWidth=1;g.beginPath();g.ellipse(12,-35,9,4,.1,0,7);g.fill();g.stroke();
+  g.strokeStyle='rgba(120,70,20,.7)';for(const dx of[-4,0,4]){g.beginPath();g.moveTo(12+dx,-37);g.lineTo(12+dx+1.5,-33);g.stroke()}
+  g.fillStyle='#7a5632';g.beginPath();g.ellipse(-18,-33,7,3,0,0,7);g.fill();g.stroke();
+  g.fillStyle='#d8412f';g.beginPath();g.arc(-20,-35.6,2,0,7);g.arc(-16,-36,2,0,7);g.fill();g.fillStyle='#f0c43a';g.beginPath();g.arc(-18,-36.4,2,0,7);g.fill();
+  g.fillStyle='#f4efe0';g.fillRect(31,-45,4,10);g.fillStyle='#ffb43a';g.beginPath();g.ellipse(33,-47,1.8,3.2+Math.sin(t*9)*.4,0,0,7);g.fill();
+  g.fillStyle='#6e4c2a';g.strokeStyle='#2a1a0e';g.lineWidth=1.3;rr(g,-74,-14,148,9,3);g.fill();g.stroke();   // panca davanti
+  g.restore();
+};
+NVDX.nv_jt=(g,e,t)=>{
+  const n=NV2.cp().j|0;
+  g.save();g.translate(e.x,e.y);shadow(g,0,3,24,6,.26);
+  g.fillStyle='#6a4a2a';g.fillRect(-3,-18,6,20);g.beginPath();g.ellipse(0,1,13,3.6,0,0,7);g.fill();
+  g.fillStyle='#9a7448';g.strokeStyle='#2a1a0e';g.lineWidth=1.3;g.beginPath();g.ellipse(0,-20,25,8.5,0,0,7);g.fill();g.stroke();
+  g.fillStyle='#7a2a2a';g.beginPath();g.ellipse(0,-20,16,5.2,0,0,7);g.fill();             // tovaglietta
+  if(n>=1){g.strokeStyle='#4a2e18';g.lineWidth=2.4;g.lineCap='round';g.beginPath();g.moveTo(-14,-22);g.lineTo(-7,-23.4);g.stroke();g.fillStyle='#4a2e18';g.beginPath();g.ellipse(-15,-24.4,2.6,3.4,0,0,7);g.fill()}
+  if(n>=2){g.save();g.translate(0,-25);g.rotate(-.28);g.fillStyle='#c9a23a';g.strokeStyle='#5a3a08';g.lineWidth=1;g.fillRect(-11,-2.6,22,5.2);g.strokeRect(-11,-2.6,22,5.2);g.fillStyle='#8a6a1a';g.fillRect(-11,-2.6,5,5.2);g.fillRect(6,-3.4,5,6.8);g.restore()}
+  if(n>=3){g.fillStyle='#c9a23a';g.strokeStyle='#5a3a08';g.lineWidth=1;g.beginPath();g.arc(13,-23.4,5.2,0,7);g.fill();g.stroke();g.fillStyle='#f4efe0';g.beginPath();g.arc(13,-23.4,3.6,0,7);g.fill();
+    g.strokeStyle='#c9372c';g.lineWidth=1.3;g.beginPath();g.moveTo(13,-23.4);g.lineTo(14.8,-25.8);g.stroke()}
+  if(n>=4){g.fillStyle='#5a3a22';g.strokeStyle='#2a1a0e';g.lineWidth=1;g.beginPath();g.moveTo(-8,-21);g.lineTo(8,-21);g.lineTo(10,-29);g.lineTo(-6,-30);g.closePath();g.fill();g.stroke();
+    g.fillStyle='#f0e4c0';g.beginPath();g.moveTo(-6,-22.2);g.lineTo(7,-22.2);g.lineTo(8.6,-28.2);g.lineTo(-4.6,-28.8);g.closePath();g.fill();g.fillStyle='#a8322a';g.fillRect(-.6,-22.6,1.8,6)}
+  if(n)twinkle(g,6,-34,t,7,e.x,'#ffe27a');
+  g.restore();
+};
+NVDX.nv_sign=(g,e,t)=>{
+  g.save();g.translate(e.x,e.y);
+  const sw=Math.sin(t*1.3)*.012;g.rotate(sw);
+  g.strokeStyle='#5a3d22';g.lineWidth=1.6;g.beginPath();g.moveTo(-30,0);g.lineTo(-30,-10);g.moveTo(30,0);g.lineTo(30,-10);g.stroke();
+  g.fillStyle='#8a5a2c';g.strokeStyle='#2a1a0e';g.lineWidth=1.4;rr(g,-38,-10,76,22,3);g.fill();g.stroke();
+  g.fillStyle='#f0dfb4';g.font='800 10.5px Nunito,Arial,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText('NIVES · FABBRO',2,1.6);
+  g.fillStyle='#c9372c';g.beginPath();g.arc(-31,1.4,1.6,0,7);g.arc(34,1.4,1.6,0,7);g.fill();
+  g.restore();
+};
+NVDX.nv_boat=(g,e,t)=>{
+  g.save();g.translate(e.x,e.y-30);g.rotate(Math.sin(t*1.1)*.025);
+  g.fillStyle='#8a5a2c';g.strokeStyle='#2a1a0e';g.lineWidth=1;g.beginPath();g.moveTo(-12,-6);g.lineTo(12,-6);g.lineTo(8,1);g.lineTo(-8,1);g.closePath();g.fill();g.stroke();
+  g.strokeStyle='#5a3a1c';g.lineWidth=1.4;g.beginPath();g.moveTo(0,-6);g.lineTo(0,-26);g.stroke();
+  g.fillStyle='#3e8ecb';g.strokeStyle='#14406a';g.lineWidth=.9;g.beginPath();g.moveTo(1.4,-25);g.quadraticCurveTo(12,-16,9,-8);g.lineTo(1.4,-8);g.closePath();g.fill();g.stroke();
+  g.fillStyle='#d8412f';g.beginPath();g.moveTo(0,-26);g.lineTo(-6,-24);g.lineTo(0,-22);g.closePath();g.fill();
+  g.restore();
+  twinkle(g,e.x+10,e.y-58,t,6,e.x,'#fff');
+};
+
+/* ---- cappelli nuovi del protagonista ---- */
+NVH.guardia=(g,hy,hr,hc,back,sp_,dk)=>{
+  const c1=hc||'#2a3a52';
+  g.fillStyle=c1;g.beginPath();g.moveTo(-hr-.8,hy-3);g.lineTo(-hr-.4,hy-12);g.quadraticCurveTo(0,hy-15.5,hr+.4,hy-12);g.lineTo(hr+.8,hy-3);g.closePath();g.fill();
+  g.strokeStyle='rgba(8,10,20,.75)';g.lineWidth=1.3;g.stroke();
+  g.fillStyle=dk(c1,1.4);g.fillRect(-hr-.7,hy-6.6,2*hr+1.4,2.6);
+  if(!back){
+    g.fillStyle='#14161f';g.beginPath();g.ellipse(0,hy-3,hr+1.6,2.5,0,0,Math.PI);g.fill();g.stroke();
+    g.fillStyle='#e0b13a';g.beginPath();g.arc(0,hy-9.6,2.2,0,7);g.fill();g.strokeStyle='#7a5a08';g.lineWidth=.8;g.stroke();
+  }
+};
+NVH.beanie=(g,hy,hr,hc,back,sp_,dk)=>{
+  const c1=hc||'#2f6fc4';
+  g.fillStyle=c1;g.beginPath();g.arc(0,hy-3,hr+.9,Math.PI,Math.PI*2);g.fill();g.strokeStyle='rgba(10,20,50,.7)';g.lineWidth=1.3;g.stroke();
+  g.fillStyle='#f3efe2';g.fillRect(-hr-.9,hy-7.4,2*hr+1.8,4.6);g.strokeRect(-hr-.9,hy-7.4,2*hr+1.8,4.6);
+  g.strokeStyle='rgba(0,0,0,.22)';g.lineWidth=.9;for(let i=-hr+1.4;i<hr;i+=2.5){g.beginPath();g.moveTo(i,hy-7.2);g.lineTo(i,hy-3)}g.stroke();
+  g.fillStyle='#f3efe2';g.strokeStyle='rgba(10,20,50,.7)';g.lineWidth=1.1;g.beginPath();g.arc(0,hy-hr-6.4,3.5,0,7);g.fill();g.stroke();
+};
+NVH.goggles=(g,hy,hr,hc,back,sp_,dk)=>{
+  const c1=hc||'#7a5a38';
+  g.fillStyle=c1;g.beginPath();g.arc(0,hy-2.4,hr+.9,Math.PI,Math.PI*2);g.fill();g.strokeStyle='rgba(30,16,6,.7)';g.lineWidth=1.3;g.stroke();
+  g.strokeStyle='#2a1c10';g.lineWidth=2.4;g.lineCap='round';g.beginPath();g.moveTo(-hr-.5,hy-6.4);g.lineTo(hr+.5,hy-6.4);g.stroke();
+  if(!back)for(const sx of[-4.7,4.7]){
+    g.fillStyle='#d9e8f0';g.beginPath();g.arc(sx,hy-7,3.7,0,7);g.fill();g.strokeStyle='#8a7a5a';g.lineWidth=1.8;g.stroke();
+    g.fillStyle='rgba(255,255,255,.75)';g.beginPath();g.arc(sx-1.1,hy-8.1,1,0,7);g.fill();
+  }
+};
+NVH.sou=(g,hy,hr,hc,back,sp_,dk)=>{
+  const c1=hc||'#f0c43a';
+  g.fillStyle=dk(c1,.85);g.beginPath();g.ellipse(0,hy-3.4,hr+7,3.3,0,0,7);g.fill();g.strokeStyle='rgba(60,40,0,.7)';g.lineWidth=1.2;g.stroke();
+  g.fillStyle=c1;g.beginPath();g.arc(0,hy-3.4,hr+.4,Math.PI,Math.PI*2);g.fill();g.stroke();
+  g.strokeStyle=dk(c1,.7);g.lineWidth=1;g.beginPath();g.arc(0,hy-3.4,hr-2.6,Math.PI*1.08,Math.PI*1.92);g.stroke();
+  if(!back){g.strokeStyle='#8a5a1c';g.lineWidth=1.1;g.beginPath();g.moveTo(-hr,hy-2.6);g.quadraticCurveTo(-hr-1,hy+7,-hr+2,hy+11);g.moveTo(hr,hy-2.6);g.quadraticCurveTo(hr+1,hy+7,hr-2,hy+11);g.stroke()}
+};
+
+/* ---- creazione degli oggetti (non toccano l'editor e non bloccano il passaggio) ---- */
+NV2.addE=(k,x,y,o)=>{if(EID['nvd_'+k])return EID['nvd_'+k];return ent(Object.assign({id:'nvd_'+k,type:'deco',spr:'nv_'+k,x:x*TS,y:y*TS,nohit:1},o||{}))};
+NV2.addBunt=()=>{
+  const T=(tx,ty,k)=>[tx*TS,ty*TS-(k?124:94)];
+  const a=T(53.6,28.6),b=T(58.2,26.4,1),c=T(62.8,27.6),d=T(50.6,31.4),f=T(54.2,33.4);
+  return NV2.addE('bunt',57,29.6,{seg:[[a[0],a[1],b[0],b[1],16],[b[0],b[1],c[0],c[1],16],[d[0],d[1],a[0],a[1],14],[f[0],f[1],d[0],d[1],14]]});
+};
+NV2.spawn=function(){
+  if(WORLD!==2||!EID.c2fire)return;
+  NV2.addE('laundry',52.4,34.9);
+  NV2.addE('pot',56.9,30.7);
+  NV2.addE('anvil',61.2,31.75);
+  NV2.addE('sparks',58.5,30.95);
+  const cp=NV2.cp();
+  if(cp.b)NV2.addBunt();
+  if(cp.l){NV2.addE('lant1',56.1,29.5,{spr:'nv_lant'});NV2.addE('lant2',61.1,29.3,{spr:'nv_lant'})}
+  if(cp.t)NV2.addE('table',59.3,34.1);
+  if(cp.j)NV2.addE('jt',60.5,28.6);
+  if(NV2.fr('nives',2))NV2.addE('sign',62.0,30.2,{sy:30.7*TS});
+  if(NV2.fr('tito',4))NV2.addE('boat',64.8,30.62);
+};
+
+/* ---- ciclo del campo: martellate, crescita, oggetti di J. ---- */
+NV2.say=(t,s)=>{try{UI.banner(t,s);sfx('quest')}catch(e){}};
+NV2.tick=function(dt){
+  if(WORLD!==2||!S||!S.live||PAUSED||UI.sleeping)return;
+  const an=EID.nvd_anvil,nv=EID.npc_nives;
+  NV2._h=(NV2._h||0)-dt;
+  if(an&&nv&&NV2._h<=0){
+    const day=S.tod>=7&&S.tod<18.5,near=hyp(nv.x-an.x,nv.y-an.y)<TS*2.3&&!nv.mv;
+    if(day&&near&&!dl.open){
+      an.hit=RT;sparkBurst(an.x+4,an.y-32,5);
+      if(hyp(P.x-an.x,P.y-an.y)<TS*11)sfx('mine');
+      NV2._bc=(NV2._bc||0)+1;
+      if(NV2._bc>=4){NV2._bc=0;NV2._h=6+Math.random()*5}else NV2._h=.75+Math.random()*.3;
+    }else NV2._h=.6;
+  }
+  NV2._g=(NV2._g||0)-dt;if(NV2._g>0)return;NV2._g=.6;
+  if(dl.open||P.mode!=='walk')return;
+  const cp=NV2.cp(),avg=['ferro','nives','tito','gnocco'].reduce((a,w)=>a+Ch2.tr(w),0)/4;
+  if(!cp.b&&avg>=2.5){cp.b=1;NV2.addBunt();NV2.say('Il campo cresce','Bandierine tra le tende');saveGame(true);return}
+  if(!cp.l&&avg>=4){cp.l=1;NV2.spawn();NV2.say('Il campo cresce','Lanterne attorno al fuoco');saveGame(true);return}
+  if(!cp.t&&avg>=5.5){cp.t=1;NV2.spawn();NV2.say('Il campo cresce','Una tavolata lunga per tutti');saveGame(true);return}
+  const pg=NV2.pages();
+  if(pg>(cp.j||0)){cp.j=pg;NV2.spawn();NV2.say('Il tavolino di J.',['','Una pipa consumata','Un cannocchiale d\'ottone','Una bussola','Il diario, rilegato'][pg]);saveGame(true)}
+};
+
+/* ---- scene di amicizia: 2 cuori (fiducia 4) e 4 cuori (fiducia 8) ---- */
+const _bp=()=>S&&S.flags&&S.flags.parrot;
+NV2.FS={
+  ferro:{
+    2:{label:"Seguire Ferro sulla duna",prize:{t:'wear',n:'Berretto da guardia'},L:()=>[
+      D('ferro',"Vieni. Non qui: sulla duna."),
+      D('hero',"Mi porta oltre le tende, dove il vento piega l'erba e il campo si vede tutto."),
+      D('ferro',"Da qui si vede il campo, il mare e chi si avvicina. Quando dormono tutti, io sono qui."),
+      D('hero',"Ogni notte?"),
+      D('ferro',"Quasi. Qualcuno deve. Non è un sacrificio: è un'abitudine."),
+      D('ferro',"Questo berretto era di un uomo che non è tornato. Non è un regalo. È un incarico: portalo bene.")]},
+    4:{label:"Sedersi accanto a Ferro, al fuoco",prize:{t:'wear',n:'Giacca da ufficiale'},L:()=>[
+      D('ferro',"Siediti. Ti racconto una cosa, una volta sola."),
+      D('ferro',"Avevo un equipaggio e un ordine giusto. Il mare non l'ha letto. Da allora ogni ordine lo peso due volte."),
+      D('hero',"Non è stata colpa tua."),
+      D('ferro',"Non l'ho chiesto. ...Ma grazie."),
+      D('ferro',"Questa era la giacca del mio secondo. A me sta stretta, a te starà meglio. Così, se ti perdi, ti riconoscono."),
+      ..._bp()?[D('biscotto',"Cra! Ufficiale! Salutare! Salutare!")]:[]]}
+  },
+  nives:{
+    2:{label:"Vedere cosa nasconde Nives",prize:{t:'decor',n:'Insegna del banco'},L:()=>[
+      D('nives',"Ehi, vieni. Ti faccio vedere una cosa. Non dirlo a Ferro: l'ho fatta di nascosto."),
+      D('hero',"Mi mostra un'asse di legno dipinta a mano. Le lettere sono un po' storte e molto orgogliose."),
+      D('nives',"Un'insegna per il banco. Le cose fatte bene meritano un nome."),
+      D('hero',"«Nives, fabbro». Ti sta bene."),
+      D('nives',"Ora devo solo appenderla e fingere di non averci pensato per tre settimane."),
+      ..._bp()?[D('biscotto',"Cra! Bella! Appendi! Appendi!")]:[]]},
+    4:{label:"Parlare con Nives, in disparte",prize:{t:'wear',n:'Occhialoni da fabbro'},L:()=>[
+      D('nives',"Siediti. Devo dirti una cosa e non so come si fa."),
+      D('nives',"Tutti o nessuno: è la mia regola. Con te l'ho allargata. Tutti, nessuno, e tu."),
+      D('hero',"Sono... onorata."),
+      D('nives',"Non fare la sentimentale. Tieni."),
+      D('hero',"Un paio di occhialoni di cuoio, con le lenti graffiate dalle scintille."),
+      D('nives',"Una scintilla in un occhio non si perdona. Portali quando lavori sul serio.")]}
+  },
+  gnocco:{
+    2:{label:"Avvicinarsi alla pentola di Gnocco",prize:{t:'recipe',n:'Zuppa del Fuggiasco'},L:()=>[
+      D('gnocco',"Psst. Vieni vicino alla pentola. Più vicino. Non mordo."),
+      D('gnocco',"Ti dico il mio segreto. Quello vero. Non è il sale."),
+      D('hero',"Non è il sale?"),
+      D('gnocco',"Il sale è il secondo. Il primo è l'ordine: prima il mollusco, poi il cocco, il pesce per ultimo, quando il brodo ha già deciso di essere buono."),
+      D('gnocco',"Da oggi la Zuppa del Fuggiasco è anche tua. Chiedimi di cucinare. E non dirlo a Ferro: la vuole sempre uguale.")]},
+    4:{label:"Il fornello per la nave",prize:{t:'wear',n:'Grembiule di Gnocco'},L:()=>[
+      D('gnocco',"Vieni. Ho una cosa per te. L'ho cucita io. Sì, io. Con ago e... pesce. Cioè filo."),
+      D('gnocco',"Ti ricordi del fornello a bordo? Non l'ho dimenticato. Ma tu sei l'unica che ci ha creduto."),
+      D('hero',"Mi allunga un grembiule blu, con una macchia a forma di pesce sulla tasca."),
+      D('gnocco',"La macchia è di brodo. Porta fortuna. Da oggi sei cuoco onorario."),
+      ..._bp()?[D('biscotto',"Cra! Cuoco! Brodo! Brodo!")]:[]]}
+  },
+  tito:{
+    2:{label:"Tito vuole farti vedere una cosa",prize:{t:'wear',n:'Berretto blu di Tito'},L:()=>[
+      D('tito',"Posso farti vedere una cosa? Ma prima giura che non ridi."),
+      D('hero',"Giuro."),
+      D('tito',"...Ho fatto un berretto. A maglia. Blu. Perché il blu non ce l'ha nessuno, qui."),
+      D('tito',"L'ho fatto per me, ma mi sta male. A te sta bene. Tienilo: così posso dire di averlo regalato a qualcuno."),
+      ..._bp()?[D('biscotto',"Cra! Blu! Io lo voglio! Io!")]:[]]},
+    4:{label:"Seguire Tito alle barche",prize:{t:'decor',n:'Barchetta di Tito'},L:()=>[
+      D('tito',"Vieni. Ti mostro una cosa che non ho mai mostrato a nessuno."),
+      D('hero',"Sotto una barca capovolta, avvolta in uno straccio: una barchetta di legno, intagliata a mano, con una vela blu."),
+      D('tito',"Un giorno ne costruirò una vera. Tutta mia. Con la vela blu."),
+      D('hero',"È bellissima."),
+      D('tito',"La metto sulla cassa, dove la vedono tutti. Così... non resto invisibile.")]}
+  }
+};
+NV2.scene=function(w,h){
+  const sc=NV2.FS[w][h];
+  UI.dlg(sc.L(),()=>{
+    const cp=NV2.cp();cp.fr[w+h]=1;sfx('quest');addXp(15);Ch2.addTrust(w,1,true);
+    const p=sc.prize;
+    if(p.t==='wear'){try{wardCheck()}catch(e){console.error(e)}}
+    else if(p.t==='recipe'){UI.banner('Ricetta nuova',p.n+'\nChiedi a Gnocco di cucinare')}
+    else if(p.t==='decor'){NV2.spawn();UI.banner('Novità al campo',p.n)}
+    saveGame();checkAll();
+  });
+};
+for(const w of['ferro','nives','tito','gnocco'])for(const h of[2,4]){
+  Ch2.QH.push({w,g:1,ready:()=>true,
+    active:()=>!!C().met[w]&&Ch2.tr(w)>=h*2&&!NV2.fr(w,h)&&(h===2||NV2.fr(w,2)),
+    label:()=>NV2.FS[w][h].label,run(){NV2.scene(w,h)}});
+}
+
+/* ---- Nives cuce: a 3 cuori (fiducia 6), con la tela ---- */
+NV2.SEW={
+  out:{cost:{tela:3},n:'Giubba di tela di Nives',lab:'un abito',l1:"Ecco: spalle larghe, cuciture doppie. Se si strappa, non è colpa mia."},
+  hat:{cost:{tela:2},n:'Cappello di tela cerata',lab:'un cappello',l1:"Ecco: tela cerata, tesa alle mani. La pioggia scivola via, l'orgoglio resta."}
+};
+NV2.sew=function(k){
+  const s=NV2.SEW[k];
+  if(!hasRes(s.cost)){UI.dlg([D('nives',"Per "+s.lab+" mi serve tela buona: "+costTxt(s.cost)+". Portamela e ti cucio qualcosa che regge anche alle tempeste.")]);return}
+  payRes(s.cost);UI.sync();
+  UI.dlg([D('nives',"Tela buona. Fammi vedere... sì. Dammi il tempo di un caffè. Che non abbiamo. Dammi un minuto."),
+    D('hero',"Cuce con mani veloci e sicure, senza guardare il filo."),
+    D('nives',s.l1)],()=>{
+    NV2.cp().sew[k]=1;sfx('quest');addXp(15);Ch2.addTrust('nives',1,true);
+    try{wardCheck()}catch(e){console.error(e)}
+    saveGame();checkAll();
+  });
+};
+for(const k of['out','hat'])Ch2.QH.push({w:'nives',g:1,ready:()=>hasRes(NV2.SEW[k].cost),
+  active:()=>!!C().met.nives&&Ch2.tr('nives')>=6&&!NV2.cp().sew[k],
+  label:()=>"Chiedi a Nives di cucirti "+NV2.SEW[k].lab+" ("+costTxt(NV2.SEW[k].cost)+")",run(){NV2.sew(k)}});
+
+/* ---- Ferro e le pagine di J.: ogni pagina trovata cambia qualcosa al campo ---- */
+NV2.FJ=[
+  null,
+  [D('hero',"Ferro, ho trovato una pagina di diario. È della stessa mano delle bottiglie."),D('ferro',"Pagine. Il vento ne porta in giro a caso."),D('ferro',"...Tienila, se vuoi. Ma non leggerla ad alta voce al campo.")],
+  [D('hero',"Una seconda pagina. Parla di una nave e di chi la comandava."),D('ferro',"Conoscevo quella calligrafia. Questa non è un'ammissione: è un'osservazione."),D('ferro',"Chiedimi un'altra cosa. Qualunque.")],
+  [D('hero',"La terza. Qui c'è scritto che qualcuno decideva chi poteva salire a bordo e chi no."),D('ferro',"Un capitano decide. È il suo mestiere."),D('ferro',"Il resto dell'equipaggio ha il mestiere di fidarsi. Non sempre ci riesce.")],
+  [D('hero',"Le ho tutte e quattro. Adesso so chi era J."),D('ferro',"Allora sai quanto me. Quasi."),D('ferro',"Domani parlerò. Non stasera: il fuoco è acceso e ho ancora un turno.")]
+];
+NV2.fjNext=()=>{const cp=NV2.cp(),pg=NV2.pages();for(let k=1;k<=pg;k++)if(!cp.fj[k])return k;return 0};
+Ch2.QH.push({w:'ferro',g:1,ready:()=>true,active:()=>!!C().met.ferro&&NV2.fjNext()>0,
+  label:()=>"Mostra a Ferro una pagina di J.",run(){
+    const k=NV2.fjNext();if(!k)return;
+    UI.dlg(NV2.FJ[k],()=>{NV2.cp().fj[k]=1;addXp(8);Ch2.addTrust('ferro',1);checkAll()});
+  }});
+
+/* ---- richieste del giorno con una scena, e cibo ben fatto che vale di più ---- */
+NV2.REQ={
+  ferro:[[{legna:4},"quattro tronchi"],[{pietra:4},"quattro pietre"],[{arrosto:2},"due pesci arrosto"]],
+  nives:[[{rottami:3},"tre rottami"],[{corda:3},"tre corde"],[{legna:3},"tre tronchi"],[{pescesec:2},"due pesci secchi per il viaggio"]],
+  tito:[[{bacche:3},"tre bacche"],[{pesce:2},"due pesci"],[{coco:2},"due noci di cocco"]],
+  gnocco:[[{pesce:3},"tre pesci"],[{molluschi:3},"tre molluschi"],[{bacche:3},"tre bacche"],[{zucca:1,coco:1},"una zucca e un cocco per la zuppa del banchetto"]]
+};
+NV2.DRY={pesce:'pescesec',bacche:'fruttasec'};
+NV2.prem=cost=>{const p={};let any=false;for(const k in cost){if(NV2.DRY[k]){p[NV2.DRY[k]]=cost[k];any=true}else p[k]=cost[k]}return any?p:null};
+NV2.isDry=cost=>Object.keys(cost).some(k=>k==='pescesec'||k==='fruttasec');
+NV2.CHK={
+  ferro:["Ferro conta i pezzi uno a uno, senza una parola.","Ferro pesa il carico con lo sguardo, poi con la mano."],
+  nives:["Nives bussa con le nocche sul materiale e tende l'orecchio.","Nives rigira tutto tra le mani e strizza un occhio."],
+  tito:["Tito guarda tutto, annusa, guarda ancora.","Tito alza tutto verso la luce, come se potesse sparire."],
+  gnocco:["Gnocco assaggia con la punta del mestolo e socchiude gli occhi.","Gnocco annusa a lungo, poi ne mette un pizzico in bocca."]
+};
+NV2.OKL={
+  ferro:["Contati. Giusti. Va bene.","Ordinato. Bene così."],
+  nives:["Suona bene. Questo regge.","Roba buona. Ti devo un favore."],
+  tito:["Non è rotto, non è marcio... è proprio quello! Grazie!","Hai ricordato! Nessuno ricorda mai."],
+  gnocco:["Mmh. Sì. Questo ha carattere.","Splendido! Ci faccio una cosa. Anche due."]
+};
+NV2.GOODL={
+  ferro:"Ben fatto. Si vede che ci hai messo cura: lo scrivo nel registro.",
+  nives:"Questo è lavoro fatto bene. Non lo dico spesso, quindi goditela.",
+  tito:"Wow, è fatto proprio bene! Nessuno mi porta cose fatte bene!",
+  gnocco:"Cibo conservato con cura. Questo vale doppio, nella mia cucina."
+};
+NV2.dailyRun=function(w){
+  const c=C();c.reqD=c.reqD||{};
+  const L=NV2.REQ[w],rq=L[S.day%L.length],cost=rq[0],txt=rq[1],pm=NV2.prem(cost);
+  const okRaw=hasRes(cost),okPm=!!pm&&hasRes(pm);
+  if(!okRaw&&!okPm){UI.dlg([D(w,"Oggi mi servirebbero "+txt+". Se riesci, portameli."+(pm?" Se sono secchi, meglio.":""))]);return}
+  let mode=okRaw?'raw':'prem';
+  const fin=()=>{
+    const pay=mode==='prem'?pm:cost,good=mode==='prem'||NV2.isDry(cost);
+    payRes(pay);UI.sync();c.reqD[w]=S.day;sfx('ok');addXp(good?18:12);
+    const i=(Math.random()*2)|0;
+    const lines=[D('hero',"Consegno "+txt+"."),D('hero',NV2.CHK[w][i]),D(w,NV2.OKL[w][i])];
+    if(good)lines.push(D(w,NV2.GOODL[w]));
+    UI.dlg(lines,()=>{Ch2.addTrust(w,good?2:1);checkAll()});
+  };
+  if(okRaw&&okPm){
+    UI.dlg([D(w,"Hai portato "+txt+"? Quali mi dai?",{choices:[
+      {t:"Quelli freschi",fn:()=>{mode='raw'}},
+      {t:"Quelli secchi (ben fatti, più fiducia)",fn:()=>{mode='prem'}}]})],fin);
+  }else fin();
+};
+for(const w of['ferro','nives','tito','gnocco']){
+  const h=Ch2.QH.find(x=>x.w===w&&!x.x&&x.offer&&!x.g);
+  if(!h)continue;
+  const rqOf=()=>{const L=NV2.REQ[w];return L[S.day%L.length]};
+  h.ready=()=>{const c=rqOf()[0],p=NV2.prem(c);return hasRes(c)||(!!p&&hasRes(p))};
+  h.label=()=>{const r=rqOf();return "Richiesta del giorno: "+r[1]+(NV2.prem(r[0])?" (meglio se secchi)":"")};
+  h.run=()=>NV2.dailyRun(w);
+}
+
+/* ---- rifornimenti e banchetto: il cibo secco conta, la zucca fa la zuppa ---- */
+{
+  const byLabel=(w,txt)=>Ch2.QH.find(h=>{if(h.w!==w||!h.label)return false;try{return h.label()===txt}catch(e){return false}});
+  const hs=byLabel('gnocco',"Consegna i rifornimenti");
+  if(hs){
+    const need=C2COST.rifornimenti,sub={arrosto:'pescesec',coco:'fruttasec'};
+    const plan=()=>{const pay={};let ok=true,dry=0;
+      for(const k in need){const n=need[k],d=Math.min((S.res[sub[k]]||0),n),r=n-d;if((S.res[k]||0)<r)ok=false;pay[k]=r;pay[sub[k]]=d;dry+=d}
+      return {ok,pay,dry}};
+    hs.ready=()=>plan().ok;
+    hs.run=function(){
+      const pl=plan();
+      if(!pl.ok){UI.dlg([D('gnocco',"Il cibo?"),D('gnocco',"Mi serve: "+costTxt(need)+". Il pesce secco vale come l'arrosto e la frutta secca come le noci, e dura molto di più.")]);return}
+      payRes(pl.pay);UI.sync();sfx('ok');
+      UI.dlg([D('gnocco',pl.dry>=3?"Cibo secco, ben conservato! Questo arriva in fondo al viaggio. Mi fai quasi commuovere.":"Quattro arrosti, sei noci. Una dispensa da re. O da naufraghi molto ottimisti."),D('gnocco',"Il brodo lo faccio io.")],
+        ()=>{Ch2.addTrust('gnocco',pl.dry>=3?3:2);C().ch.supplies=1;checkAll()});
+    };
+    QDEF.c12.goals[0].hint+=" Anche pesce secco e frutta secca vanno bene: durano di più e Gnocco li apprezza.";
+  }
+  const hb=byLabel('gnocco',"Consegna gli ingredienti del banchetto");
+  if(hb){
+    hb.run=function(){
+      const cost=C2COST.banchetto;
+      if(!hasRes(cost)){UI.dlg([D('gnocco',"Gli ingredienti?"),D('gnocco',"Mi serve: "+costTxt(cost)+". Se hai anche una zucca, la zuppa verrà ancora meglio.")]);return}
+      payRes(cost);const zu=(S.res.zucca||0)>=1;if(zu)S.res.zucca--;
+      UI.sync();sfx('ok');
+      const L=[D('gnocco',"Arrosto, molluschi, bacche, cocco. Stasera si mangia come un capitano... ma uno allegro.")];
+      if(zu)L.push(D('gnocco',"E una zucca! Ci faccio una zuppa vera, per tutti. Il campo se la ricorderà."));
+      L.push(D('gnocco',"Da oggi, per te, ricette nuove. Chiedimi di cucinare."));
+      UI.dlg(L,()=>{Ch2.addTrust('gnocco',zu?3:2);if(zu)Ch2.addTrust('tito',1);C().ch.banq=1;C().gn=1;checkAll()});
+    };
+    QDEF.n1.goals[0].hint+=" Con una zucca in più, Gnocco prepara una zuppa per tutto il campo.";
+  }
+}
+
+/* ---- la ricetta nuova di Gnocco e gli oggetti per il guardaroba ---- */
+Ch2.GN.push({id:'zuppag',n:"Zuppa del Fuggiasco",d:"La ricetta che Gnocco ti ha confidato: molluschi, cocco e pesce al momento giusto. Dà energia.",cost:{molluschi:2,coco:1,pesce:1},h:60,t:32,buff:420,gate:()=>NV2.fr('gnocco',2)});
+NV2.WEARS=[
+  {id:'h_guardia',k:'hat',n:'Berretto da guardia',hint:'Fai amicizia con Ferro: 2 cuori.',own:()=>NV2.fr('ferro',2),spec:{hat:'guardia',hatc:'#2a3a52'}},
+  {id:'o_uff',k:'out',n:'Giacca da ufficiale',hint:'Fai amicizia con Ferro: 4 cuori.',own:()=>NV2.fr('ferro',4),spec:{coat:'#2a3a62',coat2:'#1a2644',pants:'#202838',shirt:'#f4efe0',trim:'#e0b13a',boots:1,sash:'#a8322a'}},
+  {id:'h_occh',k:'hat',n:'Occhialoni da fabbro',hint:'Fai amicizia con Nives: 4 cuori.',own:()=>NV2.fr('nives',4),spec:{hat:'goggles',hatc:'#7a5a38'}},
+  {id:'h_tito',k:'hat',n:'Berretto blu di Tito',hint:'Fai amicizia con Tito: 2 cuori.',own:()=>NV2.fr('tito',2),spec:{hat:'beanie',hatc:'#2f6fc4'}},
+  {id:'o_grem',k:'out',n:'Grembiule di Gnocco',hint:'Fai amicizia con Gnocco: 4 cuori.',own:()=>NV2.fr('gnocco',4),spec:{coat:'#5a8fb8',coat2:'#3e6f96',pants:'#4a3f35',shirt:'#f6f1e4',apron:1,trim:'#f6f1e4'}},
+  {id:'o_tela',k:'out',n:'Giubba di tela di Nives',hint:'Nives a 3 cuori cuce un abito: servono 3 tele.',own:()=>!!NV2.cp().sew.out,spec:{coat:'#d9c9a0',coat2:'#b89a68',pants:'#5a4a36',shirt:'#f1ede0',trim:'#8a5a2c',boots:1,sash:'#3e6faa'}},
+  {id:'h_tela',k:'hat',n:'Cappello di tela cerata',hint:'Nives a 3 cuori cuce un cappello: servono 2 tele.',own:()=>!!NV2.cp().sew.hat,spec:{hat:'sou',hatc:'#f0c43a'}}
+];
+for(const it of NV2.WEARS){WEAR.push(it);if(it.k==='hat')WRH[it.id]=it.spec;else WRO[it.id]=it.spec}
+NV2.onBegin=function(){NV2._h=0;NV2._g=0;NV2._bc=0;try{NV2.spawn()}catch(e){console.error(e)}};
 
 /* ---- 12d_kb.js ---- */
 /* ====== TASTIERA DEL GIOCO: quando il telefono è in verticale la schermata è ruotata, ma la tastiera di sistema no.
@@ -9693,7 +10189,7 @@ const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530]
 const EDKEY='sm_edits_w'+WORLD;
 const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{},t:(o&&o.t)||[]});
 function edStore(){try{localStorage.setItem(EDKEY,JSON.stringify(ED.ed))}catch(e){}}
-const edOk=e=>!['crab','mraft','thief','npc','cdeco','glint'].includes(e.type)&&e.spr!=='hut'&&e.spr!=='cave'&&!/^(cav|cvr|h_)/.test(e.id||'')&&e.x>0&&e.y>0&&e.x<WW&&e.y<WH;
+const edOk=e=>!['crab','mraft','thief','npc','cdeco','glint'].includes(e.type)&&e.spr!=='hut'&&e.spr!=='cave'&&!/^nv_/.test(e.spr||'')&&!/^(cav|cvr|h_)/.test(e.id||'')&&e.x>0&&e.y>0&&e.x<WW&&e.y<WH;
 const ED_NAMES={reef:'Scoglio in mare',tree:'Albero',pine:'Pino',palm:'Palma',rock:'Roccia',bush:'Cespuglio',berry:'Cespuglio di bacche',rockpool:'Pozza di molluschi',debris:'Rottami',bottle:'Bottiglia',loot:'Cassa / oggetto',wparrot:'Pappagallo selvatico'};
 const ED_SPR={lamp:'Lanterna',barrel0:'Barile',barrel1:'Barile (2)',crate:'Cassa di legno',coil:'Corda arrotolata',sign:'Cartello',mesa:'Altopiano',wreck:'Relitto',oldcamp:'Campo abbandonato',lookout:'Pino Alto',pit:'Buca',rowboat:'Barca a remi'};
 const ED_PLOT={falo:'Falò',capanna:'Capanna',banco:'Banco da lavoro',zattera:'Zattera'};
@@ -10116,7 +10612,7 @@ window.Pirati={
   reachable(x,y){const[sx,sy]=playerTile(),bf=bfsFrom(sx,sy);return bf.dist[tIdx(x,y)]>=0},
   standOK(e){const[sx,sy]=playerTile(),bf=bfsFrom(sx,sy);return standCandidates(e).some(c=>bf.dist[tIdx(c[0],c[1])]>=0)},
   startAct,entBox,Extra,EX,RELICS,FISHES,rollFish,shelterNow,startNew,startContinue,saveGame,raftOK,WX,SC,PQ,STM,chalStart,scoutTargets,setWeather,strikeBolt,skyLight,moonK,toggleTorch,pondEmpty,torchHours,auMusicTick,AU,get sfx(){return sfx},get say(){return say},hint,drawShip,drawChar,CH,PAL_OUR,addXp,lvOf,
-  get NV(){return typeof NV!=='undefined'?NV:null},get quality(){return QL},get paused(){return PAUSED},get dlgOpen(){return dl.open},get ready(){return !!(S&&WATERC&&E.length)},
+  get NV(){return typeof NV!=='undefined'?NV:null},get NV2(){return typeof NV2!=='undefined'?NV2:null},get quality(){return QL},get paused(){return PAUSED},get dlgOpen(){return dl.open},get ready(){return !!(S&&WATERC&&E.length)},
   ground(){return WATERC&&LANDC?{w:WATERC.width,h:WATERC.height}:null},
   prev(){return GPREV?GPREV.toDataURL('image/png'):null},
   seaReach(c){
