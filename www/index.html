@@ -5661,6 +5661,7 @@ const AFTER=[
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
     "Capanna: salendo la prima volta la telecamera non scivola più (il personaggio compare subito al suo posto). Di sera tutte e tre le stanze sono illuminate da candele accese.",
+    "Dopo il galeone: con l'argento a bordo il mare è libero e hai un nuovo obiettivo, «Raggiungi il varco del grande viaggio». Lo segui con una freccia gialla accanto alla nave e un segnalino sulla minimappa; arrivato, si apre un messaggio e parte il Capitolo 4.",
     "Armadio della capanna: ora si apre una scheda per scegliere il tuo cappello, il tuo abito e il cappellino del pappagallo.",
     "Torcia: dopo averla costruita il pulsante resta sempre visibile e lampeggia con una freccia finché non lo tocchi. Di giorno avvisa che non puoi accenderla; dal tramonto funziona.",
     "Conferme e schede: «Costruisci», «Conferma» e gli altri pulsanti principali stanno a destra, «Annulla» e «Chiudi» a sinistra.",
@@ -9610,6 +9611,7 @@ function step(dt){
   let tv=(go?SAILSPD[C.sail]:0)*windK(p.hd)*(p.disabled?0:1)*(1-.03*Math.min(C.silver,10));
   if(VOY)tv=voyTv(tv,go,dt);
   moveShip(p,dt,tv);
+  if(C.go5&&!C.over&&Math.hypot(p.x-C.go5.x,p.y-C.go5.y)<3.4*T)go5Arrive();
   p.cdL=Math.max(0,p.cdL-dt);p.cdR=Math.max(0,p.cdR-dt);p.flash=Math.max(0,p.flash-dt);
   P.x=p.x;P.y=p.y;P.hd=p.hd;P.rv=p.v;P.moving=false;
   if(!VOY&&p.hull<=1&&!p.gunsOut){p.gunsOut=true;toast('<b>Cannoni danneggiati!</b> Torna al porto a riparare.',5000)}
@@ -9714,8 +9716,8 @@ function step(dt){
      if(f>.85&&!C.notes.esc2){C.notes.esc2=1;toast('<b>Biscotto:</b> «Sta per scappare! Colpiscilo e abbordalo, presto!»',6000)}}}
   const alive=C.ships.filter(s=>s.conv&&!s.dead);
   const gal=alive.filter(s=>s.type==='galeone');
-  if(!C.over&&C.convoy&&(C.pris===2||C.prisLost)&&gal.length===0&&C.crates.length===0)endRun('completo');
-  if(!C.over&&C.escapes>0&&!C.ships.some(x=>x.conv&&!x.dead&&!x.ally&&x.type!=='scorta'))endRun('fuga');
+  if(!C.over&&!C.go5&&C.convoy&&(C.pris===2||C.prisLost)&&gal.length===0&&C.crates.length===0)endRun('completo');
+  if(!C.over&&!C.go5&&C.escapes>0&&!C.ships.some(x=>x.conv&&!x.dead&&!x.ally&&x.type!=='scorta'))endRun('fuga');
   }
   tutStep();
   hud();
@@ -9816,7 +9818,7 @@ function drawPier(g,t){
   for(const [bx,by] of[[x0+40,y0+h*.5],[x0+62,y0+h*.3]]){g.fillStyle='#8a5a2a';g.beginPath();g.ellipse(bx,by,9,7,0,0,7);g.fill();g.strokeStyle='#3a200c';g.lineWidth=1.5;g.stroke();g.strokeStyle='#d8b24a';g.beginPath();g.ellipse(bx,by,6,4.4,0,0,7);g.stroke()}
   g.restore();
 }
-function galPath(){return C&&!VOY?ROUTE.slice():null}
+function galPath(){return C&&!VOY&&!C.go5?ROUTE.slice():null}
 function drawFx(g,t){
   if(!C)return;
   {const CS=230,x0=Math.floor((cam.x-1300)/CS),x1=Math.floor((cam.x+1300)/CS),y0=Math.floor((cam.y-850)/CS),y1=Math.floor((cam.y+850)/CS);
@@ -9888,7 +9890,7 @@ function hud(){
   {const gg=$('c3gun');if(gg){if(p.gunsOut&&!C.over){const pt=TPp(21,30);const near=Math.hypot(pt[0]-p.x,pt[1]-p.y)<320;gg.innerHTML='⚠ CANNONI DANNEGGIATI<small>'+(near?'Il carpentiere sta riparando: resta ancora qualche secondo ('+Math.min(99,Math.round(p.hull/(p.max*.25)*100))+'%)':'Torna al porto a riparare ('+dirName(pt[0]-p.x,pt[1]-p.y)+')')+'</small>';gg.style.display='block'}else gg.style.display='none'}}
   $('c3hh').innerHTML='Scafo '+h;$('c3sv').textContent=C.silver;$('c3pr').textContent=C.pris;
   const gal=C.ships.filter(s=>s.type==='galeone'&&s.conv&&!s.dead).length,dis=C.ships.find(s=>s.type==='prigionieri'&&s.disabled&&!s.ally);
-  $('c3obj').textContent=!C.convoy?('Affonda le pattuglie nemiche ('+Math.min(C.ekills||0,3)+'/3)'):C.prisLost?(gal?'Affonda i galeoni e raccogli l\'argento':'Raccogli le casse rimaste'):C.pris<2?(dis?'Abborda la nave dei prigionieri':'Danneggia la nave dei prigionieri (senza affondarla) e abbordala'):gal?"Abborda il galeone"+(()=>{const g=C.ships.find(q=>q.type==='galeone'&&!q.dead&&!q.ally);return g?" ("+dirName(g.x-p.x,g.y-p.y)+", "+Math.round(Math.hypot(g.x-p.x,g.y-p.y)/44)+" caselle)":""})()+" · argento: "+C.silver+" casse":"Raccogli le casse rimaste";
+  $('c3obj').textContent=C.go5?('Raggiungi il varco del grande viaggio ('+Math.round(Math.hypot(C.go5.x-p.x,C.go5.y-p.y)/44)+' caselle)'):!C.convoy?('Affonda le pattuglie nemiche ('+Math.min(C.ekills||0,3)+'/3)'):C.prisLost?(gal?'Affonda i galeoni e raccogli l\'argento':'Raccogli le casse rimaste'):C.pris<2?(dis?'Abborda la nave dei prigionieri':'Danneggia la nave dei prigionieri (senza affondarla) e abbordala'):gal?"Abborda il galeone"+(()=>{const g=C.ships.find(q=>q.type==='galeone'&&!q.dead&&!q.ally);return g?" ("+dirName(g.x-p.x,g.y-p.y)+", "+Math.round(Math.hypot(g.x-p.x,g.y-p.y)/44)+" caselle)":""})()+" · argento: "+C.silver+" casse":"Raccogli le casse rimaste";
   if(VOY)voyHud();
   {const l=litSide();C.lit=l;const b=$('c3fire');b.disabled=!l||!l.ready||!!C.p.gunsOut;b.classList.toggle('lit',!!(l&&l.ready&&!C.p.gunsOut))}
   sailUI();overlay();windDial();miniMap();
@@ -9898,6 +9900,10 @@ function overlay(){
   if(o.width!==w||o.height!==h){o.width=w;o.height=h}
   const g=o.getContext('2d');g.clearRect(0,0,w,h);
   if(VOY)voyOverlay(g,w,h);
+  if(C.go5&&!C.over){const[x,y]=toScreen(C.go5.x,C.go5.y);
+    if(!(x>26&&x<w-26&&y>40&&y<h-26)){const[qx,qy]=toScreen(C.p.x,C.p.y),a=Math.atan2(y-qy,x-qx),ex=qx+Math.cos(a)*150,ey=qy+Math.sin(a)*130,pl=.5+.5*Math.sin(C.t*6);
+      g.save();g.translate(ex,ey);g.rotate(a);g.shadowColor='rgba(255,214,90,.9)';g.shadowBlur=14+pl*10;g.fillStyle='#ffd23a';g.strokeStyle='#2a1a0e';g.lineWidth=3;g.beginPath();g.moveTo(24,0);g.lineTo(-12,-15);g.lineTo(-6,0);g.lineTo(-12,15);g.closePath();g.fill();g.stroke();g.restore()}
+    else{g.save();g.translate(x,y);const pl=.5+.5*Math.sin(C.t*5);g.strokeStyle='rgba(255,214,90,'+(.5+.4*pl)+')';g.lineWidth=5;g.beginPath();g.arc(0,0,3.4*44*camZoom(),0,7);g.stroke();g.fillStyle='#ffd23a';g.font='900 26px Nunito,Arial';g.textAlign='center';g.fillText('⚓',0,9);g.restore()}}
   for(const s of C.ships){
     if(s.dead||!(s.type==='galeone'&&s.conv&&!C.tut||s.type==='prigionieri'&&!s.ally&&!C.tut||s.tutT))continue;
     const[x,y]=toScreen(s.x,s.y);
@@ -9940,7 +9946,11 @@ function miniMap(){
      if(fr){const an=Math.atan2(gy,gx);c.save();c.rotate(an);c.fillStyle=on?'#ff2e2e':'#ffb0a0';c.beginPath();c.moveTo(20,0);c.lineTo(9,-8);c.lineTo(9,8);c.closePath();c.fill();c.restore()}
      c.fillStyle=on?'#ff2e2e':'#ffd0c0';c.strokeStyle='#fff';c.lineWidth=2;c.beginPath();c.arc(0,0,7,0,7);c.fill();c.stroke();
      c.restore()}}
-  if(!VOY){const pt0=TPp(21,30),px=pt0[0],py=pt0[1];let dx=(px-p.x)*sc,dy=(py-p.y)*sc;const d=Math.hypot(dx,dy),far=d>98;
+  if(C.go5){let dx=(C.go5.x-p.x)*sc,dy=(C.go5.y-p.y)*sc;const d=Math.hypot(dx,dy),far=d>96,pl=.5+.5*Math.sin(C.t*6);if(far){dx=dx/d*96;dy=dy/d*96}
+    c.save();c.translate(dx,dy);if(far){const an=Math.atan2(dy,dx);c.save();c.rotate(an);c.fillStyle='#ffd23a';c.beginPath();c.moveTo(22,0);c.lineTo(10,-8);c.lineTo(10,8);c.closePath();c.fill();c.restore()}
+    c.strokeStyle='rgba(255,214,90,'+(.3+.5*pl)+')';c.lineWidth=2.5;c.beginPath();c.arc(0,0,9+pl*6,0,7);c.stroke();
+    c.fillStyle='#3a2410';c.strokeStyle='#ffd23a';c.lineWidth=2.5;c.beginPath();c.arc(0,0,8,0,7);c.fill();c.stroke();c.fillStyle='#ffd23a';c.font='900 11px Nunito,Arial';c.textAlign='center';c.fillText('★',0,4);c.restore()}
+  if(!VOY&&!C.go5){const pt0=TPp(21,30),px=pt0[0],py=pt0[1];let dx=(px-p.x)*sc,dy=(py-p.y)*sc;const d=Math.hypot(dx,dy),far=d>98;
    if(far){dx=dx/d*98;dy=dy/d*98}
    c.save();c.translate(dx,dy);
    if(far){c.rotate(Math.atan2(dy,dx));c.fillStyle='#ffd23a';c.beginPath();c.moveTo(13,0);c.lineTo(3,-7);c.lineTo(3,7);c.closePath();c.fill();c.rotate(-Math.atan2(dy,dx))}
@@ -9951,6 +9961,22 @@ function miniMap(){
   c.restore();
 }
 
+/* ---------------- dopo il galeone: verso il grande viaggio ---------------- */
+function go5Init(){
+  C.ships=C.ships.filter(s=>s.ally);C.crates=[];C.balls=[];C.pend=[];C.convoy=true;C.notes.start=1;C.notes.found=1;C.notes.gal=1;
+  const e=ROUTE[ROUTE.length-1],t=findSea(e[0],e[1]);C.go5={x:t[0],y:t[1]};
+}
+function go5Start(){
+  UI.dlg([D('tito',"Capitano, la stiva è piena d'argento. Il convoglio spagnolo non ce la perdonerà."),D('hero',"Allora non aspettiamo. Le carte del galeone segnano un varco: lì finisce il mare che conosciamo."),D('biscotto',"Cra! Segui la freccia! Io faccio la vedetta!")],()=>{UI.banner('Nuovo obiettivo','Raggiungi il varco del grande viaggio')});
+}
+function go5Arrive(){
+  C.over=true;const sv=C.silver;
+  UI.dlg([D('hero',"Eccolo: il varco. Di là le carte non dicono più niente."),D('tito',"Argento a bordo ("+sv+" casse), Pip e Dodo al sicuro. Siamo pronti."),D('biscotto',"Cra! Pronti! Più o meno!")],()=>{
+    const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;background:#06182a;color:#ffd23a;display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 22px Nunito,Arial;text-align:center';
+    o.innerHTML='<div style="font-size:15px;opacity:.8">Capitolo 4</div><div style="font-size:30px;margin:6px 0 14px">Il grande viaggio</div><div>Caricamento…</div>';document.body.appendChild(o);
+    try{localStorage.setItem('sm_c5',JSON.stringify({fresh:1,silver:sv,hull:8}))}catch(e){}
+    setTimeout(()=>{try{__go('#w5')}catch(e){}location.reload()},1600)});
+}
 /* ---------------- fine ---------------- */
 function endRun(why){
   if(C.over)return;C.over=true;$('c3bd').style.display='none';
@@ -10109,7 +10135,7 @@ function boot(){
   if(VOY){voyBoot();return}
   newRun(true,PLAN0);sailUI();
   let res=null;try{const q=localStorage.getItem('sm_c34r');if(q){res=JSON.parse(q);localStorage.removeItem('sm_c34r')}}catch(e){}
-  if(res){C.tut=null;C.silver=res.silver||0;C.pris=res.pris||0;C.kills=res.kills||0;C.t=res.t||400;C.convoy=true;C.p.hull=Math.max(1,res.hull||C.p.max);C.p.max=res.max||C.p.max;setTimeout(()=>endRun('completo'),500)}
+  if(res){C.tut=null;C.silver=res.silver||0;C.pris=res.pris||0;C.kills=res.kills||0;C.t=res.t||400;C.convoy=true;C.p.hull=Math.max(1,res.hull||C.p.max);C.p.max=res.max||C.p.max;go5Init();setTimeout(()=>go5Start(),500)}
   else if(!tutSeen())tutStart();
 }
 // «Salpa» riavvia
