@@ -2452,13 +2452,13 @@ function genWorld(){
   // scogli: ostacoli per la zattera nel mare tra le due isole (resta sempre un corridoio largo)
   const rr2=mulberry(31);let k=0;
   const lane=x=>{const t=clamp((x-61)/(9.4+I2),0,1);return 31.4+t*1.9+Math.sin((x-61)*.62)*2.1*Math.sin(t*3.14)}
-  const rpath=[[61.2,31.4],[65.5,44],[70,44.2],[70,21],[75.5,21],[79.4,33.2]],dPath=(x,y)=>{let m=1e9;for(let i=0;i<rpath.length-1;i++){const[ax,ay]=rpath[i],[bx,by]=rpath[i+1],vx=bx-ax,vy=by-ay,u=clamp(((x-ax)*vx+(y-ay)*vy)/(vx*vx+vy*vy),0,1);m=Math.min(m,Math.hypot(x-ax-vx*u,y-ay-vy*u))}return m};
-  {let w=0;const wall=(tx,y0,y1)=>{for(let ty=y0;ty<=y1;ty++){if(!seaT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)])continue;const e=ent({id:'rw'+(w++),type:'reef',v:(tx*7+ty*3)%5,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty});addBlock(e,tx,ty,1,1)}};
-   wall(67,1,40);wall(73,24,59)}
+  const rpath=[[61.2,31.4],[63.8,24.5],[69.5,23.2],[76,25],[79.4,33.2]],dPath=(x,y)=>{let m=1e9;for(let i=0;i<rpath.length-1;i++){const[ax,ay]=rpath[i],[bx,by]=rpath[i+1],vx=bx-ax,vy=by-ay,u=clamp(((x-ax)*vx+(y-ay)*vy)/(vx*vx+vy*vy),0,1);m=Math.min(m,Math.hypot(x-ax-vx*u,y-ay-vy*u))}return m};
+  {let w=0;const blob=(cx,cy,rx,ry)=>{for(let ty=Math.floor(cy-ry);ty<=Math.ceil(cy+ry);ty++)for(let tx=Math.floor(cx-rx);tx<=Math.ceil(cx+rx);tx++){const d=((tx+.5-cx)/rx)**2+((ty+.5-cy)/ry)**2;if(d>1||(d>.55&&((tx*5+ty*11)%4===0)))continue;if(!seaT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)])continue;const e=ent({id:'rw'+(w++),type:'reef',v:(tx*7+ty*3)%5,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty});addBlock(e,tx,ty,1,1)}};
+   blob(66,32,1.4,5.6);blob(72.8,30,1.4,4.4)}
   for(let tries=0;tries<2400&&k<26+I2;tries++){
     const tx=58+((rr2()*(19+I2))|0),ty=15+((rr2()*44)|0);
     if(!seaT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)])continue;
-    if(dPath(tx+.5,ty+.5)<3.6||tx===67||tx===73)continue;
+    if(dPath(tx+.5,ty+.5)<3.4)continue;
     if(hyp(tx-FIX.landing[0],ty-FIX.landing[1])<4.6)continue;
     if(E.some(e=>e.type==='reef'&&hyp(e.tx-tx,e.ty-ty)<2.6))continue;
     const e=ent({id:'rf'+k,type:'reef',v:k%5,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty});addBlock(e,tx,ty,1,1);k++;
@@ -5666,7 +5666,7 @@ const CHANGELOG=[
     "Conferme e schede: «Costruisci», «Conferma» e gli altri pulsanti principali stanno a destra, «Annulla» e «Chiudi» a sinistra.",
     "Menu e schede si aprono sempre dall'inizio, mai già scorsi in basso.",
     "Il procione ladro cammina solo sulla terraferma e aggira l'acqua.",
-    "Il viaggio tra le due isole è molto più lungo: due muri di scogli obbligano a una serpentina tra i varchi. In zattera nella seconda isola non si vede più la mappa della grotta. Zattera e ritorno alla prima isola: le istruzioni non parlano più di est e ovest, ma del fumo e del mare aperto."
+    "Il viaggio tra le due isole è più lungo: due gruppi di scogli da aggirare e, alla prima traversata, fulmini segnalati da un cerchio rosso da schivare. In zattera nella seconda isola non si vede più la mappa della grotta. Zattera e ritorno alla prima isola: le istruzioni non parlano più di est e ovest, ma del fumo e del mare aperto."
   ]},
   {v:"0.11.1",d:"7 nov 2026",t:"Lanterne sull'isola e viaggio più scorrevole",n:[
     "Lanterne sull'isola: una vicino all'acqua, a nord del laghetto, e due file lungo i sentieri, fino al relitto sulla spiaggia e fino alla zattera. Di notte fanno luce e si cammina senza torcia.",
@@ -6030,7 +6030,7 @@ m10:{kind:'main',title:"La zattera",blurb:"Se c'è fumo, c'è qualcuno. Se c'è 
    {k:'flag',done:()=>matsOk(),txt:()=>matsTxt(),hint:"Tela: dalla vela strappata sul relitto. Legna dagli alberi, corda dalle liane, rottami dalla sabbia e dal relitto.",
     mark:()=>{if(!S.res.tela&&!S.built.zattera&&!EID.lt_sail.got)return pt(EID.lt_sail,60);return pt(plotE('zattera'),90)}},
    {k:'build',id:'zattera',txt:"Costruisci la Zattera sulla spiaggia, oltre il campo",hint:"La piazzola tratteggiata è sulla spiaggia: segui il sentiero oltre il campo.",mark:()=>pt(plotE('zattera'),90)},
-   {k:'flag',done:()=>!!S.flags.sailed,txt:"Salpa seguendo il fumo",hint:"Avvicinati alla zattera e premi «Salpa». Sterza con il joystick: due muri di scogli ti obbligano a un giro largo, cerca i varchi prima a sud e poi a nord.",mark:()=>({x:FIX.landing[0]*TS,y:FIX.landing[1]*TS,r:4*TS,up:20})}],
+   {k:'flag',done:()=>!!S.flags.sailed,txt:"Salpa seguendo il fumo",hint:"Avvicinati alla zattera e premi «Salpa». Sterza con il joystick, aggira i gruppi di scogli e schiva i fulmini.",mark:()=>({x:FIX.landing[0]*TS,y:FIX.landing[1]*TS,r:4*TS,up:20})}],
   onDone(){Story.endChapter()}},
 s1:{kind:'side',title:"Pesca",blurb:"Il mare è pieno di cibo, ma serve pazienza.",
   avail:()=>!!S.flags.lenza&&!!S.built.falo,
@@ -7341,18 +7341,18 @@ Extra.tick=function(dt){
     }
     EX.wet=0;EX.hitMsg=0;
   }else if(w.k==='rain'){EX.fw=0}
-  const storm=w.k==='storm'&&WX.i>.6;
+  const realStorm=w.k==='storm'&&WX.i>.6,cross=P.mode==='raft'&&WORLD===1&&!S.flags.sailed&&P.x>62*TS&&P.y>18*TS&&P.y<44*TS,storm=realStorm||cross;
   if(!storm){EX.warn.length=0;EX.sheltered=0;return}
   EX.fw=0;
   const sh=shelterNow();
   if(P.mode==='raft'){
     if(!STM.on){
       // onde che sballottano la zattera e lampi che cadono vicino
-      EX.rb+=dt;const wob=Math.sin(EX.rb*.8)*18;
-      if(raftOK(P.x,P.y+wob*dt))P.y+=wob*dt;
+      EX.rb+=dt;const wob=realStorm?Math.sin(EX.rb*.8)*18:0;
+      if(wob&&raftOK(P.x,P.y+wob*dt))P.y+=wob*dt;
       EX.bt-=dt;
       if(EX.bt<=0){
-        EX.bt=6+Math.random()*5;
+        EX.bt=realStorm?6+Math.random()*5:2.6+Math.random()*2.4;
         const a=P.hd+(Math.random()-.5)*2,d=(.8+Math.random()*3)*TS;
         EX.warn.push({x:P.x+Math.cos(a)*d,y:P.y+Math.sin(a)*d*.75,t:0,dur:1.3});
       }
