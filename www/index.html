@@ -468,7 +468,7 @@ var lt=0;d.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<320&
     <input id="inName" type="text" maxlength="14" placeholder="Capitano" autocomplete="off">
     <div class="seg" role="radiogroup" aria-label="Aspetto"><button class="on" id="hM" role="radio" aria-checked="true">Capitano</button><button id="hF" role="radio" aria-checked="false">Capitana</button></div>
     <div id="startBtns"><button class="btn gold big" id="bNew">Salpa!</button><button class="btn big" id="bCont" hidden>Continua</button></div>
-    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button><span>·</span><button id="bLang" class="lnk">Lingua</button><span>·</span><button id="bCap3" class="lnk">Capitolo 3 (bozza)</button><span>·</span><button id="bCap4" class="lnk">Assalto al galeone (prova)</button><span>·</span><button id="bCap5" class="lnk">Il grande viaggio (prova)</button></div>
+    <div class="links"><button id="bHow" class="lnk">Come si gioca</button><span>·</span><button id="bNews" class="lnk">Novità</button><span>·</span><button id="bLang" class="lnk">Lingua</button></div>
     <p class="ver" id="verTxt"></p>
    </div>
   </div>
@@ -5645,8 +5645,10 @@ const UPGR={
 };
 function hasRes(cost){for(const k in cost)if((S.res[k]||0)<cost[k])return false;return true}
 function payRes(cost){for(const k in cost)S.res[k]-=cost[k]}
-function reqOk(id){const p=PLOTS[id];return p.req.every(r=>S.built[r])&&(!p.needFlag||S.flags[p.needFlag])}
-function reqMsg(id){const p=PLOTS[id];if(!p.req.every(r=>S.built[r]))return p.reqText;if(p.needFlag&&!S.flags[p.needFlag])return p.needText;return''}
+function raftReady(){return !!(S.built.falo&&S.built.capanna&&S.built.banco&&S.up.torch&&S.q.m10)}
+window.__raftReady=raftReady;window.__reqOk=id=>reqOk(id);window.__reqMsg=id=>reqMsg(id);
+function reqOk(id){const p=PLOTS[id];return p.req.every(r=>S.built[r])&&(!p.needFlag||S.flags[p.needFlag])&&(id!=='zattera'||raftReady())}
+function reqMsg(id){const p=PLOTS[id];if(id==='zattera'&&!raftReady()&&(!p.needFlag||S.flags[p.needFlag])&&p.req.every(r=>S.built[r]))return"Non sei ancora pronto a salpare: costruisci falò, capanna, banco da lavoro e torcia, e porta a termine le missioni dell'isola.";if(!p.req.every(r=>S.built[r]))return p.reqText;if(p.needFlag&&!S.flags[p.needFlag])return p.needText;return''}
 function canBuild(id){return reqOk(id)&&hasRes(PLOTS[id].cost)}
 const CHAPTERS=[
   {n:1,t:"Naufrago",d:"Una spiaggia, poca acqua e nessuno intorno. Prima si sopravvive, poi si costruisce, poi si parte su una zattera.",st:"Bozza giocabile"},
@@ -5662,6 +5664,7 @@ const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
     "Capanna: salendo la prima volta la telecamera non scivola più (il personaggio compare subito al suo posto). Di sera tutte e tre le stanze sono illuminate da candele accese.",
     "Dopo il galeone: con l'argento a bordo il mare è libero e hai un nuovo obiettivo, «Raggiungi il varco del grande viaggio». Lo segui con una freccia gialla accanto alla nave e un segnalino sulla minimappa; arrivato, si apre un messaggio e parte il Capitolo 4.",
+    "Zattera: non si può più costruire subito. Prima servono falò, capanna, banco da lavoro e torcia, e bisogna aver portato avanti le missioni dell\'isola (fino al Pino Alto). I link di prova (Capitolo 3, galeone, Il grande viaggio) non sono più nel menu iniziale: si trovano in Diario → Novità, con la password.",
     "Armadio della capanna: ora si apre una scheda per scegliere il tuo cappello, il tuo abito e il cappellino del pappagallo.",
     "Torcia: dopo averla costruita il pulsante resta sempre visibile e lampeggia con una freccia finché non lo tocchi. Di giorno avvisa che non puoi accenderla; dal tramonto funziona.",
     "Conferme e schede: «Costruisci», «Conferma» e gli altri pulsanti principali stanno a destra, «Annulla» e «Chiudi» a sinistra.",
@@ -8451,7 +8454,7 @@ function journalBody(){
     return h}
   if(jTab==='r')return Extra.collectionHtml();
   if(!newsOK)return'<div class="news"><h4>Area riservata</h4><p style="font-weight:700;font-size:13.5px">Solo l\'admin può accedere.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn" id="nwGo">Entra</button></div><p id="nwErr" style="color:#b3261e;font-weight:800;font-size:13px;min-height:18px;margin:6px 0 0"></p></div>';
-  return'<div class="news"><div class="row" style="margin:4px 0 10px"><button class="btn" id="nwC4">Prova: assalto al galeone</button><button class="btn" id="nwVer">'+verLbl()+'</button></div>'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
+  return'<div class="news"><div class="row" style="margin:4px 0 10px"><button class="btn" id="nwC3">Prova: Capitolo 3 (battaglia)</button><button class="btn" id="nwC4">Prova: assalto al galeone</button><button class="btn" id="nwC5">Prova: Il grande viaggio</button><button class="btn" id="nwVer">'+verLbl()+'</button></div>'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
 }
 let newsOK=false;
 const pwHash=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return h};
@@ -8461,6 +8464,7 @@ function journalDraw(){
   c.querySelector('#jx').onclick=()=>uShow('journal',false);
   {const nv=c.querySelector('#nwVer');if(nv)nv.onclick=verSwitch}
   const nc=c.querySelector('#nwC4');if(nc)nc.onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go('#w4');location.reload()};
+  {const b3=c.querySelector('#nwC3');if(b3)b3.onclick=()=>{__go('#w3');location.reload()};const b5=c.querySelector('#nwC5');if(b5)b5.onclick=()=>{__go('#w5');location.reload()}}
   const go=c.querySelector('#nwGo');
   if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
   c.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{jTab=b.dataset.t;sfx('tap');journalDraw()});
@@ -9134,9 +9138,6 @@ function initStart(){
     {const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm,hero}))}catch(_){}startNew(nm,hero)}
   };
   $('bCont').onclick=()=>{const nm=$('inName').value.trim().slice(0,14);try{localStorage.setItem(PREFKEY,JSON.stringify({name:nm||(save&&save.name)||'',hero}))}catch(_){}startContinue(nm,hero);saveGame()};
-  $('bCap3').onclick=()=>{__go('#w3');location.reload()};
-  $('bCap5').onclick=()=>{__go('#w5');location.reload()};
-  $('bCap4').onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go('#w4');location.reload()};
   $('bLang').onclick=()=>sheetFor('<h2>Lingua</h2><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+I18N.langs.map(l=>'<button class="btn'+(l===I18N.lang?' gold':'')+'" data-lg="'+l+'">'+I18N.names[l]+'</button>').join('')+'<button class="btn" id="shNo">Chiudi</button></div>',cc=>{cc.querySelectorAll('[data-lg]').forEach(b=>b.onclick=()=>{I18N.set(b.dataset.lg);closeSheet()})});
   $('bHow').onclick=UI.showHow;$('bNews').onclick=()=>{if(!S.flags)S.flags={};UI.openJournal('n')};
   $('verTxt').textContent='Bozza v'+CHANGELOG[0].v+' · '+CHANGELOG[0].d;
