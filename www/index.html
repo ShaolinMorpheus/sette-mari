@@ -583,7 +583,12 @@ const I2=9;                              // distanza extra dell'isola dei fuggia
 const GFX=(()=>{try{return localStorage.getItem('sette-mari-gfx')||'auto'}catch(e){return'auto'}})();
 const TS=44, MW=WORLD===4?72:WORLD===3?(VOY?260:210):99, MH=WORLD===4?46:WORLD===3?(VOY?110:126):60, GS=WORLD===3?(GFX==='alta'?.8:GFX==='bassa'?.4:.6):1, SS=2, FS=WORLD===3?(GFX==='alta'?.4:GFX==='bassa'?.2:.3):.5, WW=MW*TS, WH=MH*TS, WL=0.18;
 const $=id=>document.getElementById(id);
-const pn=s=>{const n=(typeof S!=='undefined'&&S&&S.pname)||'Pappagallo';return String(s).replace(/Biscotto/g,()=>n)};   // il nome del pappagallo lo sceglie il giocatore
+const NM_BK={};
+let NMAP=Object.assign({},NM_BK);try{Object.assign(NMAP,JSON.parse(localStorage.getItem('sm_edit_names')||'{}'))}catch(e){}
+let NMRE=null;
+function nmBuild(){const k=Object.keys(NMAP).filter(a=>a&&NMAP[a]&&NMAP[a]!==a).sort((a,b)=>b.length-a.length);NMRE=k.length?new RegExp('(?<![\\p{L}])('+k.map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![\\p{L}])','gu'):null}
+nmBuild();
+const pn=s=>{const n=(typeof S!=='undefined'&&S&&S.pname)||'Pappagallo';s=String(s).replace(/Biscotto/g,()=>n);return NMRE?s.replace(NMRE,m=>NMAP[m]||m):s};   // il nome del pappagallo lo sceglie il giocatore
 const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 const lerp=(a,b,t)=>a+(b-a)*t;
 const sstep=(a,b,v)=>{const t=clamp((v-a)/(b-a),0,1);return t*t*(3-2*t)};
@@ -621,6 +626,9 @@ const SC3=a=>[a[0]*1.515,a[1]*1.5].concat(a.slice(2));const BLOBS_3=[[10,30,8,7]
 const BLOBS_5=[[262,28,9,10],[262,86,9,10],[238,16,9,6],[236,96,10,6],[226,34,3.2,2.6],[246,78,4,3],[204,16,8,5],[196,94,9,6],[207,60,3,2.4],[184,18,5,3.5],[182,84,5,4],[166,12,8,5],[160,96,10,6],[170,66,3.4,3],[143,17,6,4],[140,92,7,5],[138,66,3,2.4],[124,20,5,3.4],[122,86,5,3.6],[123,36,2.6,2.2],[108,28,3,2.4],[95,36,2.4,2.0],[98,80,4,3],[94,28,3,2.4],[104,96,5,3.4],[112,78,3,2.4],[79,68,2.4,2],[78,14,7,4.5],[80,92,8,5],[80,78,3.6,3],[60,34,3.4,2.8],[54,48,3,2.6],[87,33,3,2.4],[65,48,2.4,2],[40,14,6,4],[42,92,8,5],[24,18,5,4],[22,88,6,4],[10,50,9.5,9],[6,22,5,4],[5,84,6,4],[58,80,2.6,2.2]];
 const BLOBS=WORLD===4?[]:WORLD===3?(VOY?BLOBS_5:BLOBS_3):WORLD===2?BLOBS_2:BLOBS_1;
 /* spiagge piatte e larghe: spiaggia del relitto, spiaggia della zattera, approdo, baia a nord */
+const EDT_BK=({"2": [], "1": []})[WORLD]||[];
+const EDT=EDT_BK.concat((function(){try{const o=JSON.parse(localStorage.getItem('sm_edits_w'+WORLD)||'null');return(o&&o.t)||[]}catch(e){return[]}})());
+let EDTON=false;
 const BEACH_1=[[13.8,44.2,3.4,3.8],[19.5,48.6,8,3.6],[57.2,30.8,3.6,4.2],[71.8+I2,33,3.2,3.6],[30,15.6,4.2,2.2]];
 const BEACH_3=[[22.45,45,2.6,5],[40.4,21,2,2.4],[62.1,36,2,1.8],[96.4,49,2.5,1.6]];const BEACH=WORLD===4?[]:WORLD===3?(VOY?[]:BEACH_3):WORLD===2?[[22.6,31,3.6,4.2],[66,50.4,7,3],[48,11.4,6,2.2],[80,36.5,3,3.5],[29,45,5,2.2]]:BEACH_1;
 const POND=WORLD===4?{x:1.5,y:1.5,rx:.2,ry:.2}:WORLD===3?{x:1.5,y:1.5,rx:.2,ry:.2}:WORLD===2?{x:31,y:25.2,rx:3.4,ry:2.2}:{x:34,y:22.6,rx:2.7,ry:1.8};
@@ -648,6 +656,7 @@ function elev(x,y){
   for(const b of BEACH){const d=hyp((x-b[0])/b[2],(y-b[1])/b[3]);if(d<1){const w=sstep(1,.55,d);m=Math.max(m,lerp(m,WL+.15+(NZ.v(x*.9,y*.9)-.5)*.04,w))}}
   const dp=hyp((x-POND.x)/POND.rx,(y-POND.y)/POND.ry);
   if(dp<1.7)m=Math.min(m,.04+(dp-.55)*.62);
+  if(EDTON)for(const p of EDT){const d=hyp((x-p[1])/p[3],(y-p[2])/p[4]);if(d<1){const w=sstep(1,.55,d);const k=p[0],tg=k==='s'?WL-.55:k==='g'?WL+.33:WL+.15+(NZ.v(x*.9,y*.9)-.5)*.04;m=lerp(m,tg,w)}}
   return m;
 }
 /* scogliera (altopiano roccioso) a nord-est */
@@ -671,6 +680,16 @@ const seaT=new Uint8Array(MW*MH);          // 1 = acqua abbastanza profonda per 
     walkT[ty*MW+tx]=ok?1:0;seaT[ty*MW+tx]=(e<(WORLD===3?WL+.03:WL-.035)&&tx>0&&ty>0&&tx<MW-1&&ty<MH-1)?1:0;
   }
 })();
+let EDSV=null;
+function edtGrids(){
+  if(!EDT.length)return;
+  EDTON=true;let x0=MW,y0=MH,x1=0,y1=0;
+  for(const p of EDT){x0=Math.min(x0,Math.floor(p[1]-p[3])-2);x1=Math.max(x1,Math.ceil(p[1]+p[3])+2);y0=Math.min(y0,Math.floor(p[2]-p[4])-2);y1=Math.max(y1,Math.ceil(p[2]+p[4])+2)}
+  x0=Math.max(0,x0);y0=Math.max(0,y0);x1=Math.min(MW-1,x1);y1=Math.min(MH-1,y1);
+  for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++){const i=ty*MW+tx;if(mesaT[i])continue;const e=elev(tx+.5,ty+.5);elevT[i]=e;walkT[i]=e>WL+.075?1:0;seaT[i]=(e<WL-.035&&tx>0&&ty>0&&tx<MW-1&&ty<MH-1)?1:0}
+}
+function edtPre(){if(!EDT.length)return;EDSV=[elevT.slice(),walkT.slice(),seaT.slice()];edtGrids()}
+function edtPost(){if(!EDT.length)return;if(EDSV){elevT.set(EDSV[0]);walkT.set(EDSV[1]);seaT.set(EDSV[2]);EDSV=null}}
 const tIdx=(tx,ty)=>ty*MW+tx;
 const inMap=(tx,ty)=>tx>=0&&ty>=0&&tx<MW&&ty<MH;
 const freeT=(tx,ty)=>inMap(tx,ty)&&walkT[ty*MW+tx]===1&&blockT[ty*MW+tx]===0;
@@ -3704,6 +3723,7 @@ function updatePlayer(dt){
     P.walk=0;
     // arrivo all'isola dei fuggiaschi
     if(hyp(P.x-FIX.landing[0]*TS,P.y-FIX.landing[1]*TS)<3.2*TS)Story.onLanding();
+    else if(WORLD===2&&S.c2&&S.c2.sea&&hyp(P.x-19.4*TS,P.y-31.2*TS)<3.8*TS)Ch2.land();
     else if(WORLD===2&&P.x<9*TS&&!P.bounce){P.bounce=1;P.hd=0;P.rv=0;P.x+=TS*2.4;setTimeout(()=>P.bounce=0,4000);
       let go=false;UI.dlg([D('hero',"Il mare aperto: da lì si torna alla prima isola. Salpo per tornare?",{choices:[{t:"Torna alla prima isola",fn:()=>{go=true}},{t:"Non ancora",fn:()=>{}}]})],()=>{if(go)Ch2.toCh1()})}
     else if(WORLD===1&&S.flags.sailed&&!P.bounce){const px=P.x/TS,py=P.y/TS;for(const b of BLOBS)if(b[0]>=79&&((px-b[0])/(b[2]+3.2))**2+((py-b[1])/(b[3]+3.2))**2<1){Story.onLanding();break}}
@@ -4581,7 +4601,7 @@ function drawCrab(g,e,t){
 }
 function drawDeco(g,e,t){
   if(e.hidden)return;
-  if(e.spr==='lamp'){drawCDeco(g,e.lk,t);return}
+  if(e.spr==='lamp'){if(!e.hid)drawCDeco(g,e.lk,t);return}
   if(e.spr==='pit'){
     g.save();g.translate(e.x,e.y);shadow(g,0,3,26,8,.25);
     const lit=S&&S.flags.pitLit;
@@ -5187,7 +5207,7 @@ function render(t){
     const lights=[];
     const falo=EID.plot_falo;if(falo.st===2)lights.push([(falo.fp[0]+.5)*TS,(falo.fp[1]+.2)*TS,250,1,true]);
     const cap=EID.plot_capanna;if(cap.st===2)lights.push([(cap.fp[0]+2.3)*TS,(cap.fp[1]+1.1)*TS,100,.5]);
-    for(const e of E)if((e.type==='cdeco'&&e.k==='lanterne')||(e.type==='deco'&&e.spr==='lamp'))lights.push([e.x,e.y-38,150,.75,true]);
+    for(const e of E)if((e.type==='cdeco'&&e.k==='lanterne')||(e.type==='deco'&&e.spr==='lamp'&&!e.hid))lights.push([e.x,e.y-38,150,.75,true]);
     const ban=EID.plot_banco;if(ban.st===2)lights.push([(ban.fp[0]+1)*TS,(ban.fp[1])*TS-18,70,.3]);
     lights.push([FIX.smoke[0]*TS,FIX.smoke[1]*TS+20,180,.6,true]);
     if(S.flags.pitLit&&EID.isle_pit)lights.push([EID.isle_pit.x,EID.isle_pit.y,200,.9,true]);
@@ -5504,6 +5524,8 @@ function farmEject(k){   // se sei dentro l'area appena costruita, ti porta dava
   const px=Math.floor(P.x/TS),py=Math.floor(P.y/TS);
   if(e.blk.some(b=>px>=b[0]&&px<b[0]+b[2]&&py>=b[1]&&py<b[1]+b[3])){P.x=(e.tx+.5)*TS;P.y=(e.ty+1.6)*TS}
 }
+const lampsOn=()=>!!(S&&(S.camp||[]).some(o=>o.k==='lanterne'));
+function lampSync(){const on=lampsOn()||(typeof ED!=='undefined'&&ED.on);for(const e of E){if(e.type!=='deco'||e.spr!=='lamp')continue;e.hid=!on;if(e.hid&&e.blocked)delBlock(e);else if(!e.hid&&!e.blocked&&e.fp)reBlock(e)}}
 function campBuild(d){
   const n=campBuild0(d);
   if(n&&(d.k==='orto'||d.k==='essic')){try{farmEject(d.k);clearFarmArea()}catch(e){console.error('farm',e)}}
@@ -5511,6 +5533,7 @@ function campBuild(d){
 }
 function campBuild0(d){
   S.camp=S.camp||[];const placed=[];
+  if(d.k==='lanterne'&&E.some(e=>e.type==='deco'&&e.spr==='lamp')){if(!S.camp.some(o=>o.k==='lanterne'))S.camp.push({k:'lanterne',tx:0,ty:0,w:1});lampSync();return 1}
   if(d.alt){const f=EID.plot_falo,cx=f?f.fp[0]+.5:FIX.camp[0],cy=f?f.fp[1]+.5:FIX.camp[1];let bt=null,bd=1e9;for(const a of d.alt){const t=campTile(a[0],a[1],[1,2]);if(!t)continue;const dv=hyp(t[0]+.5-(cx+a[0]),t[1]+.5-(cy+a[1]));if(dv<=2.6){bt=t;break}if(dv<bd){bd=dv;bt=t}}if(!bt)for(const a of d.alt){const t=campTile(a[0],a[1],[1,2],1);if(t){bt=t;break}}
     if(bt){campAdd(d.k,bt[0],bt[1]);S.camp.push({k:d.k,tx:bt[0],ty:bt[1]});return 1}return 0}
   for(const a of d.at){const t=d.best?(flagTile()||campTile(a[0],a[1])):campTile(a[0],a[1]);if(!t)break;campAdd(d.k,t[0],t[1]);S.camp.push({k:d.k,tx:t[0],ty:t[1]});placed.push(t)}
@@ -5518,7 +5541,7 @@ function campBuild0(d){
 }
 function campRestore(){try{campRestore0()}finally{try{clearFarmArea()}catch(e){console.error('clr',e)}}}
 function campRestore0(){
-  for(const o of(S.camp||[]))campAdd(o.k,o.tx,o.ty);
+  for(const o of(S.camp||[])){if(o.w)continue;campAdd(o.k,o.tx,o.ty)}
   // la bandiera, ormai, sta più vicina al campo (una sola volta, anche nei salvataggi vecchi)
   try{
     if(S.camp&&!S.flagMig&&S.camp.some(o=>o.k==='bandiera')){
@@ -5538,6 +5561,7 @@ function campRestore0(){
     const L=DECOR.find(d=>d.k==='lanterne'),cam=S.camp||[];
     if(!cam.some(o=>o.k==='lanterne'))return;
     const sign=cam.filter(o=>o.k==='cartello');
+    if(E.some(e=>e.type==='deco'&&e.spr==='lamp'))return;
     for(const o of cam.filter(o=>o.k==='lanterne')){
       if(sign.some(sg=>hyp(sg.tx-o.tx,sg.ty-o.ty)<4.2)){
         const e=E.find(x=>x.type==='cdeco'&&x.k==='lanterne'&&x.tx===o.tx&&x.ty===o.ty);
@@ -5625,7 +5649,7 @@ function phatImg(id){
   try{_phi[id]=cv.toDataURL()}catch(e){_phi[id]=''}return _phi[id];
 }
 const DECOR=[
-  {k:'lanterne',n:"Lanterne",d:"Quattro lanterne attorno al campo: all'imbrunire fanno luce.",cost:{legna:3,rottami:3,corda:2},cnt:4,at:[[-4.4,0.6],[3.6,-1.4],[-3.8,-3.2],[3.6,6.4]]},
+  {k:'lanterne',n:"Lanterne",d:"Le lanterne del campo e dei sentieri: all'imbrunire fanno luce.",cost:{legna:3,rottami:3,corda:2},cnt:4,at:[[-4.4,0.6],[3.6,-1.4],[-3.8,-3.2],[3.6,6.4]]},
   {k:'bandiera',n:"Bandiera pirata",d:"Un alto palo con la bandiera nera e il teschio.",cost:{legna:3,corda:2,rottami:1},cnt:1,at:[[0,-3.2]],best:1},
   {k:'tavolo',n:"Tavolo con panche",d:"Per mangiare come si deve, almeno una volta al giorno.",cost:{legna:8,corda:2},cnt:1,at:[[4.2,3.2]]},
   {k:'amaca',n:"Amaca",d:"Un pisolino di due ore quando vuoi (costa un po' di sete e fame).",cost:{legna:5,corda:5},cnt:1,at:[[-4.2,3.8]]},
@@ -5670,9 +5694,11 @@ const CHANGELOG=[
     "Il grande viaggio: la nave fantasma ora ti insegue da lontano, senza sparare. Quando punti la prua verso di lei si dissolve fino a diventare attraversabile, poi sparisce e ricompare dietro di te. Ha uno scafo squarciato, l'albero spezzato e alghe appese.",
     "Il grande viaggio: percorsi nuovi, più vari e senza ripassare negli stessi punti. Nel mare delle Tempeste una rotta a curve larghe con i gorghi ai lati; nel mare di Nebbia le nove boe di Giacomo disegnano una serpentina con un passaggio stretto tra due isolotti.",
     "Zattera: non si può più costruire subito. Prima servono falò, capanna, banco da lavoro e torcia, e bisogna aver portato avanti le missioni dell\'isola (fino al Pino Alto). I link di prova (Capitolo 3, galeone, Il grande viaggio) non sono più nel menu iniziale: si trovano in Diario → Novità, con la password.",
-    "Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
+    "Editor mappa v2: pennello «Terreno» (sabbia, erba, mare: allarga la spiaggia o scava il mare, si applica quando esci), pannello «Nomi» per cambiare i nomi dei personaggi nei dialoghi, «Scarica file» per mandare la mappa a Claude.","Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
     "Mappa dell'isola dei Relitti (seconda isola): oggetti e palme spostati o aggiunti con l'editor, come li hai disegnati tu.",
     "Il grande viaggio: Biscotto commenta con battute la nave fantasma.",
+    "Lanterne: non ce ne sono più all\'inizio, né sulla prima né sulla seconda isola. Compaiono solo con la miglioria «Lanterne» del banco da lavoro, nei punti che hai disegnato con l\'editor.",
+    "Capitolo 2: dopo la conferma e il caricamento ci si ritrova in zattera, in mare aperto, e si naviga a lungo lungo la costa fino alla spiaggia della baia, dove si sbarca.",
     "Armadio della capanna: ora si apre una scheda per scegliere il tuo cappello, il tuo abito e il cappellino del pappagallo.",
     "Torcia: dopo averla costruita il pulsante resta sempre visibile e lampeggia con una freccia finché non lo tocchi. Di giorno avvisa che non puoi accenderla; dal tramonto funziona.",
     "Conferme e schede: «Costruisci», «Conferma» e gli altri pulsanti principali stanno a destra, «Annulla» e «Chiudi» a sinistra.",
@@ -5962,7 +5988,7 @@ const Story={};
 const Ch2={};
 const capW=()=>S.hero==='f'?'Capitana':'Capitano';
 const nomeP=()=>(S.name&&S.name.trim())||capW();
-const fmt=t=>t.replace(/\{cap\}/g,capW()).replace(/\{nome\}/g,nomeP());
+const fmt=t=>pn(t.replace(/\{cap\}/g,capW()).replace(/\{nome\}/g,nomeP()));
 const plotE=id=>EID['plot_'+id];
 const D=(w,t,x)=>Object.assign({w,t:pn(t)},x||{});
 function nearestE(types,ok){let b=null,bd=1e12;for(const e of E){if(types.indexOf(e.type)<0||(ok&&!ok(e)))continue;const d=(e.x-P.x)**2+(e.y-P.y)**2;if(d<bd){bd=d;b=e}}return b}
@@ -6044,6 +6070,8 @@ m10:{kind:'main',title:"La zattera",blurb:"Se c'è fumo, c'è qualcuno. Se c'è 
    {k:'build',id:'zattera',txt:"Costruisci la Zattera sulla spiaggia, oltre il campo",hint:"La piazzola tratteggiata è sulla spiaggia: segui il sentiero oltre il campo.",mark:()=>pt(plotE('zattera'),90)},
    {k:'flag',done:()=>!!S.flags.sailed,txt:"Salpa seguendo il fumo",hint:"Avvicinati alla zattera e premi «Salpa». Sterza con il joystick, aggira i gruppi di scogli e schiva i fulmini.",mark:()=>({x:FIX.landing[0]*TS,y:FIX.landing[1]*TS,r:4*TS,up:20})}],
   onDone(){Story.endChapter()}},
+c0:{kind:'main',title:"Il mare aperto",blurb:"Una costa da seguire fino alla baia.",
+  goals:[{k:'flag',done:()=>!(S.c2&&S.c2.sea),txt:"Segui la costa fino alla baia dei Fuggiaschi",hint:"Naviga con la zattera tenendo la costa vicina e aggira gli scogli. La baia è sulla spiaggia ad ovest dell'isola.",mark:()=>({x:19.4*TS,y:31.2*TS,r:4*TS,up:20})}]},
 s1:{kind:'side',title:"Pesca",blurb:"Il mare è pieno di cibo, ma serve pazienza.",
   avail:()=>!!S.flags.lenza&&!!S.built.falo,
   goals:[
@@ -6757,17 +6785,24 @@ Ch2.convert=function(s){
   n.pname=s.pname;n.phat=s.phat;n.phats=s.phats;n.rec=s.rec;n.xpt=s.xpt;n.cOpen=s.cOpen;n.hints=s.hints;n.wown=s.wown;n.wear=s.wear;
   n.stat=Object.assign(n.stat||{},s.stat,{built:(s.stat&&s.stat.built)||0});
   n.built={zattera:1};n.es={plot_zattera:{st:2,p:1}};n.q={};n.fog='';n.raftAt=null;n.camp=[];
-  n.px=FIX_2.spawn[0]*TS;n.py=FIX_2.spawn[1]*TS;n.hd=0;n.mode='walk';
+  n.px=96.5*TS;n.py=57*TS;n.hd=Math.PI;n.mode='raft';
   n.day=(s.day||1)+1;n.tod=7;n.vit={t:80,h:75};n.torchOn=false;n.tutDone=1;n.tut=null;
-  n.c2={};n.sound=s.sound;n.music=s.music;
+  n.c2={sea:1};n.sound=s.sound;n.music=s.music;
   return n;
 };
 Ch2.begin=function(){
   try{Ch2.swap(true)}catch(e){UI.toast('Impossibile avviare il Capitolo 2 su questo browser.')}
 };
+Ch2.land=function(){
+  if(!S.c2||!S.c2.sea)return;S.c2.sea=0;
+  leaveRaft(nearestFree(23,32,6),true);sfx('quest');
+  setTimeout(()=>{UI.banner('Capitolo 2','La Baia dei Fuggiaschi');
+    UI.dlg([D('hero',"Terra. Un'altra spiaggia, un altro mare. Mi tremano ancora le gambe."),D('hero',"Davanti, una baia, e tende tra gli alberi."),D('hero',"Su una duna, a pochi passi, una sagoma. Un uomo con le braccia incrociate, fermo, che mi guarda. Sbatto le palpebre e non c'è più."),D('biscotto',"Cra! Visto! Non visto! Prima acqua, poi tutto il resto!")],()=>startQuest('c1'))},500);
+};
 Ch2.onBegin=function(){
   const c=C();
   if(EID.nave)EID.nave.spr=c.parts.yard?'shipFix':'wreck2';
+  if(S.c2&&S.c2.sea){setTimeout(()=>{UI.banner('Capitolo 2','Il mare aperto');UI.dlg([D('hero',"Il fumo di ieri è dietro di me. Davanti, un mare più grande di quanto sembrasse."),D('hero',"Da qualche parte c'è una baia, con delle tende. Seguo la costa e tengo gli scogli alla larga."),D('biscotto',"Cra! Si naviga! Io faccio la vedetta, tu fai tutto il resto!")],()=>{if(!S.q.c0)startQuest('c0')})},400);return}
   if(!S.q.c1){
     setTimeout(()=>{UI.banner('Capitolo 2','La Baia dei Fuggiaschi');
       UI.dlg([D('hero',"Mi sveglio con la faccia nella sabbia. Un'altra spiaggia, un altro mare."),D('hero',"Alle spalle, il fumo di ieri. Davanti, una baia, e tende tra gli alberi."),D('hero',"Su una duna, a pochi passi, una sagoma. Un uomo con le braccia incrociate, fermo, che mi guarda. Sbatto le palpebre e non c'è più."),D('biscotto',"Cra! Visto! Non visto! Prima acqua, poi tutto il resto!")],()=>startQuest('c1'))},400);
@@ -9095,10 +9130,10 @@ function frameErr(err){   // un errore in un singolo passo non deve congelare tu
   errN++;if(errN<=3){try{console.error(err);UI.toast('Piccolo errore: '+String(err&&err.message||err).slice(0,60))}catch(_){}}
 }
 /* ===== EDITOR MAPPA (solo admin: Diario → Novità → «Editor mappa») ===== */
-const ED={on:false,sel:null,drag:null,pan:null,pt:new Map(),pinch0:0,ed:{mv:{},del:[],add:[],vv:{}},undo:[],grid:true,bound:false};
-const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
+const ED={on:false,sel:null,drag:null,pan:null,pt:new Map(),pinch0:0,ed:{mv:{},del:[],add:[],vv:{},t:[]},undo:[],grid:true,bound:false,brush:null,size:2.5,paint:null,dirty:false};
+const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}},"1":{"mv":{"b12":[2178,1492],"q4":[3850,1712],"fgboat":[3510,1398],"plot_falo":[1474,1230],"plot_banco":[1628,1230],"lamp7":[1826,1223],"plot_capanna":[1342,1186],"lookout":[1201,1118],"lamp2":[1122,1135],"rw4":[603,2125],"lt_old":[1380,810],"oldcamp":[1329,744],"lamp1":[1518,915],"b2":[1386,876],"t4":[1260,1712],"lamp3":[1210,1575],"lamp5":[946,1883],"t51":[1656,1624],"lamp8":[1738,1399]},"del":["feedback"],"add":[{"t":"deco","s":"lamp","f":0,"x":1738,"y":1047,"id":"ed1"},{"t":"deco","s":"lamp","f":0,"x":1078,"y":1487,"id":"ed2"},{"t":"deco","s":"lamp","f":0,"x":770,"y":2103,"id":"ed3"},{"t":"deco","s":"lamp","f":0,"x":1034,"y":2191,"id":"ed4"},{"t":"deco","s":"lamp","f":0,"x":1430,"y":1487,"id":"ed5"},{"t":"deco","s":"lamp","f":0,"x":2002,"y":1443,"id":"ed6"},{"t":"deco","s":"lamp","f":0,"x":2574,"y":1311,"id":"ed7"},{"t":"deco","s":"lamp","f":0,"x":1254,"y":871,"id":"ed8"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
 const EDKEY='sm_edits_w'+WORLD;
-const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{}});
+const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{},t:(o&&o.t)||[]});
 function edStore(){try{localStorage.setItem(EDKEY,JSON.stringify(ED.ed))}catch(e){}}
 const edOk=e=>!['reef','crab','mraft','thief','npc','cdeco'].includes(e.type)&&e.spr!=='hut'&&e.spr!=='cave'&&!/^(cav|cvr|h_)/.test(e.id||'')&&e.x>0&&e.y>0&&e.x<WW&&e.y<WH;
 const ED_NAMES={tree:'Albero',pine:'Pino',palm:'Palma',rock:'Roccia',bush:'Cespuglio',berry:'Cespuglio di bacche',rockpool:'Pozza di molluschi',debris:'Rottami',bottle:'Bottiglia',loot:'Cassa / oggetto',wparrot:'Pappagallo selvatico'};
@@ -9185,23 +9220,73 @@ function edPalette(){
       const cx=Math.round(cam.x/TS)*TS+(tpl.x-(tpl.fp?tpl.fp[0]*TS:Math.floor(tpl.x/TS)*TS)),cy=Math.round(cam.y/TS)*TS+(tpl.y-(tpl.fp?tpl.fp[1]*TS:Math.floor(tpl.y/TS)*TS));
       const d={t:p[1],s:p[2]||null,v:null,f:0,x:cx,y:cy};if(tpl.v!=null)d.v=(Math.random()*Math.max(1,edMaxV(tpl)))|0;edNew(d)})});
 }
+function edNamesLocal(){try{return JSON.parse(localStorage.getItem('sm_edit_names')||'{}')}catch(e){return{}}}
+function edCodeStr(){const o={w:WORLD,mv:ED.ed.mv,del:ED.ed.del,add:ED.ed.add,vv:ED.ed.vv,t:ED.ed.t};const n=edNamesLocal();if(Object.keys(n).length)o.names=n;return JSON.stringify(o)}
+async function edSaveFile(code,st){
+  const name='sette-mari-mappa-m'+WORLD+'.json',C=window.Capacitor,PL=C&&C.Plugins;
+  try{
+    if(C&&C.isNativePlatform&&C.isNativePlatform()&&PL&&PL.Filesystem&&PL.Share){
+      const r=await PL.Filesystem.writeFile({path:name,data:code,directory:'CACHE',encoding:'utf8'});
+      try{await PL.Share.share({title:'Mappa Sette Mari',text:'Mappa di Sette Mari',files:[r.uri],dialogTitle:'Salva o invia il file'})}
+      catch(e){if(!/cancel/i.test(String(e&&e.message||e)))await PL.Share.share({title:'Mappa Sette Mari',text:code,dialogTitle:'Salva o invia il codice'})}
+      st.textContent='Scegli dove salvarlo o a chi inviarlo.';return;
+    }
+    const f=new File([code],name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:'Mappa Sette Mari'});st.textContent='Scegli dove salvarlo.';return}catch(e){if(e&&e.name==='AbortError')return}}
+    const a=document.createElement('a'),b=new Blob([code],{type:'application/json'});
+    a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();
+    st.textContent='File scaricato (se il browser lo consente). In alternativa copia il codice.';
+  }catch(_){st.textContent='Non riesco a salvare il file: copia il codice.'}
+}
 function edCode(){
-  const code=JSON.stringify({w:WORLD,mv:ED.ed.mv,del:ED.ed.del,add:ED.ed.add,vv:ED.ed.vv});
-  sheetFor('<h2>Codice della mappa</h2><p class="sm">Copia questo codice e mandalo a Claude: lo inserirà nel gioco per tutti.</p><textarea id="edTx" class="bkta" readonly>'+code.replace(/</g,'&lt;')+'</textarea><div class="row"><button class="btn" id="shNo">Chiudi</button><button class="btn gold" id="edCp">Copia</button></div><p class="sm" id="edSt"></p>',c=>{
+  const code=edCodeStr();
+  sheetFor('<h2>Codice della mappa</h2><p class="sm">Copia il codice o scarica il file e mandalo a Claude: lo inserirà nel gioco per tutti.</p><textarea id="edTx" class="bkta" readonly>'+code.replace(/</g,'&lt;')+'</textarea><div class="row"><button class="btn" id="shNo">Chiudi</button><button class="btn" id="edFl">Scarica file</button><button class="btn gold" id="edCp">Copia</button></div><p class="sm" id="edSt"></p>',c=>{
+    c.querySelector('#edFl').onclick=()=>edSaveFile(code,c.querySelector('#edSt'));
     c.querySelector('#edCp').onclick=async()=>{const tx=c.querySelector('#edTx'),st=c.querySelector('#edSt');try{await navigator.clipboard.writeText(tx.value);st.textContent='Codice copiato.'}catch(_){tx.focus();tx.select();try{document.execCommand('copy');st.textContent='Codice copiato.'}catch(__){st.textContent='Seleziona il testo e copialo a mano.'}}}});
+}
+/* ---- terreno: pennello di spiaggia / erba / mare ---- */
+function edPaint(wx,wy){
+  const t=[ED.brush,Math.round(wx/TS*4)/4,Math.round(wy/TS*4)/4,ED.size,ED.size];
+  ED.ed.t.push(t);ED.paint.n++;ED.dirty=true;edStore();
+}
+function edBar2(){const b=document.getElementById('edHand');if(b)b.hidden=!ED.brush}
+function edTerrain(){
+  const nm={b:'Sabbia',g:'Erba',s:'Mare'};
+  sheetFor('<h2>Terreno</h2><p class="sm">Scegli un pennello, poi tocca o trascina sulla mappa: aggiungi sabbia (spiaggia), erba o mare. Il terreno si applica quando esci dall\'editor (il gioco si ricarica).</p>'
+   +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><button class="btn" data-b="b">Sabbia</button><button class="btn" data-b="g">Erba</button><button class="btn" data-b="s">Mare</button></div>'
+   +'<h3>Grandezza</h3><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px"><button class="btn" data-z="1.2">S</button><button class="btn" data-z="2.5">M</button><button class="btn" data-z="4.5">L</button><button class="btn" data-z="7">XL</button></div>'
+   +'<div class="row"><button class="btn" id="edTU">Togli l\x27ultimo tocco</button><button class="btn" id="edTA">Cancella tutto il terreno</button></div><div class="row"><button class="btn" id="shNo">Chiudi</button></div><p class="sm" id="edTs"></p>',c=>{
+    const st=c.querySelector('#edTs');const sh=()=>{st.textContent=(ED.brush?'Pennello: '+nm[ED.brush]+', raggio '+ED.size+' tile. ':'')+'Pezzi di terreno tuoi: '+ED.ed.t.length+'.'};sh();
+    c.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{ED.brush=b.dataset.b;ED.sel=null;edLabel();edBar2();sh();closeSheet();UI.toast('Pennello '+nm[ED.brush]+': tocca o trascina. Poi «Muovi» per spostarti.',3200)});
+    c.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{ED.size=+b.dataset.z;sh()});
+    c.querySelector('#edTU').onclick=()=>{if(ED.ed.t.length){ED.ed.t.pop();ED.dirty=true;edStore()}sh()};
+    let ask=0;c.querySelector('#edTA').onclick=()=>{if(!ask){ask=1;c.querySelector('#edTA').textContent='Sicuro? Tocca ancora';return}ED.ed.t=[];ED.dirty=true;edStore();sh();ask=0;c.querySelector('#edTA').textContent='Cancella tutto il terreno'};
+  });
+}
+/* ---- nomi dei personaggi ---- */
+const ED_NAMELIST=['Tonno','Pina','Nonno Ferro','Ferro','Nives','Gnocco','Capitan Pinza','Gambero','Aragosta','Pip','Dodo','Tito','Giacomo'];
+function edNames(){
+  const cur=edNamesLocal();
+  sheetFor('<h2>Nomi dei personaggi</h2><p class="sm">Scrivi il nuovo nome accanto a quello attuale (lascia vuoto per non cambiarlo). Vale in tutti i dialoghi e i messaggi. Il nome del pappagallo si sceglie nel gioco.</p>'
+   +'<div style="display:grid;grid-template-columns:1fr 1.4fr;gap:6px;align-items:center;margin-top:6px">'+ED_NAMELIST.map((n,i)=>'<span>'+n+'</span><input class="bkta" style="min-height:0;height:34px;padding:4px 8px" data-n="'+i+'" value="'+(cur[n]||'').replace(/"/g,'&quot;')+'" maxlength="22">').join('')+'</div>'
+   +'<div class="row"><button class="btn" id="shNo">Chiudi</button><button class="btn gold" id="edNs">Salva nomi</button></div><p class="sm" id="edNt"></p>',c=>{
+    c.querySelector('#edNs').onclick=()=>{const o={};c.querySelectorAll('[data-n]').forEach(i=>{const v=i.value.replace(/[<>&"]/g,'').trim();if(v&&v!==ED_NAMELIST[+i.dataset.n])o[ED_NAMELIST[+i.dataset.n]]=v});
+      try{localStorage.setItem('sm_edit_names',JSON.stringify(o))}catch(e){}
+      NMAP=Object.assign({},NM_BK,o);nmBuild();c.querySelector('#edNt').textContent='Nomi salvati: li vedrai nei prossimi dialoghi.'}});
 }
 function edUI(){
   let bar=document.getElementById('edBar');if(bar)return;
-  const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #toasts,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
+  const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #toasts,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edBar [hidden]{display:none!important}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
   document.head.appendChild(st);
   bar=document.createElement('div');bar.id='edBar';
-  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edRs">Azzera</button>';
+  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edRs">Azzera</button>';
   document.body.appendChild(bar);
   const sel=document.createElement('div');sel.id='edSel';document.body.appendChild(sel);
   const $$=id=>bar.querySelector('#'+id);
   $$('edX').onclick=edStop;
   $$('edSv').onclick=()=>{edStore();UI.toast('Modifiche salvate su questo dispositivo.',2200)};
   $$('edCd').onclick=edCode;
+  $$('edTr').onclick=edTerrain;$$('edNm').onclick=edNames;$$('edHand').onclick=()=>{ED.brush=null;edBar2();UI.toast('Torni a spostare gli oggetti.',1800)};
   $$('edUn').onclick=()=>{const f=ED.undo.pop();if(f){f();edLabel()}};
   $$('edZm').onclick=()=>{cam.uz=clamp(cam.uz/1.25,.35,2.2);camClamp()};
   $$('edZp').onclick=()=>{cam.uz=clamp(cam.uz*1.25,.35,2.2);camClamp()};
@@ -9213,12 +9298,15 @@ function edBind(){
   const dn=e=>{if(!ED.on)return;e.stopImmediatePropagation();e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}
     const[sx,sy]=cvPt(e);ED.pt.set(e.pointerId,[sx,sy]);
     if(ED.pt.size===2){const a=[...ED.pt.values()];ED.pinch0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);ED.drag=null;ED.pan=null;return}
-    const[wx,wy]=edW(sx,sy),h=edHit(wx,wy);
+    const[wx,wy]=edW(sx,sy);
+    if(ED.brush){ED.paint={lx:wx,ly:wy,n:0};edPaint(wx,wy);return}
+    const h=edHit(wx,wy);
     if(h){ED.sel=h;ED.drag={e:h,wx,wy,x0:h.x,y0:h.y,moved:false};edLabel()}
     else{ED.pan={sx,sy,cx:cam.x,cy:cam.y,moved:false}}};
   const mv=e=>{if(!ED.on)return;e.stopImmediatePropagation();e.preventDefault();
     const[sx,sy]=cvPt(e);if(!ED.pt.has(e.pointerId))return;ED.pt.set(e.pointerId,[sx,sy]);
     if(ED.pt.size===2){const a=[...ED.pt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ED.pinch0>10){cam.uz=clamp(cam.uz*d/ED.pinch0,.35,2.2);camClamp()}ED.pinch0=d;return}
+    if(ED.paint){const[wx,wy]=edW(sx,sy);if(Math.hypot(wx-ED.paint.lx,wy-ED.paint.ly)>ED.size*TS*.55){ED.paint.lx=wx;ED.paint.ly=wy;edPaint(wx,wy)}return}
     if(ED.drag){const D=ED.drag,[wx,wy]=edW(sx,sy),e2=D.e;
       let nx=D.x0+(wx-D.wx),ny=D.y0+(wy-D.wy);
       if(e2.fp||e2.type==='plot'){nx=D.x0+Math.round((wx-D.wx)/TS)*TS;ny=D.y0+Math.round((wy-D.wy)/TS)*TS}else{nx=Math.round(nx/6)*6;ny=Math.round(ny/6)*6}
@@ -9226,6 +9314,7 @@ function edBind(){
       if(D.moved&&(nx!==e2.x||ny!==e2.y))edMove(e2,nx,ny)}
     else if(ED.pan){const P0=ED.pan,z=camZoom();cam.x=P0.cx-(sx-P0.sx)/z;cam.y=P0.cy-(sy-P0.sy)/z;camClamp();if(Math.hypot(sx-P0.sx,sy-P0.sy)>6)P0.moved=true}};
   const up=e=>{if(!ED.on)return;e.stopImmediatePropagation();ED.pt.delete(e.pointerId);
+    if(ED.paint){const n=ED.paint.n;ED.paint=null;if(n)ED.undo.push(()=>{ED.ed.t.splice(ED.ed.t.length-n,n);edStore()});return}
     if(ED.drag){const D=ED.drag;if(D.moved){edRec(D.e);const px=D.prev,en=D.e;ED.undo.push(()=>{edMove(en,px[0],px[1]);edRec(en)})}ED.drag=null}
     if(ED.pan){if(!ED.pan.moved){ED.sel=null;edLabel()}ED.pan=null}};
   cv.addEventListener('pointerdown',dn,true);cv.addEventListener('pointermove',mv,true);cv.addEventListener('pointerup',up,true);cv.addEventListener('pointercancel',up,true);
@@ -9240,7 +9329,8 @@ function edStart(){
 function edStop(){
   edStore();ED.on=false;ED.drag=ED.pan=null;ED.pt.clear();document.body.classList.remove('edit');
   const b=document.getElementById('edBar'),s=document.getElementById('edSel');if(b)b.hidden=true;if(s)s.hidden=true;
-  camClamp();saveGame();
+  camClamp();saveGame();ED.brush=null;
+  if(ED.dirty){ED.dirty=false;UI.toast('Applico il nuovo terreno: ricarico il gioco…',2500);setTimeout(()=>location.reload(),900)}
 }
 function edDraw(){
   if(!ED.on||inCave()||inHut())return;
@@ -9248,6 +9338,8 @@ function edDraw(){
   g.setTransform(DPR*z,0,0,DPR*z,DPR*(VW/2-cam.x*z),DPR*(VH/2-cam.y*z));
   const vx0=cam.x-VW/2/z,vy0=cam.y-VH/2/z,vx1=cam.x+VW/2/z,vy1=cam.y+VH/2/z;
   if(ED.grid){g.strokeStyle='rgba(255,255,255,.14)';g.lineWidth=1/z;g.beginPath();for(let x=Math.floor(vx0/TS)*TS;x<vx1;x+=TS){g.moveTo(x,vy0);g.lineTo(x,vy1)}for(let y=Math.floor(vy0/TS)*TS;y<vy1;y+=TS){g.moveTo(vx0,y);g.lineTo(vx1,y)}g.stroke()}
+  {const all=EDT_BK.map(p=>[p,1]).concat(ED.ed.t.map(p=>[p,0]));const col={b:'255,220,120',g:'110,200,90',s:'60,140,255'};
+   for(const[p,bk]of all){const c=col[p[0]]||'255,255,255';g.fillStyle='rgba('+c+','+(bk?.16:.3)+')';g.strokeStyle='rgba('+c+',.8)';g.lineWidth=1.5/z;g.beginPath();g.ellipse(p[1]*TS,p[2]*TS,p[3]*TS,p[4]*TS,0,0,7);g.fill();g.stroke()}}
   for(const e of E){
     if(!edOk(e)||e.x<vx0-80||e.x>vx1+80||e.y<vy0-40||e.y>vy1+120)continue;
     if(e.fp&&e.blocked){g.strokeStyle='rgba(80,220,255,.6)';g.lineWidth=2/z;g.strokeRect(e.fp[0]*TS+1,e.fp[1]*TS+1,e.fp[2]*TS-2,e.fp[3]*TS-2)}
@@ -9277,6 +9369,7 @@ function frame(ts){
       }
     }
     if(frameN%3===0)drawMini();
+    if(frameN%20===0)lampSync();
   }else{
     cam.x=((WORLD===2?40:34)+Math.sin(t*.06)*14)*TS;cam.y=((WORLD===2?30:32)+Math.cos(t*.045)*8)*TS;camClamp();
   }
@@ -9360,9 +9453,11 @@ async function boot(){
   initNatureSprites();initStructSprites();initPropSprites();
   SP.scaf.zattera=mkScaffold(150,70);
   setP(.08,'Disegno il mare…');await nextTick();
+  edtPre();
   await bakeGround(p=>setP(.08+.84*p));
+  edtPost();
   setP(.95,'Popolo l\'isola…');await nextTick();
-  genWorld();pruneUnreachable();unhideLoot();edBoot();
+  genWorld();pruneUnreachable();unhideLoot();edtGrids();edBoot();
   S=newState('','m');cam.uz=.9;
   resize();window.addEventListener('resize',resize);window.addEventListener('orientationchange',()=>setTimeout(resize,250));
   initInput();initStart();syncPause();
