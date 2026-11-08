@@ -5700,6 +5700,13 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
+    "Galeone: a fine assalto compare la scheda con tre stelle (prigionieri salvi, sei casse d'argento, mai inseguiti prima della campana) e una medaglia di bronzo, argento o oro. Con tutte e tre le stelle arrivano il cappello da comandante nel guardaroba e il traguardo «Assalto perfetto».",
+    "Galeone: le battute del pappagallo e di Tito (anche sul mare) sono più piccole e trasparenti, così coprono meno schermo.",
+    "Galeone: alcune guardie sono fuori servizio. Due dormono nelle cuccette degli ufficiali e due nel dormitorio, altre due giocano a carte in mensa. Il rumore le sveglia (cannone, rum, sciabolate, la campana d'allarme), ma si possono anche colpire nel sonno.",
+    "Galeone: il comandante spagnolo studia le carte nella sala delle carte. Se premi «Usa» vicino a lui ti sfida a duello (facoltativo, 6 cuori, nessun aiuto). Se vinci ottieni la giubba del comandante nel guardaroba e il traguardo «Duellante».",
+    "Galeone: vita a bordo. Le lanterne ondeggiano, il legno scricchiola, nella stiva corrono i ratti (scappano se ti avvicini) e ogni tanto un gabbiano passa davanti a un oblò.",
+    "Galeone: in mensa c'è una bottiglia di rum da prendere e lanciare (tasto «Lancia»): le guardie vanno a vedere e si fermano a bere. Le guardie sospettose ora mostrano un «?» sopra la testa.",
+    "Galeone: la chiave della cella cambia posto a ogni partita (cabina del comandante, alloggi degli ufficiali o armeria) e il pappagallo, il diario e i suggerimenti ti dicono dove cercarla.",
     "Mare: una cala tranquilla dove i pesci saltano e lo scafo si ripara da solo; due forzieri sulle spiagge (si aprono avvicinandosi con la nave) e un banco di nebbia dove le pattuglie ti vedono solo da vicino, con qualche cassa nascosta dentro.",
     "Mare: ogni tanto una bottiglia galleggia in acqua. Dentro c'è la mappa del tesoro: la X su una spiaggia lontana, con una freccia color pergamena, la distanza e il segno sulla minimappa.",
     "Mare: il brigantino dalle vele viola è veloce e scappa, ma si stanca. Se lo affondi lascia 3 casse d'argento.",
@@ -10331,6 +10338,34 @@ const YD=(function(){
   return Y;
 })();
 
+/* ====== NOVITÀ v0.11.2 (C): galeone — cappello da comandante, traguardo a 3 stelle ====== */
+NVH.comm=(g,hy,hr,hc,back,sp_,dk)=>{
+  const c1=hc||'#1c2a52',gold=(sp_&&sp_.trim)||'#e8c860';
+  // feltro blu notte, due punte larghe ai lati
+  const q=g.createLinearGradient(0,hy-22,0,hy-4);q.addColorStop(0,dk(c1,1.5));q.addColorStop(1,dk(c1,.78));
+  g.fillStyle=q;g.beginPath();
+  g.moveTo(-23,hy-6);g.quadraticCurveTo(-24,hy-20,-9,hy-16);g.quadraticCurveTo(0,hy-22,9,hy-16);g.quadraticCurveTo(24,hy-20,23,hy-6);g.quadraticCurveTo(0,hy-.5,-23,hy-6);g.closePath();g.fill();
+  g.strokeStyle='#060a18';g.lineWidth=1.3;g.stroke();
+  // gallone dorato lungo il bordo e sulle punte
+  g.strokeStyle=gold;g.lineWidth=2.2;g.lineCap='round';
+  g.beginPath();g.moveTo(-22.4,hy-6.4);g.quadraticCurveTo(0,hy-.6,22.4,hy-6.4);g.stroke();
+  g.lineWidth=1.3;g.beginPath();g.moveTo(-22.8,hy-8);g.quadraticCurveTo(-23.4,hy-18.5,-9.4,hy-15.4);g.moveTo(22.8,hy-8);g.quadraticCurveTo(23.4,hy-18.5,9.4,hy-15.4);g.stroke();
+  // tre piume bianche sulla cima
+  const fe=(x,y,rot,len)=>{g.save();g.translate(x,y);g.rotate(rot);g.fillStyle='#f8f4ea';g.strokeStyle='#8a8478';g.lineWidth=.9;g.beginPath();g.moveTo(0,0);g.quadraticCurveTo(len*.4,-len*.4,len*.18,-len);g.quadraticCurveTo(-len*.22,-len*.5,0,0);g.closePath();g.fill();g.stroke();g.restore()};
+  fe(-5,hy-17,-.5,14);fe(0,hy-18.5,0,17);fe(5,hy-17,.5,14);
+  if(!back){ // coccarda rossa con bottone dorato
+    g.fillStyle='#d8312a';g.beginPath();g.arc(0,hy-9,3,0,7);g.fill();g.strokeStyle=gold;g.lineWidth=1.2;g.stroke();
+    g.fillStyle=gold;g.beginPath();g.arc(0,hy-9,1,0,7);g.fill()}
+};
+{
+  const ls=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+  const add=it=>{if(WEAR.some(x=>x.id===it.id))return;WEAR.push(it);if(it.k==='hat')WRH[it.id]=it.spec;else if(it.k==='out')WRO[it.id]=it.spec};
+  add({id:'h_comm',k:'hat',n:'Cappello da comandante',hint:'Galeone: salva i prigionieri, prendi le sei casse e non farti inseguire prima della campana (3 stelle).',own:()=>ls('sm_c4star')==='3',spec:{hat:'comm',hatc:'#1c2a52',trim:'#e8c860'}});
+  add({id:'o_spag',k:'out',n:'Giubba del comandante',hint:'Galeone: vinci il duello facoltativo col comandante spagnolo.',own:()=>ls('sm_c4duel')==='1',spec:{coat:'#a8281e',coat2:'#6a1810',pants:'#242028',shirt:'#f4efe0',trim:'#e8c860',boots:1,sash:'#e8c860'}});
+  NV3.AC.push({id:'duello',n:'Duellante',d:'Galeone: batti il comandante spagnolo in duello.',ok:()=>ls('sm_c4duel')==='1'});
+  NV3.AC.push({id:'gal3',n:'Assalto perfetto',d:'Galeone: prigionieri salvi, sei casse d\'argento e nessun inseguimento prima della campana.',ok:()=>ls('sm_c4star')==='3'});
+}
+
 /* ---- 12d_kb.js ---- */
 /* ====== TASTIERA DEL GIOCO: quando il telefono è in verticale la schermata è ruotata, ma la tastiera di sistema no.
    Per scrivere i nomi usiamo una tastiera nostra, che ruota con il gioco ====== */
@@ -11074,7 +11109,7 @@ body.w3 #vit,body.w3 #clock,body.w3 #res,body.w3 #chal,body.w3 #ctr,body.w3 #min
 #c3wind{position:absolute;right:12px;top:178px;width:60px;height:60px;border-radius:50%;background:rgba(40,22,8,.78);border:2px solid #3a200c}
 #c3mini{position:absolute;right:10px;top:56px;width:112px;height:112px;border-radius:50%;border:4px solid #b8892e;box-shadow:0 3px 6px rgba(0,0,0,.45);background:#0e3d63}
 #c3ov{position:absolute;inset:0;width:100%;height:100%}
-#c3par{position:absolute;left:76px;top:100px;max-width:min(260px,30%);display:none;background:#fff6dc;color:#3a200c;border:3px solid #3a200c;border-radius:16px 16px 16px 4px;padding:7px 10px;font:800 13px/1.3 var(--f-b,Nunito,sans-serif);box-shadow:0 3px 0 rgba(0,0,0,.35)}#c3par b{color:#c8402e}
+#c3par{position:absolute;left:76px;top:100px;max-width:min(236px,27%);display:none;background:rgba(255,246,220,.76);color:#3a200c;border:2px solid rgba(58,32,12,.7);border-radius:12px 12px 12px 3px;padding:4px 8px;font:800 12px/1.25 var(--f-b,Nunito,sans-serif);box-shadow:0 2px 0 rgba(0,0,0,.2);pointer-events:none}#c3par b{color:#c8402e}
 #c3tut{position:absolute;left:50%;transform:translateX(-50%);bottom:10px;width:min(390px,42%);pointer-events:auto;background:rgba(40,22,8,.9);border:3px solid #b8892e;border-radius:14px;color:#fff6dc;padding:8px 12px;font:700 13px/1.35 var(--f-b,Nunito,sans-serif);display:none;z-index:7}
 #c3tut .tth{display:flex;justify-content:space-between;align-items:center;gap:8px}#c3tut .tth b{font-size:15px;color:#ffd98a}#c3tut .tth span{font-size:11px;letter-spacing:1px;color:#ffd98a}
 #c3tut p{margin:4px 0 6px}#c3tut .ttb{display:flex;gap:8px;justify-content:flex-end}
@@ -13040,9 +13075,20 @@ body.w4 #vit,body.w4 #clock,body.w4 #res,body.w4 #chal,body.w4 #ctr,body.w4 #min
 #c4hit{left:70px;bottom:24px;width:100px;height:100px;background:radial-gradient(circle at 35% 30%,#ffb0a0,#d8412f);color:#fff;font-size:15px}
 #c4par{left:182px;bottom:92px;width:74px;height:74px;background:radial-gradient(circle at 35% 30%,#bcd6f2,#3f78b8);color:#fff;font-size:13px}
 #c4par.on{box-shadow:0 0 0 4px rgba(150,205,255,.95),0 0 20px 6px rgba(110,180,255,.8),0 3px 0 rgba(0,0,0,.4);transform:translateY(2px)}
-#c4say{position:absolute;left:10px;top:50px;max-width:min(300px,34%);display:none;background:#fff6dc;color:#3a200c;border:3px solid #3a200c;border-radius:16px 16px 16px 4px;padding:7px 10px;font:800 13px/1.3 var(--f-b,Nunito,sans-serif);box-shadow:0 3px 0 rgba(0,0,0,.35)}
+#c4say{position:absolute;left:10px;top:50px;max-width:min(236px,27%);display:none;background:rgba(255,246,220,.76);color:#3a200c;border:2px solid rgba(58,32,12,.7);border-radius:12px 12px 12px 3px;padding:4px 8px;font:800 12px/1.25 var(--f-b,Nunito,sans-serif);box-shadow:0 2px 0 rgba(0,0,0,.2);pointer-events:none}
 #c4say b{color:#c8402e}
 body.w4 #trow{left:auto!important;right:12px;top:8px}
+.c4st{font-size:44px;line-height:1.05;letter-spacing:8px;margin:2px 0 2px}
+.c4st i{font-style:normal;color:#cdbf9c;display:inline-block;transform:scale(.72);opacity:.55;transition:transform .42s cubic-bezier(.3,1.9,.5,1),opacity .3s,color .3s}
+.c4st i.on{color:#f2b30f;transform:scale(1);opacity:1;text-shadow:0 3px 0 #8a5a08}
+.c4ls{list-style:none;margin:4px auto 8px;padding:0;text-align:left;display:block;width:fit-content;font:800 14px/1.4 var(--f-b,Nunito,sans-serif)}
+.c4ls li{padding:1px 0 1px 24px;position:relative;color:#7a6a4a}
+.c4ls li:before{content:'☆';position:absolute;left:0;top:1px;color:#a8987a}
+.c4ls li.ok{color:#3a200c}
+.c4ls li.ok:before{content:'★';color:#e6a200}
+.c4md{display:block;width:fit-content;margin:2px auto 4px;padding:2px 14px;border-radius:14px;border:2px solid #3a200c;font:900 14px var(--f-b,Nunito,sans-serif);color:#3a200c}
+.c4md.g{background:linear-gradient(#ffe27a,#e6a914)}.c4md.s{background:linear-gradient(#f4f6fa,#b8c0cc)}.c4md.b{background:linear-gradient(#e8b27a,#b8743a)}.c4md.n{background:#e8dcc0}
+.c4nw{margin:2px 0 6px;font:800 13px var(--f-b,Nunito,sans-serif);color:#2a6a3a}
 `;
 document.head.appendChild(css);
 
@@ -13081,9 +13127,14 @@ const roomAt=(gx,gy)=>{
   if(gx>=12&&gx<=30){if(gy<=4)return'quarters';if(gy>=13)return gx<=21?'galley':'hold';return'corr'}
   return null};
 const STAIRS=[{d:[37,10.5]},{u:[37,10.5],d:[37,3.5]},{u:[37,3.5]}];
+/* dove sta la chiave della cella: cambia a ogni partita (3 posti sul ponte di comando) */
+const KEYSP=[
+ {gx:3,gy:13,lab:'Cassapanca',goal:'La chiave della cella: cerca a poppa, nella cabina del comandante.',diary:'«La chiave della cella sta nella cassapanca, sotto il letto del comandante.»',start:'Prima la cella: la chiave sta nella cassapanca del comandante, nella cabina a poppa.',enter:'Una cassapanca in fondo, a sinistra! Quella con la serratura lucida.'},
+ {gx:21,gy:2,lab:'Baule degli ufficiali',goal:'La chiave della cella: cerca negli alloggi degli ufficiali, a nord del corridoio.',diary:'«Stavolta la chiave della cella è nel baule fra le cuccette degli ufficiali. Nessuno la cercherà lì.»',start:'Prima la cella: stavolta la chiave è nel baule degli alloggi degli ufficiali, a nord del corridoio.',enter:'Il baule fra le cuccette luccica: la chiave deve essere lì dentro!'},
+ {gx:14,gy:13,lab:'Baule dell\'armeria',goal:'La chiave della cella: cerca nel baule dell\'armeria, a sud del corridoio.',diary:'«La chiave della cella? In armeria, nel baule vicino alle armature.»',start:'Prima la cella: la chiave è nel baule dell\'armeria, a sud del corridoio.',enter:'Il baule vicino alle armature luccica: ecco dov\'è la chiave!'}];
 
 /* ---------------- oggetti di scena ---------------- */
-const NOBLOCK=['chair','coil','bench'];       // si attraversano
+const NOBLOCK=['chair','coil','bench','rum'];       // si attraversano
 const TALL=['mast','wardrobe','bookshelf','armor'];   // coprono la vista alle guardie
 const PROPS_BY=[
  /* PONTE DI COMANDO */
@@ -13097,7 +13148,7 @@ const PROPS_BY=[
   ['armor',12,13,1,1],['armor',21,13,1,1],['rack',13,15,2,1],['rack',16,15,2,1,{obj:'sword'}],['rack',19,15,2,1],['table',18,13,2,1,{t:'dine'}],['barrel',12,15,1,1],
   ['maptable',25,14,3,1,{obj:'chart'}],['chair',24,14,1,1,{d:'r'}],['chair',28,14,1,1,{d:'l'}],['bookshelf',29,15,2,1],['bookshelf',23,15,1,1],
   ['mast',35,8,1,1],['barrel',33,3,1,1],['barrel',33,14,1,1],['coil',34,6,1,1],['coil',39,13,1,1],['cannon',33,2,1,1,{d:-1}],['cannon',38,2,1,1,{d:-1}],['cannon',33,15,1,1,{d:1}],['cannon',36,15,1,1,{d:1,obj:'lure'}],['cannon',38,15,1,1,{d:1}],
-  ['cannon',42,3,1,1,{d:-1}],['cannon',44,3,1,1,{d:-1}],['barrel',42,14,1,1],['barrel',44,14,1,1],['barrel',45,13,1,1],['coil',43,10,1,1]],
+  ['cannon',42,3,1,1,{d:-1}],['cannon',44,3,1,1,{d:-1}],['barrel',42,14,1,1],['barrel',44,14,1,1],['barrel',45,13,1,1],['coil',43,10,1,1],['chest',14,13,1,1,{plain:1}]],
  /* PONTE DI MEZZO */
  [['bunk',2,4,2,1,{c:'#7a8a5a'}],['bunk',2,6,2,1,{c:'#a8503a'}],['bunk',2,11,2,1,{c:'#5a7a9a'}],['bunk',2,13,2,1,{c:'#a8503a'}],['bunk',7,4,2,1,{c:'#5a7a9a'}],['bunk',7,6,2,1,{c:'#7a8a5a'}],['bunk',7,11,2,1,{c:'#a8503a'}],['bunk',7,13,2,1,{c:'#7a8a5a'}],
   ['table',4,5,2,1,{t:'dine'}],['chair',4,4,1,1,{d:'d'}],['chair',5,6,1,1,{d:'u'}],['chest',5,14,1,1,{obj:'med',med:1}],['barrel',9,2,1,1],
@@ -13106,7 +13157,7 @@ const PROPS_BY=[
   ['stove',13,13,2,1],['table',17,13,2,1,{t:'prep',obj:'recipe'}],['barrel',16,15,1,1],['barrel',17,15,1,1],['barrel',18,15,1,1],['barrel',19,15,1,1,{obj:'k2',red:1}],['sack',21,15,1,1],['sack',21,13,1,1],
   ['barrel',23,13,1,1],['barrel',30,13,1,1],['barrel',23,15,1,1],['barrel',30,15,1,1],['barrel',25,13,1,1],['sack',28,13,1,1],['sack',28,15,1,1],['sack',29,15,1,1],
   ['mast',35,8,1,1],['barrel',33,14,1,1],['cannon',33,2,1,1,{d:-1}],['cannon',38,2,1,1,{d:-1}],['cannon',33,15,1,1,{d:1}],['cannon',36,15,1,1,{d:1,obj:'lure'}],['cannon',38,15,1,1,{d:1}],['coil',34,6,1,1],
-  ['barrel',42,14,1,1],['barrel',45,13,1,1],['bucket',43,4,1,1],['bunk',45,5,2,1,{c:'#8a7a56'}],['bunk',45,10,2,1,{c:'#7a6a4e'}]],
+  ['barrel',42,14,1,1],['barrel',45,13,1,1],['bucket',43,4,1,1],['bunk',45,5,2,1,{c:'#8a7a56'}],['bunk',45,10,2,1,{c:'#7a6a4e'}],['rum',15,2,1,1]],
  /* LA STIVA */
  [['barrel',2,5,1,1],['barrel',3,5,1,1],['barrel',2,6,1,1],['barrel',8,5,1,1],['barrel',9,5,1,1],['barrel',9,6,1,1],['barrel',2,12,1,1],['barrel',3,12,1,1],['barrel',8,12,1,1],['barrel',9,12,1,1],['barrel',9,11,1,1],['sack',5,3,1,1],['sack',6,3,1,1],['sack',5,14,1,1],['coil',5,9,1,1],
   ['barrel',13,2,1,1],['barrel',14,2,1,1],['barrel',13,3,1,1],['barrel',24,2,1,1],['barrel',25,2,1,1],['barrel',29,3,1,1],['barrel',29,4,1,1],['sack',18,2,1,1],['sack',19,2,1,1],
@@ -13405,7 +13456,7 @@ function bake(){
     if(!isIn(x+1,y))g.beginPath(),g.moveTo(x*T+T-2,y*T),g.lineTo(x*T+T-2,y*T+T),g.stroke();
   }
   // oblò del cannone lungo lo scafo
-  g.fillStyle='#161616';for(const[x,y]of bord){if((x*3+y)%4!==0||x<12||x>38)continue;if(!isIn(x,y-1))g.fillRect(x*T+12,y*T+14,18,12);else if(!isIn(x,y+1))g.fillRect(x*T+12,y*T+14,18,12)}
+  g.fillStyle='#161616';PORTS_BY[DK]=[];for(const[x,y]of bord){if((x*3+y)%4!==0||x<12||x>38)continue;if(!isIn(x,y-1)||!isIn(x,y+1)){g.fillRect(x*T+12,y*T+14,18,12);PORTS_BY[DK].push([x*T+12,y*T+14])}}
   // luci calde delle lanterne
   for(const[lx,ly]of LAMPS){const X=(lx+.5)*T,Y=(ly+.5)*T,gr=g.createRadialGradient(X,Y,4,X,Y,150);gr.addColorStop(0,'rgba(255,214,120,.34)');gr.addColorStop(1,'rgba(255,214,120,0)');g.fillStyle=gr;g.fillRect(X-150,Y-150,300,300)}
   // luce del giorno sul ponte aperto
@@ -13429,6 +13480,8 @@ function mkSpecs(){
   CH.zeno={name:'Zeno',skin:'#8a5a3a',hair:'#111111',coat:'#8a6a2a',coat2:'#5e4818',pants:'#2e2a22',shirt:'#e6dfc8',hat:'tricorn',hatc:'#3a2a1a',trim:'#e0b04a',sword:20,boots:1,mustache:1,w:1.08,tall:1.02};
   CH.barba={name:'Barba',skin:'#c8946c',hair:'#3a2a1a',coat:'#6a3a2a',coat2:'#4a2418',pants:'#2e2a30',shirt:'#e8dcc0',hat:'bandana',hatc:'#2a6a4a',sword:20,stubble:1,w:1.12,tall:1.02};
   CH.lupo={name:'Lupo',skin:'#d0a07c',hair:'#8a8a8a',coat:'#3a6a5a',coat2:'#27483e',pants:'#3a3028',shirt:'#eee6d2',hat:'tricorn',hatc:'#1a2a2a',trim:'#cfcfcf',sword:20,boots:1,w:1,tall:1};
+  CH.guardiaz=Object.assign({},CH.guardia,{hat:'none',name:'Guardia'});
+  CH.comandante={name:'Comandante',skin:'#d9a27c',hair:'#d4d4d8',coat:'#a8281e',coat2:'#6a1810',pants:'#201c24',shirt:'#f4efe0',hat:'comm',hatc:'#6a1418',trim:'#e8c860',sash:'#e8c860',sword:22,boots:1,mustache:1,w:1.12,tall:1.06};
 }
 function mkChar(who,gx,gy,o){
   const e=ent(Object.assign({id:'c4_'+who+'_'+E.length,type:'c4',k:'char',who,x:cx(gx),y:(OY+gy+.92)*T,ph:Math.random()*6,flip:false,mv:false,wk:0,dir:'f'},o||{}));
@@ -13443,13 +13496,32 @@ const DUELS_BY=[
  [['guardia',4,8,'barba',6,8]],
  [['lupo',33,10,'guardia',35,10]]];
 const DECKS=[{},{},{}];
+/* guardie fuori servizio: dormono nelle cuccette o giocano a carte; il rumore le sveglia. [tipo, gx, gy, posto dopo il risveglio / ronda] */
+const OFF_BY=[
+ [['sleep',13,2,[[14,3],[16,3]]],['sleep',25,2,[[26,3],[28,3]]]],
+ [['sleep',2,6,[[2,7],[4,7]]],['sleep',7,13,[[8,12],[6,12]]],['cards',20,3,[[20,4],[16,4]]],['cards',22,3,[[22,4],[26,4]]]],
+ []];
+const CMD_POST=[29,13];     // il comandante spagnolo studia le carte nella sala delle carte (ponte di comando)
+const PORTS_BY=[[],[],[]];  // gli oblò lungo lo scafo (dove ogni tanto passa un gabbiano)
 function mkGuard(wp,n){return mkChar('guardia',wp[0][0],wp[0][1],{dk:n,guard:1,wp,wi:1,st:'patrol',ko:0,seen:0,hitCd:0,alert:0,wait:0,hp:3,maxhp:3,flash:0,swing:0,fight:null,fightT:0})}
 function buildDeckEnts(n,D){
   D.props=[];
   for(const p of PROPS_BY[n]){const[kind,gx,gy,gw,gh,o]=p;
     const e=ent(Object.assign({id:'c4p'+E.length,type:'c4',k:'prop',dk:n,kind,gx,gy,gw,gh,x:(OX+gx+gw/2)*T,y:(OY+gy+gh)*T-3},o||{}));
+    if(kind==='rum')e.y+=3;
     e.fp=[OX+gx,OY+gy,gw,gh];D.props.push(e)}
   D.gd=GP_BY[n].map(wp=>mkGuard(wp,n));
+  for(const[kind,gx,gy,wp]of OFF_BY[n]){
+    const okc=c=>walkT[tIdx(OX+c[0],OY+c[1])]&&!propAt(OX+c[0],OY+c[1]);
+    const w=wp.filter(okc);const g=mkGuard(w.length>1?w:[wp[0],wp[0]],n);g.off=kind;g.ph=Math.random()*6;
+    if(kind==='sleep'){
+      const bp=PROPS_BY[n].find(q=>q[0]==='bunk'&&q[1]===gx&&q[2]===gy);
+      g.who='guardiaz';g.bunk=[gx,gy];g.bcol=(bp&&bp[5]&&bp[5].c)||'#a8503a';g.front=wp[0];
+      g.x=wx(gx)+T;g.y=wy(gy)+T+4;g.face=Math.PI/2;g.dir='f'}
+    else{g.face=-Math.PI/2;g.dir='b'}
+    if(K.alarm)wakeOff(g,null,null,true);
+    D.gd.push(g)}
+  if(n===0){const c=mkGuard([CMD_POST,CMD_POST],n);c.cmd=1;c.who='comandante';c.hp=c.maxhp=6;c.hx=c.x;c.hy=c.y;c.face=-Math.PI/2;c.dir='b';D.gd.push(c)}
   D.duels=DUELS_BY[n].map(([w1,x1,y1,w2,x2,y2])=>[mkChar(w1,x1,y1,{dk:n,duel:1,fixed:1,flip:false,sd:0,friend:w1!=='guardia'?1:0}),mkChar(w2,x2,y2,{dk:n,duel:1,fixed:1,flip:true,sd:1,friend:w2!=='guardia'?1:0})]);
   for(const[a,b]of D.duels){a.mate=b;b.mate=a;a.cd=rr(.3,1);b.cd=rr(.6,1.4);a.sw=b.sw=0}
   D.cap=[];
@@ -13531,7 +13603,7 @@ function stairsGoal(want){const d=want>K.deck?'d':'u',st=STAIRS[K.deck][d];retur
 function goalDeck(){if(!K.key1)return 0;if(!K.cell||!K.key2)return 1;if(!K.hold||K.silver<6)return 2;return 0}
 function goal(){
   const want=goalDeck();if(K.deck!==want)return stairsGoal(want);
-  if(!K.key1)return[cx(3),cy(13),'La chiave della cella: cerca a poppa, nella cabina del comandante.'];
+  if(!K.key1){const ks=KEYSP[K.keyAt];return[cx(ks.gx),cy(ks.gy+1),ks.goal]}
   if(!K.cell)return[cx(39),cy(8.5),'La cella dei prigionieri è a prua, oltre il ponte aperto.'];
   if(!K.key2)return[cx(19),cy(15),'Ora serve la chiave della stiva: la cambusa è a sud del corridoio.'];
   if(!K.hold)return[cx(26),cy(12),'La porta della stiva è nel corridoio, lato sud.'];
@@ -13552,7 +13624,8 @@ function triggerAlarm(){
   toast('Qualcuno ha suonato la campana d\'allarme!',4800);
   say('Nives','La campana! Ci hanno sentiti: tutti in allerta!',4800);
   say('Biscotto','Ora le guardie corrono più veloci e vedono più lontano. Scappate verso la passerella!',6200);
-  for(const g of K.gd){if(g.ko>0||g.st==='chase')continue;g.st='search';g.sx=P.x;g.sy=P.y;g.sw=0;g.alert=0;g.mv=false}
+  for(const D of DECKS)for(const g of(D.gd||[]))if(g.off&&g.ko<=0)wakeOff(g,P.x,P.y);
+  for(const g of K.gd){if(g.ko>0||g.st==='chase'||(g.cmd&&!g.duel))continue;g.st='search';g.sx=P.x;g.sy=P.y;g.sw=0;g.alert=0;g.mv=false}
 }
 function fireLure(gx){
   if((K.lureCd||0)>0)return toast('Il cannone è ancora caldo: aspetta un attimo.');
@@ -13562,6 +13635,27 @@ function fireLure(gx){
   progress();
   if(!K.notes.lure){K.notes.lure=1;say('Tito','BUM! Che bella idea, Capitano: le guardie correranno a vedere!',5200);say('Biscotto','Intanto filiamo dall\'altra parte!',4200)}
 }
+/* bottiglia di rum: secondo diversivo, silenzioso ma le guardie ci restano a lungo */
+function takeRum(){
+  K.rum=1;K.rumTaken=true;progress();sfx('pick');
+  toast('Hai preso la bottiglia di rum! Premi «Lancia»: le guardie correranno a vedere.',5200);
+  say('Biscotto','Rum! Lanciala lontano: le guardie vanno a controllare e si fermano a bere.',5600)}
+function throwRum(){
+  if(!K||!K.rum||K.over||PAUSED)return;
+  const fx=K.fdx||1,fy=K.fdy||0,n0=Math.hypot(fx,fy)||1,dx=fx/n0,dy=fy/n0;
+  let x=P.x,y=P.y;
+  for(let d=20;d<=380;d+=10){const nx=P.x+dx*d,ny=P.y+dy*d,tx=Math.floor(nx/T),ty=Math.floor(ny/T);
+    if(!inMap(tx,ty)||!walkT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)]>0)break;x=nx;y=ny}
+  for(let k=0;k<8&&!inFree(x,y);k++){x-=dx*12;y-=dy*12}
+  if(Math.hypot(x-P.x,y-P.y)<70){toast('Lì davanti c\'è un ostacolo: girati verso un po\' di spazio libero.',3200);return}
+  K.rum=0;progress();
+  if(AU.ctx&&AU.on)noiseBurst(.18,900,.12);
+  K.fx.push({k:'bot',x0:P.x,y0:P.y-34,x1:x,y1:y-4,t:0,life:.42});
+  K.fx.push({k:'glass',x,y,t:-.42,life:1.5});
+  setTimeout(()=>{if(AU.ctx&&AU.on){noiseBurst(.16,3400,.22);tone(2100,1500,.09,'triangle',.07);tone(2800,2000,.06,'triangle',.05,.06)}},420);
+  noiseAt(x,y,560,null);
+  let n=0;for(const g of K.gd)if(g.st==='suspect'&&g.sx===x&&g.sy===y){g.dwell=7;n++}
+  if(!K.notes.rum){K.notes.rum=1;say('Tito',n?'Ha funzionato! Le guardie vanno a vedere... e a bere.':'Peccato: nessuna guardia qui vicino. Tienine una per la prossima volta!',4800)}}
 /* oggetti usabili */
 function objectsFor(n){
   const L=[];
@@ -13569,9 +13663,12 @@ function objectsFor(n){
   const sx=cx(37),sy=(OY+11)*T-10;
   if(n===0){
     o('desk',cx(7),cy(7),'Scrivania',()=>{
-      if(!K.readDesk){K.readDesk=true;progress();say('Diario',"«La chiave della stiva la tiene il cuoco, nel barile col tappo rosso. Non la perdo mai di vista.»",7000);say('Biscotto','Barile col tappo rosso: la cambusa, sul ponte di mezzo! E la stiva è ancora più giù.',6200)}
-      else say('Diario','«La chiave della cella sta nella cassapanca, sotto il letto del comandante.»',5200)});
-    o('k1',cx(3),cy(14),'Cassapanca',()=>{if(K.key1)return toast('La cassapanca è vuota.');K.key1=true;progress();sfx('quest');toast('Hai la chiave della cella!');say('Tito','La cella è a prua, sul ponte di mezzo: scendiamo dalla scala nel ponte aperto.',6200)},()=>!K.key1);
+      if(!K.readDesk){K.readDesk=true;progress();say('Diario',"«La chiave della stiva la tiene il cuoco, nel barile col tappo rosso. Non la perdo mai di vista.»",7000);say('Biscotto','Barile col tappo rosso: la cambusa, sul ponte di mezzo! E la stiva è ancora più giù.',6200);if(K.keyAt!==0&&!K.key1)say('Diario',KEYSP[K.keyAt].diary,6400)}
+      else say('Diario',KEYSP[K.keyAt].diary,5200)});
+    KEYSP.forEach((ks,i)=>o('k1_'+i,cx(ks.gx),cy(ks.gy+1),ks.lab,()=>{
+      if(K.key1)return toast('Il baule è vuoto.');
+      if(K.keyAt!==i){sfx('tap');toast(pick(['Solo stracci e biscotti secchi: la chiave non c\'è.','Qui dentro: calzini e una pipa. Nessuna chiave.','Vuoto! La chiave sarà in un altro posto.']),3400);return}
+      K.key1=true;progress();sfx('quest');toast('Hai la chiave della cella!');say('Tito','La cella è a prua, sul ponte di mezzo: scendiamo dalla scala nel ponte aperto.',6200)}));
     o('exit',cx(35),cy(2)-8,'Passerella',()=>leave(),()=>true);
     o('sd',sx,sy,'Scala: scendi',()=>takeStairs('d'));
     o('sword',wx(17),(OY+15)*T-6,'Rastrelliera',()=>{K.sword=true;progress();sfx('quest');toast('Sciabola spagnola! Ora ogni colpo vale doppio.');say('Tito','Quella sì che taglia! Due colpi e una guardia è a terra.',5200)},()=>!K.sword);
@@ -13580,8 +13677,10 @@ function objectsFor(n){
       if(!K.readPlan){K.readPlan=true;progress();say('Rapporto','«Argento al sicuro nella stiva, sotto chiave. Se qualcuno lo tocca: suonare la campana e svegliare tutti.»',7200);say('Biscotto','Una campana! Appena prendiamo il primo argento scatta l\'allarme: scegliete bene il momento!',6400)}
       else say('Rapporto','«Turni di guardia: due uomini per ponte, più la ronda di prua.»',4800)});
     o('lure36',cx(36),(OY+15)*T-6,'Cannone',()=>fireLure(36));
+    o('duel',cx(CMD_POST[0]),cy(CMD_POST[1]+1),'Sfida il comandante',()=>startDuel(),()=>{const c=K.gd.find(g=>g.cmd);return !!c&&c.ko<=0&&!c.duel});
   }
   if(n===1){
+    o('rum',cx(15),cy(3),'Bottiglia di rum',()=>takeRum(),()=>!K.rum&&!K.rumTaken);
     o('su',cx(37),(OY+11)*T-10,'Scala: sali',()=>takeStairs('u'));
     o('sd',cx(37),(OY+4)*T-10,'Scala: scendi',()=>takeStairs('d'));
     o('med',cx(5),(OY+14)*T-6,'Cassetta del medico',()=>{
@@ -13617,7 +13716,7 @@ function objectsFor(n){
 function nearObj(){let b=null,bd=1e9;for(const o of K.objs){if(!o.on())continue;const d=Math.hypot(o.x-P.x,o.y-P.y);if(d<86&&d<bd){bd=d;b=o}}
   for(const f of allies()){if(f.hp>0)continue;const d=Math.hypot(f.x-P.x,f.y-P.y);if(d<82&&d<bd){bd=d;b={id:'help',x:f.x,y:f.y-6,label:'Aiuta '+CH[f.who].name,on:()=>true,use:()=>{f.hp=2;f.downT=0;f.hitCd=1;sfx('ok');K.helped=(K.helped||0)+1;K.fx.push({k:'star',x:f.x,y:f.y-50,t:0,life:.9});say(f.who==='tito'?'Tito':CH[f.who].name,pick(['Grazie, Capitano! Ho preso una bella botta.','Ci sono di nuovo! Grazie.','Un graffio... grazie della mano.']),3600)}}}}
   return b}
-function useBtn(){if(!K||K.over||PAUSED)return;const o=nearObj();if(!o){toast('Non c\'è niente da usare qui.');return}o.use()}
+function useBtn(){if(!K||K.over||PAUSED)return;const o=nearObj();if(!o){if(K.rum)return throwRum();toast('Non c\'è niente da usare qui.');return}o.use()}
 function attack(){
   if(!K||K.over||PAUSED||K.atk>0||K.parry)return;K.atk=.5;K.swingT=.32;K.fx.push({k:'slash',x:P.x,y:P.y,dx:K.fdx,dy:K.fdy,t:0,life:.25});
   if(AU.ctx&&AU.on){noiseBurst(.1,500,.3)}
@@ -13625,11 +13724,12 @@ function attack(){
     if(d<96&&(dx*K.fdx+dy*K.fdy)/(d||1)>-.2)hitDuel(q,dx/(d||1),dy/(d||1))}
   for(const g of K.gd){if(g.ko>0)continue;const dx=g.x-P.x,dy=g.y-P.y,d=Math.hypot(dx,dy);
     if(d<96&&(dx*K.fdx+dy*K.fdy)/(d||1)>-.2){
-      const behind=g.st!=='chase'&&!(g.react>0)&&Math.abs(AD(g.face==null?0:g.face,Math.atan2(P.y-g.y,P.x-g.x)))>1.9;
+      const behind=!g.cmd&&(!!g.off||g.st!=='chase'&&!(g.react>0)&&Math.abs(AD(g.face==null?0:g.face,Math.atan2(P.y-g.y,P.x-g.x)))>1.9);
       if(behind){hitGuard(g,9,dx/(d||1),dy/(d||1));K.back=(K.back||0)+1;if(!K.notes.back){K.notes.back=1;say('Biscotto','Colpo alle spalle! Se non ti vedono, basta un colpo solo.',5400)}}
       else hitGuard(g,K.sword?2:1,dx/(d||1),dy/(d||1));
       if(g.ko<=0&&g.st!=='chase'){g.st='chase';g.alert=3.5}
       if(!K.notes.ko){K.notes.ko=1;say('Biscotto','Resistono a più colpi! Colpiscili ancora, o fatti aiutare dalla ciurma.',5600)}}}
+  for(const g of K.gd)if(g.off&&g.ko<=0&&Math.hypot(g.x-P.x,g.y-P.y)<130)wakeOff(g,P.x,P.y);   // la sciabola che fende l'aria sveglia chi dorme
 }
 function hitDuel(q,nx,ny){
   q.hp=(q.hp==null?3:q.hp)-(K.sword?2:1);q.flash=.25;sfx('thud');K.fx.push({k:'spark',x:q.x,y:q.y-34,t:0,life:.3});
@@ -13639,24 +13739,38 @@ function hitDuel(q,nx,ny){
   else{q.cd=Math.min(q.cd,.4);q.sw=.34}
 }
 function hitGuard(g,n,nx,ny){
-  g.hp-=n;g.flash=.25;g.hitCd=Math.max(g.hitCd,.7);sfx('thud');moveEnt(g,nx*16,ny*16);noiseAt(g.x,g.y,300,g);
+  g.hp-=n;g.flash=.25;g.hitCd=Math.max(g.hitCd,.7);sfx('thud');moveEnt(g,nx*16,ny*16);if(!g.cmd)noiseAt(g.x,g.y,300,g);
   K.fx.push({k:'spark',x:g.x,y:g.y-34,t:0,life:.3});
-  if(g.hp<=0){g.ko=1e9;g.st='ko';g.fight=null;K.kos++;K.fx.push({k:'star',x:g.x,y:g.y-70,t:0,life:.9});if(!K.notes.down){K.notes.down=1;say('Biscotto','A terra! Non si rialza più.')}}
+  if(g.hp<=0){g.ko=1e9;g.st='ko';g.fight=null;K.kos++;if(g.cmd)duelWon(g);K.fx.push({k:'star',x:g.x,y:g.y-70,t:0,life:.9});if(!K.notes.down){K.notes.down=1;say('Biscotto','A terra! Non si rialza più.')}}
 }
+function starRes(){const a=K.pris>=2,b=K.silver>=6,c=!!K.alarm&&!K.chasedPre;return{a,b,c,n:(a?1:0)+(b?1:0)+(c?1:0)}}
+function starHtml(R,first){
+  const md=R.n>=3?['g','Medaglia d\'oro']:R.n===2?['s','Medaglia d\'argento']:R.n===1?['b','Medaglia di bronzo']:['n','Nessuna medaglia'];
+  const rows=[[R.a,'Pip e Dodo sono salvi','Libera Pip e Dodo dalla cella'],[R.b,'Sei casse d\'argento prese','Casse d\'argento: '+K.silver+' su 6'],[R.c,'Mai inseguiti prima della campana',K.alarm?'Ti hanno inseguito prima della campana':'Prendi l\'argento senza farti inseguire']];
+  return '<div class="c4st"><i id="c4s0">★</i><i id="c4s1">★</i><i id="c4s2">★</i></div><div class="c4md '+md[0]+'">'+md[1]+'</div><ul class="c4ls">'+rows.map(r=>'<li class="'+(r[0]?'ok':'')+'">'+(r[0]?r[1]:r[2])+'</li>').join('')+'</ul>'+(first?'<div class="c4nw">🎩 Nuovo nel guardaroba: Cappello da comandante</div>':'')+(K.duelWon?'<div class="c4nw">⚔ Duello vinto col comandante'+(K.duelFirst?': nuova giubba nel guardaroba':'')+'</div>':'')}
+function starReveal(n){
+  for(let i=0;i<n;i++)setTimeout(()=>{const e=$('c4s'+i);if(e){e.classList.add('on');if(AU.ctx&&AU.on)tone(660+i*220,880+i*220,.16,'triangle',.12)}},500+i*430);
+  setTimeout(()=>sfx(n>=3?'quest':'ok'),500+n*430)}
 function leave(){
   if(K.over)return;
   try{if(K.silver>0)localStorage.setItem('sm_gal','1')}catch(e){}   // il bottino sbloccherà un cappello nel guardaroba
-  if(K.carry){K.over=true;
-    try{const c0=K.carry;localStorage.setItem('sm_c34r',JSON.stringify({silver:(c0.silver||0)+K.silver,pris:K.pris||c0.pris||0,hull:c0.hull,max:c0.max,kills:(c0.kills||0)+K.kos,t:c0.t}));localStorage.removeItem('sm_c34')}catch(e){}
-    toast('Tutti sulla passerella! Si torna sulla Sirena.',2500);sfx('quest');
-    setTimeout(()=>{try{__go('#w3')}catch(e){}location.reload()},1200);return}const full=K.cell&&K.silver>=1;
+  const R=starRes();let best=0;try{best=+(localStorage.getItem('sm_c4star')||0)||0}catch(e){}
+  const first=R.n>=3&&best<3;K.stars=R.n;
+  try{if(R.n>best)localStorage.setItem('sm_c4star',String(R.n))}catch(e){}   // tre stelle: cappello da comandante
   K.over=true;
+  if(K.carry){
+    try{const c0=K.carry;localStorage.setItem('sm_c34r',JSON.stringify({silver:(c0.silver||0)+K.silver,pris:K.pris||c0.pris||0,hull:c0.hull,max:c0.max,kills:(c0.kills||0)+K.kos,t:c0.t,stars:R.n}));localStorage.removeItem('sm_c34')}catch(e){}
+    const ttl=R.n>=3?'Assalto perfetto!':R.n===2?'Bel colpo!':R.n===1?'Tutti sulla passerella!':'Via, via, via!';
+    $('endCard').innerHTML='<div class="seas"><b>Nave spagnola</b><span>Assalto · risultato</span></div><h2>'+ttl+'</h2>'+starHtml(R,first)+'<div class="row"><button class="btn gold" id="eGo">Torna sulla Sirena</button></div>';
+    $('eGo').onclick=()=>{$('eGo').disabled=true;setTimeout(()=>{try{__go('#w3')}catch(e){}location.reload()},120)};
+    uShow('endcard',true);starReveal(R.n);return}
+  const full=K.cell&&K.silver>=1;
   const bad=!K.cell?'Pip e Dodo sono ancora prigionieri.':K.silver===0?'La stiva è rimasta piena d\'argento.':'';
   const title=K.cell&&K.silver>=6?'Colpo perfetto':K.cell&&K.silver>0?'Bottino e salvataggio':K.cell?'Solo salvataggio':K.silver>0?'Solo argento':'Niente da portare a casa';
-  $('endCard').innerHTML='<div class="seas"><b>Nave spagnola</b><span>Mappa interna · bozza giocabile</span></div><h2>'+title+'</h2><p>'+(bad||'Tutti sulla passerella: la Sirena può sciogliere le vele.')+'</p><div class="stats"><div><b>'+K.pris+'/2</b>prigionieri</div><div><b>'+K.silver+'/6</b>casse d\'argento</div><div><b>'+K.dob+'/9</b>dobloni d\'oro</div><div><b>'+K.kos+'</b>guardie a terra</div><div><b>'+(K.back||0)+'</b>colpi alle spalle</div><div><b>'+K.caught+'</b>volte catturato</div></div><div class="row"><button class="btn gold" id="eGo">Riprova</button><button class="btn" id="eBack">Torna a bordo</button></div>';
+  $('endCard').innerHTML='<div class="seas"><b>Nave spagnola</b><span>Mappa interna · bozza giocabile</span></div><h2>'+title+'</h2><p>'+(bad||'Tutti sulla passerella: la Sirena può sciogliere le vele.')+'</p>'+starHtml(R,first)+'<div class="stats"><div><b>'+K.pris+'/2</b>prigionieri</div><div><b>'+K.silver+'/6</b>casse d\'argento</div><div><b>'+K.dob+'/9</b>dobloni d\'oro</div><div><b>'+K.kos+'</b>guardie a terra</div><div><b>'+(K.back||0)+'</b>colpi alle spalle</div><div><b>'+K.caught+'</b>volte catturato</div></div><div class="row"><button class="btn gold" id="eGo">Riprova</button><button class="btn" id="eBack">Torna a bordo</button></div>';
   $('eGo').onclick=()=>{location.reload()};
   $('eBack').onclick=()=>{uShow('endcard',false);K.over=false;P.y+=26};
-  uShow('endcard',true);sfx('quest');
+  uShow('endcard',true);starReveal(R.n);
 }
 function setParry(v){
   if(!K)return;v=!!v&&!K.over&&!PAUSED;if(!!K.parry===v)return;K.parry=v;K.parT=0;
@@ -13682,7 +13796,7 @@ function hurtP(g){
   const dx=P.x-g.x,dy=P.y-g.y,d=Math.hypot(dx,dy)||1;moveEnt(P,dx/d*46,dy/d*46);
   K.fx.push({k:'flash',x:P.x,y:P.y-40,t:0,life:.3});
   if(!K.notes.hit){K.notes.hit=1;say('Biscotto','Ahi! Stendile col pugno (Attacca) o nasconditi dietro un angolo.')}
-  if(K.hp<=0){K.caught++;K.hp=K.maxhp;K.inv=2.5;P.x=cx(35);P.y=(OY+3.95)*T;K.tr=[{x:P.x,y:P.y}];for(const g2 of K.gd){g2.st='patrol';g2.alert=0;g2.x=cx(g2.wp[0][0]);g2.y=(OY+g2.wp[0][1]+.92)*T}toast('Catturato! Ti liberi e riparti dalla passerella.',4500)}
+  if(K.hp<=0){K.caught++;K.hp=K.maxhp;K.inv=2.5;P.x=cx(35);P.y=(OY+3.95)*T;K.tr=[{x:P.x,y:P.y}];for(const g2 of K.gd){if(g2.off)continue;g2.st='patrol';g2.alert=0;if(g2.cmd){g2.duel=0;g2.hp=g2.maxhp;g2.x=g2.hx;g2.y=g2.hy;continue}g2.x=cx(g2.wp[0][0]);g2.y=(OY+g2.wp[0][1]+.92)*T}toast('Catturato! Ti liberi e riparti dalla passerella.',4500)}
 }
 const AD=(a,b)=>{let d=a-b;while(d>Math.PI)d-=Math.PI*2;while(d<-Math.PI)d+=Math.PI*2;return d};
 function faceG(g,ang){g.face=ang;const c=Math.cos(ang);if(Math.abs(c)>.12)g.flip=c<0;g.dir=Math.sin(ang)<-.72?'b':'f'}
@@ -13700,12 +13814,60 @@ function goTo(g,tx,ty,sp,dt){
 /* un rumore attira le guardie vicine: vanno a vedere */
 function noiseAt(x,y,r,except){
   for(const g of K.gd){if(g===except||g.ko>0||g.st==='chase'||g.fight)continue;
-    if(Math.hypot(g.x-x,g.y-y)<r){g.st='suspect';g.sx=x;g.sy=y;g.sw=0;g.alert=0;g.mv=false}}}
+    if(g.cmd&&!g.duel)continue;
+    if(Math.hypot(g.x-x,g.y-y)<(g.off==='sleep'?r*.6:r)){
+      if(g.off){wakeOff(g,x,y);continue}
+      g.st='suspect';g.sx=x;g.sy=y;g.sw=0;g.alert=0;g.mv=false}}}
+/* guardie fuori servizio: dormono o giocano a carte, ma un rumore forte le sveglia */
+function wakeOff(g,x,y,quiet){
+  if(!g.off)return;const was=g.off;g.off=0;g.look=null;g.nz=0;
+  if(was==='sleep'){g.who='guardia';g.x=cx(g.front[0]);g.y=(OY+g.front[1]+.92)*T;g.flip=false;g.dir='f';g.face=Math.PI/2}
+  if(quiet){g.st='patrol';g.mv=false;return}   // già in piedi: il ponte è stato costruito dopo la campana
+  g.st='suspect';g.sx=x==null?g.x:x;g.sy=y==null?g.y:y;g.sw=0;g.alert=0;g.mv=false;g.react=.45;
+  if(g.dk===K.deck){K.fx.push({k:'star',x:g.x,y:g.y-64,t:0,life:.8});sfx('thud')}
+  if(!K.notes.wake&&g.dk===K.deck){K.notes.wake=1;say('Biscotto','Si è svegliato! Nasconditi, o colpiscilo prima che ti veda.',5400)}}
+function offStep(g,dt){
+  g.mv=false;
+  const dP=Math.hypot(P.x-g.x,P.y-g.y);
+  if(g.off==='sleep'){
+    // russano: si svegliano solo se ti fermi vicinissimo, o per un rumore forte
+    g.nz=Math.max(0,(g.nz||0)+(dP<76?dt:-dt*.6));
+    if(g.nz>2.2)wakeOff(g,P.x,P.y)}
+  else{
+    // assorti nel gioco: ti sentono solo se ti fermi dietro di loro, o se li guardi in faccia da vicino
+    g.nz=Math.max(0,(g.nz||0)+(dP<56?dt:-dt*.6));
+    const ang=Math.atan2(P.y-g.y,P.x-g.x),seen=dP<125&&Math.abs(AD(g.face,ang))<1&&los(g.x,g.y-6,P.x,P.y-6);
+    if(g.nz>1.1||seen)wakeOff(g,P.x,P.y)}}
+/* il comandante spagnolo: duello facoltativo (non chiama nessuno, nessun aiuto) */
+function cmdIdle(g,dt){
+  if(g.duel){
+    if(g.st==='patrol'){ // ha perso di vista lo sfidante: torna al suo posto
+      g.rtT=(g.rtT||0)+dt;
+      if(goTo(g,g.hx,g.hy,78,dt)||g.rtT>25){g.rtT=0;g.x=g.hx;g.y=g.hy;g.duel=0;g.hp=g.maxhp;g.face=-Math.PI/2;g.dir='b';g.flip=false}
+      return true}
+    return false}
+  if(g.st==='chase'){g.duel=1;g.alert=3.2;return false}   // provocato: il duello comincia
+  g.mv=false;g.hp=Math.min(g.maxhp,g.hp+dt*.4);g.face=-Math.PI/2;g.dir='b';return true}
+function startDuel(){
+  const c=K.gd.find(g=>g.cmd);if(!c||c.ko>0||c.duel)return;
+  c.duel=1;c.st='chase';c.react=.6;c.alert=3.2;c.ls=[P.x,P.y];faceG(c,Math.atan2(P.y-c.y,P.x-c.x));progress();sfx('thud');
+  say('Comandante','¡Alto! Un duello, ragazzo. Solo noi due: niente aiuti!',5200);
+  if(!K.notes.duel2){K.notes.duel2=1;say('Biscotto','Ha 6 cuori e picchia forte: para al momento giusto e colpisci quando abbassa la sciabola!',6400)}}
+function duelWon(c){
+  if(K.duelWon)return;K.duelWon=true;
+  let had=false;try{had=localStorage.getItem('sm_c4duel')==='1';localStorage.setItem('sm_c4duel','1')}catch(e){}
+  K.duelFirst=!had;K.hp=K.maxhp;
+  sfx('quest');K.fx.push({k:'star',x:c.x,y:c.y-84,t:0,life:1});
+  toast('Duello vinto! Il comandante si arrende.',4800);
+  say('Comandante','Basta, basta! Non ho mai visto una lama così svelta. La mia giubba è tua.',6200);
+  if(!K.notes.duelw){K.notes.duelw=1;say('Biscotto',K.duelFirst?'Hai vinto la giubba del comandante: la trovi nel guardaroba!':'Il comandante è a terra: bel duello!',5600)}}
 function stepGuard(g,dt){
   g.hitCd=Math.max(0,g.hitCd-dt);g.pfT=(g.pfT||0)-dt;
   g.flash=Math.max(0,g.flash-dt);g.swing=Math.max(0,g.swing-dt);
   if(g.face==null)g.face=g.flip?Math.PI:0;
   if(g.ko>0){g.ko-=dt;g.mv=false;return}
+  if(g.off){offStep(g,dt);return}
+  if(g.cmd&&cmdIdle(g,dt))return;
   const d=Math.hypot(P.x-g.x,P.y-g.y);
   /* vista: cono davanti (circa 120°) oppure molto vicino */
   const ang=Math.atan2(P.y-g.y,P.x-g.x),al=K.alarm?1:0,cone=d<(88+al*22)||Math.abs(AD(g.face,ang))<(1.05+al*.25);
@@ -13726,20 +13888,23 @@ function stepGuard(g,dt){
     if(g.st!=='chase'){
       g.st='chase';g.react=.42;g.mv=false;faceG(g,ang);
       if(!K.notes.sight){K.notes.sight=1;say('Biscotto','Guardia! Ti ha visto!',3600)}
-      noiseAt(P.x,P.y,420,g);sfx('thud')}
+      if(!g.cmd)noiseAt(P.x,P.y,420,g);sfx('thud')}
     g.alert=3.2;g.ls=[P.x,P.y]}
   else if(g.st==='chase'){g.alert-=dt;if(g.alert<=0){g.st='search';g.sx=g.ls?g.ls[0]:g.x;g.sy=g.ls?g.ls[1]:g.y;g.sw=0}}
   if(g.react>0){g.react-=dt;g.mv=false;if(g.st==='chase')faceG(g,ang);return}
   if(g.st==='chase'){
-    const sp=112+al*10,n=d<70&&vis?[P.x,P.y]:nextStep(g);
+    const sp=(g.cmd?122:112)+al*10,n=d<70&&vis?[P.x,P.y]:nextStep(g);
     if(n){const dx=n[0]-g.x,dy=n[1]-g.y,dd=Math.hypot(dx,dy)||1,m=Math.min(sp*dt,dd);g.mv=moveEnt(g,dx/dd*m,dy/dd*m);g.wk+=dt*sp*.06;faceG(g,Math.atan2(dy,dx))}else g.mv=false;
-    if(d<34&&g.hitCd<=0){g.hitCd=1.2;g.swing=.32;hurtP(g)}
+    if(d<34&&g.hitCd<=0){g.hitCd=g.cmd?.95:1.2;g.swing=.32;hurtP(g)}
     return}
   if(g.st==='search'||g.st==='suspect'){
     const arrived=goTo(g,g.sx,g.sy,(g.st==='search'?98:84)+al*20,dt);
+    if(!arrived){g.stk=(g.stk||0)+dt;   // fermo contro un ostacolo per più di 1,5 s: si guarda intorno lì
+      if(g.stk>1.5){g.stk=0;if(g.stp&&Math.hypot(g.x-g.stp[0],g.y-g.stp[1])<6){g.sx=g.x;g.sy=g.y}g.stp=[g.x,g.y]}}
+    else{g.stk=0;g.stp=null}
     if(arrived){g.sw+=dt;g.mv=false;
       const base=g.look==null?(g.look=g.face):g.look;faceG(g,base+Math.sin(g.sw*2.2)*1.25);
-      if(g.sw>(g.st==='search'?3.4:2.4)){g.st='patrol';g.look=null;g.wait=.3}}
+      if(g.sw>(g.dwell||(g.st==='search'?3.4:2.4))){g.st='patrol';g.look=null;g.wait=.3;g.dwell=0}}
     return}
   /* ronda */
   const w=g.wp[g.wi],gx=cx(w[0]),gy=(OY+w[1]+.92)*T;
@@ -13754,7 +13919,7 @@ function stepAllies(dt){
     if(f.hp<=0){f.mv=false;f.busy=true;f.downT+=dt;if(f.downT>70){f.hp=1;f.downT=0}continue}
     const dPl=Math.hypot(f.x-P.x,f.y-P.y),post=f.dk!==undefined;
     let best=null,bd=1e9;
-    for(const g of K.gd){if(g.ko>0)continue;const d=Math.hypot(g.x-f.x,g.y-f.y),dgp=Math.hypot(g.x-P.x,g.y-P.y);
+    for(const g of K.gd){if(g.ko>0||g.cmd||g.off)continue;const d=Math.hypot(g.x-f.x,g.y-f.y),dgp=Math.hypot(g.x-P.x,g.y-P.y);
       const hunting=g.st==='chase'||g.fight===f||g.react>0&&g.st!=='patrol';
       const near=post?(hunting&&d<80):(hunting&&dgp<115&&d<190);
       if(near&&d<bd){bd=d;best=g}}
@@ -13821,15 +13986,15 @@ function stepFollowers(dt){
   }}
 /* ingresso nelle stanze: indizi della ciurma */
 const ENTER_BY=[
-{cabin:()=>{say('Biscotto','Una cassapanca in fondo, a sinistra! Quella con la serratura lucida.')},
+{cabin:()=>{say('Biscotto',K.keyAt===0?KEYSP[0].enter:'La cabina del comandante: un letto, una scrivania... ma la chiave non è qui.')},
  corr:()=>{say('Nives','Corridoio dei cannoni: cammina lungo i muri, le guardie fanno la ronda.')},
- quarters:()=>{say('Tito','Gli alloggi degli ufficiali: russano come orsi. Piano!',4200)},
- galley:()=>{say('Tito','L\'armeria degli ufficiali! Quelle sciabole valgono più della tua: prendine una, Capitano.',5600)},
- hold:()=>{say('Biscotto','La sala delle carte: studiare la carta ti fa vedere dove fanno la ronda.',5600)},
+ quarters:()=>{if(K.keyAt===1&&!K.key1)say('Biscotto',KEYSP[1].enter,5200);else say('Tito','Gli alloggi degli ufficiali: russano come orsi. Piano!',4200)},
+ galley:()=>{say('Tito','L\'armeria degli ufficiali! Quelle sciabole valgono più della tua: prendine una, Capitano.',5600);if(K.keyAt===2&&!K.key1)say('Biscotto',KEYSP[2].enter,5200)},
+ hold:()=>{say('Biscotto','La sala delle carte: studiare la carta ti fa vedere dove fanno la ronda.',5600);say('Tito','Quello è il comandante spagnolo! Se vuoi sfidarlo a duello premi «Usa» vicino a lui: è facoltativo.',6600)},
  cell:()=>{say('Tito','La prua: guardie di vedetta! Occhi aperti.')}},
-{cabin:()=>{say('Tito','Il dormitorio della ciurma: amache vuote, c\'è sempre qualcuno di turno.')},
+{cabin:()=>{say('Tito','Il dormitorio della ciurma: due guardie dormono. Piano, o colpiscile nel sonno!',5400)},
  corr:()=>{say('Nives','Ponte dei cannoni di mezzo. Attenti alle ronde.')},
- quarters:()=>{say('Tito','La mensa. Briciole e coltelli.')},
+ quarters:()=>{say('Tito',K.rumTaken?'La mensa. Briciole e coltelli.':'La mensa. Briciole, coltelli... e una bottiglia di rum sul tavolo: può servire!',5000);say('Nives','Due guardie giocano a carte: sono distratte, ma se ti fermi dietro di loro ti sentono.',5800)},
  galley:()=>{say('Biscotto','Odore di stufato... e il barile col tappo rosso dev\'essere qui! Una pentola è ancora calda.')},
  hold:()=>{say('Nives','La dispensa: sacchi e barili. Qui non c\'è argento, ma forse qualcosa di prezioso sì.')},
  cell:()=>{say('Tito','Eccoli! Dietro le sbarre!')}},
@@ -13858,7 +14023,8 @@ function step(dt){
     if(K.fieldT<=0&&(K.needField||K.gd.some(g=>g.st==='chase'))){bfsField();K.fieldT=.3;K.needField=false}
     K.fieldT-=dt;
     for(const g of K.gd)stepGuard(g,dt);
-    stepAllies(dt);stepFollowers(dt);stepDuels(dt);sepAll(dt);
+    if(!K.alarm&&!K.chasedPre&&K.gd.some(g=>g.ko<=0&&g.st==='chase'&&!g.cmd))K.chasedPre=true;
+    stepAllies(dt);stepFollowers(dt);stepDuels(dt);sepAll(dt);stepRats(dt);
   }
   for(const q of K.fx)q.t+=dt;K.fx=K.fx.filter(q=>q.t<q.life);
   // dobloni nascosti: si raccolgono passandoci sopra
@@ -13875,17 +14041,21 @@ function step(dt){
   const r=roomAt(Math.floor(P.x/T)-OX,Math.floor(P.y/T)-OY);
   const rk=K.deck+':'+r;if(r&&!K.rooms[rk]){K.rooms[rk]=1;if(K.t>2&&ENTER_BY[K.deck][r])ENTER_BY[K.deck][r]()}
   // oggetti
-  const o=nearObj();K.near=o;const b=$('c4use');b.disabled=!o;b.classList.toggle('lit',!!o);
+  const o=nearObj();K.near=o;const b=$('c4use'),lanc=!o&&!!K.rum;b.disabled=!o&&!K.rum;b.classList.toggle('lit',!!o||lanc);{const bl=lanc?'Lancia':'Usa';if(b.textContent!==bl)b.textContent=bl}
+  // vita a bordo: scricchiolii del legno, gocce nella stiva
+  K.creakT=(K.creakT==null?5+Math.random()*5:K.creakT)-dt;if(K.creakT<=0){K.creakT=8+Math.random()*9;creak()}
+  if(K.deck===2){K.dripT=(K.dripT==null?4+Math.random()*5:K.dripT)-dt;if(K.dripT<=0){K.dripT=6+Math.random()*8;sfx('drip')}}
   // dialoghi e suggerimenti
   sayNow();
-  if(K.t>1.2&&!K.notes.start){K.notes.start=1;say('Tito','Capitano, a bordo c\'è odore di candele e di guai.');say('Biscotto',K.carry&&K.cell?'Crack! L\'argento è nella stiva, giù in fondo. Il cuoco tiene la chiave in un barile col tappo rosso, sul ponte di mezzo.':'Crack! Prima la cella: i comandanti tengono le chiavi vicino al letto.',6600)}
+  if(K.t>1.2&&!K.notes.start){K.notes.start=1;say('Tito','Capitano, a bordo c\'è odore di candele e di guai.');say('Biscotto',K.carry&&K.cell?'Crack! L\'argento è nella stiva, giù in fondo. Il cuoco tiene la chiave in un barile col tappo rosso, sul ponte di mezzo.':'Crack! '+KEYSP[K.keyAt].start,6800)}
   if(!K.over&&K.t-K.lastProg>30&&K.t-(K.lastSay||0)>16&&K.say.length===0&&K.sayT<=0){const g=goal();say('Biscotto',g[2]+' ('+dirName(g[0]-P.x,g[1]-P.y)+')',6200);K.lastProg=K.t-12}
+  else if(!K.over&&K.t>9&&!K.notes.stars&&K.say.length===0&&K.sayT<=0){K.notes.stars=1;say('Biscotto','Tre stelle in palio: salva Pip e Dodo, prendi le sei casse e non farti inseguire prima della campana!',7000)}
   else if(!K.over&&K.t>20&&(K.parN-=dt)<=0){K.parN=rr(35,55);if(K.say.length===0&&K.sayT<=0)quip()}
   // HUD
   let h='';for(let i=0;i<K.maxhp;i++)h+=i<K.hp?'<span style="color:#ff5f6f">♥</span>':'<span style="color:#7a4c4c">♡</span>';
   $('c4hh').innerHTML='Scafo '.replace('Scafo','Vita')+h;$('c4key').textContent=(K.key1?'🗝 cella ':'')+(K.key2?'🗝 stiva':'')||'🗝 –';
   if(!K.key1&&!K.key2)$('c4key').textContent='🗝 nessuna';
-  $('c4sv').textContent=K.silver;$('c4db').textContent=K.dob;
+  $('c4sv').textContent=K.silver;$('c4db').textContent=K.dob;{const rm=$('c4rm');if(rm)rm.style.display=K.rum?'':'none'}
   const oj=$('c4obj'),tx=objText();if(tx!==K.lastObj){K.lastObj=tx;K.objT=7}K.objT=Math.max(0,(K.objT||0)-dt);oj.textContent=tx;oj.style.display=!K.over?'block':'none';
 }
 /* ---------------- disegno ---------------- */
@@ -13915,6 +14085,67 @@ function drawSilverChest(g,x,y,t,i,taken){
   /* serratura dorata */
   g.fillStyle='#f2c04a';g.fillRect(-5,-h+4,10,11);g.strokeStyle='#8a6a1a';g.lineWidth=1.4;g.strokeRect(-5,-h+4,10,11);g.fillStyle='#4a3208';g.fillRect(-1,-h+8,2,4);
   g.restore()}
+/* ---------------- vita a bordo: scricchiolii, ratti nella stiva, gabbiani agli oblò ---------------- */
+function creak(){
+  if(!(AU.ctx&&AU.on))return;
+  const f=70+Math.random()*50;
+  tone(f,f*.7,.5,'sawtooth',.03);tone(f*1.52,f*1.05,.34,'triangle',.016,.06);noiseBurst(.28,240,.018,.03)}
+const RATN=[0,2,5];
+function ratFree(x,y){const tx=Math.floor(x/T),ty=Math.floor(y/T);return inMap(tx,ty)&&walkT[tIdx(tx,ty)]&&!blockT[tIdx(tx,ty)]}
+function makeRats(n){
+  const out=[];let tries=0;
+  while(out.length<RATN[n]&&tries++<800){
+    const gx=1+((Math.random()*(SW-2))|0),gy=1+((Math.random()*(SH-2))|0);
+    if(!roomAt(gx,gy))continue;
+    const x=(OX+gx+.5)*T,y=(OY+gy+.5)*T;if(!ratFree(x,y)||Math.hypot(x-P.x,y-P.y)<260)continue;
+    out.push({x,y,tx:null,ty:null,wait:Math.random()*2,sp:80,fl:0,dir:Math.random()<.5?-1:1,mv:0,ph:Math.random()*6,sq:0})}
+  return out}
+function stepRats(dt){
+  if(!RATN[K.deck])return;
+  const D=DECKS[K.deck];if(!D.rats)D.rats=makeRats(K.deck);
+  for(const r of D.rats){
+    r.sq=Math.max(0,r.sq-dt);
+    const dP=Math.hypot(P.x-r.x,P.y-r.y);
+    if(dP<140&&r.fl<=0){r.fl=1.2;const a=Math.atan2(r.y-P.y,r.x-P.x)+(Math.random()-.5)*1.2;r.tx=r.x+Math.cos(a)*200;r.ty=r.y+Math.sin(a)*160;r.sp=230;r.wait=0;
+      if(r.sq<=0&&dP<120&&AU.ctx&&AU.on){r.sq=3;tone(2400,3200,.05,'square',.02);tone(3000,2200,.05,'square',.015,.06)}}
+    if(r.fl>0)r.fl-=dt;
+    if(r.wait>0){r.wait-=dt;r.mv=0;continue}
+    if(r.tx==null){const a=Math.random()*6.283,d=60+Math.random()*130;r.tx=r.x+Math.cos(a)*d;r.ty=r.y+Math.sin(a)*d*.7;r.sp=85+Math.random()*30}
+    const dx=r.tx-r.x,dy=r.ty-r.y,d=Math.hypot(dx,dy);
+    if(d<6){r.tx=null;r.wait=.5+Math.random()*3.5;r.mv=0;continue}
+    const m=Math.min(r.sp*dt,d),nx=r.x+dx/d*m,ny=r.y+dy/d*m;
+    if(ratFree(nx,ny)&&ratFree(nx+dx/d*8,ny+dy/d*8)){r.x=nx;r.y=ny;r.mv=1;if(Math.abs(dx)>2)r.dir=dx<0?-1:1}
+    else if(r.fl>0){   // in fuga ma contro un muro: prova un'altra direzione, non restare fermo davanti al giocatore
+      const a0=Math.atan2(r.y-P.y,r.x-P.x);r.mv=0;
+      for(let k=0;k<6;k++){const a=a0+(Math.random()-.5)*3.2;if(ratFree(r.x+Math.cos(a)*40,r.y+Math.sin(a)*40)&&ratFree(r.x+Math.cos(a)*14,r.y+Math.sin(a)*14)){r.tx=r.x+Math.cos(a)*200;r.ty=r.y+Math.sin(a)*160;break}}}
+    else{r.tx=null;r.wait=.15;r.mv=0}}}
+function drawRat(g,r,t){
+  g.save();g.translate(r.x,r.y);g.scale(r.dir,1);
+  g.fillStyle='rgba(10,8,20,.25)';g.beginPath();g.ellipse(0,1,8,2.6,0,0,7);g.fill();
+  const bob=r.mv?Math.sin(t*26+r.ph)*.7:0;
+  g.strokeStyle='#c9a0a0';g.lineWidth=1.3;g.lineCap='round';g.beginPath();g.moveTo(-6.5,-4+bob);g.quadraticCurveTo(-12,-1+Math.sin(t*9+r.ph)*2,-15,-3);g.stroke();
+  g.fillStyle='#7d6c5c';g.beginPath();g.ellipse(0,-4+bob,7,3.5,0,0,7);g.fill();
+  g.fillStyle='#8e7c6a';g.beginPath();g.ellipse(6.6,-4.4+bob,3.6,2.6,0,0,7);g.fill();
+  g.fillStyle='#d8a0a8';g.beginPath();g.arc(9.9,-4.2+bob,1,0,7);g.fill();
+  g.fillStyle='#c8aaa0';g.beginPath();g.arc(4.9,-6.9+bob,1.7,0,7);g.fill();
+  g.fillStyle='#14100c';g.beginPath();g.arc(7.4,-5+bob,.7,0,7);g.fill();
+  if(r.mv){g.strokeStyle='#5e4e40';g.lineWidth=1;const s=Math.sin(t*26+r.ph)*2;g.beginPath();g.moveTo(-3,-1.4);g.lineTo(-3+s,.6);g.moveTo(3,-1.4);g.lineTo(3-s,.6);g.stroke()}
+  g.restore()}
+function drawGulls(g,t){
+  if(K.deck>1)return;
+  const ps=PORTS_BY[K.deck]||[];
+  for(let i=0;i<ps.length;i++){const X=wx(0)+ps[i][0],Y=wy(0)+ps[i][1];
+    if(Math.abs(X-P.x)>720||Math.abs(Y-P.y)>420)continue;
+    const per=34+(i%5)*6,off=(i*9.7)%per,u=(t+off)%per,ev=Math.floor((t+off)/per);
+    if(u>2.4)continue;
+    const p=u/2.4;
+    g.save();g.beginPath();g.rect(X,Y,18,12);g.clip();
+    g.fillStyle='rgba(150,205,240,'+(.9*Math.sin(p*Math.PI))+')';g.fillRect(X,Y,18,12);
+    const gx=X-4+p*26,gy=Y+6+Math.sin(p*6)*1.5,fl=Math.sin(t*16);
+    g.strokeStyle='#fff';g.lineWidth=1.6;g.lineCap='round';g.beginPath();g.moveTo(gx-5,gy-2.5*fl-1);g.quadraticCurveTo(gx-2.5,gy-4*fl-2.5,gx,gy);g.quadraticCurveTo(gx+2.5,gy-4*fl-2.5,gx+5,gy-2.5*fl-1);g.stroke();
+    g.fillStyle='#fff';g.beginPath();g.ellipse(gx,gy+.5,1.6,1.1,0,0,7);g.fill();
+    g.restore();
+    if(ps[i].ev!==ev){ps[i].ev=ev;if(Math.hypot(X-P.x,Y-P.y)<360&&AU.ctx&&AU.on)sfx('gull')}}}
 function drawFloor(g,t){
   if(!SHIPC)bake();
   g.drawImage(SHIPC,wx(0),wy(0));
@@ -13926,6 +14157,8 @@ function drawFloor(g,t){
     g.fillStyle='#f2c04a';g.strokeStyle='#8a6a1a';g.lineWidth=2;g.beginPath();g.ellipse(X,Y,3+8*sp,9,0,0,7);g.fill();g.stroke();
     g.strokeStyle='#c8921a';g.lineWidth=1.4;g.beginPath();g.ellipse(X,Y,1.5+5*sp,5.6,0,0,7);g.stroke();
     const a=.5+.5*Math.sin(t*5+c.y);if(a>.75){g.fillStyle='rgba(255,255,255,'+(a-.5)+')';g.fillRect(X+6,Y-14,2,8);g.fillRect(X+3,Y-11,8,2)}}
+  if(K.deck>0){const D=DECKS[K.deck];if(D.rats)for(const r of D.rats)drawRat(g,r,t)}
+  drawGulls(g,t);
   // porte chiuse
   for(const d of DOORS){if(d.open)continue;
     for(const[x,y]of d.cells){const X=wx(x),Y=wy(y);
@@ -14022,6 +14255,16 @@ const ell=(g,x,y,rx,ry,f,s,lw)=>{g.beginPath();g.ellipse(x,y,rx,ry,0,0,7);if(f){
 const candle=(g,x,y)=>{g.fillStyle='#f4efe0';g.fillRect(x-2,y-8,4,8);g.fillStyle='#ffd23a';g.beginPath();g.ellipse(x,y-11,2.2,3.4,0,0,7);g.fill();const gr=g.createRadialGradient(x,y-10,1,x,y-10,16);gr.addColorStop(0,'rgba(255,220,120,.55)');gr.addColorStop(1,'rgba(255,220,120,0)');g.fillStyle=gr;g.fillRect(x-16,y-26,32,32)};
 const plate=(g,x,y)=>{ell(g,x,y,8,4,'#f4efe0','#6a5a3a',1);ell(g,x,y,4.5,2.2,'rgba(0,0,0,.12)')};
 const mug=(g,x,y)=>{g.fillStyle='#c8a050';g.fillRect(x-3,y-8,7,8);g.strokeStyle='#3a2410';g.lineWidth=1.2;g.strokeRect(x-3,y-8,7,8);g.beginPath();g.arc(x+5,y-4,2.6,-1.4,1.4);g.stroke();ell(g,x+.5,y-8,3.5,1.6,'#5a2a14')};
+PK.rum=(g,gw,gd)=>{
+  const x=gw/2,y=16;
+  ell(g,x,y+1,7,3,'rgba(0,0,0,.28)');
+  const q=g.createLinearGradient(x-6,0,x+6,0);q.addColorStop(0,'#1f5a38');q.addColorStop(.45,'#3f9a62');q.addColorStop(1,'#16402a');
+  g.fillStyle=q;rrect(g,x-6,y-15,12,16,4);g.fill();g.strokeStyle='#0c2a1a';g.lineWidth=1.2;g.stroke();
+  g.fillStyle=q;g.fillRect(x-2.4,y-26,4.8,12);g.strokeRect(x-2.4,y-26,4.8,12);
+  g.fillStyle='#c8a060';g.fillRect(x-2.8,y-29,5.6,4);g.strokeStyle='#5a3a14';g.lineWidth=1;g.strokeRect(x-2.8,y-29,5.6,4);
+  g.fillStyle='#f4e6c0';g.fillRect(x-5,y-11,10,7);g.strokeStyle='#7a5a2a';g.lineWidth=.8;g.strokeRect(x-5,y-11,10,7);
+  g.fillStyle='#b8402e';g.fillRect(x-3,y-9,6,1.6);g.fillRect(x-3,y-6.6,4,1.2);
+  g.fillStyle='rgba(255,255,255,.55)';g.fillRect(x-4,y-13,1.6,9)};
 PK.bed=(g,gw,gd)=>{
   g.fillStyle='#3a200c';g.fillRect(4,0,gw-8,gd-4);
   g.fillStyle='#5a3418';g.fillRect(4,0,gw-8,18);g.fillStyle='#8a5a2a';g.fillRect(4,0,gw-8,5);
@@ -14192,6 +14435,7 @@ function drawMast(g,e,t,x0,y0,gw,gd){
 function drawProp(g,e,t){
   const gw=e.gw*T,gd=e.gh*T,x0=wx(e.gx),y0=wy(e.gy),k=e.kind;
   if(k==='mast')return drawMast(g,e,t,x0,y0,gw,gd);
+  if(k==='rum'&&(K.rum||K.rumTaken))return;
   g.save();
   if(k==='crate'){g.fillStyle='rgba(10,8,20,.0)';drawSilverChest(g,x0+T/2,y0+T-4,t,e.gx+e.gy,!!K[e.obj]);g.restore();return}
   if(k!=='coil'&&k!=='bench'&&k!=='chair'){g.fillStyle='rgba(10,8,20,.26)';g.beginPath();g.ellipse(x0+gw/2,y0+gd-3,gw*.48,Math.max(5,gd*.15),0,0,7);g.fill()}
@@ -14201,7 +14445,8 @@ function drawProp(g,e,t){
   g.drawImage(spr(e),x0-8,y0-PAD);g.globalAlpha=1;
   /* effetti dinamici */
   const o=e.obj;
-  if(k==='chest'&&o==='k1'&&!K.key1){const a=.5+.5*Math.sin(t*5);g.fillStyle='rgba(255,246,200,'+a+')';g.beginPath();g.arc(x0+gw-10,y0+gd-34,3+a*2,0,7);g.fill()}
+  if(k==='chest'&&K.deck===0&&!K.key1&&K.keyAt!=null&&e.gx===KEYSP[K.keyAt].gx&&e.gy===KEYSP[K.keyAt].gy){const a=.5+.5*Math.sin(t*5);g.fillStyle='rgba(255,246,200,'+a+')';g.beginPath();g.arc(x0+gw-10,y0+gd-34,3+a*2,0,7);g.fill()}
+  if(k==='rum'){const a=.5+.5*Math.sin(t*5);g.fillStyle='rgba(255,246,200,'+a+')';g.beginPath();g.arc(x0+gw/2+10,y0-9,3+a*2,0,7);g.fill()}
   if(k==='chest'&&o==='med'&&!K.medUsed){const a=.5+.5*Math.sin(t*4);g.fillStyle='rgba(255,255,255,'+(.4+.5*a)+')';g.beginPath();g.arc(x0+gw-9,y0+gd-36,2.6+a*2,0,7);g.fill()}
   if(k==='barrel'&&e.red){if(!K.key2){g.fillStyle='#d8412f';g.beginPath();g.arc(x0+T/2+4,y0+T-8-31,3.5,0,7);g.fill();const a=.5+.5*Math.sin(t*5);g.fillStyle='rgba(255,246,200,'+a+')';g.beginPath();g.arc(x0+T/2+10,y0+T-8-38,3+a*2,0,7);g.fill()}else{g.fillStyle='#d8412f';g.beginPath();g.arc(x0+T/2+4,y0+T-8-31,3.5,0,7);g.fill()}}
   if(k==='stove'){const f=.5+.3*Math.sin(t*9);g.fillStyle='rgba(255,150,60,'+f+')';g.beginPath();g.moveTo(x0+18,y0+gd-8);g.quadraticCurveTo(x0+26,y0+gd-24-f*4,x0+34,y0+gd-8);g.fill();g.fillStyle='rgba(255,230,120,'+(f+.2)+')';g.beginPath();g.moveTo(x0+23,y0+gd-8);g.quadraticCurveTo(x0+26,y0+gd-18,x0+29,y0+gd-8);g.fill()}
@@ -14232,17 +14477,34 @@ function allyHpPips(g,e){
 function drawLying(g,e,t,label){
   g.save();g.translate(e.x,e.y);g.rotate(1.35);drawChar(g,0,0,charO(e,t,{moving:false,noShadow:1}));g.restore();
   g.fillStyle='#fff6dc';g.font='800 14px Nunito,Arial';g.textAlign='center';g.fillText(label,e.x+6,e.y-40+Math.sin(t*3)*3)}
+function drawSleeper(g,e,t){
+  const x0=wx(e.bunk[0]),y0=wy(e.bunk[1]);
+  g.save();g.translate(x0+2*T-18,y0+24);g.rotate(-1.38);
+  drawChar(g,0,0,charO(e,t,{moving:false,noShadow:1,dir:'f'}));
+  g.restore();
+  // coperta sulle gambe, la testa resta sul cuscino
+  g.fillStyle=e.bcol;g.fillRect(x0+38,y0+14,46,13);g.fillStyle='rgba(0,0,0,.2)';g.fillRect(x0+38,y0+22,46,5);g.fillStyle='rgba(255,255,255,.2)';g.fillRect(x0+38,y0+14,46,2);
+  g.fillStyle='#e0b04a';g.fillRect(x0+38,y0+14,3,13);
+  if(!(e.ko>0)){g.save();g.textAlign='center';g.lineWidth=3;g.strokeStyle='rgba(30,20,10,.75)';
+    for(let i=0;i<3;i++){const p=(t*.55+i*.33)%1;g.globalAlpha=Math.sin(p*Math.PI);g.font='800 '+(10+i*3)+'px Nunito,Arial';g.fillStyle='#fff6dc';g.strokeText('z',x0+20+i*8+p*6,y0-2-p*22-i*4);g.fillText('z',x0+20+i*8+p*6,y0-2-p*22-i*4)}g.restore()}
+}
+function drawCards(g,x,y,t,seed){
+  g.save();g.translate(x,y);
+  for(let i=0;i<3;i++){g.save();g.rotate((i-1)*.34+Math.sin(t*1.3+seed)*.05);g.fillStyle='#fffdf4';g.strokeStyle='#4a3a28';g.lineWidth=1;rrect(g,-4,-11,8,12,1.6);g.fill();g.stroke();g.fillStyle=i===1?'#c8302a':'#222';g.font='800 6px Arial';g.textAlign='center';g.fillText(i===1?'♥':'♠',0,-3);g.restore()}
+  g.restore()}
 function drawEnt(g,e,t){
   if(e.dk!==undefined&&e.dk!==K.deck)return;
   if(e.k==='prop')return drawProp(g,e,t);
   if(e.guard){
+    if(e.who==='guardiaz'){drawSleeper(g,e,t);return}
     const ko=e.ko>0;
-    if(ko){drawLying(g,e,t,'z z z');return}
+    if(ko){drawLying(g,e,t,e.cmd?'✦ ✦ ✦':'z z z');return}
     if(e.flash>0){g.save();g.globalAlpha=.55+.45*Math.sin(t*60)}
     const fa=e.face!=null?e.face:(e.flip?Math.PI:0),sb=e.swing>0?{a:sabSwing(fa,1-e.swing/.32),r:.95}:{a:sabIdle(e.flip),r:.3};
-    drawChar(g,e.x,e.y,charO(e,t,e.st==='chase'?{emote:'!',sab:sb}:{sab:sb}));
+    drawChar(g,e.x,e.y,charO(e,t,e.st==='chase'?{emote:'!',sab:sb}:(e.st==='suspect'||e.st==='search')?{emote:(e.dwell>0&&e.st==='suspect'?'🍺':'?'),sab:sb}:{sab:sb}));
     bladeAt(g,sb,24,null,e);
     if(e.flash>0)g.restore();
+    if(e.off==='cards')drawCards(g,e.x,e.y-70,t,e.ph);
     allyHpPips(g,e);return}
   if(e.duel){
     if(e.ko>0){drawLying(g,e,t,'z z z');return}
@@ -14272,11 +14534,12 @@ function drawTop(g,t){
    q.addColorStop(0,'rgba(8,5,16,0)');q.addColorStop(.25,'rgba(8,5,16,.14)');q.addColorStop(.5,'rgba(8,5,16,.36)');q.addColorStop(.78,'rgba(8,5,16,.58)');q.addColorStop(1,'rgba(8,5,16,.66)');
    g.fillStyle=q;g.fillRect(P.x-R-40,P.y-R-40,R*2+80,R*2+80)}
   // riflesso caldo delle lanterne (sopra al pavimento e ai personaggi, leggero)
-  for(const[lx,ly]of LAMPS){const X=cx(lx),Y=cy(ly),fl=1+.05*Math.sin(t*7+lx);
-    g.fillStyle='#2a1a0a';g.fillRect(X-2,Y-46,4,10);g.fillStyle='rgba(255,210,110,.95)';g.beginPath();g.ellipse(X,Y-30,6,8*fl,0,0,7);g.fill();g.fillStyle='rgba(255,255,230,.9)';g.beginPath();g.arc(X,Y-30,2.5,0,7);g.fill()}
+  for(const[lx,ly]of LAMPS){const X0=cx(lx),Y=cy(ly),fl=1+.05*Math.sin(t*7+lx),sw=Math.sin(t*1.25+lx*.9+ly*.5)*2.8,X=X0+sw;   // la nave dondola: le lanterne oscillano appena
+    g.fillStyle='#2a1a0a';g.fillRect(X0-2,Y-46,4,6);g.strokeStyle='#2a1a0a';g.lineWidth=1.6;g.beginPath();g.moveTo(X0,Y-41);g.lineTo(X,Y-35);g.stroke();
+    g.fillStyle='rgba(255,210,110,.95)';g.beginPath();g.ellipse(X,Y-30,6,8*fl,sw*.03,0,7);g.fill();g.fillStyle='rgba(255,255,230,.9)';g.beginPath();g.arc(X,Y-30,2.5,0,7);g.fill()}
   if(K.routesT>0){
     g.save();g.setLineDash([10,8]);g.lineWidth=3;g.lineCap='round';
-    for(const gd of K.gd){if(gd.ko>0)continue;
+    for(const gd of K.gd){if(gd.ko>0||gd.off||(gd.cmd&&!gd.duel))continue;
       g.strokeStyle='rgba(255,120,90,'+(.5+.25*Math.sin(t*5))+')';
       const pts=gd.wp.map(w=>[cx(w[0]),(OY+w[1]+.92)*T-22]);g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));if(pts.length>2)g.closePath();g.stroke();
       g.setLineDash([]);const f=gd.face==null?0:gd.face;g.fillStyle='rgba(255,70,50,.13)';g.beginPath();g.moveTo(gd.x,gd.y-22);g.arc(gd.x,gd.y-22,(K.alarm?340:290)*.8,f-(K.alarm?1.3:1.05),f+(K.alarm?1.3:1.05));g.closePath();g.fill();g.setLineDash([10,8])}
@@ -14286,7 +14549,10 @@ function drawTop(g,t){
     if(q.k==='slash'){g.save();g.translate(q.x,q.y-26);g.rotate(Math.atan2(q.dy,q.dx));g.strokeStyle='rgba(255,255,255,'+a+')';g.lineWidth=7*a+2;g.lineCap='round';g.beginPath();g.arc(0,0,48,-.9+q.t*3,.9+q.t*3);g.stroke();g.restore()}
     else if(q.k==='star'){g.fillStyle='rgba(255,230,120,'+a+')';g.font='800 20px Nunito,Arial';g.textAlign='center';g.fillText('✦',q.x+Math.sin(q.t*9)*8,q.y-q.t*14)}
     else if(q.k==='spark'){g.strokeStyle='rgba(255,240,170,'+a+')';g.lineWidth=2.4;g.lineCap='round';for(let i=0;i<6;i++){const an=i*1.05+q.t*3,r1=4+q.t*30,r2=r1+8;g.beginPath();g.moveTo(q.x+Math.cos(an)*r1,q.y+Math.sin(an)*r1);g.lineTo(q.x+Math.cos(an)*r2,q.y+Math.sin(an)*r2);g.stroke()}}
-    else if(q.k==='flash'){g.fillStyle='rgba(255,90,90,'+a*.7+')';g.beginPath();g.arc(q.x,q.y,26*(1+q.t*2),0,7);g.fill()}}
+    else if(q.k==='flash'){g.fillStyle='rgba(255,90,90,'+a*.7+')';g.beginPath();g.arc(q.x,q.y,26*(1+q.t*2),0,7);g.fill()}
+    else if(q.k==='bot'){const p=q.t/q.life,x=q.x0+(q.x1-q.x0)*p,y=q.y0+(q.y1-q.y0)*p-Math.sin(p*Math.PI)*54;g.save();g.translate(x,y);g.rotate(p*14);g.fillStyle='#2f8a52';g.strokeStyle='#0c2a1a';g.lineWidth=1.2;rrect(g,-4,-8,8,12,3);g.fill();g.stroke();g.fillRect(-1.6,-14,3.2,7);g.strokeRect(-1.6,-14,3.2,7);g.restore()}
+    else if(q.k==='glass'&&q.t>=0){const p=q.t/q.life;g.fillStyle='rgba(214,150,40,'+(.5*(1-p*.6))+')';g.beginPath();g.ellipse(q.x,q.y+6,16+p*12,6+p*4,0,0,7);g.fill();
+      for(let i=0;i<7;i++){const an=i*.9+.3,r=8+p*34*(.6+.1*(i%3));g.fillStyle='rgba(190,240,220,'+Math.max(0,1-p*1.2)+')';g.save();g.translate(q.x+Math.cos(an)*r,q.y-4+Math.sin(an)*r*.6-Math.sin(Math.min(1,p*2.4)*3.1)*14);g.rotate(an+p*6);g.fillRect(-2.5,-1,5,2);g.restore()}}}
   {const sb=K.sb;if(sb&&sb.out){bladeAt(g,sb,K.parry?(K.sword?34:28):(K.swingT>0?(K.sword?38:30):(K.sword?32:26)),K.sword?'#fff2c4':null,heroSpec());
    if(K.parry){ // arco di luce davanti al giocatore
      const f=Math.atan2(K.fdy,K.fdx),pu=.5+.5*Math.sin(t*14);g.save();g.lineCap='round';g.strokeStyle='rgba(170,215,255,'+(.35+.25*pu)+')';g.lineWidth=5;g.beginPath();g.arc(P.x,P.y-24,44,f-1.2,f+1.2);g.stroke();
@@ -14299,7 +14565,7 @@ function drawTop(g,t){
 function buildHud(){
   document.body.classList.add('w4');
   const d=document.createElement('div');d.id='c4';
-  d.innerHTML='<div id="c4top"><div class="pl" id="c4hh"></div><div class="pl" id="c4key"></div><div class="pl">🪙 <span id="c4sv">0</span></div><div class="pl">💰 <span id="c4db">0</span>/9</div></div><div id="c4alarm"></div><div class="pl" id="c4obj"></div><div id="c4say"></div><div id="c4fade" style="position:absolute;inset:0;background:#000;opacity:0;transition:opacity .22s;pointer-events:none"></div><button class="bt" id="c4use">Usa</button><button class="bt" id="c4par">Para</button><button class="bt" id="c4hit">Attacca</button>';
+  d.innerHTML='<div id="c4top"><div class="pl" id="c4hh"></div><div class="pl" id="c4key"></div><div class="pl">🪙 <span id="c4sv">0</span></div><div class="pl">💰 <span id="c4db">0</span>/9</div><div class="pl" id="c4rm" style="display:none">🍾 Rum</div></div><div id="c4alarm"></div><div class="pl" id="c4obj"></div><div id="c4say"></div><div id="c4fade" style="position:absolute;inset:0;background:#000;opacity:0;transition:opacity .22s;pointer-events:none"></div><button class="bt" id="c4use">Usa</button><button class="bt" id="c4par">Para</button><button class="bt" id="c4hit">Attacca</button>';
   $('hud').appendChild(d);
   const press=(el,fn)=>el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();auInit();fn()});
   press($('c4use'),useBtn);press($('c4hit'),attack);
@@ -14318,7 +14584,7 @@ function boot(){
   try{beginGame()}catch(e){console.error('beginGame',e)}
   S.flags.parrot=1;P.mode='walk';S.mode='walk';
   FOG.fill(1);FOGDIRTY=true;cam.uz=1;
-  K={hp:6,maxhp:6,key1:false,key2:false,cell:false,hold:false,silver:0,pris:0,kos:0,caught:0,t:0,inv:0,atk:0,over:false,notes:{},tr:[],fol:[],gd:[],objs:[],say:[],sayT:0,parN:20,lastProg:0,fx:[],fdx:1,fdy:0,field:null,fieldT:0,rooms:{},readDesk:false,dt:.016,lastSay:0,dob:0,sword:false,medUsed:false,stew:false,alarm:false,lureCd:0,routesT:0,mLv:0,mHold:0,back:0,readPlan:false};
+  K={hp:6,maxhp:6,key1:false,key2:false,cell:false,hold:false,silver:0,pris:0,kos:0,caught:0,t:0,inv:0,atk:0,over:false,notes:{},tr:[],fol:[],gd:[],objs:[],say:[],sayT:0,parN:20,lastProg:0,fx:[],fdx:1,fdy:0,field:null,fieldT:0,rooms:{},readDesk:false,dt:.016,lastSay:0,dob:0,sword:false,medUsed:false,stew:false,alarm:false,lureCd:0,routesT:0,mLv:0,mHold:0,back:0,readPlan:false,chasedPre:false,keyAt:(Math.random()*3)|0,rum:0,rumTaken:false};
   P.x=sp[0];P.y=sp[1];P.dir='f';cam.x=P.x;cam.y=P.y;K.tr=[{x:P.x,y:P.y}];
   let car=null;try{const q=localStorage.getItem('sm_c34');if(q)car=JSON.parse(q)}catch(e){}
   K.carry=car;
@@ -14335,7 +14601,7 @@ function playerSab(){
   else if(K.swingT>0)sb={a:sabSwing(f,1-K.swingT/.32),r:.95};
   else sb={a:sabIdle(P.flip),r:.3};
   K.sb=sb;return sb}
-window.Ch4={sab:playerSab,mtick:(t,b)=>assaultTick(t,b),auInit:()=>auInit(),setDeck,bfsFrom,GP_BY,cx,cy,OX,OY,T,DECKS,get MW(){return MW},get MH(){return MH},get P(){return P},get cam(){return cam},get AU(){return AU},mood:()=>musicMood(),tp(gx,gy){P.x=cx(gx);P.y=cy(gy);cam.x=P.x;cam.y=P.y;K.tr=[{x:P.x,y:P.y}]},use:useBtn,atk:attack,boot,step,drawFloor,drawTop,drawEnt,get K(){return K},dump(){return G.map(r=>r.join('')).join('\n')}};
+window.Ch4={OFF_BY,PORTS_BY,drawGulls,creak,triggerAlarm,wakeOff,startDuel,stepRats,noiseAt,KEYSP,throwRum,starRes,goal,objText,sab:playerSab,mtick:(t,b)=>assaultTick(t,b),auInit:()=>auInit(),setDeck,bfsFrom,GP_BY,cx,cy,OX,OY,T,DECKS,get MW(){return MW},get MH(){return MH},get P(){return P},get cam(){return cam},get AU(){return AU},mood:()=>musicMood(),tp(gx,gy){P.x=cx(gx);P.y=cy(gy);cam.x=P.x;cam.y=P.y;K.tr=[{x:P.x,y:P.y}]},use:useBtn,atk:attack,boot,step,drawFloor,drawTop,drawEnt,get K(){return K},dump(){return G.map(r=>r.join('')).join('\n')}};
 })();
 
 })();
