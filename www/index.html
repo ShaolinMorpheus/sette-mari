@@ -2319,7 +2319,8 @@ const FIX_4=Object.assign({},FIX_2,{spawn:[30,23],sign:[-60,-60],wreck:[-60,-60]
 const FIX_5=Object.assign({},FIX_3,{spawn:[248,60],sign:[-60,-60],raftLaunch:[248,60]});
 const FIX=WORLD===4?FIX_4:WORLD===3?(VOY?FIX_5:FIX_3):WORLD===2?FIX_2:FIX_1;
 const E=[],EID={};
-function ent(o){o.id=o.id||('e'+E.length);o.x=o.x||0;E.push(o);EID[o.id]=o;return o}
+let EDR=0;
+function ent(o){o.id=o.id||('e'+(E.length+EDR));o.x=o.x||0;E.push(o);EID[o.id]=o;return o}
 const tileOf=v=>Math.floor(v/TS);
 const isTrunk=e=>(e.type==='tree'||e.type==='pine'||e.type==='palm')&&e.fp&&e.fp[2]===1&&e.fp[3]===1;
 const isInset=e=>e.fp&&e.fp[2]===1&&e.fp[3]===1&&!isTrunk(e)&&e.type!=='reef'&&e.type!=='npc'&&e.type!=='thief'&&e.type!=='plot';
@@ -5669,6 +5670,8 @@ const CHANGELOG=[
     "Il grande viaggio: la nave fantasma ora ti insegue da lontano, senza sparare. Quando punti la prua verso di lei si dissolve fino a diventare attraversabile, poi sparisce e ricompare dietro di te. Ha uno scafo squarciato, l'albero spezzato e alghe appese.",
     "Il grande viaggio: percorsi nuovi, più vari e senza ripassare negli stessi punti. Nel mare delle Tempeste una rotta a curve larghe con i gorghi ai lati; nel mare di Nebbia le nove boe di Giacomo disegnano una serpentina con un passaggio stretto tra due isolotti.",
     "Zattera: non si può più costruire subito. Prima servono falò, capanna, banco da lavoro e torcia, e bisogna aver portato avanti le missioni dell\'isola (fino al Pino Alto). I link di prova (Capitolo 3, galeone, Il grande viaggio) non sono più nel menu iniziale: si trovano in Diario → Novità, con la password.",
+    "Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
+    "Il grande viaggio: Biscotto commenta con battute la nave fantasma.",
     "Armadio della capanna: ora si apre una scheda per scegliere il tuo cappello, il tuo abito e il cappellino del pappagallo.",
     "Torcia: dopo averla costruita il pulsante resta sempre visibile e lampeggia con una freccia finché non lo tocchi. Di giorno avvisa che non puoi accenderla; dal tramonto funziona.",
     "Conferme e schede: «Costruisci», «Conferma» e gli altri pulsanti principali stanno a destra, «Annulla» e «Chiudi» a sinistra.",
@@ -8458,7 +8461,7 @@ function journalBody(){
     return h}
   if(jTab==='r')return Extra.collectionHtml();
   if(!newsOK)return'<div class="news"><h4>Area riservata</h4><p style="font-weight:700;font-size:13.5px">Solo l\'admin può accedere.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn" id="nwGo">Entra</button></div><p id="nwErr" style="color:#b3261e;font-weight:800;font-size:13px;min-height:18px;margin:6px 0 0"></p></div>';
-  return'<div class="news"><div class="row" style="margin:4px 0 10px"><button class="btn" id="nwC3">Prova: Capitolo 3 (battaglia)</button><button class="btn" id="nwC4">Prova: assalto al galeone</button><button class="btn" id="nwC5">Prova: Il grande viaggio</button><button class="btn" id="nwVer">'+verLbl()+'</button></div>'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
+  return'<div class="news"><div class="row" style="margin:4px 0 10px"><button class="btn" id="nwEd">Editor mappa</button><button class="btn" id="nwC3">Prova: Capitolo 3 (battaglia)</button><button class="btn" id="nwC4">Prova: assalto al galeone</button><button class="btn" id="nwC5">Prova: Il grande viaggio</button><button class="btn" id="nwVer">'+verLbl()+'</button></div>'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
 }
 let newsOK=false;
 const pwHash=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return h};
@@ -8469,6 +8472,7 @@ function journalDraw(){
   {const nv=c.querySelector('#nwVer');if(nv)nv.onclick=verSwitch}
   const nc=c.querySelector('#nwC4');if(nc)nc.onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go('#w4');location.reload()};
   {const b3=c.querySelector('#nwC3');if(b3)b3.onclick=()=>{__go('#w3');location.reload()};const b5=c.querySelector('#nwC5');if(b5)b5.onclick=()=>{__go('#w5');location.reload()}}
+  {const be=c.querySelector('#nwEd');if(be)be.onclick=()=>{uShow('journal',false);setTimeout(edStart,150)}}
   const go=c.querySelector('#nwGo');
   if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
   c.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{jTab=b.dataset.t;sfx('tap');journalDraw()});
@@ -9075,6 +9079,7 @@ function step(dt){
   updateEnts(dt);updateFx(dt);updateParrot(dt,RT);updateAmb(dt);
 }
 function camFollow(dt){
+  if(ED.on)return;
   if(window.__camSnap>0){window.__camSnap-=dt;cam.x=P.x;cam.y=P.y-18;camLead[0]=camLead[1]=0;dlgOff=0;camClamp();return}
   const z=camZoom();
   dlgOff+=((dl.open?VH*.2/z:0)-dlgOff)*(1-Math.exp(-dt*6));
@@ -9088,6 +9093,169 @@ let errN=0;
 function frameErr(err){   // un errore in un singolo passo non deve congelare tutto il gioco
   errN++;if(errN<=3){try{console.error(err);UI.toast('Piccolo errore: '+String(err&&err.message||err).slice(0,60))}catch(_){}}
 }
+/* ===== EDITOR MAPPA (solo admin: Diario → Novità → «Editor mappa») ===== */
+const ED={on:false,sel:null,drag:null,pan:null,pt:new Map(),pinch0:0,ed:{mv:{},del:[],add:[],vv:{}},undo:[],grid:true,bound:false};
+const ED_BAKED=null;   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
+const EDKEY='sm_edits_w'+WORLD;
+const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{}});
+function edStore(){try{localStorage.setItem(EDKEY,JSON.stringify(ED.ed))}catch(e){}}
+const edOk=e=>!['reef','crab','mraft','thief','npc','cdeco'].includes(e.type)&&e.spr!=='hut'&&e.spr!=='cave'&&!/^(cav|cvr|h_)/.test(e.id||'')&&e.x>0&&e.y>0&&e.x<WW&&e.y<WH;
+const ED_NAMES={tree:'Albero',pine:'Pino',palm:'Palma',rock:'Roccia',bush:'Cespuglio',berry:'Cespuglio di bacche',rockpool:'Pozza di molluschi',debris:'Rottami',bottle:'Bottiglia',loot:'Cassa / oggetto',wparrot:'Pappagallo selvatico'};
+const ED_SPR={lamp:'Lanterna',barrel0:'Barile',barrel1:'Barile (2)',crate:'Cassa di legno',coil:'Corda arrotolata',sign:'Cartello',mesa:'Altopiano',wreck:'Relitto',oldcamp:'Campo abbandonato',lookout:'Pino Alto',pit:'Buca',rowboat:'Barca a remi'};
+const ED_PLOT={falo:'Falò',capanna:'Capanna',banco:'Banco da lavoro',zattera:'Zattera'};
+function edName(e){if(e.type==='plot')return ED_PLOT[e.pid]||'Costruzione';if(e.type==='deco')return ED_SPR[e.spr]||('Oggetto «'+e.spr+'»');return ED_NAMES[e.type]||e.type}
+const ED_DUP=e=>['tree','pine','palm','rock','bush','berry','rockpool','debris'].includes(e.type)||(e.type==='deco'&&['lamp','barrel0','barrel1','crate','coil'].includes(e.spr));
+const ED_PAL=[['Albero','tree'],['Pino','pine'],['Palma','palm'],['Cespuglio','bush'],['Cespuglio di bacche','berry'],['Roccia','rock'],['Pozza di molluschi','rockpool'],['Rottami','debris'],['Lanterna','deco','lamp'],['Barile','deco','barrel0'],['Barile (2)','deco','barrel1'],['Cassa di legno','deco','crate'],['Corda arrotolata','deco','coil']];
+const edTpl=(t,s)=>E.find(e=>e.type===t&&(s==null||e.spr===s)&&e.alive!==false&&e.id.indexOf('ed')!==0&&edOk(e))||E.find(e=>e.type===t&&(s==null||e.spr===s));
+function edRemove(e){if(e.xb){blockRect(e.fp[0]-1,e.fp[1],1,1,-1);blockRect(e.fp[0]+e.fp[2],e.fp[1],1,1,-1);e.xb=0}delBlock(e);const i=E.indexOf(e);if(i>=0){E.splice(i,1);EDR++}delete EID[e.id]}
+function edMove(e,x,y){
+  const dx=Math.round((x-e.x)/TS),dy=Math.round((y-e.y)/TS),was=e.blocked;
+  if(was){if(e.xb){blockRect(e.fp[0]-1,e.fp[1],1,1,-1);blockRect(e.fp[0]+e.fp[2],e.fp[1],1,1,-1);e.xb=0}delBlock(e)}
+  e.x=x;e.y=y;if(e.lk){e.lk.x=x;e.lk.y=y}if(e.tx!=null){e.tx+=dx;e.ty+=dy}if(e.fp){e.fp[0]+=dx;e.fp[1]+=dy}
+  if(was)reBlock(e);
+}
+function edMake(d){
+  if(EID[d.id])return null;
+  const tpl=edTpl(d.t,d.s);if(!tpl)return null;
+  const o={};for(const k in tpl){const v=tpl[k];if(v===null||(typeof v!=='object'&&typeof v!=='function'))o[k]=v}
+  if(tpl.lk)o.lk={x:tpl.lk.x,y:tpl.lk.y,k:tpl.lk.k};
+  o.id=d.id;o.blocked=false;o.parrotHost=false;o.keep=false;
+  if('alive' in o){o.alive=true;o.grow=1;o.fall=0}if('got' in o)o.got=false;if('ready' in o)o.ready=true;if('coco' in o){o.coco=true;o.cd=0}
+  if(d.v!=null&&'v' in o)o.v=d.v;if(d.f!=null&&'flip' in o)o.flip=!!d.f;
+  const dx=Math.round((d.x-tpl.x)/TS),dy=Math.round((d.y-tpl.y)/TS);
+  o.x=d.x;o.y=d.y;if(tpl.tx!=null){o.tx=tpl.tx+dx;o.ty=tpl.ty+dy}
+  const e=ent(o);if(e.lk){e.lk.x=d.x;e.lk.y=d.y}
+  if(tpl.fp){addBlock(e,tpl.fp[0]+dx,tpl.fp[1]+dy,tpl.fp[2],tpl.fp[3])}
+  return e;
+}
+function edApply(o){
+  if(!o)return;o=edNorm(o);
+  for(const id of o.del){const e=EID[id];if(e)edRemove(e)}
+  for(const d of o.add)edMake(d);
+  for(const id in o.mv){const e=EID[id];if(e&&edOk(e))edMove(e,o.mv[id][0],o.mv[id][1])}
+  for(const id in o.vv){const e=EID[id];if(e&&'v' in e)e.v=o.vv[id]}
+}
+function edBoot(){
+  try{if(ED_BAKED&&ED_BAKED[WORLD])edApply(ED_BAKED[WORLD])}catch(e){console.warn('ED baked',e)}
+  try{const l=JSON.parse(localStorage.getItem(EDKEY)||'null');ED.ed=edNorm(l);edApply(ED.ed)}catch(e){console.warn('ED local',e)}
+}
+function edRec(e){
+  if(e.id.indexOf('ed')===0){const d=ED.ed.add.find(a=>a.id===e.id);if(d){d.x=Math.round(e.x);d.y=Math.round(e.y);d.v=e.v;d.f=e.flip?1:0}}
+  else ED.ed.mv[e.id]=[Math.round(e.x),Math.round(e.y)];
+  edStore();
+}
+function edMaxV(e){return e.type==='tree'?SP.tree.length:e.type==='pine'?SP.pine.length:e.type==='palm'?SP.palm.length:e.type==='bush'?SP.bush.length:e.type==='berry'?(SP.berry||[]).length:e.type==='rock'?(SP.boulder||[]).length:0}
+function edHit(wx,wy){
+  let best=null,bs=1e9;
+  for(const e of E){
+    if(!edOk(e))continue;
+    let sc=1e9;
+    if(e.type==='plot'&&e.fp){const x0=e.fp[0]*TS,y0=e.fp[1]*TS,x1=x0+e.fp[2]*TS,y1=y0+e.fp[3]*TS;if(wx>=x0-8&&wx<=x1+8&&wy>=y0-40&&wy<=y1+8)sc=Math.hypot(wx-(x0+x1)/2,wy-(y0+y1)/2)*.6}
+    else{const dx=Math.abs(wx-e.x);if(dx<34&&wy>e.y-84&&wy<e.y+16)sc=Math.hypot(dx,wy-(e.y-26))}
+    if(e===ED.sel)sc-=14;
+    if(sc<bs){bs=sc;best=e}
+  }
+  return bs<1e8?best:null;
+}
+const edW=(sx,sy)=>{const z=camZoom();return[cam.x+(sx-VW/2)/z,cam.y+(sy-VH/2)/z]};
+function edLabel(){const el=document.getElementById('edSel');if(!el)return;const e=ED.sel;
+  el.innerHTML=e?'<b>'+edName(e)+'</b><small>'+Math.floor(e.x/TS)+','+Math.floor(e.y/TS)+'</small>'
+    +'<button class="btn" id="edDel">Elimina</button>'+(ED_DUP(e)?'<button class="btn" id="edDup">Duplica</button>':'')+(edMaxV(e)>1?'<button class="btn" id="edVar">Aspetto</button>':'')+'<button class="btn" id="edAdd">+ Aggiungi</button>'
+    :'<span>Tocca un oggetto per selezionarlo.</span><button class="btn" id="edAdd">+ Aggiungi</button>';
+  const q=id=>el.querySelector('#'+id);
+  if(q('edDel'))q('edDel').onclick=()=>{const e=ED.sel;if(!e)return;const rec=e;ED.sel=null;
+    const isNew=e.id.indexOf('ed')===0,addD=isNew?ED.ed.add.find(a=>a.id===e.id):null;
+    edRemove(e);if(isNew){ED.ed.add=ED.ed.add.filter(a=>a.id!==e.id)}else{ED.ed.del.push(e.id);delete ED.ed.mv[e.id]}edStore();
+    ED.undo.push(()=>{E.push(rec);EDR--;EID[rec.id]=rec;if(rec.fp)reBlock(rec);if(isNew){if(addD)ED.ed.add.push(addD)}else ED.ed.del=ED.ed.del.filter(i=>i!==rec.id);edStore()});edLabel()};
+  if(q('edDup'))q('edDup').onclick=()=>{const e=ED.sel;if(!e)return;edNew({t:e.type,s:e.spr,v:e.v,f:e.flip?1:0,x:e.x+TS,y:e.y})};
+  if(q('edVar'))q('edVar').onclick=()=>{const e=ED.sel;if(!e)return;const o=e.v,n=(o+1)%edMaxV(e);e.v=n;if(e.id.indexOf('ed')===0)edRec(e);else{ED.ed.vv[e.id]=n;edStore()}ED.undo.push(()=>{e.v=o;if(e.id.indexOf('ed')===0)edRec(e);else{ED.ed.vv[e.id]=o;edStore()}})};
+  if(q('edAdd'))q('edAdd').onclick=edPalette;
+}
+function edNew(d){
+  let n=1;while(EID['ed'+n])n++;d.id='ed'+n;
+  const e=edMake(d);if(!e){UI.toast('In questa mappa manca un modello per questo oggetto.');return}
+  ED.ed.add.push(d);edStore();ED.sel=e;ED.undo.push(()=>{if(ED.sel===e)ED.sel=null;edRemove(e);ED.ed.add=ED.ed.add.filter(a=>a.id!==d.id);edStore();edLabel()});edLabel();
+}
+function edPalette(){
+  const items=ED_PAL.filter(p=>edTpl(p[1],p[2]));
+  sheetFor('<h2>Aggiungi oggetto</h2><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">'+items.map((p,i)=>'<button class="btn" data-i="'+i+'">'+p[0]+'</button>').join('')+'</div><div class="row"><button class="btn" id="shNo">Chiudi</button></div>',c=>{
+    c.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const p=items[+b.dataset.i],tpl=edTpl(p[1],p[2]);closeSheet();
+      const cx=Math.round(cam.x/TS)*TS+(tpl.x-(tpl.fp?tpl.fp[0]*TS:Math.floor(tpl.x/TS)*TS)),cy=Math.round(cam.y/TS)*TS+(tpl.y-(tpl.fp?tpl.fp[1]*TS:Math.floor(tpl.y/TS)*TS));
+      const d={t:p[1],s:p[2]||null,v:null,f:0,x:cx,y:cy};if(tpl.v!=null)d.v=(Math.random()*Math.max(1,edMaxV(tpl)))|0;edNew(d)})});
+}
+function edCode(){
+  const code=JSON.stringify({w:WORLD,mv:ED.ed.mv,del:ED.ed.del,add:ED.ed.add,vv:ED.ed.vv});
+  sheetFor('<h2>Codice della mappa</h2><p class="sm">Copia questo codice e mandalo a Claude: lo inserirà nel gioco per tutti.</p><textarea id="edTx" class="bkta" readonly>'+code.replace(/</g,'&lt;')+'</textarea><div class="row"><button class="btn" id="shNo">Chiudi</button><button class="btn gold" id="edCp">Copia</button></div><p class="sm" id="edSt"></p>',c=>{
+    c.querySelector('#edCp').onclick=async()=>{const tx=c.querySelector('#edTx'),st=c.querySelector('#edSt');try{await navigator.clipboard.writeText(tx.value);st.textContent='Codice copiato.'}catch(_){tx.focus();tx.select();try{document.execCommand('copy');st.textContent='Codice copiato.'}catch(__){st.textContent='Seleziona il testo e copialo a mano.'}}}});
+}
+function edUI(){
+  let bar=document.getElementById('edBar');if(bar)return;
+  const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #toasts,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
+  document.head.appendChild(st);
+  bar=document.createElement('div');bar.id='edBar';
+  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edRs">Azzera</button>';
+  document.body.appendChild(bar);
+  const sel=document.createElement('div');sel.id='edSel';document.body.appendChild(sel);
+  const $$=id=>bar.querySelector('#'+id);
+  $$('edX').onclick=edStop;
+  $$('edSv').onclick=()=>{edStore();UI.toast('Modifiche salvate su questo dispositivo.',2200)};
+  $$('edCd').onclick=edCode;
+  $$('edUn').onclick=()=>{const f=ED.undo.pop();if(f){f();edLabel()}};
+  $$('edZm').onclick=()=>{cam.uz=clamp(cam.uz/1.25,.35,2.2);camClamp()};
+  $$('edZp').onclick=()=>{cam.uz=clamp(cam.uz*1.25,.35,2.2);camClamp()};
+  $$('edGr').onclick=()=>{ED.grid=!ED.grid};
+  let rs=0;$$('edRs').onclick=()=>{if(!rs){rs=1;$$('edRs').textContent='Sicuro? Tocca ancora';setTimeout(()=>{rs=0;$$('edRs').textContent='Azzera'},3000);return}try{localStorage.removeItem(EDKEY)}catch(e){}location.reload()};
+}
+function edBind(){
+  if(ED.bound)return;ED.bound=true;
+  const dn=e=>{if(!ED.on)return;e.stopImmediatePropagation();e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}
+    const[sx,sy]=cvPt(e);ED.pt.set(e.pointerId,[sx,sy]);
+    if(ED.pt.size===2){const a=[...ED.pt.values()];ED.pinch0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);ED.drag=null;ED.pan=null;return}
+    const[wx,wy]=edW(sx,sy),h=edHit(wx,wy);
+    if(h){ED.sel=h;ED.drag={e:h,wx,wy,x0:h.x,y0:h.y,moved:false};edLabel()}
+    else{ED.pan={sx,sy,cx:cam.x,cy:cam.y,moved:false}}};
+  const mv=e=>{if(!ED.on)return;e.stopImmediatePropagation();e.preventDefault();
+    const[sx,sy]=cvPt(e);if(!ED.pt.has(e.pointerId))return;ED.pt.set(e.pointerId,[sx,sy]);
+    if(ED.pt.size===2){const a=[...ED.pt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ED.pinch0>10){cam.uz=clamp(cam.uz*d/ED.pinch0,.35,2.2);camClamp()}ED.pinch0=d;return}
+    if(ED.drag){const D=ED.drag,[wx,wy]=edW(sx,sy),e2=D.e;
+      let nx=D.x0+(wx-D.wx),ny=D.y0+(wy-D.wy);
+      if(e2.fp||e2.type==='plot'){nx=D.x0+Math.round((wx-D.wx)/TS)*TS;ny=D.y0+Math.round((wy-D.wy)/TS)*TS}else{nx=Math.round(nx/6)*6;ny=Math.round(ny/6)*6}
+      if(!D.moved&&(Math.abs(nx-D.x0)>1||Math.abs(ny-D.y0)>1)){D.moved=true;D.prev=[e2.x,e2.y]}
+      if(D.moved&&(nx!==e2.x||ny!==e2.y))edMove(e2,nx,ny)}
+    else if(ED.pan){const P0=ED.pan,z=camZoom();cam.x=P0.cx-(sx-P0.sx)/z;cam.y=P0.cy-(sy-P0.sy)/z;camClamp();if(Math.hypot(sx-P0.sx,sy-P0.sy)>6)P0.moved=true}};
+  const up=e=>{if(!ED.on)return;e.stopImmediatePropagation();ED.pt.delete(e.pointerId);
+    if(ED.drag){const D=ED.drag;if(D.moved){edRec(D.e);const px=D.prev,en=D.e;ED.undo.push(()=>{edMove(en,px[0],px[1]);edRec(en)})}ED.drag=null}
+    if(ED.pan){if(!ED.pan.moved){ED.sel=null;edLabel()}ED.pan=null}};
+  cv.addEventListener('pointerdown',dn,true);cv.addEventListener('pointermove',mv,true);cv.addEventListener('pointerup',up,true);cv.addEventListener('pointercancel',up,true);
+  cv.addEventListener('wheel',e=>{if(!ED.on)return;e.stopImmediatePropagation()},true);
+}
+function edStart(){
+  if(!S||!S.live)return;
+  edBind();edUI();ED.on=true;ED.sel=null;ED.undo=[];document.body.classList.add('edit');edLabel();
+  const b=document.getElementById('edBar'),s=document.getElementById('edSel');if(b)b.hidden=false;if(s)s.hidden=false;
+  UI.toast('Editor mappa: tocca e trascina gli oggetti.',3000);
+}
+function edStop(){
+  edStore();ED.on=false;ED.drag=ED.pan=null;ED.pt.clear();document.body.classList.remove('edit');
+  const b=document.getElementById('edBar'),s=document.getElementById('edSel');if(b)b.hidden=true;if(s)s.hidden=true;
+  camClamp();saveGame();
+}
+function edDraw(){
+  if(!ED.on||inCave()||inHut())return;
+  const g=ctx,z=camZoom();
+  g.setTransform(DPR*z,0,0,DPR*z,DPR*(VW/2-cam.x*z),DPR*(VH/2-cam.y*z));
+  const vx0=cam.x-VW/2/z,vy0=cam.y-VH/2/z,vx1=cam.x+VW/2/z,vy1=cam.y+VH/2/z;
+  if(ED.grid){g.strokeStyle='rgba(255,255,255,.14)';g.lineWidth=1/z;g.beginPath();for(let x=Math.floor(vx0/TS)*TS;x<vx1;x+=TS){g.moveTo(x,vy0);g.lineTo(x,vy1)}for(let y=Math.floor(vy0/TS)*TS;y<vy1;y+=TS){g.moveTo(vx0,y);g.lineTo(vx1,y)}g.stroke()}
+  for(const e of E){
+    if(!edOk(e)||e.x<vx0-80||e.x>vx1+80||e.y<vy0-40||e.y>vy1+120)continue;
+    if(e.fp&&e.blocked){g.strokeStyle='rgba(80,220,255,.6)';g.lineWidth=2/z;g.strokeRect(e.fp[0]*TS+1,e.fp[1]*TS+1,e.fp[2]*TS-2,e.fp[3]*TS-2)}
+    const sel=e===ED.sel;g.fillStyle=sel?'#ffd23a':'rgba(255,255,255,.8)';g.strokeStyle='rgba(20,12,4,.9)';g.lineWidth=1.5/z;g.beginPath();g.arc(e.x,e.y,(sel?7:3.5)/z,0,7);g.fill();g.stroke();
+  }
+  const s=ED.sel;if(s){const pl=.5+.5*Math.sin(RT*6);g.strokeStyle='rgba(255,214,58,'+(.6+.4*pl)+')';g.lineWidth=3/z;g.setLineDash([8/z,5/z]);
+    if(s.fp)g.strokeRect(s.fp[0]*TS-3,s.fp[1]*TS-3,s.fp[2]*TS+6,s.fp[3]*TS+6);else g.strokeRect(s.x-30,s.y-70,60,84);g.setLineDash([])}
+}
+window.__ED={start:edStart,stop:edStop,ED,scr:toScreen,E,EID,code:()=>JSON.stringify(ED.ed)};
+
 function frame(ts){
   requestAnimationFrame(frame);
   const t=ts/1000,dt=Math.min(.05,Math.max(0,t-lastTs));lastTs=t;RT=t;
@@ -9095,7 +9263,7 @@ function frame(ts){
   UI.tick(dt,t);
   if(S.live){
     try{auMusicTick();auAmbTick(dt)}catch(err){frameErr(err)}
-    if(!PAUSED&&!UI.sleeping){const n=Math.max(1,Math.round(TIMESCALE));for(let i=0;i<n;i++){try{step(dt)}catch(err){frameErr(err)}}}
+    if(!PAUSED&&!UI.sleeping&&!ED.on){const n=Math.max(1,Math.round(TIMESCALE));for(let i=0;i<n;i++){try{step(dt)}catch(err){frameErr(err)}}}
     try{camFollow(dt)}catch(err){frameErr(err)}
     if(frameN%4===0){UI.hud();UI.act()}
     if(!PAUSED&&!dl.open){
@@ -9110,7 +9278,7 @@ function frame(ts){
   }else{
     cam.x=((WORLD===2?40:34)+Math.sin(t*.06)*14)*TS;cam.y=((WORLD===2?30:32)+Math.cos(t*.045)*8)*TS;camClamp();
   }
-  render(t);
+  render(t);if(ED.on)edDraw();
   frameN++;
 }
 const TXTK='sette-mari-text',TXT_NAMES=['Normale','Grande','Molto grande'];
@@ -9192,7 +9360,7 @@ async function boot(){
   setP(.08,'Disegno il mare…');await nextTick();
   await bakeGround(p=>setP(.08+.84*p));
   setP(.95,'Popolo l\'isola…');await nextTick();
-  genWorld();pruneUnreachable();unhideLoot();
+  genWorld();pruneUnreachable();unhideLoot();edBoot();
   S=newState('','m');cam.uz=.9;
   resize();window.addEventListener('resize',resize);window.addEventListener('orientationchange',()=>setTimeout(resize,250));
   initInput();initStart();syncPause();
@@ -10681,20 +10849,22 @@ function spawnGhost(){
   const p=C.p;let x=p.x+1500,y=p.y-500;
   if(!clearAt(x,y,100)){const r=findSea(x,y);x=r[0];y=r[1]}
   const g=mkShip('fantasma',x,y,Math.PI,{hostile:true});C.ships.push(g);V.ghost=g;
+  if(!V.notes.ghostJ0){V.notes.ghostJ0=1;setTimeout(()=>{if(V&&!V.over&&!V.busy)say('Biscotto',"Cra! Capitano, dietro di noi c'è una barca con le alghe in testa. Forse è solo in ritardo col bucato.",6200)},9000)}
 }
+const GHOST_JOKES=['Cra! Una nave con le alghe addosso. Neanche io mi conciavo così dopo il bagno.','Cra! Se ci insegue per l\'argento, è arrivata tardi: anche i fantasmi pagano il pedaggio.','Cra! Capitano, non guardarla negli occhi. Ah no, non ne ha. Meglio.','Cra! Scommetto che è una ex nave da crociera. Ha ancora il buffet.','Cra! Io non ho paura. Sono solo molto, molto concentrato sulle mie piume.','Cra! Dì la verità: è la tua ex nave. Ritorna sempre quando meno te lo aspetti.','Cra! Un fantasma! Finalmente qualcuno con meno scafo di me.'];
 function voyGhostAI(s,dt,dp){
   const p=C.p;
   if(s.fade!=null){s.fade+=dt*.3;s.v*=.96;if(s.fade>=1){s.dead=true;s.sinking=false}return}
   if(V.busy)return;
   if(s.gh==null)s.gh=1;
   // sparita: dopo qualche secondo ricompare lontano, dietro la scia
-  if(s.gone>0){s.gone-=dt;s.gh=0;if(s.gone<=0){const Lg=LEGS[V.leg],ag=Lg?Math.atan2(Lg.y*T-p.y,Lg.x*T-p.x):Math.PI;let x=p.x-Math.cos(ag)*rr(850,1100)+rr(-200,200),y=p.y-Math.sin(ag)*rr(850,1100)+rr(-200,200);if(!clearAt(x,y,100)){const r=findSea(x,y);x=r[0];y=r[1]}s.x=x;s.y=y;s.hd=Math.atan2(p.y-y,p.x-x);s.v=0}return}
+  if(s.gone>0){s.gone-=dt;s.gh=0;if(s.gone<=0){const Lg=LEGS[V.leg],ag=Lg?Math.atan2(Lg.y*T-p.y,Lg.x*T-p.x):Math.PI;let x=p.x-Math.cos(ag)*rr(850,1100)+rr(-200,200),y=p.y-Math.sin(ag)*rr(850,1100)+rr(-200,200);if(!clearAt(x,y,100)){const r=findSea(x,y);x=r[0];y=r[1]}s.x=x;s.y=y;s.hd=Math.atan2(p.y-y,p.x-x);s.v=0;const n=V.notes.gj=(V.notes.gj||0)+1;if(n%2===1)setTimeout(()=>{if(V&&!V.over&&!V.busy)say('Biscotto',GHOST_JOKES[((n-1)/2)%GHOST_JOKES.length|0],5400)},2500)}return}
   // se la prua del giocatore punta verso di lei, la nave si dissolve: poi la si attraversa e sparisce
   const look=Math.abs(angD(p.hd,Math.atan2(s.y-p.y,s.x-p.x))),seen=look<.9&&dp<1150;
   if(seen){
     s.gh-=dt*(dp<260?.9:.4);
-    if(!V.notes.ghostSee){V.notes.ghostSee=1;say('Pip','Capitano, guarda! Una nave... sta sparendo! Si vede attraverso!',5200)}
-    if(s.gh<=.05){s.gone=rr(6,9);s.gh=0;for(let i=0;i<8;i++)C.fx.push({k:'puff',x:s.x+rr(-50,50),y:s.y+rr(-30,30),r:rr(10,18),t:0,life:1.6,vx:rr(-14,14),vy:rr(-24,-6)});if(!V.notes.ghostGone){V.notes.ghostGone=1;say('Tito','Svanita nel nulla. Ma tornerà: ci segue da quando siamo entrati.',5600)}return}
+    if(!V.notes.ghostSee){V.notes.ghostSee=1;say('Pip','Capitano, guarda! Una nave... sta sparendo! Si vede attraverso!',5200);setTimeout(()=>say('Biscotto','Cra! Trasparente! Il sogno di ogni pappagallo a dieta.',4800),5600)}
+    if(s.gh<=.05){s.gone=rr(6,9);s.gh=0;for(let i=0;i<8;i++)C.fx.push({k:'puff',x:s.x+rr(-50,50),y:s.y+rr(-30,30),r:rr(10,18),t:0,life:1.6,vx:rr(-14,14),vy:rr(-24,-6)});if(!V.notes.ghostGone){V.notes.ghostGone=1;say('Tito','Svanita nel nulla. Ma tornerà: ci segue da quando siamo entrati.',5600);setTimeout(()=>say('Biscotto','Cra! Sparita! Maleducata: non ha nemmeno salutato.',4800),6200)}return}
   }else s.gh=Math.min(1,s.gh+dt*.22);
   // ci insegue: resta dietro, mai troppo vicina, mai troppo lontana
   const sp0=SPEC.fantasma,want=Math.atan2(p.y-s.y,p.x-s.x),D0=560;
