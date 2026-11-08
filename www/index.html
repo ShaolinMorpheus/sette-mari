@@ -5671,6 +5671,7 @@ const CHANGELOG=[
     "Il grande viaggio: percorsi nuovi, più vari e senza ripassare negli stessi punti. Nel mare delle Tempeste una rotta a curve larghe con i gorghi ai lati; nel mare di Nebbia le nove boe di Giacomo disegnano una serpentina con un passaggio stretto tra due isolotti.",
     "Zattera: non si può più costruire subito. Prima servono falò, capanna, banco da lavoro e torcia, e bisogna aver portato avanti le missioni dell\'isola (fino al Pino Alto). I link di prova (Capitolo 3, galeone, Il grande viaggio) non sono più nel menu iniziale: si trovano in Diario → Novità, con la password.",
     "Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
+    "Mappa dell'isola dei Relitti (seconda isola): oggetti e palme spostati o aggiunti con l'editor, come li hai disegnati tu.",
     "Il grande viaggio: Biscotto commenta con battute la nave fantasma.",
     "Armadio della capanna: ora si apre una scheda per scegliere il tuo cappello, il tuo abito e il cappellino del pappagallo.",
     "Torcia: dopo averla costruita il pulsante resta sempre visibile e lampeggia con una freccia finché non lo tocchi. Di giorno avvisa che non puoi accenderla; dal tramonto funziona.",
@@ -9095,7 +9096,7 @@ function frameErr(err){   // un errore in un singolo passo non deve congelare tu
 }
 /* ===== EDITOR MAPPA (solo admin: Diario → Novità → «Editor mappa») ===== */
 const ED={on:false,sel:null,drag:null,pan:null,pt:new Map(),pinch0:0,ed:{mv:{},del:[],add:[],vv:{}},undo:[],grid:true,bound:false};
-const ED_BAKED=null;   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
+const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
 const EDKEY='sm_edits_w'+WORLD;
 const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{}});
 function edStore(){try{localStorage.setItem(EDKEY,JSON.stringify(ED.ed))}catch(e){}}
