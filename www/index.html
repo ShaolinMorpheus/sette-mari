@@ -3218,6 +3218,7 @@ function entBox(e){
 }
 const treeLocked=e=>!!e.parrotHost&&!(EID.wparrot&&EID.wparrot.got);   // l'albero col pappagallo non si taglia
 function isInter(e){
+  if(e.type==='plot'&&e.pid==='zattera'&&e.st===0&&!raftReady())return false;
   switch(e.type){
     case'tree':case'pine':return e.alive&&e.grow>=1&&!e.fall&&!treeLocked(e);
     case'palm':return !!e.coco;case'rock':return e.alive;
@@ -4276,7 +4277,7 @@ function hutProp(g,k,t){
   }
   g.restore();
 }
-const HU_CANDLES=[[2,4],[6,4],[8,6],[5,7],[10,3],[17,3],[11,7],[16,7],[20,4],[26,4],[22,6],[24,7],[3,5],[12,2]];
+const HU_CANDLES=[[6,4],[11,7],[17,3],[16,7],[22,6],[26,4]];
 function hutCandle(g,x,y,t,k){
   g.save();g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.ellipse(x,y+4,8,3,0,0,7);g.fill();
   g.fillStyle='#8a6a2c';g.fillRect(x-6,y+1,12,4);g.fillStyle='#c9a24a';g.fillRect(x-6,y+1,12,1.5);g.fillStyle='#6a4e1c';g.fillRect(x-1.5,y-9,3,10);
@@ -4309,7 +4310,7 @@ function renderHut(t){
   if(sun>.05){g.save();g.globalCompositeOperation='lighter';for(const gx of[4.5,22]){const wx=X(gx),wy=Y(0)+30,q=g.createLinearGradient(wx,wy,wx+60,wy+170);q.addColorStop(0,`rgba(255,240,190,${.28*sun})`);q.addColorStop(1,'rgba(255,240,190,0)');g.fillStyle=q;g.beginPath();g.moveTo(wx-24,wy);g.lineTo(wx+24,wy);g.lineTo(wx+110,wy+190);g.lineTo(wx+20,wy+190);g.closePath();g.fill()}g.restore()}
   const lights=[[X(14),Y(2.6),360,1,true,[255,170,90]],[X(4.5),Y(1.5),150,.7,true,[255,200,120]],[X(14),Y(4.2),200,.55,true,[255,210,140]],[X(15.2),Y(4.2),120,.4,true,[255,210,140]],[X(15),Y(2.2),100,.5,true,[255,200,120]],[P.x,P.y-28,56,.16,false,[255,230,190]]];
   const cdK=Math.min(1,dk*1.7),cds=HU_CANDLES.filter(c=>HUT.G[c[1]]&&HUT.G[c[1]][c[0]]===1);
-  if(cdK>.05)for(const c of cds)lights.push([X(c[0]+.5),Y(c[1]+.5)-16,205,.78*cdK,true,[255,186,96]]);
+  if(cdK>.05)for(const c of cds)lights.push([X(c[0]+.5),Y(c[1]+.5)-16,150,.55*cdK,true,[255,186,96]]);
   if(!LCV)LCV=document.createElement('canvas');
   if(LCV.width!==cv.width||LCV.height!==cv.height){LCV.width=cv.width;LCV.height=cv.height}
   const lg=LCV.getContext('2d'),M=g.getTransform();
@@ -4693,7 +4694,7 @@ function drawPlot(g,e,t){
   const id=e.pid,pl=PLOTS[id];
   if(e.st===0){
     const can=canBuild(id),near=hyp(P.x-cx,P.y-(y0+y1)/2)<TS*6;
-    if(id==='zattera'&&!reqOk(id)&&!near)return;
+    if(id==='zattera'&&!reqOk(id))return;
     g.save();g.fillStyle='rgba(255,240,170,.10)';g.fillRect(x0,y0,x1-x0,y1-y0);
     g.setLineDash([9,6]);g.lineDashOffset=-t*14;g.strokeStyle=can?'rgba(255,230,120,.95)':'rgba(255,255,255,.55)';g.lineWidth=2.6;g.strokeRect(x0+2,y0+2,x1-x0-4,y1-y0-4);g.setLineDash([]);
     for(const[px,py]of[[x0+4,y0+5],[x1-4,y0+5],[x0+4,y1-3],[x1-4,y1-3]]){g.fillStyle='#8a5e38';g.fillRect(px-2.5,py-13,5,14);g.fillStyle='#d9b27a';g.fillRect(px-2.5,py-13,5,3);g.strokeStyle='#2a160a';g.lineWidth=1;g.strokeRect(px-2.5,py-13,5,14)}
@@ -4733,7 +4734,7 @@ function drawPlayer(g,t,alpha){
   const a=P.act,low=a&&(a.kind==='gather'||a.kind==='forage'||a.kind==='pool'||a.kind==='drink'||a.kind==='open'||a.kind==='pick');
   g.save();
   if(low){const b=Math.sin(Math.min(1,a.t/.35)*1.57)*.9;g.translate(P.x,P.y);g.transform(1,0,(P.flip?-1:1)*.1*b,1-.1*b,0,0);g.translate(-P.x,-P.y)}
-  if(P.mode==='raft'){g.translate(0,-6+Math.sin(RT*1.6)*1.2)}
+  if(P.mode==='raft'){g.translate(Math.cos(P.hd)*54,Math.sin(P.hd)*54-6+Math.sin(RT*1.6)*1.2)}
   if(P.cl&&P.cl.dy)g.translate(0,P.cl.dy);
   drawChar(g,P.x,P.y,{k:hs,dir:P.cl&&P.cl.ph===2?'b':P.dir,side:P.side,flip:P.flip,walk:P.walk,sab:(WORLD===4&&window.Ch4)?Ch4.sab():null,moving:P.mode==='raft'?false:P.moving,tool:P.tool,swing:P.act&&P.tool?(P.swing%1):null,torchHand:!!(S&&S.up.torch&&S.torchOn),t,alpha,noShadow:P.mode==='raft'});
   g.restore();
@@ -5037,7 +5038,7 @@ function drawMini(){
   }
   const mxw=t=>cxm+(t/TS-pxt)*k,myw=t=>cym+(t/TS-pyt)*k;
   for(const e of E){
-    if(e.type==='plot'&&e.pid==='zattera'&&e.st<2&&!e.away&&FOG[tIdx(e.fp[0],e.fp[1])]){g.fillStyle='#ffd23a';g.fillRect(mxw((e.fp[0]+e.fp[2]/2)*TS)-2.5,myw((e.fp[1]+e.fp[3]/2)*TS)-2.5,5,5)}
+    if(e.type==='plot'&&e.pid==='zattera'&&e.st<2&&!e.away&&raftReady()&&FOG[tIdx(e.fp[0],e.fp[1])]){g.fillStyle='#ffd23a';g.fillRect(mxw((e.fp[0]+e.fp[2]/2)*TS)-2.5,myw((e.fp[1]+e.fp[3]/2)*TS)-2.5,5,5)}
     else if(e.type==='bottle'&&!e.got&&S.flags.sawBottle&&FOG[tIdx(e.tx,e.ty)]){g.fillStyle='#fff';g.fillRect(mxw(e.x)-1.5,myw(e.y)-1.5,3,3)}
     else if(e.type==='npc'&&WORLD===2){const m=Ch2.npcMark(e);if(m){let x=mxw(e.x),y=myw(e.y);const dd=hyp(x-cxm,y-cym),lim=R-9;if(dd>lim){x=cxm+(x-cxm)/dd*lim;y=cym+(y-cym)/dd*lim}
       g.fillStyle=m==='!'?'#ffd23a':'#fff';g.strokeStyle='#2a1a0e';g.lineWidth=1.6;g.beginPath();g.arc(x,y,6,0,7);g.fill();g.stroke();g.fillStyle='#2a1a0e';g.font='800 10px Nunito,Arial,sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(m,x,y+.5)}}
@@ -5664,6 +5665,9 @@ const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
     "Capanna: salendo la prima volta la telecamera non scivola più (il personaggio compare subito al suo posto). Di sera tutte e tre le stanze sono illuminate da candele accese.",
     "Dopo il galeone: con l'argento a bordo il mare è libero e hai un nuovo obiettivo, «Raggiungi il varco del grande viaggio». Lo segui con una freccia gialla accanto alla nave e un segnalino sulla minimappa; arrivato, si apre un messaggio e parte il Capitolo 4.",
+    "Zattera: la piazzola e il riquadro «Zattera» restano nascosti finché non si sblocca. In capanna ci sono meno candele (solo le essenziali, luce più morbida). Sulla zattera l'omino sta in punta, davanti.",
+    "Il grande viaggio: la nave fantasma ora ti insegue da lontano, senza sparare. Quando punti la prua verso di lei si dissolve fino a diventare attraversabile, poi sparisce e ricompare dietro di te. Ha uno scafo squarciato, l'albero spezzato e alghe appese.",
+    "Il grande viaggio: percorsi nuovi, più vari e senza ripassare negli stessi punti. Nel mare delle Tempeste una rotta a curve larghe con i gorghi ai lati; nel mare di Nebbia le nove boe di Giacomo disegnano una serpentina con un passaggio stretto tra due isolotti.",
     "Zattera: non si può più costruire subito. Prima servono falò, capanna, banco da lavoro e torcia, e bisogna aver portato avanti le missioni dell\'isola (fino al Pino Alto). I link di prova (Capitolo 3, galeone, Il grande viaggio) non sono più nel menu iniziale: si trovano in Diario → Novità, con la password.",
     "Armadio della capanna: ora si apre una scheda per scegliere il tuo cappello, il tuo abito e il cappellino del pappagallo.",
     "Torcia: dopo averla costruita il pulsante resta sempre visibile e lampeggia con una freccia finché non lo tocchi. Di giorno avvisa che non puoi accenderla; dal tramonto funziona.",
@@ -9334,7 +9338,7 @@ const SPEC={
   scorta:{L:92,W:28,hull:5,spd:135,name:'Scorta',hc:'#6a1a1a',dk:'#340a0a',trim:'#d6a46a',sail:['#f6ead0','#d0bc90'],emb:'#2a0a0a',masts:[.32,-.18],mh:138,cannons:4},
   galeone:{L:122,W:37,hull:8,spd:34,name:"Galeone d'argento",hc:'#4a3320',dk:'#241508',trim:'#f2c04a',sail:['#faf1d6','#d8c698'],emb:'#e0a820',masts:[.42,.02,-.34],mh:170,cannons:6},
   prigionieri:{L:112,W:34,hull:8,spd:70,name:'Nave dei prigionieri',hc:'#3a3a44',dk:'#16161c',trim:'#cfcfd8',sail:['#ffffff','#d0d4dc'],emb:'#888',masts:[.4,0,-.36],mh:160,cannons:2},
-  fantasma:{L:112,W:34,hull:6,spd:104,name:'Il Gabbiano',hc:'#52706c',dk:'#27403e',trim:'#a8e0d0',sail:['#d6efe8','#9cc4ba'],emb:'#9fe8d0',masts:[.4,0,-.34],mh:158,cannons:4}
+  fantasma:{L:112,W:34,hull:6,spd:104,name:'Il Gabbiano',hc:'#52706c',dk:'#27403e',trim:'#a8e0d0',sail:['#d6efe8','#9cc4ba'],emb:'#9fe8d0',masts:[.38,-.3],mh:132,cannons:0}
 };
 const SAILSPD=[0,62,118,170];
 let C=null,SPR={};
@@ -9765,9 +9769,27 @@ function board(){
 }
 
 /* ---------------- disegno nel mondo ---------------- */
+function ghostDeco(g,s,t,al){
+  const bob=Math.sin(t*1.5+s.seed)*1.6,W=SPEC.fantasma.W;
+  g.save();g.globalAlpha=Math.min(1,al*1.25);g.translate(s.x,s.y+8+bob);g.rotate(s.hd);
+  // squarcio nello scafo: tavole spezzate
+  g.fillStyle='rgba(6,20,24,.88)';g.beginPath();g.moveTo(-8,-W*.42);g.lineTo(2,-W*.1);g.lineTo(-4,W*.05);g.lineTo(10,W*.3);g.lineTo(26,W*.38);g.lineTo(22,W*.12);g.lineTo(30,-W*.12);g.lineTo(14,-W*.2);g.lineTo(18,-W*.44);g.closePath();g.fill();
+  g.strokeStyle='#8fa8a0';g.lineWidth=2.2;for(const[x1,y1,x2,y2]of[[-6,-W*.4,-14,-W*.55],[16,-W*.42,24,-W*.58],[24,W*.38,30,W*.56],[-2,W*.04,-12,W*.2]]){g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke()}
+  // moncone dell'albero maestro
+  g.fillStyle='#3a4a44';g.beginPath();g.moveTo(-5,-5);g.lineTo(-3,-24);g.lineTo(-1,-15);g.lineTo(2,-27);g.lineTo(5,-12);g.lineTo(6,-5);g.closePath();g.fill();
+  // alghe attaccate: lunghi fili che ondeggiano
+  g.lineCap='round';
+  for(let i=0;i<14;i++){const side=i%2?1:-1,x=-50+i*7.2,y0=side*W*(.46+.04*Math.sin(i*2.3)),L=10+7*((i*37)%5),sw=Math.sin(t*1.7+i*1.3)*4;
+    g.strokeStyle=i%3?'rgba(78,170,100,.95)':'rgba(46,130,84,.95)';g.lineWidth=2.6+((i*13)%3)*.7;
+    g.beginPath();g.moveTo(x,y0);g.quadraticCurveTo(x+sw,y0+side*L*.6,x+sw*1.6-3,y0+side*L);g.stroke();
+    g.fillStyle='rgba(140,214,120,.95)';g.beginPath();g.ellipse(x+sw*1.6-3,y0+side*L,3.2,2,0,0,7);g.fill()}
+  // alga sul ponte e conchiglie
+  g.fillStyle='rgba(70,150,88,.92)';for(const[x,y]of[[-22,2],[30,-4],[-40,-6],[44,6]]){g.beginPath();g.ellipse(x,y,7,4,.5,0,7);g.fill()}
+  g.restore();
+}
 function drawShip(g,e,t){
   const s=e.s;
-  if(s.type==='fantasma'){g.save();g.globalCompositeOperation='lighter';const gl=g.createRadialGradient(s.x,s.y,10,s.x,s.y,190);gl.addColorStop(0,'rgba(120,255,220,.20)');gl.addColorStop(1,'rgba(120,255,220,0)');g.fillStyle=gl;g.fillRect(s.x-190,s.y-190,380,380);g.restore();g.save();g.globalAlpha=Math.max(0,(.5+.14*Math.sin(t*2+s.seed))*(1-(s.fade||0)));drawShip0(g,e,t);g.restore();return}
+  if(s.type==='fantasma'){const ga=s.gh==null?1:s.gh;if(ga<=.01)return;g.save();g.globalCompositeOperation='lighter';const gl=g.createRadialGradient(s.x,s.y,10,s.x,s.y,190);gl.addColorStop(0,'rgba(120,255,220,'+(.20*ga)+')');gl.addColorStop(1,'rgba(120,255,220,0)');g.fillStyle=gl;g.fillRect(s.x-190,s.y-190,380,380);g.restore();const al=Math.max(0,(.74+.12*Math.sin(t*2+s.seed))*(1-(s.fade||0))*ga);g.save();g.globalAlpha=al;drawShip0(g,e,t);g.restore();ghostDeco(g,s,t,al);return}
   drawShip0(g,e,t)
 }
 function drawShip0(g,e,t){
@@ -10161,14 +10183,20 @@ const LEGS=[
  {z:1,x:206,y:42,t:'Attraversa i Sargassi: usa «Voga!» quando il vento cala'},
  {z:1,x:192,y:72,t:'Attraversa i Sargassi: usa «Voga!» quando il vento cala'},
  {z:1,x:174,y:50,gate:1,t:'Attraversa i Sargassi: usa «Voga!» quando il vento cala'},
- {z:2,x:162,y:26,t:'Attraversa la tempesta: schiva gorghi e lampi'},
- {z:2,x:150,y:80,t:'Attraversa la tempesta: schiva gorghi e lampi'},
- {z:2,x:139,y:28,t:'Attraversa la tempesta: schiva gorghi e lampi'},
- {z:2,x:129,y:62,gate:1,t:'Attraversa la tempesta: schiva gorghi e lampi'},
- {z:3,k:'buoy',x:121,y:62},{z:3,k:'buoy',x:114,y:38},{z:3,k:'buoy',x:108,y:66},{z:3,k:'buoy',x:102,y:40},
- {z:3,k:'buoy',x:97,y:70},{z:3,k:'buoy',x:92,y:46},{z:3,k:'buoy',x:88,y:68},{z:3,k:'buoy',x:84,y:54,gate:1},
- {z:4,x:76,y:26,t:'Naviga tra i relitti: la nave fantasma ti segue'},
- {z:4,x:69,y:84,t:'Naviga tra i relitti: la nave fantasma ti segue'},
+ {z:2,x:176,y:72,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:160,y:86,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:151,y:68,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:158,y:48,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:150,y:28,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:139,y:26,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:136,y:46,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:147,y:62,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:2,x:129,y:58,gate:1,t:'Attraversa la tempesta: schiva gorghi e lampi'},
+ {z:3,k:'buoy',x:121,y:52},{z:3,k:'buoy',x:116,y:42},{z:3,k:'buoy',x:114,y:24},{z:3,k:'buoy',x:102,y:20},
+ {z:3,k:'buoy',x:101,y:44},{z:3,k:'buoy',x:110,y:60},{z:3,k:'buoy',x:104,y:72},{z:3,k:'buoy',x:90,y:70},{z:3,k:'buoy',x:84,y:54,gate:1},
+ {z:4,x:80,y:34,t:'Naviga tra i relitti: la nave fantasma ti segue'},
+ {z:4,x:72,y:72,t:'Naviga tra i relitti: la nave fantasma ti segue'},
+ {z:4,x:76,y:52,t:'Naviga tra i relitti: la nave fantasma ti segue'},
  {z:4,k:'wreck',x:60,y:56,t:'Raggiungi il relitto del Gabbiano'},
  {z:4,x:49,y:78,gate:1,t:'Esci dal mare dei relitti, sempre a ovest'},
  {z:5,x:41,y:26,t:'Segui la stella bassa'},
@@ -10209,7 +10237,11 @@ function voyWorld(){
   const w=[];
   [[213,56,230,0],[201,50,210,1],[199,67,260,2],[190,58,215,0],[183,67,235,1],[178,52,195,2],[206,36,175,1],[188,77,210,0],[171,57,240,2],[196,44,155,1],[216,72,170,2],[181,40,170,0]]
     .forEach((a,i)=>w.push({x:a[0]*T,y:a[1]*T,r:a[2],v:a[3],ph:i*1.7}));
-  const vt=[[168,38],[157,52],[150,64],[141,58],[137,34],[155,30],[162,70],[145,42]].map((a,i)=>({x:a[0]*T,y:a[1]*T,ph:i*2.1}));
+  // gorghi: sparsi ai lati della rotta (mai sopra), con qualche passaggio stretto
+  const pl=[CPS[2]].concat(LEGS.filter(l=>l.z===2).map(l=>[l.x,l.y])),dseg=(px,py,a,b)=>{const dx=b[0]-a[0],dy=b[1]-a[1],L2=dx*dx+dy*dy,u=Math.max(0,Math.min(1,((px-a[0])*dx+(py-a[1])*dy)/L2));return Math.hypot(px-a[0]-u*dx,py-a[1]-u*dy)};
+  const dpl=(px,py)=>{let m=1e9;for(let i=0;i<pl.length-1;i++)m=Math.min(m,dseg(px,py,pl[i],pl[i+1]));return m};
+  const rv=mulberry(311),vt=[];
+  for(let k=0,tr=0;k<12&&tr<600;tr++){const x=130+rv()*48,y=18+rv()*76,d=dpl(x,y);if(d<6.6||d>11)continue;if(vt.some(o=>Math.hypot(o.x/T-x,o.y/T-y)<8))continue;vt.push({x:x*T,y:y*T,ph:k*2.1});k++}
   const bu=LEGS.filter(l=>l.k==='buoy').map(l=>({x:l.x*T,y:l.y*T}));
   // rottami sparsi nel mare dei relitti
   const rg=mulberry(77),deb=[];
@@ -10654,15 +10686,20 @@ function voyGhostAI(s,dt,dp){
   const p=C.p;
   if(s.fade!=null){s.fade+=dt*.3;s.v*=.96;if(s.fade>=1){s.dead=true;s.sinking=false}return}
   if(V.busy)return;
-  const sp0=SPEC.fantasma,want=Math.atan2(p.y-s.y,p.x-s.x);
-  if(!s.orb||(s.orbT-=dt)<=0){s.orb=Math.sign(angD(s.hd,want))||1;s.orbT=8}
-  const D0=430,k=dp>D0+150?.6:dp<D0-110?1.5:1,des=want+s.orb*(Math.PI/2)*k,d=angD(s.hd,des);
-  s.hd+=cl(d,-1,1)*1.15*dt;s.hd=avoid(s,s.hd);
-  moveShip(s,dt,sp0.spd*(dp>D0+150?1.15:.85));
-  for(const sd of[-1,1]){
-    const sa=s.hd+(sd>0?Math.PI/2:-Math.PI/2),toP=Math.atan2(p.y-s.y,p.x-s.x);
-    if(dp<640&&Math.abs(angD(sa,toP))<.75&&s.cd<=0&&(sd<0?s.cdL:s.cdR)<=0){fire(s,sd);s.cd=rr(3.2,4.8)}
-  }
+  if(s.gh==null)s.gh=1;
+  // sparita: dopo qualche secondo ricompare lontano, dietro la scia
+  if(s.gone>0){s.gone-=dt;s.gh=0;if(s.gone<=0){const Lg=LEGS[V.leg],ag=Lg?Math.atan2(Lg.y*T-p.y,Lg.x*T-p.x):Math.PI;let x=p.x-Math.cos(ag)*rr(850,1100)+rr(-200,200),y=p.y-Math.sin(ag)*rr(850,1100)+rr(-200,200);if(!clearAt(x,y,100)){const r=findSea(x,y);x=r[0];y=r[1]}s.x=x;s.y=y;s.hd=Math.atan2(p.y-y,p.x-x);s.v=0}return}
+  // se la prua del giocatore punta verso di lei, la nave si dissolve: poi la si attraversa e sparisce
+  const look=Math.abs(angD(p.hd,Math.atan2(s.y-p.y,s.x-p.x))),seen=look<.9&&dp<1150;
+  if(seen){
+    s.gh-=dt*(dp<260?.9:.4);
+    if(!V.notes.ghostSee){V.notes.ghostSee=1;say('Pip','Capitano, guarda! Una nave... sta sparendo! Si vede attraverso!',5200)}
+    if(s.gh<=.05){s.gone=rr(6,9);s.gh=0;for(let i=0;i<8;i++)C.fx.push({k:'puff',x:s.x+rr(-50,50),y:s.y+rr(-30,30),r:rr(10,18),t:0,life:1.6,vx:rr(-14,14),vy:rr(-24,-6)});if(!V.notes.ghostGone){V.notes.ghostGone=1;say('Tito','Svanita nel nulla. Ma tornerà: ci segue da quando siamo entrati.',5600)}return}
+  }else s.gh=Math.min(1,s.gh+dt*.22);
+  // ci insegue: resta dietro, mai troppo vicina, mai troppo lontana
+  const sp0=SPEC.fantasma,want=Math.atan2(p.y-s.y,p.x-s.x),D0=560;
+  s.hd+=cl(angD(s.hd,want),-1,1)*1.05*dt;s.hd=avoid(s,s.hd);
+  moveShip(s,dt,sp0.spd*(dp>D0+250?1.35:dp>D0?1:dp<D0-160?.25:.6));
 }
 function voyGhostHit(s,n){
   s.flash=.2;
