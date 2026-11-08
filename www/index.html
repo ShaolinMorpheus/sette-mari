@@ -9107,7 +9107,8 @@ const ED_PLOT={falo:'Falò',capanna:'Capanna',banco:'Banco da lavoro',zattera:'Z
 function edName(e){if(e.type==='plot')return ED_PLOT[e.pid]||'Costruzione';if(e.type==='deco')return ED_SPR[e.spr]||('Oggetto «'+e.spr+'»');return ED_NAMES[e.type]||e.type}
 const ED_DUP=e=>['tree','pine','palm','rock','bush','berry','rockpool','debris'].includes(e.type)||(e.type==='deco'&&['lamp','barrel0','barrel1','crate','coil'].includes(e.spr));
 const ED_PAL=[['Albero','tree'],['Pino','pine'],['Palma','palm'],['Cespuglio','bush'],['Cespuglio di bacche','berry'],['Roccia','rock'],['Pozza di molluschi','rockpool'],['Rottami','debris'],['Lanterna','deco','lamp'],['Barile','deco','barrel0'],['Barile (2)','deco','barrel1'],['Cassa di legno','deco','crate'],['Corda arrotolata','deco','coil']];
-const edTpl=(t,s)=>E.find(e=>e.type===t&&(s==null||e.spr===s)&&e.alive!==false&&e.id.indexOf('ed')!==0&&edOk(e))||E.find(e=>e.type===t&&(s==null||e.spr===s));
+const ED_LAMP={type:'deco',spr:'lamp',nohit:1,x:.5*TS,y:.8*TS,fp:[0,0,1,1],lk:{x:0,y:0,k:'lanterne'},blocked:true,id:'lamptpl'};
+const edTpl=(t,s)=>(t==='deco'&&s==='lamp'&&!E.some(e=>e.type==='deco'&&e.spr==='lamp'))?ED_LAMP:E.find(e=>e.type===t&&(s==null||e.spr===s)&&e.alive!==false&&e.id.indexOf('ed')!==0&&edOk(e))||E.find(e=>e.type===t&&(s==null||e.spr===s));
 function edRemove(e){if(e.xb){blockRect(e.fp[0]-1,e.fp[1],1,1,-1);blockRect(e.fp[0]+e.fp[2],e.fp[1],1,1,-1);e.xb=0}delBlock(e);const i=E.indexOf(e);if(i>=0){E.splice(i,1);EDR++}delete EID[e.id]}
 function edMove(e,x,y){
   const dx=Math.round((x-e.x)/TS),dy=Math.round((y-e.y)/TS),was=e.blocked;
