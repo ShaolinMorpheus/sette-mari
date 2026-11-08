@@ -282,7 +282,7 @@ body.portrait #startCard{grid-template-columns:1fr;width:min(430px,100%)}
 .phs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .phs button{display:flex;flex-direction:column;align-items:center;gap:3px;width:92px;padding:6px 4px;border-radius:12px;border:3px solid var(--wood-d);background:#ead29a;color:var(--ink);font:800 12px var(--f-b);cursor:pointer}
 .phs button.sel{background:var(--gold);box-shadow:0 0 0 2px #fff6 inset}
-.phs img,.phs .no{width:56px;height:56px;border-radius:10px;display:grid;place-items:center;font-size:26px;background:#d9a85a}
+.phs img,.phs .no,.phs canvas{width:56px;height:56px;border-radius:10px;display:grid;place-items:center;font-size:26px;background:#d9a85a}
 .pgb{height:10px;border-radius:6px;background:rgba(0,0,0,.28);overflow:hidden;margin:6px 0}.pgb i{display:block;height:100%;width:0;background:linear-gradient(#9be06a,#3f9a2e);transition:width .9s linear}
 .wl{list-style:none;margin:0 0 8px;padding:0}.wl li{font:700 12.5px var(--f-b);padding:6px 9px;border-radius:10px;background:rgba(0,0,0,.09);margin-bottom:5px}.wl b{display:block;font-weight:800}
 .mr i img{width:34px;height:34px;border-radius:8px;display:block}
@@ -5700,6 +5700,12 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
+    "Mare: le battute di Tito non finiscono più nascoste sotto la scheda del tutorial.",
+    "Mare: frecce sul bordo dello schermo con la distanza (in caselle) per la nave bersaglio, il galeone, la nave dei prigionieri e la pattuglia più vicina.",
+    "Mare: dopo la prima nave nemica affondata arriva una scorta armata, con più scafo e più cannoni delle pattuglie.",
+    "Cantiere navale: alla nave del campo l'argento portato dal mare compra cuori di scafo, cannoni più rapidi e vele più veloci. Le migliorie restano per sempre.",
+    "Aspetto della nave: vele, bandiera e polena si sbloccano giocando e si scelgono dal Menu › Guardaroba › Nave.",
+    "Tolta la scritta «bozza giocabile» dalle schermate finali del mare e del grande viaggio.",
     "Pesce aurora: un pesce leggendario che si pesca solo di notte, con la luna piena e la pioggia. Il registro dei pesci ora ha 9 specie.",
     "Fungo lunare: una nuova coltura dell'orto che cresce solo di notte (più in fretta con la luna piena). Serve per la «Zuppa di luna» di Gnocco.",
     "Lo spaventapasseri può indossare uno dei tuoi cappelli: scegli dall'orto.",
@@ -6493,7 +6499,7 @@ Ch2.look=function(e){
     c.parts.rudder=1;c.ch.note=1;sfx('quest');
     UI.dlg([D('hero',"Il timone, avvolto in un telo cerato. E sopra, un biglietto con la grafia di Ferro."),D('hero',"«Otto posti. Tre nomi. Gli altri aspetteranno la prossima nave. — F.»"),D('hero',"«La prossima nave». Non ci sarà nessuna prossima nave."),D('hero',"Ferro non ha mai pensato di portarli tutti.")],()=>{checkAll()});return true}
   if(e.id==='nave'){
-    if(S.flags.ch2end){let go=false;UI.dlg([D('hero',"La nave ha già compiuto il suo viaggio. Ma il mare è ancora là fuori."),D('hero',"Vuoi riprendere il mare?",{choices:[{t:"Sì: Capitolo 3, la battaglia in mare.",fn:()=>{go=true}},{t:"No, resto qui.",fn:()=>{}}]})],()=>{if(go){try{saveGame()}catch(_){}__go('#w3');location.reload()}});return true}
+    if(S.flags.ch2end){let go=false,yd=false;UI.dlg([D('hero',"La nave ha già compiuto il suo viaggio. Ma il mare è ancora là fuori."),D('hero',"Cosa facciamo?",{choices:[{t:"Salpa: Capitolo 3, la battaglia in mare.",fn:()=>{go=true}},{t:"Cantiere: migliora la nave con l'argento.",fn:()=>{yd=true}},{t:"Niente, resto qui.",fn:()=>{}}]})],()=>{if(go){try{saveGame()}catch(_){}__go('#w3');location.reload()}else if(yd)YD.yardSheet()});return true}
     if(qAct('c10',0)){
       const cost=C2COST.cantiere;
       if(!hasRes(cost)){UI.dlg([D('hero',"Lo scafo è da rimettere in sesto. Mi serve: "+costTxt(cost)+".")]);return true}
@@ -8645,7 +8651,7 @@ UI.openMenu=function(){
    +'</div><div class="mpn">'
    +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mGfx','🎨','Grafica',GFX_NAMES[GFX]||'Auto')+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra'))
    +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+(SMAds.available()?T('mAd','🎁','Guarda un video','scorta in regalo')+T('mPriv','🔒','Privacy',null):'')+T('mJ','📖','Diario e novità',null)+T('mVer','🔁',verLbl(),null)+(WORLD===2?T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
-   +pnl('gd','<div class="mhd2">Guardaroba</div>'+T('mWh',wI('hat'),'Cappello',wearName('hat'))+T('mWo',wI('out'),'Abito',wearName('out'))+'<p class="sm">Cappelli e abiti si trovano giocando: casse, raccolti, ricette, capitoli. Quelli che mancano sono elencati con un indizio.</p>')
+   +pnl('gd','<div class="mhd2">Guardaroba</div>'+T('mWh',wI('hat'),'Cappello',wearName('hat'))+T('mWo',wI('out'),'Abito',wearName('out'))+(YD.avail()?T('mSh','⛵','Nave',YD.lookName())+T('mYd','⚓','Cantiere navale',YD.yardName()):'')+'<p class="sm">Cappelli e abiti si trovano giocando: casse, raccolti, ricette, capitoli. Quelli che mancano sono elencati con un indizio.</p>')
    +(hasP?pnl('pp','<div class="mhd2">Pappagallo</div>'+T('mPn','🦜','Nome',pn('Biscotto')+' · tocca per rinominare')+(hasH?T('mPh',curH?'<img alt="" src="'+phatImg(curH.id)+'">':'🚫','Cappellino',curH?curH.n:'Nessuno'):'<p class="sm">Troverai dei cappellini per il pappagallo durante il viaggio.</p>')):'')
    +pnl('lg',I18N.langs.map(l=>T('mLg_'+l,l.toUpperCase(),I18N.names[l],null,l===I18N.lang?'sel':'')).join(''))+pnl('ai',T('mHow','❓','Come si gioca',null)+T('mTut','🧭','Tutorial',null))
    +'</div></div>';
@@ -8688,6 +8694,8 @@ UI.openMenu=function(){
   };
   {const a=c.querySelector('#mWh');if(a)a.onclick=()=>{uShow('menu',false);wardSheet('hat')}}
   {const a=c.querySelector('#mWo');if(a)a.onclick=()=>{uShow('menu',false);wardSheet('out')}}
+  {const a=c.querySelector('#mSh');if(a)a.onclick=()=>{uShow('menu',false);YD.lookSheet()}}
+  {const a=c.querySelector('#mYd');if(a)a.onclick=()=>{uShow('menu',false);YD.yardSheet()}}
   const mp=c.querySelector('#mPn');if(mp)mp.onclick=()=>{uShow('menu',false);UI.askParrotName(null,true)};
   c.querySelector('#mTut').onclick=()=>{uShow('menu',false);UI.tutStart()};
   c.querySelector('#mJ').onclick=()=>{uShow('menu',false);UI.openJournal('n')};
@@ -10119,6 +10127,203 @@ NV3.fungoLights=function(e,lights){
   }
 };
 
+/* ====== NOVITÀ v0.12h (B1): Cantiere navale e Aspetto della nave ======
+   - l'argento portato dal mare finisce in cassa al cantiere del campo e compra migliorie che restano per sempre
+   - vele, bandiera e polena da sbloccare giocando e da scegliere dal Menu (come i cappelli)
+   Tutto vive in localStorage (come il resto del mare): sm_yard = cassa e livelli, sm_ship = statistiche e scelta. */
+const YD=(function(){
+  const KY='sm_yard',KS='sm_ship';
+  const rd=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k)||'null');return v&&typeof v==='object'?v:d}catch(e){return d}};
+  const wr=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+  const lim=(v,a,b)=>Math.max(a,Math.min(b,v|0));
+  const Y={};
+  let _sel=null;
+
+  /* ---------- cantiere: cassa e migliorie ---------- */
+  Y.UP=[
+    {id:'h',n:'Scafo rinforzato',ic:'♥',max:4,cost:[3,5,7,9],d:'Un cuore di scafo in più a ogni livello: la nave regge più colpi.'},
+    {id:'g',n:'Cannoni rapidi',ic:'💥',max:3,cost:[4,6,8],d:'I cannoni si ricaricano più in fretta: più colpi in ogni scontro.'},
+    {id:'s',n:'Vele veloci',ic:'⛵',max:3,cost:[4,6,8],d:'La Sirena corre di più, anche con l\'argento a bordo.'}
+  ];
+  Y.gunK=l=>1-.14*lim(l,0,3);         // moltiplicatore del tempo di ricarica
+  Y.sailK=l=>1+.06*lim(l,0,3);        // moltiplicatore della velocità
+  Y.eff=(id,l)=>id==='h'?(l?'+'+l+(l===1?' cuore':' cuori'):'nessuno'):id==='g'?(l?'ricarica −'+Math.round((1-Y.gunK(l))*100)+'%':'nessuna'):(l?'+'+Math.round((Y.sailK(l)-1)*100)+'% di velocità':'nessuna');
+  Y.get=()=>{const o=rd(KY,{});return{b:Math.max(0,o.b|0),tot:Math.max(0,o.tot|0),h:lim(o.h,0,4),g:lim(o.g,0,3),s:lim(o.s,0,3)}};
+  Y.put=o=>{wr(KY,o);_sel=null};
+  Y.bank=n=>{n=n|0;const o=Y.get();if(n>0){o.b+=n;o.tot+=n;Y.put(o)}return o};
+  Y.buy=id=>{
+    const u=Y.UP.find(x=>x.id===id),o=Y.get();if(!u)return false;
+    const l=o[id];if(l>=u.max)return false;const c=u.cost[l];if(o.b<c)return false;
+    o.b-=c;o[id]=l+1;Y.put(o);return true};
+  Y.yardName=()=>{const o=Y.get();return'🪙 '+o.b+' in cassa'};
+
+  /* ---------- aspetto: tabelle ---------- */
+  Y.SAIL=[
+    {id:'crema',n:'Vele color crema',hint:'',c:['#fff3d2','#d8c79a'],emb:'#c8402e',own:()=>true},
+    {id:'rosse',n:'Vele rosse',hint:'Affonda 3 navi nemiche.',c:['#f0765e','#a8321f'],emb:'#fff0cf',own:s=>s.kills>=3},
+    {id:'blu',n:'Vele blu mare',hint:'Salva Pip e Dodo.',c:['#8ccdf2','#3b78b8'],emb:'#fff3d2',own:s=>s.pris>=1},
+    {id:'strisce',n:'Vele a strisce',hint:'Porta 10 casse d\'argento al cantiere.',c:['#fff3d2','#d8c79a'],emb:'#c8402e',pat:'stripes',pc:'#5b8fd0',own:(s,y)=>y.tot>=10},
+    {id:'nere',n:'Vele nere',hint:'Abborda il galeone spagnolo.',c:['#5a5a6c','#262632'],emb:'#e8e8f2',own:s=>s.gal>=1},
+    {id:'oro',n:'Vele dorate',hint:'Compra tutte le migliorie del cantiere.',c:['#ffeaa6','#d9a528'],emb:'#8a2a1c',own:(s,y)=>y.h>=4&&y.g>=3&&y.s>=3}
+  ];
+  Y.FLAG=[
+    {id:'rossa',n:'Bandiera rossa',hint:'',col:'#e0523f',own:()=>true},
+    {id:'stella',n:'Bandiera con la stella',hint:'Affonda la tua prima nave nemica.',col:'#2f6fc0',sym:'star',own:s=>s.kills>=1},
+    {id:'scacchi',n:'Bandiera a scacchi',hint:'Torna in porto 3 volte dal mare.',col:'#f4f4f4',sym:'check',own:s=>s.runs>=3},
+    {id:'perla',n:'Bandiera della sirena',hint:'Compra una miglioria al cantiere.',col:'#1f9aa8',sym:'pearl',own:(s,y)=>y.h+y.g+y.s>=1},
+    {id:'teschio',n:'Bandiera del teschio',hint:'Affonda 15 navi nemiche.',col:'#202028',sym:'skull',own:s=>s.kills>=15}
+  ];
+  Y.FIG=[
+    {id:'nessuna',n:'Nessuna polena',hint:'',own:()=>true},
+    {id:'delfino',n:'Delfino',hint:'Affonda 8 navi nemiche.',own:s=>s.kills>=8},
+    {id:'pappagallo',n:'Pappagallo',hint:'Fai un «Colpo perfetto»: tutto l\'argento, tutti salvi, scafo quasi intatto.',own:s=>s.perfect>=1},
+    {id:'sirena',n:'Sirena',hint:'Porta 20 casse d\'argento al cantiere.',own:(s,y)=>y.tot>=20},
+    {id:'stella',n:'Stella dorata',hint:'Compra 3 migliorie al cantiere.',own:(s,y)=>y.h+y.g+y.s>=3}
+  ];
+  const KINDS=[['sail','Vele',Y.SAIL],['flag','Bandiera',Y.FLAG],['fig','Polena',Y.FIG]];
+
+  /* ---------- aspetto: stato (statistiche, scelta, novità) ---------- */
+  const SH0=()=>({sel:{sail:'crema',flag:'rossa',fig:'nessuna'},st:{kills:0,pris:0,gal:0,runs:0,perfect:0},seen:{'sail:crema':1,'flag:rossa':1,'fig:nessuna':1}});
+  Y.ship=()=>{const o=rd(KS,null),b=SH0();if(!o)return b;return{sel:Object.assign(b.sel,o.sel||{}),st:Object.assign(b.st,o.st||{}),seen:Object.assign(b.seen,o.seen||{})}};
+  Y.shipPut=o=>{wr(KS,o);_sel=null};
+  Y.stat=(k,n)=>{const o=Y.ship();o.st[k]=(o.st[k]|0)+(n==null?1:n);Y.shipPut(o);return o.st[k]};
+  const owned=(list,id,sh,yd)=>{const it=list.find(x=>x.id===id);return !!it&&it.own(sh.st,yd)};
+  Y.sel=()=>{
+    if(_sel)return _sel;
+    const sh=Y.ship(),yd=Y.get(),s=sh.sel;
+    _sel={sail:owned(Y.SAIL,s.sail,sh,yd)?s.sail:'crema',flag:owned(Y.FLAG,s.flag,sh,yd)?s.flag:'rossa',fig:owned(Y.FIG,s.fig,sh,yd)?s.fig:'nessuna'};
+    return _sel};
+  Y.look=sel=>{sel=sel||Y.sel();return{sail:Y.SAIL.find(x=>x.id===sel.sail)||Y.SAIL[0],flag:Y.FLAG.find(x=>x.id===sel.flag)||Y.FLAG[0],fig:Y.FIG.find(x=>x.id===sel.fig)||Y.FIG[0]}};
+  Y.setSel=(kind,id)=>{const sh=Y.ship();sh.sel[kind]=id;Y.shipPut(sh)};
+  Y.lookName=()=>{const L=Y.look();return L.sail.n+' · '+L.flag.n+(L.fig.id!=='nessuna'?' · '+L.fig.n:'')+(Y.hasNew()?' ✨':'')};
+  Y.hasNew=()=>{const sh=Y.ship(),yd=Y.get();return KINDS.some(([k,t,list])=>list.some(it=>it.own(sh.st,yd)&&!sh.seen[k+':'+it.id]))};
+  /* restituisce le cose appena sbloccate (e le segna come viste): da chiamare dove il giocatore le vede annunciare */
+  Y.announce=()=>{
+    const sh=Y.ship(),yd=Y.get(),out=[];
+    for(const[k,t,list]of KINDS)for(const it of list){const key=k+':'+it.id;if(it.own(sh.st,yd)&&!sh.seen[key]){sh.seen[key]=1;out.push({kind:k,it})}}
+    if(out.length)Y.shipPut(sh);
+    return out};
+  Y.tellNew=(ms)=>{const n=Y.announce();if(n.length)setTimeout(()=>{try{UI.toast('Nuovo per la nave: '+n.map(x=>x.it.n).join(', ')+'. Lo scegli dal Menu › Guardaroba › Nave.',5600)}catch(e){}},ms||900);return n};
+  Y.avail=()=>{try{return WORLD>=3||!!(S&&S.flags&&S.flags.ch2end)||!!localStorage.getItem(KY)||!!localStorage.getItem(KS)}catch(e){return false}};
+
+  /* ---------- disegno: usato dal mare (sprite della Sirena) e dalle anteprime ---------- */
+  const star=(g,cx,cy,R,r)=>{g.beginPath();for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,q=i%2?r:R;g[i?'lineTo':'moveTo'](cx+Math.cos(a)*q,cy+Math.sin(a)*q)}g.closePath();g.fill()};
+  /* bandierina in cima all'albero: (x,y) è la cima, sz la scala */
+  Y.flagPaint=function(g,x,y,col,sym,sz){
+    sz=sz||1;g.save();g.translate(x,y);g.scale(sz,sz);
+    const fp=()=>{g.beginPath();g.moveTo(0,0);g.quadraticCurveTo(14,-6,26,-2);g.lineTo(22,8);g.quadraticCurveTo(10,4,0,6);g.closePath()};
+    fp();g.fillStyle=col;g.fill();
+    if(sym==='check'){g.save();fp();g.clip();g.fillStyle='#1c1c24';for(let i=0;i<5;i++)for(let j=0;j<2;j++)if((i+j)%2===0)g.fillRect(i*6-2,j*6-4,6,6);g.restore()}
+    else if(sym==='star'){g.fillStyle='#ffd23a';star(g,12,2.4,4,1.7)}
+    else if(sym==='pearl'){g.fillStyle='#fff';g.beginPath();g.arc(12,2.2,3.1,0,7);g.fill();g.fillStyle='rgba(120,200,220,.9)';g.beginPath();g.arc(11.2,1.4,1,0,7);g.fill()}
+    else if(sym==='skull'){g.fillStyle='#f4f4f4';g.beginPath();g.arc(12,1.5,3.3,0,7);g.fill();g.fillRect(10.4,3.2,3.2,2.1);g.fillStyle='#202028';g.beginPath();g.arc(10.8,1.1,.95,0,7);g.arc(13.2,1.1,.95,0,7);g.fill()}
+    fp();g.strokeStyle='rgba(40,25,10,.65)';g.lineWidth=1;g.stroke();
+    g.restore()};
+  /* vela della Sirena (stessa forma di sempre): cx = albero, by = base, h = altezza, wd = larghezza, L = aspetto, fs = scala bandierina */
+  Y.sailPaint=function(g,cx,by,h,wd,L,fs){
+    const S0=L.sail,yt=by-h*.9,yb=by-h*.18;
+    const sg=g.createLinearGradient(cx,by-h*.9,cx+wd,by-h*.2);sg.addColorStop(0,S0.c[0]);sg.addColorStop(1,S0.c[1]);
+    const path=()=>{g.beginPath();g.moveTo(cx+3,yt);g.quadraticCurveTo(cx+wd*1.1,yt+h*.12,cx+wd*.92,yb-h*.04);g.lineTo(cx+wd*.74,yb+3);g.lineTo(cx+wd*.58,yb-4);g.lineTo(cx+wd*.4,yb+4);g.lineTo(cx+wd*.22,yb-3);g.lineTo(cx+3,yb+2);g.closePath()};
+    g.fillStyle=sg;path();g.fill();
+    if(S0.pat==='stripes'){g.save();path();g.clip();g.fillStyle=S0.pc;g.globalAlpha=.9;const n=6,w1=wd*1.1/n;for(let i=1;i<n;i+=2)g.fillRect(cx+3+i*w1,yt-8,w1,yb-yt+16);g.restore()}
+    g.strokeStyle='rgba(70,54,28,.65)';g.lineWidth=1.4;path();g.stroke();
+    g.strokeStyle='rgba(120,90,50,.28)';g.lineWidth=1;for(let i=1;i<5;i++){g.beginPath();g.moveTo(cx+3,yt+(yb-yt)*i/5);g.quadraticCurveTo(cx+wd*.55,yt+(yb-yt)*i/5+h*.06,cx+wd*.9,yt+(yb-yt)*i/5);g.stroke()}
+    g.fillStyle='#5a3a22';g.fillRect(cx-4,yt-3,wd*1.0,5);          // verga
+    g.fillStyle=S0.emb;g.globalAlpha=.9;                            // emblema della sirena
+    g.beginPath();g.moveTo(cx+wd*.2,yt+h*.2);g.quadraticCurveTo(cx+wd*.5,yt+h*.12,cx+wd*.78,yt+h*.24);g.lineTo(cx+wd*.7,yt+h*.4);g.quadraticCurveTo(cx+wd*.45,yt+h*.46,cx+wd*.26,yt+h*.4);g.closePath();g.fill();
+    g.fillStyle=S0.id==='nere'?'#262632':'#fff';g.beginPath();g.arc(cx+wd*.48,yt+h*.31,wd*.07,0,7);g.fill();
+    g.globalAlpha=1;
+    Y.flagPaint(g,cx,by-h,L.flag.col,L.flag.sym,fs||1)};
+  /* polena sulla punta del bompresso: (x,y) è la punta, davanti = +x */
+  Y.figPaint=function(g,x,y,id,sz){
+    if(!id||id==='nessuna')return;
+    sz=sz||1;g.save();g.translate(x,y);g.scale(sz,sz);g.lineJoin='round';g.lineWidth=1.8;g.strokeStyle='#2a1608';
+    if(id==='delfino'){
+      g.fillStyle='#4f9fdc';g.beginPath();g.moveTo(-16,5);g.quadraticCurveTo(-14,-9,-2,-9);g.quadraticCurveTo(8,-9,14,-3);g.lineTo(21,-5);g.lineTo(17,0);g.lineTo(21,4);g.quadraticCurveTo(10,5,2,6);g.quadraticCurveTo(-8,8,-16,5);g.closePath();g.fill();g.stroke();
+      g.fillStyle='#bfe3fa';g.beginPath();g.ellipse(-2,2.6,9,2.6,0,0,7);g.fill();
+      g.fillStyle='#fff';g.beginPath();g.arc(11,-2.4,1.6,0,7);g.fill();g.fillStyle='#10202c';g.beginPath();g.arc(11.4,-2.4,.75,0,7);g.fill()
+    }else if(id==='pappagallo'){
+      g.fillStyle='#2f9f4a';g.beginPath();g.moveTo(-12,-4);g.quadraticCurveTo(-22,-1,-20,5);g.lineTo(-10,3);g.closePath();g.fill();g.stroke();
+      g.fillStyle='#d8312b';g.beginPath();g.ellipse(-3,0,12,8.5,0,0,7);g.fill();g.stroke();
+      g.fillStyle='#ffc93a';g.beginPath();g.moveTo(6,-5);g.quadraticCurveTo(18,-2,15,5);g.quadraticCurveTo(10,2,6,3);g.closePath();g.fill();g.stroke();
+      g.fillStyle='#fff';g.beginPath();g.arc(3,-3,2.3,0,7);g.fill();g.fillStyle='#111';g.beginPath();g.arc(3.7,-3,1,0,7);g.fill()
+    }else if(id==='sirena'){
+      g.fillStyle='#2fb6a8';g.beginPath();g.moveTo(-17,6);g.quadraticCurveTo(-19,-3,-8,-3);g.lineTo(0,1);g.quadraticCurveTo(-4,8,-17,6);g.closePath();g.fill();g.stroke();
+      g.fillStyle='#e9a83a';g.beginPath();g.arc(-1,-1,8.2,0,7);g.fill();g.stroke();
+      g.fillStyle='#f6cfa6';g.beginPath();g.arc(2,-1,6,0,7);g.fill();
+      g.fillStyle='#2a1608';g.beginPath();g.arc(4.6,-2.4,.95,0,7);g.arc(4.6,1,.95,0,7);g.fill()
+    }else if(id==='stella'){
+      g.fillStyle='#ffd23a';star(g,0,0,12,5.2);g.stroke();
+      g.fillStyle='rgba(255,255,255,.7)';g.beginPath();g.arc(-2,-3,2,0,7);g.fill()
+    }
+    g.restore()};
+  /* anteprima della nave (di profilo) con l'aspetto scelto */
+  Y.preview=function(cv,sel){
+    const g=cv.getContext('2d'),W=cv.width,H=cv.height,L=Y.look(sel);
+    g.clearRect(0,0,W,H);
+    let q=g.createLinearGradient(0,0,0,H);q.addColorStop(0,'#cfeefb');q.addColorStop(.62,'#9fd8ef');q.addColorStop(.63,'#46a3d0');q.addColorStop(1,'#1f6ea6');g.fillStyle=q;g.fillRect(0,0,W,H);
+    g.strokeStyle='rgba(255,255,255,.4)';g.lineWidth=2;g.lineCap='round';
+    for(let i=0;i<7;i++){const y=H*.69+(i%4)*12,x=((i*61)%W)-10;g.beginPath();g.moveTo(x,y);g.quadraticCurveTo(x+12,y-5,x+24,y);g.quadraticCurveTo(x+36,y+5,x+48,y);g.stroke()}
+    const dk=Math.round(H*.76);
+    q=g.createLinearGradient(0,dk-8,0,dk+38);q.addColorStop(0,'#9a3524');q.addColorStop(.6,'#8a2a1c');q.addColorStop(1,'#4a140c');
+    g.fillStyle=q;g.strokeStyle='#1c0f06';g.lineWidth=2.4;g.beginPath();
+    g.moveTo(30,dk-10);g.lineTo(30,dk+6);g.quadraticCurveTo(54,dk+34,108,dk+37);g.lineTo(232,dk+35);g.quadraticCurveTo(286,dk+26,308,dk-4);g.lineTo(308,dk-10);g.closePath();g.fill();g.stroke();
+    g.strokeStyle='#f4e2b0';g.lineWidth=2.6;g.beginPath();g.moveTo(34,dk+2);g.quadraticCurveTo(60,dk+26,110,dk+29);g.lineTo(230,dk+27);g.quadraticCurveTo(282,dk+19,303,dk-3);g.stroke();
+    g.fillStyle='#161616';for(let i=0;i<4;i++)g.fillRect(96+i*34,dk+8,12,8);
+    g.fillStyle='#6a3e1c';g.strokeStyle='#241008';g.lineWidth=1.8;g.fillRect(30,dk-26,38,18);g.strokeRect(30,dk-26,38,18);g.fillStyle='#ffd45a';g.fillRect(40,dk-21,8,8);g.fillRect(52,dk-21,8,8);
+    g.fillStyle='#cfa066';g.fillRect(30,dk-10,278,5);g.strokeStyle='#3a200c';g.lineWidth=1.4;g.strokeRect(30,dk-10,278,5);
+    g.strokeStyle='#5a3a1c';g.lineWidth=5;g.beginPath();g.moveTo(292,dk-8);g.lineTo(318,dk-13);g.stroke();
+    const h=Math.round(H*.6),wd=Math.round(h*.66);
+    for(const mx of[96,186]){g.fillStyle='#4a2c18';g.fillRect(mx-3,dk-10-h,6,h);Y.sailPaint(g,mx,dk-10,h,wd,L,1.5)}
+    Y.figPaint(g,318,dk-13,L.fig.id,1)};
+  const chipPaint=(cv,kind,id)=>{
+    const g=cv.getContext('2d');g.clearRect(0,0,cv.width,cv.height);
+    const L=Y.look({sail:kind==='sail'?id:'crema',flag:kind==='flag'?id:'rossa',fig:kind==='fig'?id:'nessuna'});
+    if(kind==='sail'){g.save();g.translate(9,58);g.scale(.5,.5);Y.sailPaint(g,0,0,100,66,L,1.3);g.restore()}
+    else if(kind==='flag'){g.strokeStyle='#4a2c18';g.lineWidth=3;g.lineCap='round';g.beginPath();g.moveTo(9,6);g.lineTo(9,52);g.stroke();Y.flagPaint(g,9,13,L.flag.col,L.flag.sym,1.7)}
+    else{const c0={delfino:2.5,pappagallo:-2,sirena:-4.5,stella:0}[id]||0;Y.figPaint(g,28-c0*1.25,29,id,1.25)}};
+
+  /* ---------- schede ---------- */
+  Y.lookSheet=function(){
+    const sh=Y.ship(),yd=Y.get();
+    const sec=(kind,title,list)=>{
+      const own=list.filter(x=>x.own(sh.st,yd)),lock=list.filter(x=>!x.own(sh.st,yd));
+      return'<h3>'+title+'</h3><div class="phs">'+own.map(x=>'<button data-yk="'+kind+':'+x.id+'">'+(x.id==='nessuna'?'<span class="no">🚫</span>':'<canvas width="56" height="56" data-yp="'+kind+':'+x.id+'"></canvas>')+x.n+(sh.seen[kind+':'+x.id]?'':' ✨')+'</button>').join('')+'</div>'
+        +(lock.length?'<ul class="wl">'+lock.map(x=>'<li><b>🔒 '+x.n+'</b>'+x.hint+'</li>').join('')+'</ul>':'')};
+    const h='<h2>Aspetto della nave</h2><p class="sm">Vele, bandiera e polena si sbloccano giocando in mare e portando l\'argento al cantiere. Quello che scegli si vede subito in mare.</p>'
+      +'<canvas id="ypv" width="340" height="190" style="display:block;width:100%;max-width:300px;height:auto;margin:4px auto 10px;border-radius:14px;border:3px solid var(--wood-d)"></canvas>'
+      +sec('sail','Vele',Y.SAIL)+sec('flag','Bandiera',Y.FLAG)+sec('fig','Polena',Y.FIG)
+      +'<div class="row"><button class="btn" id="shNo">Chiudi</button></div>';
+    sheetFor(h,c=>{
+      const upd=()=>{const s=Y.sel();Y.preview(c.querySelector('#ypv'),s);c.querySelectorAll('[data-yk]').forEach(b=>{const[k,i]=b.dataset.yk.split(':');b.classList.toggle('sel',s[k]===i)})};
+      c.querySelectorAll('canvas[data-yp]').forEach(cv=>{const[k,i]=cv.dataset.yp.split(':');chipPaint(cv,k,i)});
+      c.querySelectorAll('[data-yk]').forEach(b=>b.onclick=()=>{const[k,i]=b.dataset.yk.split(':');Y.setSel(k,i);sfx('ok');upd()});
+      upd();
+      Y.announce();       // aprendo la scheda le novità si considerano viste
+    })};
+  Y.yardSheet=function(){
+    const draw=()=>{
+      const o=Y.get();
+      let h='<h2>Cantiere navale</h2><p class="sm">L\'argento che porti dal mare compra migliorie per la Sirena. Restano per sempre, anche se rigiochi.</p>'
+        +'<div style="font:900 17px var(--f-b);margin:6px 0 2px">🪙 Argento in cassa: <span id="ybk">'+o.b+'</span></div>';
+      for(const u of Y.UP){
+        const l=o[u.id],mx=l>=u.max,c=mx?0:u.cost[l];
+        const pips=Array.from({length:u.max},(_,i)=>i<l?'●':'○').join(' ');
+        h+='<div class="upg"><h3>'+u.ic+' '+u.n+' <span style="font-size:15px;letter-spacing:2px;color:#a8741a">'+pips+'</span></h3><p class="sm">'+u.d+'</p>'
+          +'<p class="sm"><b>Ora:</b> '+Y.eff(u.id,l)+(mx?'':' · <b>Dopo:</b> '+Y.eff(u.id,l+1))+'</p>'
+          +(mx?'<span class="tick">✔ Al massimo</span>':'<button class="btn gold" data-yb="'+u.id+'"'+(o.b>=c?'':' disabled')+'>Migliora · 🪙 '+c+'</button>'+(o.b>=c?'':'<div class="req">Ti servono ancora '+(c-o.b)+' casse d\'argento.</div>'))+'</div>'}
+      h+='<div class="row"><button class="btn" id="yLook">Aspetto della nave</button><button class="btn" id="shNo">Chiudi</button></div>';
+      sheetFor(h,c=>{
+        c.querySelectorAll('[data-yb]').forEach(b=>b.onclick=()=>{
+          const id=b.dataset.yb,u=Y.UP.find(x=>x.id===id);
+          if(!Y.buy(id)){sfx('no');return}
+          sfx('hammer');try{UI.banner('Cantiere navale',u.n+' · livello '+Y.get()[id])}catch(e){}
+          Y.tellNew(1200);draw()});
+        c.querySelector('#yLook').onclick=()=>Y.lookSheet()})};
+    draw()};
+  return Y;
+})();
+
 /* ---- 12d_kb.js ---- */
 /* ====== TASTIERA DEL GIOCO: quando il telefono è in verticale la schermata è ruotata, ma la tastiera di sistema no.
    Per scrivere i nomi usiamo una tastiera nostra, che ruota con il gioco ====== */
@@ -10796,7 +11001,7 @@ window.Pirati={
   reachable(x,y){const[sx,sy]=playerTile(),bf=bfsFrom(sx,sy);return bf.dist[tIdx(x,y)]>=0},
   standOK(e){const[sx,sy]=playerTile(),bf=bfsFrom(sx,sy);return standCandidates(e).some(c=>bf.dist[tIdx(c[0],c[1])]>=0)},
   startAct,entBox,Extra,EX,RELICS,FISHES,rollFish,shelterNow,startNew,startContinue,saveGame,raftOK,WX,SC,PQ,STM,chalStart,scoutTargets,setWeather,strikeBolt,skyLight,moonK,toggleTorch,pondEmpty,torchHours,auMusicTick,AU,get sfx(){return sfx},get say(){return say},hint,drawShip,drawChar,CH,PAL_OUR,addXp,lvOf,
-  get NV(){return typeof NV!=='undefined'?NV:null},get NV2(){return typeof NV2!=='undefined'?NV2:null},get NV3(){return typeof NV3!=='undefined'?NV3:null},get quality(){return QL},get paused(){return PAUSED},get dlgOpen(){return dl.open},get ready(){return !!(S&&WATERC&&E.length)},
+  get NV(){return typeof NV!=='undefined'?NV:null},get NV2(){return typeof NV2!=='undefined'?NV2:null},get NV3(){return typeof NV3!=='undefined'?NV3:null},get YD(){return typeof YD!=='undefined'?YD:null},get quality(){return QL},get paused(){return PAUSED},get dlgOpen(){return dl.open},get ready(){return !!(S&&WATERC&&E.length)},
   ground(){return WATERC&&LANDC?{w:WATERC.width,h:WATERC.height}:null},
   prev(){return GPREV?GPREV.toDataURL('image/png'):null},
   seaReach(c){
@@ -10820,7 +11025,7 @@ window.Pirati={
   Promise.race([fonts,new Promise(r=>setTimeout(r,2000))]).then(()=>setTimeout(boot,30));
 })();
 
-/* ====== CAPITOLO 3 – IL CONVOGLIO (bozza giocabile dentro il motore dell'isola) ====== */
+/* ====== CAPITOLO 3 – IL CONVOGLIO (dentro il motore dell'isola) ====== */
 (function(){
 if(typeof WORLD==='undefined'||WORLD!==3)return;
 const T=TS,TAU=Math.PI*2;
@@ -10868,6 +11073,7 @@ body.w3 #vit,body.w3 #clock,body.w3 #res,body.w3 #chal,body.w3 #ctr,body.w3 #min
 #c3tut p{margin:4px 0 6px}#c3tut .ttb{display:flex;gap:8px;justify-content:flex-end}
 #c3tut button{border:2px solid #3a200c;border-radius:10px;background:#f0dfb4;color:#3a200c;font:900 12px var(--f-b,Nunito,sans-serif);padding:6px 12px;cursor:pointer}#c3tut button.go{background:linear-gradient(#ffd98a,#e19a26)}
 body.w3 #trow{left:auto!important;right:12px;top:8px}
+body.w3 #bcol{bottom:calc(var(--dlgh,0px) + var(--c3tuth,0px) + 12px + var(--sb))}
 #c3act{left:180px;right:auto;bottom:26px;width:84px;height:84px;font-size:15px;background:radial-gradient(circle at 35% 30%,#d4f4ff,#3aa6cf)}
 body[data-hand=left] #c3fire{left:auto;right:76px}
 body[data-hand=left] #c3act{left:auto;right:180px}
@@ -10938,8 +11144,8 @@ if(!VOY){ /* editor: rotta del convoglio + caratteristiche delle navi */
 let C=null,SPR={};
 
 /* ---------------- sprite delle navi (stesso stile dell'isola) ---------------- */
-function hullSprite(k){
-  const sp0=SPEC[k],L=sp0.L,w=sp0.W,Wd=Math.ceil(L*2+60),Hd=Math.ceil(w*2+50);
+function hullSprite(k,fig){
+  const sp0=SPEC[k],L=sp0.L,w=sp0.W,Wd=Math.ceil(L*2+60+(fig?44:0)),Hd=Math.ceil(w*2+50);
   return sp(Wd,Hd,g=>{
     const cx=Wd/2,cy=Hd/2;
     g.fillStyle='rgba(6,40,60,.30)';g.beginPath();g.ellipse(cx+5,cy+9,L*1.02,w*1.02,0,0,7);g.fill();
@@ -10967,12 +11173,14 @@ function hullSprite(k){
     // bompresso
     g.strokeStyle='#5a3a1c';g.lineWidth=5;g.lineCap='round';g.beginPath();g.moveTo(cx+L*.9,cy);g.lineTo(cx+L+26,cy);g.stroke();
     g.strokeStyle='rgba(255,230,160,.5)';g.lineWidth=1.4;g.beginPath();g.moveTo(cx+L*.9,cy-1.5);g.lineTo(cx+L+26,cy-1.5);g.stroke();
+    if(fig)YD.figPaint(g,cx+L+22,cy,fig,1.15);
   },Wd/2,Hd/2);
 }
-function sailSprite(k){
+function sailSprite(k,sel){
   const sp0=SPEC[k],h=sp0.mh,wd=Math.round(h*.66),Wd=wd+40,Hd=h+30;
   return sp(Wd,Hd,g=>{
     const cx=Wd*.38,by=Hd-8;
+    if(sel){YD.sailPaint(g,cx,by,h,wd,YD.look(sel),1.5);return}
     const sg=g.createLinearGradient(cx,by-h*.9,cx+wd,by-h*.2);sg.addColorStop(0,sp0.sail[0]);sg.addColorStop(1,sp0.sail[1]);g.fillStyle=sg;
     const yt=by-h*.9,yb=by-h*.18;
     g.beginPath();g.moveTo(cx+3,yt);g.quadraticCurveTo(cx+wd*1.1,yt+h*.12,cx+wd*.92,yb-h*.04);
@@ -10994,7 +11202,8 @@ function sailSprite(k){
   },cx0(Wd),Hd-8);
   function cx0(Wd){return Wd*.38}
 }
-const hs=k=>SPR['h'+k]||(SPR['h'+k]=hullSprite(k)),ss=k=>SPR['s'+k]||(SPR['s'+k]=sailSprite(k));
+const hs=(k,s)=>{let f='';if(k==='sirena'&&s&&C&&s===C.p){f=YD.sel().fig;if(f==='nessuna')f=''}const key='h'+k+(f?'@'+f:'');return SPR[key]||(SPR[key]=hullSprite(k,f))},
+  ss=(k,s)=>{let sel=null,key='s'+k;if(k==='sirena'&&s&&C&&s===C.p){sel=YD.sel();key+='@'+sel.sail+'|'+sel.flag}return SPR[key]||(SPR[key]=sailSprite(k,sel))};
 
 /* ---------------- navi ---------------- */
 function mkShip(type,x,y,hd,o){
@@ -11047,8 +11256,9 @@ function hurt(s,n){
   if(s.type==='galeone'&&!s.ally&&s.hull-n<3){s.hull=3;s.flash=.2;if(!s.disabled){s.disabled=true;s.v=0;toast('<b>Tito:</b> «Il galeone è in avaria! Avvicinati e abborda: l\'argento è a bordo!»',7000)}return}
   s.hull-=n;s.flash=.2;
   if(s===C.p&&s.hull<=0){s.hull=0;return}
-  if(s.hull<=0){s.dead=true;s.sinking=true;C.kills++;if(s.type!=='mercante')C.ekills=(C.ekills||0)+1;sink(s);if(s.type==='prigionieri'){C.prisLost=true;toast('La nave dei prigionieri è affondata. Il piano non copriva questo rischio.',6000)}}
+  if(s.hull<=0){s.dead=true;s.sinking=true;C.kills++;if(s.type!=='mercante')C.ekills=(C.ekills||0)+1;if(s.type==='pattuglia'||s.type==='scorta'||s.type==='galeone'){try{YD.stat('kills');yAnn(2600)}catch(e){}}sink(s);if(s.type==='prigionieri'){C.prisLost=true;toast('La nave dei prigionieri è affondata. Il piano non copriva questo rischio.',6000)}}
 }
+function yAnn(ms){setTimeout(()=>{try{const n=YD.announce();if(n.length)toast('Nuovo per la nave: <b>'+n.map(x=>x.it.n).join(', ')+'</b>. Lo scegli dal Menu › Guardaroba › Nave.',6500)}catch(e){}},ms||1800)}
 function sink(s){
   for(let i=0;i<10;i++)puff(s.x+rr(-30,30),s.y+rr(-20,20),rr(10,22),rr(1,2));
   if(s===C.p)return;
@@ -11085,7 +11295,7 @@ function fire(s,side,aim){
   if(s===C.p){if(!VOY&&s.hull<=1)s.gunsOut=true;else if(s.hull>=s.max*.25)s.gunsOut=false;
     if(s.gunsOut){if(!(C.gunT>0)){C.gunT=3;toast('<b>Cannoni danneggiati!</b> Torna al porto a riparare.',4500);sfx('thud')}return false}}
   const cd=side<0?'cdL':'cdR';if(s[cd]>0||s.dead||s.disabled)return false;
-  s[cd]=s===C.p?2.1:3.4;
+  s[cd]=s===C.p?(C.cdP||2.1):3.4;
   const sa=s.hd+(side>0?Math.PI/2:-Math.PI/2);let base=sa;
   const own=s===C.p;
   const list=own?C.ships.filter(e=>!e.dead&&e!==s&&!e.ally&&onScr(e)):[C.p];
@@ -11094,7 +11304,7 @@ function fire(s,side,aim){
   if(own&&aim!=null)base+=angD(base,aim)*(C.easy?1:.8);
   else if(best!=null)base+=angD(base,best)*(own&&C.easy?1:own?.75:.55);
   if(!own&&C.plan&&C.plan.time==='tempesta')base+=rr(-.11,.11);
-  const sp0=SPEC[s.type],n=own?3:(s.type==='galeone'?3:2),lifeB=own&&best!=null?Math.min(2.2,Math.max(1,bd/640*1.08+.12)):1.0;
+  const sp0=SPEC[s.type],n=own?3:(s.type==='galeone'||s.free?3:2),lifeB=own&&best!=null?Math.min(2.2,Math.max(1,bd/640*1.08+.12)):1.0;
   for(let k=0;k<n;k++){
     const a=base+(k-(n-1)/2)*.07+rr(-.025,.025),off=(k-(n-1)/2)*sp0.L*.34;
     const ox=Math.cos(s.hd)*off+Math.cos(sa)*sp0.W*1.05,oy=Math.sin(s.hd)*off+Math.sin(sa)*sp0.W*1.05;
@@ -11116,7 +11326,8 @@ function newRun(easy,plan,cp){
   C={plan:Object.assign({},plan),easy,t:0,p:null,ships:[],balls:[],crates:[],fx:[],silver:0,pris:0,sail:2,kills:0,sunkSilver:0,shots:0,hits:0,lost:0,ended:false,wind:rr(0,TAU),notes:{},escapes:0,pend:[],fireQ:0,over:false,ramCd:0,convoy:false};
   S.tod=TIMES[plan.time].tod;
   const sp=TPp(24.5,31);
-  C.p=mkShip('sirena',sp[0],sp[1],0,{hull:8,max:8});C.p.isP=true;
+  const yd=YD.get(),hm=8+yd.h;C.yd=yd;C.cdP=2.1*YD.gunK(yd.g);C.sailK=YD.sailK(yd.s);
+  C.p=mkShip('sirena',sp[0],sp[1],0,{hull:hm,max:hm});C.p.isP=true;
   P.x=C.p.x;P.y=C.p.y;P.hd=0;P.mode='raft';cam.x=P.x;cam.y=P.y;
   const TQ=(x,y)=>[x*T,y*T];
   for(const [x,y] of[[44,58],[46,30],[80,30],[108,62],[64,80],[170,40],[160,95],[130,108],[190,85],[150,40]]){const p=TQ(x,y);const s=mkShip('mercante',p[0],p[1],rr(0,TAU));C.ships.push(s)}
@@ -11190,6 +11401,14 @@ function spawnConvoy(){
     const s=mkShip(t,q.x+c*slot[0]-n*slot[1],q.y+n*slot[0]+c*slot[1],q.hd,o);C.ships.push(s)}
   parEv('convoy',1);sfx('quest');toast('Tito: «Capitano! Il galeone spagnolo con la scorta: arriva da est!»',6000);
 }
+function spawnEscort(){      // seconda uscita: una scorta armata (più scafo e più cannoni delle pattuglie)
+  const p=C.p;let q=null;
+  for(let k=0;k<50&&!q;k++){const a=p.hd+rr(-1.2,1.2),d=rr(1700,2300),x=p.x+Math.cos(a)*d,y=p.y+Math.sin(a)*d;if(x>300&&y>300&&x<WW-300&&y<WH-300&&clearAt(x,y,100))q=[x,y]}
+  if(!q)q=randSea();
+  const s=mkShip('scorta',q[0],q[1],Math.atan2(p.y-q[1],p.x-q[0]),{free:true,nm:'Scorta armata'});
+  C.ships.push(s);C.esc=s;
+  toast('<b>Tito:</b> «Vela rossa '+dirName(q[0]-p.x,q[1]-p.y)+', capitano! È una scorta armata: ha più cannoni e più scafo delle pattuglie. Tienila di prua o di poppa.»',7000);
+}
 function findSea(x,y){for(let R=1;R<30;R++)for(let j=-R;j<=R;j++)for(let i=-R;i<=R;i++){if(Math.max(Math.abs(i),Math.abs(j))!==R)continue;const cx=x+i*40,cy=y+j*40;if(clearAt(cx,cy,80))return[cx,cy]}return[x,y]}
 function randSea(){for(let k=0;k<60;k++){const x=rr(300,WW-300),y=rr(300,WH-300);if(clearAt(x,y,90))return[x,y]}return [WW/2,WH/2]}
 
@@ -11207,7 +11426,7 @@ function step(dt){
     else if(jm>.12){const a=Math.atan2(jy,jx),d=angD(p.hd,a);p.hd+=cl(d*2.4,-1.05,1.05)*dt}
   }
   const go=ctl&&(jm>.12||kx!==0||ky<0);
-  let tv=(go?SAILSPD[C.sail]:0)*windK(p.hd)*(p.disabled?0:1)*(1-.03*Math.min(C.silver,10));
+  let tv=(go?SAILSPD[C.sail]:0)*windK(p.hd)*(p.disabled?0:1)*(1-.03*Math.min(C.silver,10))*(C.sailK||1);
   if(VOY)tv=voyTv(tv,go,dt);
   moveShip(p,dt,tv);
   if(C.go5&&!C.over&&Math.hypot(p.x-C.go5.x,p.y-C.go5.y)<3.4*T)go5Arrive();
@@ -11237,10 +11456,10 @@ function step(dt){
       const flee=s.hit&&dp<900;
       if(flee||dp<400)steerTo(s,s.x+(s.x-p.x),s.y+(s.y-p.y),dt,1);else steerTo(s,s.wp[0],s.wp[1],dt,1);
       s.hd=avoid(s,s.hd);moveShip(s,dt,SPEC.mercante.spd*(flee?1.15:.65)*windK(s.hd));
-    }else if(s.type==='pattuglia'||(s.type==='scorta'&&s.alert&&!s.guard)){
+    }else if(s.type==='pattuglia'||s.free||(s.type==='scorta'&&s.alert&&!s.guard)){
       const sp0=SPEC[s.type];
-      if(s.type==='pattuglia'&&!s.hostile&&dp<330*(C.plan?C.plan.detect:1)){s.hostile=true;if(!C.notes.patr){C.notes.patr=1;toast('<b>Tito:</b> «Una pattuglia! Ci ha visti!»')}}
-      if(s.type==='pattuglia'&&s.hostile&&dp>(s.hit?1600:620))s.hostile=false;
+      if((s.type==='pattuglia'||s.free)&&!s.hostile&&dp<(s.free?560:330)*(C.plan?C.plan.detect:1)){s.hostile=true;if(!C.notes.patr&&!s.free){C.notes.patr=1;toast('<b>Tito:</b> «Una pattuglia! Ci ha visti!»')}}
+      if((s.type==='pattuglia'||s.free)&&s.hostile&&dp>(s.hit?1600:(s.free?900:620)))s.hostile=false;
       if(s.type==='scorta'&&s.alert&&dp>1500)s.alert=false;
       if((s.hostile&&(s.type!=='pattuglia'||C.eng.has(s)))||s.alert){
         const want=Math.atan2(p.y-s.y,p.x-s.x);
@@ -11250,7 +11469,7 @@ function step(dt){
         moveShip(s,dt,sp0.spd*(dp>D+120?1:.8)*windK(s.hd));
         for(const sd of[-1,1]){
           const sa=s.hd+(sd>0?Math.PI/2:-Math.PI/2),toP=Math.atan2(p.y-s.y,p.x-s.x);
-          if(dp<640&&Math.abs(angD(sa,toP))<.75&&s.cd<=0&&(sd<0?s.cdL:s.cdR)<=0){fire(s,sd);s.cd=rr(2.2,3.8)}
+          if(dp<640&&Math.abs(angD(sa,toP))<.75&&s.cd<=0&&(sd<0?s.cdL:s.cdR)<=0){fire(s,sd);s.cd=s.free?rr(1.8,3):rr(2.2,3.8)}
         }
       }else{
         if(!s.wp||Math.hypot(s.wp[0]-s.x,s.wp[1]-s.y)<150)s.wp=randSea();
@@ -11274,7 +11493,7 @@ function step(dt){
       if(hitTest(s,b.x,b.y)){
         b.dead=true;
         const trav=b.t*640,dmg=s===p?((C.easy?.35:.7)*(b.own&&b.own.type==='galeone'?1.5:.8)):(b.own===p?(trav<450?1.15:trav<800?1:Math.max(.35,1-(trav-800)/900)):1);
-        if(b.own===p){C.hits++;s.hit=true;if(s.type==='pattuglia')s.hostile=true;if(s.conv)alertConvoy()}
+        if(b.own===p){C.hits++;s.hit=true;if(s.type==='pattuglia'||s.free)s.hostile=true;if(s.conv)alertConvoy()}
         hurt(s,dmg);
         for(let i=0;i<7;i++)C.fx.push({k:'chip',x:b.x,y:b.y,vx:rr(-120,120),vy:rr(-160,-30),t:0,life:.7});
         C.fx.push({k:'flash',x:b.x,y:b.y,r:22,t:0,life:.25});puff(b.x,b.y,16,1);
@@ -11307,6 +11526,7 @@ function step(dt){
   if(VOY){voyStep(dt)}else{
   // storia
   if(!C.tut&&!C.notes.start&&C.t>1.5){C.notes.start=1;toast('<b>Tito:</b> «Capitano, ci sono navi nemiche in zona. Affondane qualcuna.»')}
+  if(!C.tut&&!C.convoy&&!C.notes.esc0&&(C.ekills||0)>=1){C.esW=(C.esW||0)+dt;if(C.esW>5){C.notes.esc0=1;spawnEscort()}}
   if(!C.tut&&C.convoy&&!C.notes.found&&C.ships.some(s=>s.conv&&!s.dead&&Math.hypot(s.x-p.x,s.y-p.y)<1400)){C.notes.found=1;toast('<b>Tito:</b> «Pip e Dodo sono sulla nave con la bandiera bianca. <b>Non affondarla.</b>»')}
   if(!C.convoy&&!C.tut&&((C.ekills||0)>=3||C.t>300)){const q0=routePos(700);C.cvW=(C.cvW||0)+dt;if(C.cvW<1.5&&!C.cvT){C.cvT=1;toast('Tito: «Capitano! Il galeone spagnolo sta per salpare, tieniti pronto!»',5000)}if(Math.hypot(q0.x-p.x,q0.y-p.y)>2600||C.cvW>25)spawnConvoy()}
   {const ldg=C.ships.find(s=>s.conv&&s.type==='galeone'&&!s.dead&&!s.ally);
@@ -11353,10 +11573,10 @@ function clearCP(){try{localStorage.removeItem('sm_c3cp')}catch(e){}}
 function board(){
   if(!C||C.over)return;const s=nearBoard();if(!s)return;
   if(s.type==='galeone'){
-    C.over=true;boardSfx();toast('<b>Abbordaggio!</b> Tutti sul galeone spagnolo!',2500);
+    C.over=true;boardSfx();toast('<b>Abbordaggio!</b> Tutti sul galeone spagnolo!',2500);try{YD.stat('gal')}catch(e){}
     try{localStorage.setItem('sm_c34',JSON.stringify({pris:C.pris,silver:C.silver,hull:C.p.hull,max:C.p.max,kills:C.kills,t:C.t,shots:C.shots,hits:C.hits}))}catch(e){}
     setTimeout(()=>{try{__go('#w4')}catch(e){}location.reload()},1100);return}
-  s.ally=true;s.conv=false;s.disabled=false;s.hull=s.max;C.pris=2;boardSfx();parEv('board',1);saveCP();
+  s.ally=true;s.conv=false;s.disabled=false;s.hull=s.max;C.pris=2;boardSfx();parEv('board',1);saveCP();try{YD.stat('pris');yAnn(5200)}catch(e){}
   toast('<b>Pip:</b> «Capitano! Sapevo che saresti venuto!» · <b>Dodo:</b> «Ho ancora il cucchiaio!»');
   for(let i=0;i<8;i++)C.fx.push({k:'flash',x:s.x+rr(-60,60),y:s.y+rr(-30,30),r:18,t:0,life:.6});
   setTimeout(()=>{if(!C||C.over)return;const g=C.ships.find(q=>q.type==='galeone'&&!q.dead&&!q.ally);if(g)toast('<b>Biscotto:</b> «Ora il galeone! Colpiscilo fino all\'avaria, poi premi Abborda: l\'argento è a bordo. È '+dirName(g.x-C.p.x,g.y-C.p.y)+': guarda il segnalino rosso sulla minimappa.»',7000)},3500);
@@ -11394,7 +11614,7 @@ function drawShip0(g,e,t){
   if(sk>0)g.globalAlpha=1-sk*.9;
   if(sk<.3){g.save();g.translate(s.x+12,s.y+26);g.rotate(s.hd);g.fillStyle='rgba(4,24,44,.26)';g.beginPath();g.ellipse(0,0,sp0.L*.82,sp0.W*.7,0,0,7);g.fill();g.restore()}
   g.translate(s.x,s.y+8+bob+sk*26);g.rotate(s.hd+sk*.15+Math.sin(t*1.1+s.seed)*.012);
-  drawSp(g,hs(s.type),0,0,1);
+  drawSp(g,hs(s.type,s),0,0,1);
   if(s.flash>0){g.globalAlpha=Math.min(1,s.flash*3.5);g.fillStyle='rgba(255,255,255,.7)';g.beginPath();g.ellipse(0,0,sp0.L*.85,sp0.W*.85,0,0,7);g.fill();g.globalAlpha=1}
   g.restore();
   if(sk>.5)return;
@@ -11408,7 +11628,7 @@ function drawShip0(g,e,t){
     g.save();g.translate(s.x+c*m*sp0.L,s.y+sn*m*sp0.L+8+bob);
     g.transform(1,0,sw,1,0,0);g.scale(1,k);{const mg=g.createLinearGradient(-3,0,3,0);mg.addColorStop(0,'#9a7048');mg.addColorStop(1,'#4a2c18');g.fillStyle=mg;g.fillRect(-3,-sp0.mh,6,sp0.mh);g.strokeStyle='rgba(20,10,4,.6)';g.lineWidth=1;g.strokeRect(-3,-sp0.mh,6,sp0.mh)}g.scale(s.sf,1);
     if(sk>0)g.globalAlpha=1-sk*1.4;
-    const spr=ss(s.type);drawSp(g,spr,0,0,1);g.restore()
+    const spr=ss(s.type,s);drawSp(g,spr,0,0,1);g.restore()
   }
   if(s===C.p&&sk<.3){const m0=sp0.masts[0],px=s.x+c*m0*sp0.L,py=s.y+sn*m0*sp0.L+8+bob-sp0.mh*k+8;drawParrot(g,px,py,{t,s:.78,perch:true,flip:c<0,hat:S&&S.phat})}
   // etichetta e barra
@@ -11416,7 +11636,7 @@ function drawShip0(g,e,t){
   if(!s.isP){
     g.save();g.textAlign='center';g.font='800 14px Nunito,Arial';
     const near=Math.hypot(P.x-s.x,P.y-s.y)<1100||s.type==='prigionieri'&&!s.ally;
-    if(near){const lab=s.ally?'Nave di Pip e Dodo':sp0.name+(s.disabled?' · in avaria':'');g.lineWidth=4;g.strokeStyle='rgba(10,22,34,.85)';g.fillStyle=s.type==='prigionieri'?'#fff':s.type==='galeone'?'#ffe08a':s.type==='mercante'?'#e8e0c8':s.ally?'#b9f0b0':'#ffb0a0';g.strokeText(lab,s.x,hy-10);g.fillText(lab,s.x,hy-10)}
+    if(near){const lab=s.ally?'Nave di Pip e Dodo':(s.nm||sp0.name)+(s.disabled?' · in avaria':'');g.lineWidth=4;g.strokeStyle='rgba(10,22,34,.85)';g.fillStyle=s.type==='prigionieri'?'#fff':s.type==='galeone'?'#ffe08a':s.type==='mercante'?'#e8e0c8':s.ally?'#b9f0b0':'#ffb0a0';g.strokeText(lab,s.x,hy-10);g.fillText(lab,s.x,hy-10)}
     if(s.hull<s.max||s.type==='galeone'||s.type==='prigionieri'){const bw=70;g.fillStyle='rgba(10,22,34,.75)';g.fillRect(s.x-bw/2,hy,bw,7);g.fillStyle=s.type==='prigionieri'?'#b9d4ff':s.ally?'#8fe08a':'#ff6a5a';g.fillRect(s.x-bw/2+1,hy+1,(bw-2)*cl(s.hull/s.max,0,1),5)}
     g.restore();
   }
@@ -11512,6 +11732,19 @@ function hud(){
   {const l=litSide();C.lit=l;const b=$('c3fire');b.disabled=!l||!l.ready||!!C.p.gunsOut;b.classList.toggle('lit',!!(l&&l.ready&&!C.p.gunsOut))}
   sailUI();overlay();windDial();miniMap();
 }
+function edgeArrow(g,w,h,x,y,col,dist){      // freccia sul bordo (dentro un rettangolo che evita i pulsanti) + distanza in caselle
+  const x0=88,x1=w-142,y0=58,y1=h-80,mx=(x0+x1)/2,my=(y0+y1)/2,hx=(x1-x0)/2,hy=(y1-y0)/2;
+  const dx=x-w/2,dy=y-h/2,a=Math.atan2(dy,dx),k=Math.min(dx?hx/Math.abs(dx):1e9,dy?hy/Math.abs(dy):1e9),ex=mx+dx*k,ey=my+dy*k;
+  g.save();g.translate(ex,ey);g.rotate(a);g.fillStyle=col;g.strokeStyle='#2a1a0e';g.lineWidth=2.5;g.beginPath();g.moveTo(16,0);g.lineTo(-9,-10);g.lineTo(-9,10);g.closePath();g.fill();g.stroke();g.restore();
+  distPill(g,ex,ey,a,Math.round(dist/T)+' caselle',col)
+}
+function distPill(g,ex,ey,a,txt,col){
+  const lx=ex-Math.cos(a)*34,ly=ey-Math.sin(a)*34;
+  g.save();g.font='800 12px Nunito,Arial';g.textAlign='center';g.textBaseline='middle';
+  const tw=g.measureText(txt).width+14,x=lx-tw/2,y=ly-10,r=10;
+  g.fillStyle='rgba(24,14,6,.8)';g.beginPath();g.moveTo(x+r,y);g.arcTo(x+tw,y,x+tw,y+20,r);g.arcTo(x+tw,y+20,x,y+20,r);g.arcTo(x,y+20,x,y,r);g.arcTo(x,y,x+tw,y,r);g.closePath();g.fill();
+  g.lineWidth=2;g.strokeStyle=col;g.stroke();g.fillStyle='#fff6dc';g.fillText(txt,lx,ly+1);g.restore()
+}
 function overlay(){
   const o=$('c3ov'),w=o.clientWidth,h=o.clientHeight;if(!w)return;
   if(o.width!==w||o.height!==h){o.width=w;o.height=h}
@@ -11519,21 +11752,23 @@ function overlay(){
   if(VOY)voyOverlay(g,w,h);
   if(C.go5&&!C.over){const[x,y]=toScreen(C.go5.x,C.go5.y);
     if(!(x>26&&x<w-26&&y>40&&y<h-26)){const[qx,qy]=toScreen(C.p.x,C.p.y),a=Math.atan2(y-qy,x-qx),ex=qx+Math.cos(a)*150,ey=qy+Math.sin(a)*130,pl=.5+.5*Math.sin(C.t*6);
-      g.save();g.translate(ex,ey);g.rotate(a);g.shadowColor='rgba(255,214,90,.9)';g.shadowBlur=14+pl*10;g.fillStyle='#ffd23a';g.strokeStyle='#2a1a0e';g.lineWidth=3;g.beginPath();g.moveTo(24,0);g.lineTo(-12,-15);g.lineTo(-6,0);g.lineTo(-12,15);g.closePath();g.fill();g.stroke();g.restore()}
+      g.save();g.translate(ex,ey);g.rotate(a);g.shadowColor='rgba(255,214,90,.9)';g.shadowBlur=14+pl*10;g.fillStyle='#ffd23a';g.strokeStyle='#2a1a0e';g.lineWidth=3;g.beginPath();g.moveTo(24,0);g.lineTo(-12,-15);g.lineTo(-6,0);g.lineTo(-12,15);g.closePath();g.fill();g.stroke();g.restore();distPill(g,ex,ey,a,Math.round(Math.hypot(C.go5.x-C.p.x,C.go5.y-C.p.y)/T)+' caselle','#ffd23a')}
     else{g.save();g.translate(x,y);const pl=.5+.5*Math.sin(C.t*5);g.strokeStyle='rgba(255,214,90,'+(.5+.4*pl)+')';g.lineWidth=5;g.beginPath();g.arc(0,0,3.4*44*camZoom(),0,7);g.stroke();g.fillStyle='#ffd23a';g.font='900 26px Nunito,Arial';g.textAlign='center';g.fillText('⚓',0,9);g.restore()}}
-  for(const s of C.ships){
-    if(s.dead||!(s.type==='galeone'&&s.conv&&!C.tut||s.type==='prigionieri'&&!s.ally&&!C.tut||s.tutT))continue;
+  {let near=null,nd=1e9;      // nel primo tratto: freccia verso la pattuglia più vicina, se è fuori schermo
+   if(!VOY&&!C.convoy&&!C.tut&&!C.go5&&!C.over)for(const s of C.ships){if(s.dead||s.sinking||s.ally||s.conv||!(s.type==='pattuglia'||s.free))continue;const d=Math.hypot(s.x-C.p.x,s.y-C.p.y);if(d<nd){nd=d;near=s}}
+   for(const s of C.ships){
+    const kd=s.dead?0:s.tutT?'t':(s.type==='galeone'&&s.conv&&!C.tut)?'g':(s.type==='prigionieri'&&!s.ally&&!C.tut)?'p':s===near?'e':0;
+    if(!kd)continue;
     const[x,y]=toScreen(s.x,s.y);
     if(x>26&&x<w-26&&y>40&&y<h-26)continue;
-    const a=Math.atan2(y-h/2,x-w/2),ex=cl(w/2+Math.cos(a)*(w/2-34),34,w-34),ey=cl(h/2+Math.sin(a)*(h/2-34),50,h-34);
-    g.save();g.translate(ex,ey);g.rotate(a);g.fillStyle=s.tutT?'#7be3ff':s.type==='prigionieri'?'#fff':'#ffd23a';g.strokeStyle='#2a1a0e';g.lineWidth=2.5;g.beginPath();g.moveTo(16,0);g.lineTo(-9,-10);g.lineTo(-9,10);g.closePath();g.fill();g.stroke();g.restore();
-  }
+    edgeArrow(g,w,h,x,y,kd==='t'?'#7be3ff':kd==='p'?'#ffffff':kd==='e'?'#ff8a7a':'#ffd23a',Math.hypot(s.x-C.p.x,s.y-C.p.y))
+   }}
   // lato illuminato verso i nemici + ricarica
   const p=C.p,[px,py]=toScreen(p.x,p.y),z=camZoom(),l=C.lit;
   for(const sd of[-1,1]){const cd=sd<0?p.cdL:p.cdR,an=p.hd+(sd>0?Math.PI/2:-Math.PI/2),isLit=l&&l.side===sd;
     if(isLit){g.save();g.shadowColor='rgba(255,190,60,.95)';g.shadowBlur=18;g.strokeStyle=l.ready?'rgba(255,214,90,'+(.7+.3*Math.sin(C.t*8))+')':'rgba(255,255,255,.6)';g.lineWidth=l.ready?9:6;g.lineCap='round';g.beginPath();g.arc(px,py+6*z,(SPEC.sirena.W+26)*z,an-.62,an+.62);g.stroke();g.restore();
       if(l.ready){const[tx,ty]=toScreen(l.e.x,l.e.y);g.save();g.setLineDash([8,8]);g.strokeStyle='rgba(255,214,90,.55)';g.lineWidth=2.5;g.beginPath();g.moveTo(px,py);g.lineTo(tx,ty);g.stroke();g.restore()}}
-    if(cd>0){g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.arc(px,py+6*z,(SPEC.sirena.W+14)*z,an-.5,an-.5+(1-cd/2.1));g.stroke()}}
+    if(cd>0){g.strokeStyle='rgba(255,255,255,.55)';g.lineWidth=5;g.lineCap='round';g.beginPath();g.arc(px,py+6*z,(SPEC.sirena.W+14)*z,an-.5,an-.5+(1-cd/(C.cdP||2.1)));g.stroke()}}
 }
 function windDial(){
   const c=$('c3wind').getContext('2d'),p=C.p;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,120,120);c.translate(60,60);
@@ -11588,9 +11823,10 @@ function go5Start(){
 }
 function go5Arrive(){
   C.over=true;const sv=C.silver;
+  try{YD.bank(sv);YD.stat('runs')}catch(e){}
   UI.dlg([D('hero',"Eccolo: il varco. Di là le carte non dicono più niente."),D('tito',"Argento a bordo ("+sv+" casse), Pip e Dodo al sicuro. Siamo pronti."),D('biscotto',"Cra! Pronti! Più o meno!")],()=>{
     const o=document.createElement('div');o.style.cssText='position:fixed;inset:0;z-index:99999;background:#06182a;color:#ffd23a;display:flex;flex-direction:column;align-items:center;justify-content:center;font:800 22px Nunito,Arial;text-align:center';
-    o.innerHTML='<div style="font-size:15px;opacity:.8">Capitolo 4</div><div style="font-size:30px;margin:6px 0 14px">Il grande viaggio</div><div>Caricamento…</div>';document.body.appendChild(o);
+    o.innerHTML='<div style="font-size:15px;opacity:.8">Capitolo 4</div><div style="font-size:30px;margin:6px 0 14px">Il grande viaggio</div>'+(sv>0?'<div style="font-size:15px;opacity:.85;margin-bottom:12px">🪙 +'+sv+' casse d\'argento al cantiere del campo</div>':'')+'<div>Caricamento…</div>';document.body.appendChild(o);
     try{localStorage.setItem('sm_c5',JSON.stringify({fresh:1,silver:sv,hull:8}))}catch(e){}
     setTimeout(()=>{try{__go('#w5')}catch(e){}location.reload()},1600)});
 }
@@ -11604,7 +11840,9 @@ function endRun(why){
   else if(C.silver>=4){key=3;title='Solo argento';txt='La stiva è piena. Ma sul convoglio sono rimasti i tuoi, e questo pesa.'}
   else{key=4;title=why==='affondata'?'Affondata':why==='fuga'?'Il galeone è scappato':'Colpo mancato';txt=why==='fuga'?"Il galeone spagnolo è uscito dal mare con il suo argento: missione fallita. Riprova!":"Il convoglio è passato. Un'altra volta."}
   const rows=['Pieno: argento e tutti salvati','Argento e salvataggio, con perdite','Solo salvataggio','Solo argento','Colpo mancato'];
-  $('endCard').innerHTML='<div class="seas"><b>Capitolo 3</b><span>Il Convoglio · bozza giocabile</span></div><h2>'+title+'</h2><p>'+txt+'</p><div class="stats"><div><b>'+C.silver+'</b>casse d\'argento</div><div><b>'+C.pris+'/2</b>prigionieri salvati</div><div><b>'+C.kills+'</b>navi affondate</div><div><b>'+Math.max(0,Math.round(C.p.hull/C.p.max*100))+'%</b>scafo rimasto</div></div><p class="sm">Esito: <b>'+rows[key]+'</b></p><div class="row"><button class="btn gold" id="eGo">Riprova</button>'+(key>=2&&loadCP()?'<button class="btn" id="eCp">Riprendi con Pip e Dodo</button>':'')+'</div>';
+  let bk=0,ann=[],ybk=0;try{bk=C.silver;YD.bank(bk);ybk=YD.get().b;YD.stat('runs');if(key===0)YD.stat('perfect');ann=YD.announce()}catch(e){}
+  const ybHtml=(bk>0?'<p class="sm">🪙 <b>+'+bk+'</b> casse d\'argento al cantiere del campo (in cassa: '+ybk+').</p>':'<p class="sm">🪙 Senza argento il cantiere resta fermo: porta le casse al campo per migliorare la nave.</p>')+(ann.length?'<p class="sm">⛵ Nuovo per la nave: <b>'+ann.map(x=>x.it.n).join(', ')+'</b>. Lo trovi nel Menu › Guardaroba › Nave.</p>':'');
+  $('endCard').innerHTML='<div class="seas"><b>Capitolo 3</b><span>Il Convoglio</span></div><h2>'+title+'</h2><p>'+txt+'</p><div class="stats"><div><b>'+C.silver+'</b>casse d\'argento</div><div><b>'+C.pris+'/2</b>prigionieri salvati</div><div><b>'+C.kills+'</b>navi affondate</div><div><b>'+Math.max(0,Math.round(C.p.hull/C.p.max*100))+'%</b>scafo rimasto</div></div><p class="sm">Esito: <b>'+rows[key]+'</b></p>'+ybHtml+'<div class="row"><button class="btn gold" id="eGo">Riprova</button>'+(key>=2&&loadCP()?'<button class="btn" id="eCp">Riprendi con Pip e Dodo</button>':'')+'</div>';
   if(key<=2){const nb=document.createElement('button');nb.className='btn gold';nb.textContent='Continua: Il grande viaggio';nb.style.cssText='display:block;margin:10px auto 0';nb.onclick=()=>{try{localStorage.setItem('sm_c5',JSON.stringify({fresh:1,silver:C.silver,hull:8}))}catch(e){}try{__go('#w5')}catch(e){}location.reload()};$('endCard').appendChild(nb)}
   {const h=document.createElement('button');h.className='lnk';h.textContent='Torna al gioco';h.style.cssText='display:block;margin:10px auto 0';h.onclick=()=>{try{history.replaceState(null,'',location.pathname)}catch(e){}location.reload()};$('endCard').appendChild(h)}
   {const cpb=$('endCard').querySelector('#eCp');if(cpb)cpb.onclick=()=>{uShow('endcard',false);newRun(C.easy,C.plan,loadCP());sailUI()}}
@@ -11675,6 +11913,7 @@ function tutShow(){
   d.innerHTML='<div class="tth"><b>'+st.t+'</b><span>'+TUT.map((_,k)=>k<tt.i?'●':k===tt.i?'◉':'○').join(' ')+'</span></div><p>'+st.x+'</p><div class="ttb"><button id="ttSkip">Salta</button>'+(st.btn?'<button class="go" id="ttNext">'+st.btn+'</button>':'')+'</div>';
   const pr=(el,fn)=>{if(el)el.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();fn()})};
   pr($('ttSkip'),tutEnd);pr($('ttNext'),tutNext);
+  try{document.body.style.setProperty('--c3tuth',(d.offsetHeight+14)+'px')}catch(e){}
   if(st.target&&!tt.tg){
     const p=C.p;let x=p.x+Math.cos(p.hd+.5)*620,y=p.y+Math.sin(p.hd+.5)*620;
     if(!clearAt(x,y,90)){const r2=findSea(x,y);x=r2[0];y=r2[1]}
@@ -11687,6 +11926,7 @@ function tutEnd(){
   try{localStorage.setItem(TUTK,'1')}catch(e){}
   if(C.tut.tg){C.tut.tg.still=false;C.tut.tg.tutT=false}
   C.tut=null;const d=$('c3tut');if(d)d.style.display='none';
+  try{document.body.style.removeProperty('--c3tuth')}catch(e){}
   toast('Buon vento, capitano!');
 }
 function tutStart(){C.tut={i:0,hd0:C.p.hd,x0:C.p.x,y0:C.p.y,tg:null};tutShow()}
@@ -12159,7 +12399,7 @@ function newVoy(sv){
   S.tod=VZ[cz].tod%24;
   C={plan:Object.assign({},PLAN0),easy:true,t:0,p:null,ships:[],balls:[],crates:[],fx:[],silver:(sv&&sv.silver)||0,pris:2,sail:2,kills:0,sunkSilver:0,shots:0,hits:0,lost:0,ended:false,wind:Math.PI,notes:{},escapes:0,pend:[],fireQ:0,over:false,ramCd:0,convoy:false,tut:null};
   const c=CPS[cz];
-  C.p=mkShip('sirena',c[0]*T,c[1]*T,Math.PI,{hull:8,max:8});C.p.isP=true;
+  const yd5=YD.get();C.sailK=YD.sailK(yd5.s);C.p=mkShip('sirena',c[0]*T,c[1]*T,Math.PI,{hull:8+yd5.h,max:8+yd5.h});C.p.isP=true;
   if(!clearAt(C.p.x,C.p.y,60)){const r=findSea(C.p.x,C.p.y);C.p.x=r[0];C.p.y=r[1]}
   P.x=C.p.x;P.y=C.p.y;P.hd=C.p.hd;P.mode='raft';cam.x=P.x;cam.y=P.y;
   WX.i=VZ[cz].wx;S.wx.k=WX.i>.8?'storm':WX.i>.05?'rain':'clear';S.wx.t=1e9;
@@ -12279,7 +12519,7 @@ function voyEnd(){
   saveV(true);
   try{localStorage.setItem('sm_c5done','1')}catch(e){}
   const m=Math.floor((V.tAll+V.t)/60),s=Math.floor((V.tAll+V.t)%60);
-  $('endCard').innerHTML='<div class="seas"><b>Capitolo 4</b><span>Il grande viaggio · bozza giocabile</span></div><h2>La stella bassa</h2><p>Cinque mari ignoti, ventidue nomi letti ad alta voce e un faro acceso. Giacomo ti aspettava davvero.</p><div class="stats"><div><b>5/5</b>mari attraversati</div><div><b>'+Math.max(0,Math.round(C.p.hull/C.p.max*100))+'%</b>scafo rimasto</div><div><b>'+C.silver+'</b>casse d\'argento</div><div><b>'+m+':'+(s<10?'0':'')+s+'</b>tempo</div></div><p class="sm">Sulla linea dell\'orizzonte, a est, c\'è una vela. Una sola. Troppo lontana per riconoscerla.</p><div class="row"><button class="btn gold" id="eGo">Rifai il viaggio</button></div>';
+  $('endCard').innerHTML='<div class="seas"><b>Capitolo 4</b><span>Il grande viaggio</span></div><h2>La stella bassa</h2><p>Cinque mari ignoti, ventidue nomi letti ad alta voce e un faro acceso. Giacomo ti aspettava davvero.</p><div class="stats"><div><b>5/5</b>mari attraversati</div><div><b>'+Math.max(0,Math.round(C.p.hull/C.p.max*100))+'%</b>scafo rimasto</div><div><b>'+C.silver+'</b>casse d\'argento</div><div><b>'+m+':'+(s<10?'0':'')+s+'</b>tempo</div></div><p class="sm">Sulla linea dell\'orizzonte, a est, c\'è una vela. Una sola. Troppo lontana per riconoscerla.</p><div class="row"><button class="btn gold" id="eGo">Rifai il viaggio</button></div>';
   {const h=document.createElement('button');h.className='lnk';h.textContent='Torna al gioco';h.style.cssText='display:block;margin:10px auto 0';h.onclick=()=>{try{history.replaceState(null,'',location.pathname)}catch(e){}location.reload()};$('endCard').appendChild(h)}
   $('endCard').querySelector('#eGo').onclick=()=>{KS(VKEY,{fresh:1,done:true,silver:0});location.reload()};
   uShow('endcard',true);sfx('quest');
