@@ -615,7 +615,9 @@ function hsl(h,s,l,a){return a==null?`hsl(${h|0},${s|0}%,${l|0}%)`:`hsla(${h|0},
 const BLOBS_1=[
   [33,30,17,12],[19,35,9,8],[21,45,8,4.6],[24,41,6,4],[28,40,6,4],[42,38,8.5,4.2],[36,18,11,6.5],[49,20,7,6],[51,32,8,7],[37,43,10,5],[47,43,6,4],
   [13,21,4.5,4],[60,11,4,3],[63,50,3.6,3],
-  [79+I2,31,8,9],[82+I2,22,5,4],[74+I2,40,5,4.5]
+  [79+I2,31,8,9],[82+I2,22,5,4],[74+I2,40,5,4.5],
+  ...[4,7.5,11,14.5,18,21.5,25,28.5,32,35.5,39].map(y=>[64.8,y,2.1,2.7]),    /* dorsale ovest: chiusa a nord, aperta a sud */
+  ...[22,25.5,29,32.5,36,39.5,43,46.5,50,53.5,57].map(y=>[73.3,y,2.1,2.7])    /* dorsale est: chiusa a sud, aperta a nord */
 ];
 /* capitolo 2: la grande isola della Baia dei Fuggiaschi (molto più grande della prima) */
 const BLOBS_2=[
@@ -681,10 +683,11 @@ const seaT=new Uint8Array(MW*MH);          // 1 = acqua abbastanza profonda per 
   }
 })();
 let EDSV=null;
-function edtGrids(){
-  if(!EDT.length)return;
+function edtGrids(all){
+  if(!EDT.length&&!all)return;
   EDTON=true;let x0=MW,y0=MH,x1=0,y1=0;
   for(const p of EDT){x0=Math.min(x0,Math.floor(p[1]-p[3])-2);x1=Math.max(x1,Math.ceil(p[1]+p[3])+2);y0=Math.min(y0,Math.floor(p[2]-p[4])-2);y1=Math.max(y1,Math.ceil(p[2]+p[4])+2)}
+  if(all){x0=0;y0=0;x1=MW-1;y1=MH-1}
   x0=Math.max(0,x0);y0=Math.max(0,y0);x1=Math.min(MW-1,x1);y1=Math.min(MH-1,y1);
   for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++){const i=ty*MW+tx;if(mesaT[i])continue;const e=elev(tx+.5,ty+.5);elevT[i]=e;walkT[i]=e>WL+.075?1:0;seaT[i]=(e<WL-.035&&tx>0&&ty>0&&tx<MW-1&&ty<MH-1)?1:0}
 }
@@ -2474,8 +2477,8 @@ function genWorld(){
   const lane=x=>{const t=clamp((x-61)/(9.4+I2),0,1);return 31.4+t*1.9+Math.sin((x-61)*.62)*2.1*Math.sin(t*3.14)}
   const rpath=[[61.2,31.4],[63.8,24.5],[69.5,23.2],[76,25],[79.4,33.2]],dPath=(x,y)=>{let m=1e9;for(let i=0;i<rpath.length-1;i++){const[ax,ay]=rpath[i],[bx,by]=rpath[i+1],vx=bx-ax,vy=by-ay,u=clamp(((x-ax)*vx+(y-ay)*vy)/(vx*vx+vy*vy),0,1);m=Math.min(m,Math.hypot(x-ax-vx*u,y-ay-vy*u))}return m};
   {let w=0;const blob=(cx,cy,rx,ry)=>{for(let ty=Math.floor(cy-ry);ty<=Math.ceil(cy+ry);ty++)for(let tx=Math.floor(cx-rx);tx<=Math.ceil(cx+rx);tx++){const d=((tx+.5-cx)/rx)**2+((ty+.5-cy)/ry)**2;if(d>1||(d>.55&&((tx*5+ty*11)%4===0)))continue;if(!seaT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)])continue;const e=ent({id:'rw'+(w++),type:'reef',v:(tx*7+ty*3)%5,x:(tx+.5)*TS,y:(ty+.8)*TS,tx,ty});addBlock(e,tx,ty,1,1)}};
-   blob(66,32,1.4,5.6);blob(72.8,30,1.4,4.4)}
-  for(let tries=0;tries<2400&&k<26+I2;tries++){
+   }
+  for(let tries=0;tries<2400&&k<0;tries++){
     const tx=58+((rr2()*(19+I2))|0),ty=15+((rr2()*44)|0);
     if(!seaT[tIdx(tx,ty)]||blockT[tIdx(tx,ty)])continue;
     if(dPath(tx+.5,ty+.5)<3.4)continue;
@@ -4755,7 +4758,7 @@ function drawPlayer(g,t,alpha){
   const a=P.act,low=a&&(a.kind==='gather'||a.kind==='forage'||a.kind==='pool'||a.kind==='drink'||a.kind==='open'||a.kind==='pick');
   g.save();
   if(low){const b=Math.sin(Math.min(1,a.t/.35)*1.57)*.9;g.translate(P.x,P.y);g.transform(1,0,(P.flip?-1:1)*.1*b,1-.1*b,0,0);g.translate(-P.x,-P.y)}
-  if(P.mode==='raft'){g.translate(Math.cos(P.hd)*54,Math.sin(P.hd)*54-6+Math.sin(RT*1.6)*1.2)}
+  if(P.mode==='raft'){g.translate(Math.cos(P.hd)*38,Math.sin(P.hd)*38+7+Math.sin(RT*1.6)*1.5)}
   if(P.cl&&P.cl.dy)g.translate(0,P.cl.dy);
   drawChar(g,P.x,P.y,{k:hs,dir:P.cl&&P.cl.ph===2?'b':P.dir,side:P.side,flip:P.flip,walk:P.walk,sab:(WORLD===4&&window.Ch4)?Ch4.sab():null,moving:P.mode==='raft'?false:P.moving,tool:P.tool,swing:P.act&&P.tool?(P.swing%1):null,torchHand:!!(S&&S.up.torch&&S.torchOn),t,alpha,noShadow:P.mode==='raft'});
   g.restore();
@@ -5694,7 +5697,7 @@ const CHANGELOG=[
     "Il grande viaggio: la nave fantasma ora ti insegue da lontano, senza sparare. Quando punti la prua verso di lei si dissolve fino a diventare attraversabile, poi sparisce e ricompare dietro di te. Ha uno scafo squarciato, l'albero spezzato e alghe appese.",
     "Il grande viaggio: percorsi nuovi, più vari e senza ripassare negli stessi punti. Nel mare delle Tempeste una rotta a curve larghe con i gorghi ai lati; nel mare di Nebbia le nove boe di Giacomo disegnano una serpentina con un passaggio stretto tra due isolotti.",
     "Zattera: non si può più costruire subito. Prima servono falò, capanna, banco da lavoro e torcia, e bisogna aver portato avanti le missioni dell\'isola (fino al Pino Alto). I link di prova (Capitolo 3, galeone, Il grande viaggio) non sono più nel menu iniziale: si trovano in Diario → Novità, con la password.",
-    "Editor mappa v2: pennello «Terreno» (sabbia, erba, mare: allarga la spiaggia o scava il mare, si applica quando esci), pannello «Nomi» per cambiare i nomi dei personaggi nei dialoghi, «Scarica file» per mandare la mappa a Claude.","Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
+    "Prima traversata più lunga: due dorsali di terra tra la prima isola e la Baia obbligano a un giro largo (circa il quadruplo della strada) sotto la tempesta, con frecce che indicano la rotta; tolti gli scogli sparsi inutili.","Zattera: l'omino resta sempre sul ponte, fisso a prua, anche quando giri.","Editor mappa v3: «Anteprima costa» ridisegna subito sabbia/erba/mare; nuovi editor per galeone (rotta del convoglio e caratteristiche delle navi), interno della nave (mobili, lanterne, decorazioni, dobloni su tutti e tre i ponti) e grande viaggio (tappe, boe, punti di ripresa), dal menu con password.","Editor mappa v2: pennello «Terreno» (sabbia, erba, mare: allarga la spiaggia o scava il mare, si applica quando esci), pannello «Nomi» per cambiare i nomi dei personaggi nei dialoghi, «Scarica file» per mandare la mappa a Claude.","Editor mappa (Diario → Novità, con password): metti in pausa il gioco, tocca un oggetto per selezionarlo, trascinalo dove vuoi, eliminalo, duplicalo, cambia aspetto o aggiungine di nuovi (alberi, pini, palme, cespugli, rocce, lanterne, barili, casse…). Puoi spostare anche capanna, falò, banco e zattera. «Salva» tiene le modifiche su questo telefono; «Codice» le copia per mandarle a Claude.",
     "Mappa dell'isola dei Relitti (seconda isola): oggetti e palme spostati o aggiunti con l'editor, come li hai disegnati tu.",
     "Il grande viaggio: Biscotto commenta con battute la nave fantasma.",
     "Lanterne: non ce ne sono più all\'inizio, né sulla prima né sulla seconda isola. Compaiono solo con la miglioria «Lanterne» del banco da lavoro, nei punti che hai disegnato con l\'editor.",
@@ -6068,7 +6071,7 @@ m10:{kind:'main',title:"La zattera",blurb:"Se c'è fumo, c'è qualcuno. Se c'è 
    {k:'flag',done:()=>matsOk(),txt:()=>matsTxt(),hint:"Tela: dalla vela strappata sul relitto. Legna dagli alberi, corda dalle liane, rottami dalla sabbia e dal relitto.",
     mark:()=>{if(!S.res.tela&&!S.built.zattera&&!EID.lt_sail.got)return pt(EID.lt_sail,60);return pt(plotE('zattera'),90)}},
    {k:'build',id:'zattera',txt:"Costruisci la Zattera sulla spiaggia, oltre il campo",hint:"La piazzola tratteggiata è sulla spiaggia: segui il sentiero oltre il campo.",mark:()=>pt(plotE('zattera'),90)},
-   {k:'flag',done:()=>!!S.flags.sailed,txt:"Salpa seguendo il fumo",hint:"Avvicinati alla zattera e premi «Salpa». Sterza con il joystick, aggira i gruppi di scogli e schiva i fulmini.",mark:()=>({x:FIX.landing[0]*TS,y:FIX.landing[1]*TS,r:4*TS,up:20})}],
+   {k:'flag',done:()=>!!S.flags.sailed,txt:"Salpa seguendo il fumo",hint:"Avvicinati alla zattera e premi «Salpa». Sterza con il joystick, segui le frecce attorno alle due dorsali di terra e schiva i fulmini.",mark:()=>rwMark()||({x:FIX.landing[0]*TS,y:FIX.landing[1]*TS,r:4*TS,up:20})}],
   onDone(){Story.endChapter()}},
 c0:{kind:'main',title:"Il mare aperto",blurb:"Una costa da seguire fino alla baia.",
   goals:[{k:'flag',done:()=>!(S.c2&&S.c2.sea),txt:"Segui la costa fino alla baia dei Fuggiaschi",hint:"Naviga con la zattera tenendo la costa vicina e aggira gli scogli. La baia è sulla spiaggia ad ovest dell'isola.",mark:()=>({x:19.4*TS,y:31.2*TS,r:4*TS,up:20})}]},
@@ -7161,6 +7164,13 @@ function drawScoutMark(g,t){
 /* ---- 11c_storm.js ---- */
 /* ====== SFIDA DI FINE CAPITOLO: la tempesta in mare aperto ====== */
 const STM={on:false,hp:3,inv:0,warn:[],bt:2,t:0,fails:0};
+const RW=[[61.5,36],[63,43.5],[67.5,43],[67.6,36],[69.5,28],[68.6,22],[70,15],[76.8,15],[77,22],[77,30],[79.4,33.2]];   // tappe del giro lungo
+let RW_I=0;
+function rwMark(){
+  if(WORLD!==1||S.flags.sailed||P.mode!=='raft'){RW_I=0;return null}
+  while(RW_I<RW.length-1&&hyp(P.x-RW[RW_I][0]*TS,P.y-RW[RW_I][1]*TS)<3.2*TS)RW_I++;
+  const w=RW[RW_I];return{x:w[0]*TS,y:w[1]*TS,r:2.2*TS,up:0};
+}
 const CHAL_X=64.6;                       // oltre gli isolotti: da qui comincia la tempesta
 function chalHud(){
   const el=$('chal');if(!el)return;el.hidden=!STM.on;
@@ -7173,7 +7183,7 @@ function chalStart(){
   STM.on=true;STM.max=S.up.hull?4:3;STM.hp=STM.max;STM.inv=0;STM.warn=[];STM.bt=2.4;STM.t=0;
   WX.lock=true;S.wx.k='storm';S.wx.t=999;WX.boltT=99;
   UI.banner('Tempesta!','Schiva i lampi: il cerchio rosso dice dove cadono');sfx('horn');
-  setTimeout(()=>UI.toast('Raggiungi la costa a est. Il mare ti spinge indietro.'),1800);
+  setTimeout(()=>UI.toast('Segui le frecce: le due dorsali di terra obbligano a un giro largo.'),1800);
   chalHud();
 }
 function chalEnd(ok){
@@ -7195,7 +7205,7 @@ function chalFail(){
 }
 function updateChallenge(dt){
   if(!S||!S.live)return;
-  if(!S.flags.sailed&&!STM.on&&P.mode==='raft'&&P.x>CHAL_X*TS)chalStart();
+  if(!S.flags.sailed&&!STM.on&&P.mode==='raft'&&hyp(P.x-FIX.raftLaunch[0]*TS,P.y-FIX.raftLaunch[1]*TS)>4.5*TS)chalStart();
   if(!STM.on)return;
   if(P.mode!=='raft'){chalEnd(false);return}
   STM.t+=dt;STM.inv=Math.max(0,STM.inv-dt);
@@ -8497,7 +8507,7 @@ function journalBody(){
     return h}
   if(jTab==='r')return Extra.collectionHtml();
   if(!newsOK)return'<div class="news"><h4>Area riservata</h4><p style="font-weight:700;font-size:13.5px">Solo l\'admin può accedere.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn" id="nwGo">Entra</button></div><p id="nwErr" style="color:#b3261e;font-weight:800;font-size:13px;min-height:18px;margin:6px 0 0"></p></div>';
-  return'<div class="news"><div class="row" style="margin:4px 0 10px"><button class="btn" id="nwEd">Editor mappa</button><button class="btn" id="nwC3">Prova: Capitolo 3 (battaglia)</button><button class="btn" id="nwC4">Prova: assalto al galeone</button><button class="btn" id="nwC5">Prova: Il grande viaggio</button><button class="btn" id="nwVer">'+verLbl()+'</button></div>'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
+  return'<div class="news"><div class="row" style="margin:4px 0 10px"><button class="btn" id="nwEd">Editor mappa</button><button class="btn" id="nwE3">Editor galeone</button><button class="btn" id="nwE4">Editor interno nave</button><button class="btn" id="nwE5">Editor viaggio finale</button><button class="btn" id="nwC3">Prova: Capitolo 3 (battaglia)</button><button class="btn" id="nwC4">Prova: assalto al galeone</button><button class="btn" id="nwC5">Prova: Il grande viaggio</button><button class="btn" id="nwVer">'+verLbl()+'</button></div>'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
 }
 let newsOK=false;
 const pwHash=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return h};
@@ -8509,6 +8519,7 @@ function journalDraw(){
   const nc=c.querySelector('#nwC4');if(nc)nc.onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go('#w4');location.reload()};
   {const b3=c.querySelector('#nwC3');if(b3)b3.onclick=()=>{__go('#w3');location.reload()};const b5=c.querySelector('#nwC5');if(b5)b5.onclick=()=>{__go('#w5');location.reload()}}
   {const be=c.querySelector('#nwEd');if(be)be.onclick=()=>{uShow('journal',false);setTimeout(edStart,150)}}
+  for(const[id,h]of[['nwE3','#w3'],['nwE4','#w4'],['nwE5','#w5']]){const b=c.querySelector('#'+id);if(b)b.onclick=()=>{try{localStorage.setItem('sm_edx_auto','1');if(h==='#w4')localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go(h);location.reload()}}
   const go=c.querySelector('#nwGo');
   if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
   c.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{jTab=b.dataset.t;sfx('tap');journalDraw()});
@@ -9182,7 +9193,9 @@ function edRec(e){
   edStore();
 }
 function edMaxV(e){return e.type==='tree'?SP.tree.length:e.type==='pine'?SP.pine.length:e.type==='palm'?SP.palm.length:e.type==='bush'?SP.bush.length:e.type==='berry'?(SP.berry||[]).length:e.type==='rock'?(SP.boulder||[]).length:0}
+const edZmin=()=>ED.x?.08:.35;
 function edHit(wx,wy){
+  if(ED.x){let best=null,bs=1e9;const z=camZoom();for(const it of ED.x.items()){const d=Math.hypot(wx-it.x,wy-it.y),R=Math.max(it.r||24,26/z);if(d<R&&d<bs){bs=d;best=it}}return best}
   let best=null,bs=1e9;
   for(const e of E){
     if(!edOk(e))continue;
@@ -9196,6 +9209,7 @@ function edHit(wx,wy){
 }
 const edW=(sx,sy)=>{const z=camZoom();return[cam.x+(sx-VW/2)/z,cam.y+(sy-VH/2)/z]};
 function edLabel(){const el=document.getElementById('edSel');if(!el)return;const e=ED.sel;
+  if(ED.x){edxLabel(el);return}
   el.innerHTML=e?'<b>'+edName(e)+'</b><small>'+Math.floor(e.x/TS)+','+Math.floor(e.y/TS)+'</small>'
     +'<button class="btn" id="edDel">Elimina</button>'+(ED_DUP(e)?'<button class="btn" id="edDup">Duplica</button>':'')+(edMaxV(e)>1?'<button class="btn" id="edVar">Aspetto</button>':'')+'<button class="btn" id="edAdd">+ Aggiungi</button>'
     :'<span>Tocca un oggetto per selezionarlo.</span><button class="btn" id="edAdd">+ Aggiungi</button>';
@@ -9221,7 +9235,7 @@ function edPalette(){
       const d={t:p[1],s:p[2]||null,v:null,f:0,x:cx,y:cy};if(tpl.v!=null)d.v=(Math.random()*Math.max(1,edMaxV(tpl)))|0;edNew(d)})});
 }
 function edNamesLocal(){try{return JSON.parse(localStorage.getItem('sm_edit_names')||'{}')}catch(e){return{}}}
-function edCodeStr(){const o={w:WORLD,mv:ED.ed.mv,del:ED.ed.del,add:ED.ed.add,vv:ED.ed.vv,t:ED.ed.t};const n=edNamesLocal();if(Object.keys(n).length)o.names=n;return JSON.stringify(o)}
+function edCodeStr(){if(ED.x)return ED.x.code();const o={w:WORLD,mv:ED.ed.mv,del:ED.ed.del,add:ED.ed.add,vv:ED.ed.vv,t:ED.ed.t};const n=edNamesLocal();if(Object.keys(n).length)o.names=n;return JSON.stringify(o)}
 async function edSaveFile(code,st){
   const name='sette-mari-mappa-m'+WORLD+'.json',C=window.Capacitor,PL=C&&C.Plugins;
   try{
@@ -9252,7 +9266,7 @@ function edPaint(wx,wy){
 function edBar2(){const b=document.getElementById('edHand');if(b)b.hidden=!ED.brush}
 function edTerrain(){
   const nm={b:'Sabbia',g:'Erba',s:'Mare'};
-  sheetFor('<h2>Terreno</h2><p class="sm">Scegli un pennello, poi tocca o trascina sulla mappa: aggiungi sabbia (spiaggia), erba o mare. Il terreno si applica quando esci dall\'editor (il gioco si ricarica).</p>'
+  sheetFor('<h2>Terreno</h2><p class="sm">Scegli un pennello, poi tocca o trascina sulla mappa: aggiungi sabbia (spiaggia), erba o mare. I cerchi sono solo una guida: premi «Anteprima costa» per vedere il risultato vero (con «Griglia» spenta spariscono anche i cerchi).</p>'
    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px"><button class="btn" data-b="b">Sabbia</button><button class="btn" data-b="g">Erba</button><button class="btn" data-b="s">Mare</button></div>'
    +'<h3>Grandezza</h3><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px"><button class="btn" data-z="1.2">S</button><button class="btn" data-z="2.5">M</button><button class="btn" data-z="4.5">L</button><button class="btn" data-z="7">XL</button></div>'
    +'<div class="row"><button class="btn" id="edTU">Togli l\x27ultimo tocco</button><button class="btn" id="edTA">Cancella tutto il terreno</button></div><div class="row"><button class="btn" id="shNo">Chiudi</button></div><p class="sm" id="edTs"></p>',c=>{
@@ -9276,10 +9290,10 @@ function edNames(){
 }
 function edUI(){
   let bar=document.getElementById('edBar');if(bar)return;
-  const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #toasts,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edBar [hidden]{display:none!important}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
+  const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg,body.edit #c3,body.edit #c3ov,body.edit #c4{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edBar [hidden]{display:none!important}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
   document.head.appendChild(st);
   bar=document.createElement('div');bar.id='edBar';
-  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edRs">Azzera</button>';
+  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edAp">Anteprima costa</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edRs">Azzera</button>';
   document.body.appendChild(bar);
   const sel=document.createElement('div');sel.id='edSel';document.body.appendChild(sel);
   const $$=id=>bar.querySelector('#'+id);
@@ -9288,10 +9302,10 @@ function edUI(){
   $$('edCd').onclick=edCode;
   $$('edTr').onclick=edTerrain;$$('edNm').onclick=edNames;$$('edHand').onclick=()=>{ED.brush=null;edBar2();UI.toast('Torni a spostare gli oggetti.',1800)};
   $$('edUn').onclick=()=>{const f=ED.undo.pop();if(f){f();edLabel()}};
-  $$('edZm').onclick=()=>{cam.uz=clamp(cam.uz/1.25,.35,2.2);camClamp()};
-  $$('edZp').onclick=()=>{cam.uz=clamp(cam.uz*1.25,.35,2.2);camClamp()};
+  $$('edZm').onclick=()=>{cam.uz=clamp(cam.uz/1.25,edZmin(),2.2);camClamp()};
+  $$('edZp').onclick=()=>{cam.uz=clamp(cam.uz*1.25,edZmin(),2.2);camClamp()};
   $$('edGr').onclick=()=>{ED.grid=!ED.grid};
-  let rs=0;$$('edRs').onclick=()=>{if(!rs){rs=1;$$('edRs').textContent='Sicuro? Tocca ancora';setTimeout(()=>{rs=0;$$('edRs').textContent='Azzera'},3000);return}try{localStorage.removeItem(EDKEY)}catch(e){}location.reload()};
+  let rs=0;$$('edRs').onclick=()=>{if(!rs){rs=1;$$('edRs').textContent='Sicuro? Tocca ancora';setTimeout(()=>{rs=0;$$('edRs').textContent='Azzera'},3000);return}try{if(ED.x)ED.x.reset();else localStorage.removeItem(EDKEY)}catch(e){}location.reload()};
 }
 function edBind(){
   if(ED.bound)return;ED.bound=true;
@@ -9305,40 +9319,44 @@ function edBind(){
     else{ED.pan={sx,sy,cx:cam.x,cy:cam.y,moved:false}}};
   const mv=e=>{if(!ED.on)return;e.stopImmediatePropagation();e.preventDefault();
     const[sx,sy]=cvPt(e);if(!ED.pt.has(e.pointerId))return;ED.pt.set(e.pointerId,[sx,sy]);
-    if(ED.pt.size===2){const a=[...ED.pt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ED.pinch0>10){cam.uz=clamp(cam.uz*d/ED.pinch0,.35,2.2);camClamp()}ED.pinch0=d;return}
+    if(ED.pt.size===2){const a=[...ED.pt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ED.pinch0>10){cam.uz=clamp(cam.uz*d/ED.pinch0,edZmin(),2.2);camClamp()}ED.pinch0=d;return}
     if(ED.paint){const[wx,wy]=edW(sx,sy);if(Math.hypot(wx-ED.paint.lx,wy-ED.paint.ly)>ED.size*TS*.55){ED.paint.lx=wx;ED.paint.ly=wy;edPaint(wx,wy)}return}
     if(ED.drag){const D=ED.drag,[wx,wy]=edW(sx,sy),e2=D.e;
       let nx=D.x0+(wx-D.wx),ny=D.y0+(wy-D.wy);
-      if(e2.fp||e2.type==='plot'){nx=D.x0+Math.round((wx-D.wx)/TS)*TS;ny=D.y0+Math.round((wy-D.wy)/TS)*TS}else{nx=Math.round(nx/6)*6;ny=Math.round(ny/6)*6}
+      if(ED.x){const sn=ED.x.snap||22;nx=Math.round((D.x0+(wx-D.wx))/sn)*sn;ny=Math.round((D.y0+(wy-D.wy))/sn)*sn}
+      else if(e2.fp||e2.type==='plot'){nx=D.x0+Math.round((wx-D.wx)/TS)*TS;ny=D.y0+Math.round((wy-D.wy)/TS)*TS}else{nx=Math.round(nx/6)*6;ny=Math.round(ny/6)*6}
       if(!D.moved&&(Math.abs(nx-D.x0)>1||Math.abs(ny-D.y0)>1)){D.moved=true;D.prev=[e2.x,e2.y]}
-      if(D.moved&&(nx!==e2.x||ny!==e2.y))edMove(e2,nx,ny)}
+      if(D.moved&&(nx!==e2.x||ny!==e2.y)){if(ED.x)ED.x.move(e2,nx,ny);else edMove(e2,nx,ny)}}
     else if(ED.pan){const P0=ED.pan,z=camZoom();cam.x=P0.cx-(sx-P0.sx)/z;cam.y=P0.cy-(sy-P0.sy)/z;camClamp();if(Math.hypot(sx-P0.sx,sy-P0.sy)>6)P0.moved=true}};
   const up=e=>{if(!ED.on)return;e.stopImmediatePropagation();ED.pt.delete(e.pointerId);
     if(ED.paint){const n=ED.paint.n;ED.paint=null;if(n)ED.undo.push(()=>{ED.ed.t.splice(ED.ed.t.length-n,n);edStore()});return}
-    if(ED.drag){const D=ED.drag;if(D.moved){edRec(D.e);const px=D.prev,en=D.e;ED.undo.push(()=>{edMove(en,px[0],px[1]);edRec(en)})}ED.drag=null}
+    if(ED.drag){const D=ED.drag;if(D.moved){if(ED.x){const px=D.prev,en=D.e;ED.x.save();ED.undo.push(()=>{ED.x.move(en,px[0],px[1]);ED.x.save()})}else{edRec(D.e);const px=D.prev,en=D.e;ED.undo.push(()=>{edMove(en,px[0],px[1]);edRec(en)})}}ED.drag=null}
     if(ED.pan){if(!ED.pan.moved){ED.sel=null;edLabel()}ED.pan=null}};
   cv.addEventListener('pointerdown',dn,true);cv.addEventListener('pointermove',mv,true);cv.addEventListener('pointerup',up,true);cv.addEventListener('pointercancel',up,true);
   cv.addEventListener('wheel',e=>{if(!ED.on)return;e.stopImmediatePropagation()},true);
 }
 function edStart(){
   if(!S||!S.live)return;
-  edBind();edUI();ED.on=true;ED.sel=null;ED.undo=[];document.body.classList.add('edit');edLabel();
+  ED.x=window.__EDX||null;
+  edBind();edUI();ED.on=true;edBtns();ED.sel=null;ED.undo=[];document.body.classList.add('edit');edLabel();
   const b=document.getElementById('edBar'),s=document.getElementById('edSel');if(b)b.hidden=false;if(s)s.hidden=false;
   UI.toast('Editor mappa: tocca e trascina gli oggetti.',3000);
 }
 function edStop(){
+  if(ED.x){try{ED.x.save()}catch(e){}try{localStorage.removeItem('sm_edx_auto');__go('#w1')}catch(e){}location.reload();return}
   edStore();ED.on=false;ED.drag=ED.pan=null;ED.pt.clear();document.body.classList.remove('edit');
   const b=document.getElementById('edBar'),s=document.getElementById('edSel');if(b)b.hidden=true;if(s)s.hidden=true;
   camClamp();saveGame();ED.brush=null;
-  if(ED.dirty){ED.dirty=false;UI.toast('Applico il nuovo terreno: ricarico il gioco…',2500);setTimeout(()=>location.reload(),900)}
+  if(ED.dirty){edtPreview()}
 }
 function edDraw(){
-  if(!ED.on||inCave()||inHut())return;
+  if(!ED.on||(!ED.x&&(inCave()||inHut())))return;
   const g=ctx,z=camZoom();
   g.setTransform(DPR*z,0,0,DPR*z,DPR*(VW/2-cam.x*z),DPR*(VH/2-cam.y*z));
   const vx0=cam.x-VW/2/z,vy0=cam.y-VH/2/z,vx1=cam.x+VW/2/z,vy1=cam.y+VH/2/z;
+  if(ED.x){edxDraw(g,z,vx0,vy0,vx1,vy1);return}
   if(ED.grid){g.strokeStyle='rgba(255,255,255,.14)';g.lineWidth=1/z;g.beginPath();for(let x=Math.floor(vx0/TS)*TS;x<vx1;x+=TS){g.moveTo(x,vy0);g.lineTo(x,vy1)}for(let y=Math.floor(vy0/TS)*TS;y<vy1;y+=TS){g.moveTo(vx0,y);g.lineTo(vx1,y)}g.stroke()}
-  {const all=EDT_BK.map(p=>[p,1]).concat(ED.ed.t.map(p=>[p,0]));const col={b:'255,220,120',g:'110,200,90',s:'60,140,255'};
+  if(ED.grid){const all=EDT_BK.map(p=>[p,1]).concat(ED.ed.t.map(p=>[p,0]));const col={b:'255,220,120',g:'110,200,90',s:'60,140,255'};
    for(const[p,bk]of all){const c=col[p[0]]||'255,255,255';g.fillStyle='rgba('+c+','+(bk?.16:.3)+')';g.strokeStyle='rgba('+c+',.8)';g.lineWidth=1.5/z;g.beginPath();g.ellipse(p[1]*TS,p[2]*TS,p[3]*TS,p[4]*TS,0,0,7);g.fill();g.stroke()}}
   for(const e of E){
     if(!edOk(e)||e.x<vx0-80||e.x>vx1+80||e.y<vy0-40||e.y>vy1+120)continue;
@@ -9348,6 +9366,59 @@ function edDraw(){
   const s=ED.sel;if(s){const pl=.5+.5*Math.sin(RT*6);g.strokeStyle='rgba(255,214,58,'+(.6+.4*pl)+')';g.lineWidth=3/z;g.setLineDash([8/z,5/z]);
     if(s.fp)g.strokeRect(s.fp[0]*TS-3,s.fp[1]*TS-3,s.fp[2]*TS+6,s.fp[3]*TS+6);else g.strokeRect(s.x-30,s.y-70,60,84);g.setLineDash([])}
 }
+/* ---- editor dei mondi speciali (galeone, interno nave, viaggio finale) ---- */
+function edxLabel(el){
+  const X=ED.x,e=ED.sel,q=id=>el.querySelector('#'+id);
+  const add=X.palette?'<button class="btn" id="edAdd">+ Aggiungi</button>':'';
+  el.innerHTML=e?'<b>'+(X.name?X.name(e):(e.lab||'Punto'))+'</b><small>'+(X.info?X.info(e):'')+'</small>'+(X.del?'<button class="btn" id="edDel">Elimina</button>':'')+(X.dup?'<button class="btn" id="edDup">Duplica</button>':'')+add
+    :'<span>Tocca un punto per selezionarlo, poi trascinalo.</span>'+add;
+  if(q('edDel'))q('edDel').onclick=()=>{const it=ED.sel;if(!it)return;const u=X.del(it);ED.sel=null;ED.dirty=true;X.save();if(u)ED.undo.push(()=>{u();X.save();edLabel()});edLabel()};
+  if(q('edDup'))q('edDup').onclick=()=>{const it=ED.sel;if(!it)return;const n=X.dup(it);if(n){ED.sel=n;ED.dirty=true;X.save();ED.undo.push(()=>{X.del(n);ED.sel=null;X.save();edLabel()});edLabel()}};
+  if(q('edAdd'))q('edAdd').onclick=()=>{
+    sheetFor('<h2>Aggiungi</h2><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">'+X.palette.map((p,i)=>'<button class="btn" data-i="'+i+'">'+p[0]+'</button>').join('')+'</div><div class="row"><button class="btn" id="shNo">Chiudi</button></div>',c=>{
+      c.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{const p=X.palette[+b.dataset.i];closeSheet();const it=X.add(p[1],Math.round(cam.x/22)*22,Math.round(cam.y/22)*22);if(it){ED.sel=it;ED.dirty=true;X.save();ED.undo.push(()=>{X.del(it);ED.sel=null;X.save();edLabel()});edLabel()}})})};
+}
+function edxDraw(g,z,vx0,vy0,vx1,vy1){
+  const X=ED.x;
+  if(ED.grid){g.strokeStyle='rgba(255,255,255,.12)';g.lineWidth=1/z;const st=z<.2?TS*5:TS;g.beginPath();for(let x=Math.floor(vx0/st)*st;x<vx1;x+=st){g.moveTo(x,vy0);g.lineTo(x,vy1)}for(let y=Math.floor(vy0/st)*st;y<vy1;y+=st){g.moveTo(vx0,y);g.lineTo(vx1,y)}g.stroke()}
+  if(X.draw)X.draw(g,z,vx0,vy0,vx1,vy1);
+  const fs=Math.min(30,12/z);g.font='800 '+fs+'px sans-serif';g.textAlign='center';
+  for(const it of X.items()){
+    if(it.x<vx0-60||it.x>vx1+60||it.y<vy0-60||it.y>vy1+60)continue;
+    const sel=it===ED.sel,r=(sel?8:5)/z;
+    g.fillStyle=sel?'#ffd23a':(it.col||'rgba(255,255,255,.9)');g.strokeStyle='rgba(20,12,4,.95)';g.lineWidth=1.6/z;g.beginPath();g.arc(it.x,it.y,r,0,7);g.fill();g.stroke();
+    if(it.lab&&(z>.5||sel||it.big)){g.lineWidth=3/z;g.strokeStyle='rgba(20,12,4,.9)';g.fillStyle='#fff6dc';g.strokeText(it.lab,it.x,it.y-r-4/z);g.fillText(it.lab,it.x,it.y-r-4/z)}
+    if(sel){const pl=.5+.5*Math.sin(RT*6);g.strokeStyle='rgba(255,214,58,'+(.6+.4*pl)+')';g.lineWidth=3/z;g.beginPath();g.arc(it.x,it.y,(it.r||24),0,7);g.stroke()}
+  }
+}
+function edxApply(){try{localStorage.setItem('sm_edx_auto','1');ED.x.save()}catch(e){}UI.toast('Applico le modifiche…',2000);setTimeout(()=>location.reload(),600)}
+async function edtPreview(){
+  UI.toast('Ridisegno la costa…',3000);
+  EDT.length=0;for(const p of EDT_BK)EDT.push(p);for(const p of ED.ed.t)EDT.push(p);
+  EDTON=true;edtGrids(true);
+  try{await bakeGround(()=>{})}catch(e){console.warn(e)}
+  ED.dirty=false;UI.toast('Costa aggiornata.',1800);
+}
+function edBtns(){
+  const bar=document.getElementById('edBar');if(!bar)return;
+  bar.querySelectorAll('.edXb').forEach(b=>b.remove());
+  const X=ED.x;
+  const tr=bar.querySelector('#edTr');if(tr)tr.hidden=!!X;
+  const ap=bar.querySelector('#edAp');if(ap){ap.textContent=X?'Applica e rivedi':'Anteprima costa';ap.onclick=()=>{if(X)edxApply();else edtPreview()}}
+  if(X&&X.buttons)for(const b of X.buttons){const e=document.createElement('button');e.className='btn edXb';e.textContent=b.t;e.onclick=b.fn;bar.appendChild(e)}
+}
+function edAuto(){
+  if(!window.__EDX)return;
+  try{if(localStorage.getItem('sm_edx_auto')!=='1')return}catch(e){return}
+  let n=0;const iv=setInterval(()=>{
+    n++;if(n>80){clearInterval(iv);return}
+    if(!S||!S.live)return;
+    if(dl.open){try{UI.dlgAuto()}catch(e){}return}
+    clearInterval(iv);try{localStorage.removeItem('sm_edx_auto')}catch(e){}
+    setTimeout(()=>{try{edStart()}catch(e){console.warn(e)}},600);
+  },500);
+}
+setTimeout(edAuto,1500);
 window.__ED={start:edStart,stop:edStop,ED,scr:toScreen,E,EID,code:()=>JSON.stringify(ED.ed)};
 
 function frame(ts){
@@ -9575,12 +9646,23 @@ document.head.appendChild(css);
 
 /* ---------------- dati ---------------- */
 const TP=(x,y)=>[x*1.515*T,y*1.5*T];const TPp=(x,y)=>[(x+5.15)*T,(y+15)*T];
+/* ---- EDITOR dei mondi speciali: salvataggio e dati (Novità → Editor galeone / viaggio finale) ---- */
+const EXH=q=>{let a=0;for(let i=0;i<q.length;i++)a=(a*31+q.charCodeAt(i))|0;return a};
+function exStore(tag,baked,empty){
+  const K='sm_edx_'+tag,bs=JSON.stringify(baked||null),h=EXH(bs);
+  let st=baked?JSON.parse(bs):empty();
+  try{const l=JSON.parse(localStorage.getItem(K)||'null');if(l&&l.base===h&&l.st)st=l.st}catch(e){}
+  return{st,save(){try{localStorage.setItem(K,JSON.stringify({base:h,st}))}catch(e){}},reset(){try{localStorage.removeItem(K)}catch(e){}},code:()=>JSON.stringify({w:'x'+tag.slice(1),st})};
+}
+const EXS=exStore(VOY?'w5':'w3',VOY?null:null,()=>VOY?{legs:{},cps:{}}:{wps:{},spec:{}});
+const WPS0=[[MW-8,Math.round(MH*.78)],[130,112],[80,95],[110,50],[Math.round(MW*.5),6]];
+if(!VOY)for(const i in EXS.st.wps)if(WPS0[i])WPS0[i]=EXS.st.wps[i].slice();
 const ROUTE=VOY?[[0,0],[1,1]]:(function(){
   const W=MW,H=MH,cl0=new Int16Array(W*H).fill(999),q=[];
   for(let i=0;i<W*H;i++)if(!seaT[i]||blockT[i]){cl0[i]=0;q.push(i)}
   for(let h=0;h<q.length;h++){const i=q[h],x=i%W,y=(i/W)|0;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const j=ny*W+nx;if(cl0[j]>cl0[i]+1){cl0[j]=cl0[i]+1;q.push(j)}}}
   const near=(tx,ty,R)=>{let b=-1,bd=1e9;for(let y=0;y<H;y++)for(let x=0;x<W;x++){if(cl0[y*W+x]<R)continue;const d=(x-tx)*(x-tx)+(y-ty)*(y-ty);if(d<bd){bd=d;b=y*W+x}}return b};
-  const WPS=[[MW-8,Math.round(MH*.78)],[130,112],[80,95],[110,50],[Math.round(MW*.5),6]];
+  const WPS=WPS0;
   const bfs=(st,gl,R)=>{const par=new Int32Array(W*H).fill(-2);par[st]=-1;const qq=[st];let found=false;
     for(let h=0;h<qq.length&&!found;h++){const i=qq[h],x=i%W,y=(i/W)|0;for(const[dx,dy]of[[-1,0],[0,-1],[0,1],[1,0]]){const nx=x+dx,ny=y+dy;if(nx<0||ny<0||nx>=W||ny>=H)continue;const j=ny*W+nx;if(par[j]!==-2||cl0[j]<R)continue;par[j]=i;if(j===gl){found=true;break}qq.push(j)}}
     if(!found)return null;const path=[];for(let i=gl;i!==-1;i=par[i])path.push(i);return path.reverse()};
@@ -9606,6 +9688,21 @@ const SPEC={
   fantasma:{L:112,W:34,hull:6,spd:104,name:'Il Gabbiano',hc:'#52706c',dk:'#27403e',trim:'#a8e0d0',sail:['#d6efe8','#9cc4ba'],emb:'#9fe8d0',masts:[.38,-.3],mh:132,cannons:0}
 };
 const SAILSPD=[0,62,118,170];
+if(!VOY)for(const k in EXS.st.spec)if(SPEC[k])Object.assign(SPEC[k],EXS.st.spec[k]);
+if(!VOY){ /* editor: rotta del convoglio + caratteristiche delle navi */
+  const ITEMS=WPS0.map((w,i)=>({id:'w'+i,i,x:w[0]*T,y:w[1]*T,r:30,lab:i===0?'Partenza del galeone':i===WPS0.length-1?'Arrivo del galeone':'Tappa '+i,col:'#ffd23a',big:1}));
+  const X={tag:'w3',snap:T,items:()=>ITEMS,
+    name:it=>it.lab,info:it=>'casella '+WPS0[it.i][0]+','+WPS0[it.i][1],
+    move(it,nx,ny){const gx=Math.round(nx/T),gy=Math.round(ny/T);WPS0[it.i]=[gx,gy];EXS.st.wps[it.i]=[gx,gy];it.x=gx*T;it.y=gy*T},
+    draw(g,z){g.lineWidth=3/z;g.strokeStyle='rgba(255,210,60,.85)';g.beginPath();ROUTE.forEach((q,i)=>i?g.lineTo(q[0],q[1]):g.moveTo(q[0],q[1]));g.stroke();
+      g.setLineDash([10/z,8/z]);g.strokeStyle='rgba(255,255,255,.7)';g.beginPath();ITEMS.forEach((q,i)=>i?g.lineTo(q.x,q.y):g.moveTo(q.x,q.y));g.stroke();g.setLineDash([])},
+    save(){EXS.save()},code:()=>EXS.code(),reset(){EXS.reset()},
+    buttons:[{t:'Navi',fn(){
+      const rows=Object.keys(SPEC).map(k=>{const q=SPEC[k];return'<tr><td>'+q.name+'</td><td><input class="bkta" style="min-height:0;height:32px;width:64px" data-k="'+k+'" data-f="hull" value="'+q.hull+'"></td><td>'+(q.spd!=null?'<input class="bkta" style="min-height:0;height:32px;width:64px" data-k="'+k+'" data-f="spd" value="'+q.spd+'">':'—')+'</td><td>'+(q.cannons!=null?'<input class="bkta" style="min-height:0;height:32px;width:64px" data-k="'+k+'" data-f="cannons" value="'+q.cannons+'">':'—')+'</td></tr>'}).join('');
+      sheetFor('<h2>Navi</h2><p class="sm">Colpi per affondare, velocità e cannoni di ogni nave. Dopo «Applica e rivedi» valgono nello scontro.</p><table style="width:100%;font-size:13px"><tr><th>Nave</th><th>Scafo</th><th>Veloc.</th><th>Cannoni</th></tr>'+rows+'</table><div class="row"><button class="btn" id="shNo">Chiudi</button><button class="btn gold" id="spOk">Salva</button></div><p class="sm" id="spSt"></p>',c=>{
+        c.querySelector('#spOk').onclick=()=>{c.querySelectorAll('[data-k]').forEach(i=>{const v=+i.value;if(!isNaN(v)&&v>=0){const k=i.dataset.k,f=i.dataset.f;if(SPEC[k][f]!==v){SPEC[k][f]=v;(EXS.st.spec[k]=EXS.st.spec[k]||{})[f]=v}}});EXS.save();c.querySelector('#spSt').textContent='Salvato. Premi «Applica e rivedi» per provarle.'}})}}]};
+  window.__EDX=X;
+}
 let C=null,SPR={};
 
 /* ---------------- sprite delle navi (stesso stile dell'isola) ---------------- */
@@ -10471,6 +10568,20 @@ const LEGS=[
 ];
 const BU0=LEGS.findIndex(l=>l.k==='buoy'),NB=LEGS.filter(l=>l.k==='buoy').length;
 const CPS=[[247,60],[219,58],[177,52],[126,60],[86,56],[50,76]];
+if(VOY)for(const i in EXS.st.legs)if(LEGS[i]){LEGS[i].x=EXS.st.legs[i][0];LEGS[i].y=EXS.st.legs[i][1]}
+if(VOY)for(const i in EXS.st.cps)if(CPS[i]){CPS[i][0]=EXS.st.cps[i][0];CPS[i][1]=EXS.st.cps[i][1]}
+if(VOY){ /* editor: tappe, boe e punti di ripresa del grande viaggio */
+  const ZC=['#7fd0ff','#c8e060','#9fa8ff','#e0e0f0','#7fe0c0','#ffd23a'];
+  const ITEMS=LEGS.map((l,i)=>({id:'l'+i,k:'l',i,x:l.x*T,y:l.y*T,r:34,col:ZC[l.z],lab:(l.k==='buoy'?'Boa ':l.k==='wreck'?'Relitto ':l.k==='dock'?'Molo ':'Tappa ')+i+(l.gate?' (uscita)':'')}))
+    .concat(CPS.map((c,i)=>({id:'c'+i,k:'c',i,x:c[0]*T,y:c[1]*T,r:30,col:'#ff7a6a',lab:'Ripresa '+i})));
+  const X={tag:'w5',snap:T,items:()=>ITEMS,name:it=>it.lab,info:it=>'casella '+Math.round(it.x/T)+','+Math.round(it.y/T),
+    move(it,nx,ny){const gx=Math.round(nx/T),gy=Math.round(ny/T);it.x=gx*T;it.y=gy*T;if(it.k==='l'){LEGS[it.i].x=gx;LEGS[it.i].y=gy;EXS.st.legs[it.i]=[gx,gy]}else{CPS[it.i][0]=gx;CPS[it.i][1]=gy;EXS.st.cps[it.i]=[gx,gy]}},
+    draw(g,z){const L=ITEMS.filter(q=>q.k==='l');g.lineWidth=2.5/z;
+      for(let i=0;i<L.length-1;i++){g.strokeStyle=ZC[LEGS[i].z]+'cc';g.beginPath();g.moveTo(L[i].x,L[i].y);g.lineTo(L[i+1].x,L[i+1].y);g.stroke()}
+      for(let z0=0;z0<6;z0++){const gx=XLIM[z0]*T;g.setLineDash([12/z,10/z]);g.strokeStyle='rgba(255,255,255,.35)';g.beginPath();g.moveTo(gx,0);g.lineTo(gx,WH);g.stroke();g.setLineDash([])}},
+    save(){EXS.save()},code:()=>EXS.code(),reset(){EXS.reset()}};
+  window.__EDX=X;
+}
 const firstLeg=z=>LEGS.findIndex(l=>l.z===z);
 const gateOf=z=>{for(let i=LEGS.length-1;i>=0;i--)if(LEGS[i].z===z&&LEGS[i].gate)return LEGS[i];return LEGS[0]};
 const XLIM=VZ.map((_,z)=>gateOf(z).x-12);
@@ -11253,6 +11364,63 @@ const DECOR_BY=[
  [['net',17,1],['chains',24,1],['chains',31,4],['chains',31,13],['sconce',11,7],['sconce',11,10],['net',17,5],['net',25,5],['sconce',31,7],['sconce',31,10],['sconce',40,7],['sconce',40,10],['cross',13,12]]];
 /* dobloni nascosti: [gx, gy] per ponte */
 const COINS_BY=[[[4,3],[26,15],[21,14]],[[9,13],[26,15],[46,9]],[[4,13],[30,3],[21,15]]];
+/* ---- EDITOR: dati modificabili dell'interno nave (si apre da Novità → Editor interno nave) ---- */
+const EXB4=null;
+const EXH=q=>{let a=0;for(let i=0;i<q.length;i++)a=(a*31+q.charCodeAt(i))|0;return a};
+const exCopy=a=>JSON.parse(JSON.stringify(a));
+const EXORG={p:exCopy(PROPS_BY),l:exCopy(LAMPS_BY),d:exCopy(DECOR_BY),c:exCopy(COINS_BY)};
+const EXTGT={p:PROPS_BY,l:LAMPS_BY,d:DECOR_BY,c:COINS_BY};
+const EXOFF={p:1,l:0,d:1,c:0};
+const exEmpty=()=>{const o={};for(const k of['p','l','d','c'])o[k]=[0,1,2].map(()=>({mv:{},del:[],add:[],n:0}));return o};
+const EXK4='sm_edx_w4',EXBS=JSON.stringify(EXB4),EXBH=EXH(EXBS);
+let EXST=EXB4?JSON.parse(EXBS):exEmpty();
+try{const l=JSON.parse(localStorage.getItem(EXK4)||'null');if(l&&l.base===EXBH&&l.st)EXST=l.st}catch(e){}
+function exBuild(k,d){
+  const org=EXORG[k][d],op=EXST[k][d],off=EXOFF[k],out=[];
+  org.forEach((e,i)=>{const id='o'+i;if(op.del.indexOf(id)>=0)return;const c=e.slice(),m=op.mv[id];if(m){c[off]=m[0];c[off+1]=m[1]}out.push({id,e:c})});
+  for(const a of op.add)out.push({id:a.id,e:a.e});
+  return out;
+}
+for(const k of['p','l','d','c'])for(let d=0;d<3;d++){const arr=EXTGT[k][d];arr.length=0;for(const o of exBuild(k,d))arr.push(o.e)}
+{ // oggetti toccabili dall'editor
+  const NAMES={bed:'Letto',wardrobe:'Armadio',bookshelf:'Libreria',globe:'Mappamondo',desk:'Scrivania',chair:'Sedia',chest:'Baule',table:'Tavolo',mast:'Albero',barrel:'Barile',longtable:'Tavolone',bunk:'Cuccetta',armor:'Armatura',rack:'Rastrelliera',maptable:'Tavolo delle mappe',coil:'Corda',cannon:'Cannone',bucket:'Secchio',bench:'Panca',stove:'Fornello',sack:'Sacco',crate:'Cassa',paint:'Quadro',flag:'Bandiera',sconce:'Applique',map:'Mappa',cross:'Spade incrociate',shelf:'Mensola',hams:'Prosciutti',pans:'Pentole',chains:'Catene',net:'Rete',l:'Lanterna',c:'Dobloni nascosti'};
+  const ITEMS=[];let seq=0;
+  const pos=it=>{const e=it.e;if(it.k==='p'){it.x=(OX+e[1]+e[3]/2)*T;it.y=(OY+e[2]+e[4]/2)*T;it.r=Math.max(e[3],e[4])*T/2+8}else{const o=EXOFF[it.k];it.x=(OX+e[o]+.5)*T;it.y=(OY+e[o+1]+.5)*T;it.r=22}};
+  const nid=()=>'a'+(EXST.seq4=(EXST.seq4||0)+1);
+  const COL={p:'#7fe0ff',l:'#ffd23a',d:'#ff9fe0',c:'#ffc23a'};
+  const mk=(k,d,o)=>{const it={k,deck:d,id:o.id,e:o.e,col:COL[k]};it.lab=NAMES[k==='p'||k==='d'?o.e[0]:k];pos(it);return it};
+  for(const k of['p','l','d','c'])for(let d=0;d<3;d++)for(const o of exBuild(k,d))ITEMS.push(mk(k,d,o));
+  const cur=()=>(typeof K!=='undefined'&&K&&K.deck)|0;
+  const save=()=>{try{localStorage.setItem(EXK4,JSON.stringify({base:EXBH,st:EXST}))}catch(e){}};
+  const opOf=it=>EXST[it.k][it.deck];
+  const X={tag:'w4',snap:T/2,
+    items:()=>ITEMS.filter(i=>i.deck===cur()),
+    name:it=>(it.k==='l'?'Lanterna':it.k==='c'?'Dobloni nascosti':(NAMES[it.e[0]]||it.e[0])),
+    info:it=>'ponte '+(it.deck+1)+' · cella '+it.e[EXOFF[it.k]]+','+it.e[EXOFF[it.k]+1],
+    move(it,nx,ny){
+      const e=it.e,o=EXOFF[it.k];
+      const gx=it.k==='p'?Math.round(nx/T-OX-e[3]/2):Math.round(nx/T-OX-.5),gy=it.k==='p'?Math.round(ny/T-OY-e[4]/2):Math.round(ny/T-OY-.5);
+      if(gx===e[o]&&gy===e[o+1])return;
+      e[o]=gx;e[o+1]=gy;pos(it);
+      const op=opOf(it);if(it.id[0]==='o')op.mv[it.id]=[gx,gy];
+    },
+    del(it){const op=opOf(it),i=ITEMS.indexOf(it);if(i>=0)ITEMS.splice(i,1);
+      let ad=null,ai=-1;if(it.id[0]==='o')op.del.push(it.id);else{ai=op.add.findIndex(a=>a.id===it.id);if(ai>=0)ad=op.add.splice(ai,1)[0]}
+      return()=>{ITEMS.push(it);if(it.id[0]==='o')op.del=op.del.filter(q=>q!==it.id);else if(ad)op.add.push(ad)}},
+    dup(it){const op=opOf(it),o=EXOFF[it.k],e=it.e.slice();e[o]+=1;const id=nid();op.add.push({id,e});const n=mk(it.k,it.deck,{id,e});ITEMS.push(n);return n},
+    palette:[['Barile','p:barrel:1:1'],['Cassa','p:crate:1:1'],['Sacco','p:sack:1:1'],['Corda','p:coil:1:1'],['Secchio','p:bucket:1:1'],['Sedia','p:chair:1:1'],['Tavolo','p:table:2:1'],['Panca','p:bench:3:1'],['Tavolone','p:longtable:4:1'],['Cuccetta','p:bunk:2:1'],['Baule','p:chest:1:1'],['Armatura','p:armor:1:1'],['Libreria','p:bookshelf:2:1'],['Rastrelliera','p:rack:2:1'],['Fornello','p:stove:2:1'],['Lanterna','l'],['Dobloni','c'],['Quadro (muro)','d:paint'],['Bandiera (muro)','d:flag'],['Applique (muro)','d:sconce']],
+    add(key,x,y){
+      const d=cur(),a=key.split(':'),k=a[0];let e;
+      const gx=Math.round(x/T-OX-.5),gy=Math.round(y/T-OY-.5);
+      if(k==='p')e=[a[1],gx,gy,+a[2],+a[3]];else if(k==='d')e=[a[1],gx,gy];else e=[gx,gy];
+      const id=nid();EXST[k][d].add.push({id,e});const it=mk(k,d,{id,e});ITEMS.push(it);return it},
+    draw(g,z){for(const it of this.items()){if(it.k!=='p')continue;const e=it.e;g.strokeStyle='rgba(127,224,255,.75)';g.lineWidth=2/z;g.strokeRect((OX+e[1])*T+1,(OY+e[2])*T+1,e[3]*T-2,e[4]*T-2)}},
+    save,code:()=>JSON.stringify({w:'x4',st:EXST}),reset(){try{localStorage.removeItem(EXK4)}catch(e){}},
+    buttons:[{t:'Ponte −',fn(){exDeck(-1)}},{t:'Ponte +',fn(){exDeck(1)}}]
+  };
+  window.__EDX=X;
+}
+function exDeck(d){const n=Math.max(0,Math.min(2,K.deck+d));if(n===K.deck)return;try{setDeck(n,20,8,true);UI.toast(DECKN[n],1600)}catch(e){console.warn(e)}}
 let PROPS=PROPS_BY[0],LAMPS=LAMPS_BY[0];
 const propAt=(tx,ty)=>{const gx=tx-OX,gy=ty-OY;return PROPS.some(p=>gx>=p[1]&&gx<p[1]+p[3]&&gy>=p[2]&&gy<p[2]+p[4]&&TALL.indexOf(p[0])<0)};
 
