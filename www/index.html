@@ -811,16 +811,30 @@ function bakeDecor(g){
   const r=mulberry(2024);
   g.save();g.setTransform(GS,0,0,GS,0,0);
   const blade=(x,y,h,col)=>{g.strokeStyle=col;g.lineWidth=1.4;g.lineCap='round';g.beginPath();g.moveTo(x,y);g.quadraticCurveTo(x+(r()-.5)*5,y-h*.6,x+(r()-.5)*8,y-h);g.stroke()};
+  const tb=(x,y,h,lean,w,col)=>{g.fillStyle=col;g.beginPath();g.moveTo(x-w,y);g.quadraticCurveTo(x-w*.5+lean*.3,y-h*.6,x+lean,y-h);g.quadraticCurveTo(x+w*.5+lean*.3,y-h*.55,x+w,y);g.closePath();g.fill()};
+  const reed=(x,y,hh)=>{
+    g.fillStyle='rgba(20,50,20,.2)';g.beginPath();g.ellipse(x,y+1.5,9,2.6,0,0,7);g.fill();
+    for(let i=0;i<7;i++){const a=(i-3)*2.6;tb(x+a*.55,y,hh*(.65+r()*.35),a*.9+(r()-.5)*3,1.3,i%2?'#4d8f38':'#3a7a2e')}
+    for(let i=0;i<3;i++){const sx=x+(i-1)*4.5,sh=hh*(.95+r()*.2),tip=(i-1)*4+(r()-.5)*3;
+      g.strokeStyle='#8a7a3a';g.lineWidth=1;g.lineCap='round';g.beginPath();g.moveTo(sx,y);g.quadraticCurveTo(sx+2.5,y-sh*.5,sx+tip,y-sh);g.stroke();
+      g.fillStyle='#dcc67c';g.strokeStyle='#8a6a2a';g.lineWidth=.6;g.beginPath();g.ellipse(sx+tip,y-sh-3,1.7,4.4,tip*.07,0,7);g.fill();g.stroke()}
+  };
   for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){
     const e=elevT[ty*MW+tx];if(e<WL+.03)continue;
     const s=e-WL,n1=NZ.fbm((tx+.5)*1.9,(ty+.5)*1.9,2);
     const gT=sstep(.17,.27,s+(n1-.5)*.16),dp=pathDist(tx+.5,ty+.5),onPath=dp<1.1;
     const fF=forestF(tx+.5,ty+.5);
     const nT=Math.round(gT*(onPath?1:3.4+fF*3)*(r()+.4));
-    for(let i=0;i<nT;i++){
-      const x=(tx+r())*TS,y=(ty+r())*TS,hh=5+r()*7,l=hsl(84+r()*34,38+r()*20,28+r()*20,.9);
-      for(let k=0;k<3;k++)blade(x+k*2.2-2,y,hh*(.7+r()*.5),l);
+    const nT2=Math.round(nT*1.8);
+    for(let i=0;i<nT2;i++){
+      const x=(tx+r())*TS,y=(ty+r())*TS,hh=6+r()*9,hue=84+r()*34;
+      if(r()<.35){g.fillStyle='rgba(20,50,20,.16)';g.beginPath();g.ellipse(x,y+1,5,1.6,0,0,7);g.fill()}
+      const nb=3+((r()*3)|0);
+      for(let k=0;k<nb;k++){const a=(k-(nb-1)/2),lean=a*2.2+(r()-.5)*3,h2=hh*(.7+r()*.5);tb(x+a*1.5,y,h2,lean,1.1,hsl(hue,42,22+r()*6,.95))}     // strato scuro
+      for(let k=0;k<nb-1;k++){const a=(k-(nb-2)/2),lean=a*2.4+(r()-.5)*3,h2=hh*(.6+r()*.5);tb(x+a*1.4,y,h2,lean,.9,hsl(hue+4,48,36+r()*8,.95))}   // strato medio
+      if(r()<.7){const a=(r()-.5)*4;tb(x+a,y,hh*(.5+r()*.3),a*1.5,.7,hsl(hue+10,55,56+r()*10,.95))}                                              // punta chiara
     }
+    if(gT>.55&&s<.38&&!onPath&&fF<.5&&r()<.055)reed((tx+r())*TS,(ty+.3+r()*.6)*TS,22+r()*14);
     // ciuffi sulla sabbia asciutta, vicino al verde
     if(gT<.5&&s>.12&&r()<.12){const x=(tx+r())*TS,y=(ty+r())*TS;for(let k=0;k<5;k++)blade(x+k*1.6-3,y,8+r()*5,hsl(70+r()*24,30,46+r()*14,.9))}
     if(gT>.6&&!onPath&&r()<.06+.03*(1-fF)){
@@ -5709,6 +5723,8 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
+    "Erba più ricca: prato fitto a più strati di verde e, vicino all'acqua, ciuffi alti con le spighe.",
+    "Foto: il tasto Condividi ora apre il menu di Android nell'app; dove non è possibile mostra la foto grande da tenere premuta per salvarla o inviarla.",
     "Casse, forzieri, barili e matasse di corda ora sono solidi: non si attraversano più (scompare l'ostacolo quando il forziere è stato aperto).",
     "Password di «Novità» e «Solo per me»: tastiera tutta dentro al gioco, così non compare più quella verticale di Android.",
     "Lo scheletro della grotta è stato ridisegnato: teschio con bandana, costole, bacino, braccia con il biglietto, gambe e stivali.",
@@ -10644,12 +10660,19 @@ PHO.save=function(c,msg,main){
   const al=c.querySelector('#phMain');if(al&&!c.querySelector('#phAlb2')){const x=document.createElement('button');x.className='btn';x.id='phAlb2';x.textContent='Apri l\'album';x.onclick=()=>PHO.album();al.appendChild(x)}};
 PHO.share=async function(url,name,msg){
   if(!url)return;
+  try{const C=window.Capacitor,PL=C&&C.Plugins;
+    if(C&&C.isNativePlatform&&C.isNativePlatform()&&PL&&PL.Filesystem&&PL.Share){
+      const w=await PL.Filesystem.writeFile({path:name,data:url.split(',')[1],directory:'CACHE'});
+      await PL.Share.share({title:'Sette Mari',text:'Una foto ricordo da Sette Mari',files:[w.uri],dialogTitle:'Condividi la foto'});return}
+  }catch(e){if(e&&/cancel/i.test(String(e.message||e)))return}
   try{const r=await fetch(url),bl=await r.blob(),f=new File([bl],name,{type:'image/jpeg'});
     if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Sette Mari',text:'Una foto ricordo da Sette Mari'});return}}
   catch(e){if(e&&e.name==='AbortError')return}
-  try{const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
-    msg&&msg('Se il telefono non salva il file, fai uno screenshot: la foto resta nell\'album.')}
-  catch(e){msg&&msg('Non posso condividere da qui: fai uno screenshot, la foto resta nell\'album.')}};
+  PHO.big(url,name);};
+PHO.big=function(url,name){
+  const d=document.createElement('div');d.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(10,8,4,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:10px;box-sizing:border-box';
+  d.innerHTML='<img alt="" src="'+url+'" style="max-width:96%;max-height:64%;border-radius:10px;border:3px solid #f3e3b8;-webkit-touch-callout:default;user-select:auto"><div style="color:#f3e3b8;font:700 14px sans-serif;text-align:center;max-width:90%">Da qui la condivisione diretta non è disponibile: <b>tieni premuta la foto</b> per salvarla o inviarla (WhatsApp, ecc.), oppure scarica il file.</div><div style="display:flex;gap:8px"><a class="btn gold" download="'+name+'" href="'+url+'" style="text-decoration:none">⬇ Scarica</a><button class="btn" id="phBigX">Chiudi</button></div>';
+  document.body.appendChild(d);d.querySelector('#phBigX').onclick=()=>d.remove()};
 PHO.album=function(){
   cancelAnimationFrame(PHO.st.raf);
   const a=PHO.list();
@@ -11229,12 +11252,12 @@ function blkSync(dt){
   const px=Math.floor(P.x/TS),py=Math.floor((P.y-2)/TS);
   for(const e of E){
     if(!(e.type==='loot'||(e.type==='deco'&&BKS.includes(e.spr))))continue;
-    if(e.got||e.hid||e.inRoom){if(e.bk&&e.blocked)delBlock(e);continue}
+    if(e.got||e.hid||e.inRoom){if(e.bk&&e.blocked){if(e.bkfull){insetT[tIdx(e.fp[0],e.fp[1])]++;e.bkfull=0}delBlock(e)}continue}
     if(e.blocked||e.fp)continue;
     const tx=e.type==='loot'&&e.tx!=null?e.tx:Math.floor(e.x/TS),ty=e.type==='loot'&&e.ty!=null?e.ty:Math.floor((e.y-1)/TS);
     if(!inMap(tx,ty)||!walkT[tIdx(tx,ty)]||(tx===px&&ty===py))continue;
     if(huReg(tx,ty)||((tx>=CV_X0&&tx<CV_X0+CV_W&&ty>=CV_Y0&&ty<CV_Y0+CV_H)))continue;
-    addBlock(e,tx,ty,1,1);e.bk=1;
+    addBlock(e,tx,ty,1,1);e.bk=1;if(isInset(e)&&insetT[tIdx(tx,ty)]>0){insetT[tIdx(tx,ty)]--;e.bkfull=1}
   }
 }
 function drawCvSkel(g,e,t){
