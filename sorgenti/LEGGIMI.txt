@@ -1,0 +1,4 @@
+Sorgenti di Sette Mari v0.13 (grafica classica).
+Il gioco finito e' www/index.html, generato dai file di questo archivio.
+Ripristino: tar xzf sorgenti-v0.13-classica.tgz in una cartella vuota, poi bash build.sh.
+Punto di ripristino del gioco finito: ramo git classica-v0.13.
