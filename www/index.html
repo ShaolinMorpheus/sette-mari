@@ -3616,6 +3616,7 @@ function hint(id){if(S&&!S.hints[id]&&U.hintFn){U.hintFn(id)}}
 /* collisione del giocatore: scatola (rettangolo) contro le tile; i tronchi di alberi e palme bloccano solo il tronco, non tutta la tile */
 function boxFree(x,y,rx,ry){
   if(window.__leafHit&&window.__leafHit(x,y))return false;
+  if(typeof OBR!=='undefined'&&OBR.length)for(const o of OBR){if(x+rx>o.x0&&x-rx<o.x1&&y+ry>o.y0&&y-ry<o.y1)return false}
   const x0=Math.floor((x-rx)/TS),x1=Math.floor((x+rx)/TS),y0=Math.floor((y-ry)/TS),y1=Math.floor((y+ry)/TS);
   for(let ty=y0;ty<=y1;ty++)for(let tx=x0;tx<=x1;tx++){
     if(!inMap(tx,ty))return false;
@@ -5724,6 +5725,8 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
+    "Collisione a sagoma per casse, forzieri e barili: non si attraversa più nemmeno la parte alta del disegno.",
+    "Vibrazione del telefono per indizi (Biscotto), missioni, tesori e eventi: si spegne dal menu «Vibrazione».",
     "Niente erba sui sentieri e nel campo (isola 1 e 2): restano terra e sabbia pulite.",
     "Erba più ricca: prato fitto a più strati di verde e, vicino all'acqua, ciuffi alti con le spighe.",
     "Foto: il tasto Condividi ora apre il menu di Android nell'app; dove non è possibile mostra la foto grande da tenere premuta per salvarla o inviarla.",
@@ -8735,7 +8738,7 @@ UI.openMenu=function(){
   c.innerHTML='<div class="mhd"><h2>Menu</h2><button class="mxb" id="mX" aria-label="Chiudi">✕</button></div><div class="mwr"><div class="mnav">'
    +tabs.map(t=>'<button class="mn" data-mn="'+t[0]+'" aria-selected="'+(UI._mt===t[0])+'"><i>'+t[1]+'</i>'+t[2]+'</button>').join('')
    +'</div><div class="mpn">'
-   +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mGfx','🎨','Grafica',GFX_NAMES[GFX]||'Auto')+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra'))
+   +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mVib',HAP.on?'📳':'📴','Vibrazione',HAP.on?'attiva':'spenta','tgl'+(HAP.on?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mGfx','🎨','Grafica',GFX_NAMES[GFX]||'Auto')+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra'))
    +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+(SMAds.available()?T('mAd','🎁','Guarda un video','scorta in regalo')+T('mPriv','🔒','Privacy',null):'')+T('mJ','📖','Novità',null)+T('mAdm','🔐','Solo per me',null)+(WORLD>=3?T('mHome','🏝️','Torna all\'isola','tocca due volte'):'')+T('mVer','🔁',verLbl(),null)+(WORLD===2?T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
    +pnl('gd','<div class="mhd2">Guardaroba</div>'+T('mWh',wI('hat'),'Cappello',wearName('hat'))+T('mWo',wI('out'),'Abito',wearName('out'))+(YD.avail()?T('mSh','⛵','Nave',YD.lookName())+T('mYd','⚓','Cantiere navale',YD.yardName()):'')+T('mPhoto','📷','Foto ricordo',PHO.sub())+'<p class="sm">Cappelli e abiti si trovano giocando: casse, raccolti, ricette, capitoli. Quelli che mancano sono elencati con un indizio.</p>')
    +(hasP?pnl('pp','<div class="mhd2">Pappagallo</div>'+T('mPn','🦜','Nome',pn('Biscotto')+' · tocca per rinominare')+(hasH?T('mPh',curH?'<img alt="" src="'+phatImg(curH.id)+'">':'🚫','Cappellino',curH?curH.n:'Nessuno'):'<p class="sm">Troverai dei cappellini per il pappagallo durante il viaggio.</p>')):'')
@@ -8744,6 +8747,7 @@ UI.openMenu=function(){
   c.querySelectorAll('.mn').forEach(b=>b.onclick=()=>{UI._mt=b.dataset.mn;c.querySelectorAll('.mn').forEach(x=>x.setAttribute('aria-selected',x===b));c.querySelectorAll('.mp').forEach(x=>x.hidden=x.dataset.mp!==UI._mt)});
   const setT=(id,ic,sub)=>{const b=c.querySelector('#'+id);b.querySelector('i').textContent=ic;const m=b.querySelector('.ms');if(m)m.textContent=sub};
   c.querySelector('#mMus').onclick=()=>{auInit();muSet(!AU.mus);S.music=AU.mus;setT('mMus',AU.mus?'🎵':'🔕',AU.mus?'accesa':'spenta');c.querySelector('#mMus').classList.toggle('on',!!AU.mus);saveGame()};
+  c.querySelector('#mVib').onclick=()=>{HAP.on=!HAP.on;try{localStorage.setItem('sm_vib',HAP.on?'1':'0')}catch(_){}setT('mVib',HAP.on?'📳':'📴',HAP.on?'attiva':'spenta');c.querySelector('#mVib').classList.toggle('on',!!HAP.on);if(HAP.on)buzz([40,40,40])};
   c.querySelector('#mSnd').onclick=()=>{auInit();auSet(!AU.on);S.sound=AU.on;setT('mSnd',AU.on?'🔊':'🔇',AU.on?'accesi':'spenti');c.querySelector('#mSnd').classList.toggle('on',!!AU.on)};
   c.querySelector('#mGfx').onclick=()=>{const o=['auto','bassa','media','alta'],n=o[(o.indexOf(GFX_CUR)+1)%4];GFX_CUR=n;try{localStorage.setItem('sette-mari-gfx',n)}catch(_){}
     if(n==='bassa'){DPRMAX=1;QL=2}else if(n==='alta'){DPRMAX=2;QL=0}else if(n==='media'){DPRMAX=WORLD===3?1.25:1.6;QL=0}else{DPRMAX=WORLD===3?1.25:1.6;QL=0}
@@ -11256,11 +11260,12 @@ function blkSync(dt){
     if(!(e.type==='loot'||(e.type==='deco'&&BKS.includes(e.spr))))continue;
     if(e.got||e.hid||e.inRoom){if(e.bk&&e.blocked){if(e.bkfull){insetT[tIdx(e.fp[0],e.fp[1])]++;e.bkfull=0}delBlock(e)}continue}
     if(e.blocked||e.fp)continue;
-    const tx=e.type==='loot'&&e.tx!=null?e.tx:Math.floor(e.x/TS),ty=e.type==='loot'&&e.ty!=null?e.ty:Math.floor((e.y-1)/TS);
+    const tx=e.type==='loot'&&e.tx!=null?e.tx:Math.floor(e.x/TS),ty=e.type==='loot'&&e.ty!=null?e.ty:Math.floor((e.y-9)/TS);   // il corpo sta sopra la linea di base
     if(!inMap(tx,ty)||!walkT[tIdx(tx,ty)]||(tx===px&&ty===py))continue;
     if(huReg(tx,ty)||((tx>=CV_X0&&tx<CV_X0+CV_W&&ty>=CV_Y0&&ty<CV_Y0+CV_H)))continue;
     addBlock(e,tx,ty,1,1);e.bk=1;if(isInset(e)&&insetT[tIdx(tx,ty)]>0){insetT[tIdx(tx,ty)]--;e.bkfull=1}
   }
+  obrBuild();
 }
 function drawCvSkel(g,e,t){
   const B1='#efe5c8',B2='#c9bd98',B3='#8e8466',L='#2a2418';
@@ -11319,6 +11324,43 @@ function drawCvSkel(g,e,t){
   g.save();g.translate(27,3);g.rotate(-.3);g.fillRect(-4,-1.2,8,2.4);g.strokeRect(-4,-1.2,8,2.4);g.restore();
   g.restore();
 }
+
+/* collisione che segue la sagoma vera dell'oggetto (il corpo sta sopra la linea di base, non nel riquadro sotto) */
+const OBR=[];
+function sprOf(e){
+  try{
+    if(e.type==='deco')return e.spr==='barrel0'?SP.barrel[0]:e.spr==='barrel1'?SP.barrel[1]:e.spr==='crate'?SP.crate:e.spr==='coil'?SP.coil:null;
+    if(e.type==='loot'){
+      if(e.kind===9||e.kind===10||e.kind===11||(e.id&&e.id.indexOf('lt_rare')===0))return null;
+      if(e.id==='lt_flint')return SP.barrel[1];if(e.id==='lt_line'||e.kind===8)return SP.crate;
+      return SP.chest[e.kind]&&SP.chest[e.kind][0];
+    }
+  }catch(x){}
+  return null;
+}
+function obrBuild(){
+  OBR.length=0;
+  for(const e of E){
+    if(!e.bk||e.got||e.hid)continue;
+    const s=sprOf(e);if(!s)continue;
+    const cx=e.x-s.ax+s.w/2,hw=s.w*.4,dp=Math.min(s.h*.6,36);
+    const o={x0:cx-hw,x1:cx+hw,y0:e.y-dp,y1:e.y+2,e};
+    if(P.x>o.x0-12&&P.x<o.x1+12&&P.y>o.y0-12&&P.y<o.y1+12)continue;   // se ci sei già dentro, esci prima
+    OBR.push(o);
+  }
+}
+/* ---- vibrazione: indizi, tesori, missioni (si spegne dal menu) ---- */
+const HAP={on:(()=>{try{return localStorage.getItem('sm_vib')!=='0'}catch(e){return true}})(),t:0};
+function buzz(p){
+  if(!HAP.on)return;const n=Date.now();if(n-HAP.t<110)return;HAP.t=n;
+  try{
+    const C=window.Capacitor,PL=C&&C.Plugins,arr=Array.isArray(p)?p:[p];
+    if(PL&&PL.Haptics&&PL.Haptics.vibrate){let d=0;arr.forEach((v,i)=>{if(i%2===0)setTimeout(()=>{try{PL.Haptics.vibrate({duration:v})}catch(e){}},d);d+=v});return}
+    if(navigator.vibrate)navigator.vibrate(arr);
+  }catch(e){}
+}
+{const HP={quest:[40,60,40],relic:[30,50,30,50,70],cra:[18,50,18],ok:12,no:[22],thud:24,thunder:[70,40,90],hammer:14,chop:18,mine:18};
+ const o=sfx;sfx=function(n){try{const v=HP[n];if(v)buzz(v)}catch(e){}return o.apply(this,arguments)}}
 
 /* ---- 12d_kb.js ---- */
 /* ====== TASTIERA DEL GIOCO: quando il telefono è in verticale la schermata è ruotata, ma la tastiera di sistema no.
