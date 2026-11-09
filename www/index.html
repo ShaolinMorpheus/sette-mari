@@ -5728,6 +5728,7 @@ const CHANGELOG=[
     "Collisione a sagoma per casse, forzieri e barili: non si attraversa più nemmeno la parte alta del disegno, e restano solidi anche una volta aperti.",
     "Vibrazione del telefono per indizi (Biscotto), missioni, tesori e eventi: si spegne dal menu «Vibrazione».",
     "Niente erba sui sentieri e nel campo (isola 1 e 2): restano terra e sabbia pulite.",
+    "Copia di sicurezza: nuovo tasto «Scarica sul telefono» che salva il file nella cartella Documenti (il vecchio «Salva file» ora si chiama «Condividi»).",
     "Erba più ricca: prato fitto a più strati di verde e, vicino all'acqua, ciuffi alti con le spighe.",
     "Foto: il tasto Condividi ora apre il menu di Android nell'app; dove non è possibile mostra la foto grande da tenere premuta per salvarla o inviarla.",
     "Casse, forzieri, barili e matasse di corda ora sono solidi: non si attraversano più (scompare l'ostacolo quando il forziere è stato aperto).",
@@ -7640,7 +7641,7 @@ function openBackupImpl(){
   let code='Preparo il codice…';
   sheetFor('<h2>Copia di sicurezza</h2><p class="sm">Il salvataggio vive solo in questo browser. Copia il codice (o scarica il file) per ritrovare la tua partita su un altro telefono o con un altro link.</p>'
     +'<textarea id="bkTx" class="bkta" readonly></textarea>'
-    +'<div class="row"><button class="btn gold" id="bkCp">Copia</button><button class="btn" id="bkDl">Salva file</button></div>'
+    +'<div class="row"><button class="btn gold" id="bkCp">Copia</button><button class="btn" id="bkSv">⬇ Scarica sul telefono</button><button class="btn" id="bkDl">Condividi</button></div>'
     +'<h3>Ripristina</h3><textarea id="bkIn" class="bkta" placeholder="Incolla qui il codice"></textarea>'
     +'<input type="file" id="bkFile" accept=".txt,text/plain" style="margin:6px 0;max-width:100%">'
     +'<div class="row"><button class="btn" id="bkGo">Ripristina</button><button class="btn" id="shNo">Chiudi</button></div><p id="bkSt" class="sm"></p>',c=>{
@@ -7649,6 +7650,23 @@ function openBackupImpl(){
       c.querySelector('#bkCp').onclick=async()=>{
         try{await navigator.clipboard.writeText(code);st.textContent='Codice copiato.'}
         catch(_){tx.focus();tx.select();try{document.execCommand('copy');st.textContent='Codice copiato.'}catch(__){st.textContent='Seleziona il testo e copialo a mano.'}}
+      };
+      c.querySelector('#bkSv').onclick=async()=>{
+        const name='sette-mari-salvataggio.txt',C=window.Capacitor,PL=C&&C.Plugins;
+        try{
+          if(C&&C.isNativePlatform&&C.isNativePlatform()&&PL&&PL.Filesystem){
+            try{await PL.Filesystem.requestPermissions()}catch(_){}
+            let r,dir='DOCUMENTS';
+            try{r=await PL.Filesystem.writeFile({path:name,data:code,directory:'DOCUMENTS',encoding:'utf8',recursive:true})}
+            catch(e1){dir='la cartella dell\'app';r=await PL.Filesystem.writeFile({path:name,data:code,directory:'EXTERNAL',encoding:'utf8',recursive:true})}
+            st.textContent='Salvato! File «'+name+'» nella cartella Documenti del telefono (app File › Documenti).';
+            if(dir!=='DOCUMENTS')st.textContent='Salvato nella cartella dell\'app (Android › data › it.settemari.game › files). Per portarlo fuori usa «Condividi».';
+            return;
+          }
+          const a=document.createElement('a'),b=new Blob([code],{type:'text/plain'});
+          a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();
+          st.textContent='File scaricato (se il browser lo consente). In alternativa copia il codice.';
+        }catch(_){st.textContent='Non riesco a scaricare il file: usa «Condividi» o «Copia».'}
       };
       c.querySelector('#bkDl').onclick=async()=>{
         const name='sette-mari-salvataggio.txt',C=window.Capacitor,PL=C&&C.Plugins;
