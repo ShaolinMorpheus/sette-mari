@@ -42,13 +42,11 @@ var GfxNew=(function(){
   function sparkle(seed,cx,cy,w,h){const r=rnd(seed);for(let k=0;k<8;k++){g.fillStyle=['#fff8c8','#ffd36b','#ffffff'][k%3];g.beginPath();g.arc(cx+(r()-.5)*w,cy+(r()-.5)*h,1.3+r()*1.4,0,7);g.fill()}}
   const R=Math.round;
   function nature(){
-    const so=.54,oW=R(200*so),oH=R(212*so)+10;
-    const oakS=(f,a)=>B(oW,oH,oW/2,oH-6,()=>{(a?oakA:oak)(oW/2,oH-6,so,f)});
-    const o0=oakS(false),o3=oakS(true);
-    SP.tree=[o0,tint(o0,'hue-rotate(12deg) saturate(1.1)'),tint(o0,'hue-rotate(-8deg) saturate(1.1) brightness(.95)'),o3,tint(o3,'hue-rotate(12deg)'),tint(o3,'hue-rotate(-8deg) brightness(.95)'),tint(o0,'brightness(1.1) saturate(.9)'),tint(o0,'hue-rotate(-14deg) brightness(.9)')];
-    const sp_=.63,pW=R(170*sp_)+8,pH=R(205*sp_)+10;
-    const pn=B(pW,pH,pW/2,pH-6,()=>pine(pW/2,pH-6,sp_));
-    SP.pine=[pn,tint(pn,'hue-rotate(18deg)'),tint(pn,'hue-rotate(-22deg) brightness(.95)'),tint(pn,'hue-rotate(40deg) saturate(.9)'),tint(pn,'hue-rotate(-45deg) saturate(1.2)')];
+    const outl=(c,rad)=>{const pd=4,t=document.createElement('canvas');t.width=c.c.width;t.height=c.c.height;const x=t.getContext('2d');x.drawImage(c.c,0,0);x.globalCompositeOperation='source-in';x.fillStyle=OC;x.fillRect(0,0,t.width,t.height);
+      return sp(c.w+2*pd,c.h+2*pd,gg=>{for(let k=0;k<16;k++){const an=k/16*6.283;gg.drawImage(t,pd+Math.cos(an)*rad,pd+Math.sin(an)*rad,c.w,c.h)}gg.drawImage(c.c,pd,pd,c.w,c.h)},c.ax+pd,c.ay+pd)};
+    const ct=SP.tree.map(q=>outl(q,1.9)),cp=SP.pine.map(q=>outl(q,1.9));
+    SP.tree=[...ct,tint(ct[0],'hue-rotate(10deg)'),tint(ct[3],'hue-rotate(-8deg) brightness(.95)')];
+    SP.pine=[...cp,tint(cp[1],'hue-rotate(16deg)')];
     const sm=.56,mW=R(260*sm)+10,mH=R(290*sm)+10,mx=R(68*sm)+5;
     const pm=(c)=>B(mW,mH,mx,mH-8,()=>palm(mx,mH-8,sm,false,c));
     const p1=pm(true),p0=pm(false);
@@ -79,6 +77,7 @@ var GfxNew=(function(){
   }
   return{nature,props,on:()=>GFXN};
 })();
+function waterNew(d){const a=waterRGB(.05),b=waterRGB(.27),c=waterRGB(.8);const s1=sstep(.12,.16,d),s2=sstep(.38,.42,d);let o=mixc(mixc(a,b,s1),c,s2);const e=Math.max(1-Math.abs(d-.14)/.012,1-Math.abs(d-.4)/.012,0);if(e>0)o=mixc(o,[235,255,255],.32*e);return o}
 function gfxSwitch(){try{localStorage.setItem('sm_gfx',GFXN?'old':'new')}catch(e){}try{saveGame(true)}catch(e){}location.reload()}
 '''
 open('/home/claude/work/new31.js','w',encoding='utf8').write(js)
