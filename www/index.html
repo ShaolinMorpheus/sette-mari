@@ -7654,6 +7654,8 @@ function openBackupImpl(){
       c.querySelector('#bkSv').onclick=async()=>{
         const name='sette-mari-salvataggio.txt',C=window.Capacitor,PL=C&&C.Plugins;
         try{
+          if(C&&C.isNativePlatform&&C.isNativePlatform()&&!(C.isPluginAvailable&&C.isPluginAvailable('Filesystem'))){
+            st.textContent='Questa versione dell\'app non può salvare file nel telefono. Usa «Condividi» (poi «Salva in File» o Drive), «Invia per email» o «Copia». Con l\'APK nuovo questo tasto funziona.';return}
           if(C&&C.isNativePlatform&&C.isNativePlatform()&&PL&&PL.Filesystem){
             try{await PL.Filesystem.requestPermissions()}catch(_){}
             let r,dir='DOCUMENTS';
