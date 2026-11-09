@@ -5728,7 +5728,7 @@ const CHANGELOG=[
     "Collisione a sagoma per casse, forzieri e barili: non si attraversa più nemmeno la parte alta del disegno, e restano solidi anche una volta aperti.",
     "Vibrazione del telefono per indizi (Biscotto), missioni, tesori e eventi: si spegne dal menu «Vibrazione».",
     "Niente erba sui sentieri e nel campo (isola 1 e 2): restano terra e sabbia pulite.",
-    "Copia di sicurezza: nuovo tasto «Scarica sul telefono» che salva il file nella cartella Documenti (il vecchio «Salva file» ora si chiama «Condividi»).",
+    "Copia di sicurezza: nuovo tasto «Scarica sul telefono» che salva il file nella cartella Documenti e «Invia per email» (salva il codice nella tua posta, funziona anche con le vecchie app); il vecchio «Salva file» ora si chiama «Condividi».",
     "Erba più ricca: prato fitto a più strati di verde e, vicino all'acqua, ciuffi alti con le spighe.",
     "Foto: il tasto Condividi ora apre il menu di Android nell'app; dove non è possibile mostra la foto grande da tenere premuta per salvarla o inviarla.",
     "Casse, forzieri, barili e matasse di corda ora sono solidi: non si attraversano più (scompare l'ostacolo quando il forziere è stato aperto).",
@@ -7641,7 +7641,7 @@ function openBackupImpl(){
   let code='Preparo il codice…';
   sheetFor('<h2>Copia di sicurezza</h2><p class="sm">Il salvataggio vive solo in questo browser. Copia il codice (o scarica il file) per ritrovare la tua partita su un altro telefono o con un altro link.</p>'
     +'<textarea id="bkTx" class="bkta" readonly></textarea>'
-    +'<div class="row"><button class="btn gold" id="bkCp">Copia</button><button class="btn" id="bkSv">⬇ Scarica sul telefono</button><button class="btn" id="bkDl">Condividi</button></div>'
+    +'<div class="row"><button class="btn gold" id="bkCp">Copia</button><button class="btn" id="bkSv">⬇ Scarica sul telefono</button><button class="btn" id="bkDl">Condividi</button><button class="btn" id="bkMl">✉ Invia per email</button></div>'
     +'<h3>Ripristina</h3><textarea id="bkIn" class="bkta" placeholder="Incolla qui il codice"></textarea>'
     +'<input type="file" id="bkFile" accept=".txt,text/plain" style="margin:6px 0;max-width:100%">'
     +'<div class="row"><button class="btn" id="bkGo">Ripristina</button><button class="btn" id="shNo">Chiudi</button></div><p id="bkSt" class="sm"></p>',c=>{
@@ -7667,6 +7667,11 @@ function openBackupImpl(){
           a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();
           st.textContent='File scaricato (se il browser lo consente). In alternativa copia il codice.';
         }catch(_){st.textContent='Non riesco a scaricare il file: usa «Condividi» o «Copia».'}
+      };
+      c.querySelector('#bkMl').onclick=()=>{
+        try{location.href='mailto:?subject='+encodeURIComponent('Salvataggio Sette Mari')+'&body='+encodeURIComponent('Codice di salvataggio di Sette Mari (copialo per intero nel gioco, in Copia di sicurezza › Ripristina):\n\n'+code);
+          st.textContent='Si apre la tua app di posta: invia la mail a te stesso. Il codice resta nella tua casella.'}
+        catch(_){st.textContent='Non riesco ad aprire la posta: usa «Copia».'}
       };
       c.querySelector('#bkDl').onclick=async()=>{
         const name='sette-mari-salvataggio.txt',C=window.Capacitor,PL=C&&C.Plugins;
