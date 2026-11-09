@@ -5725,7 +5725,7 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
-    "Collisione a sagoma per casse, forzieri e barili: non si attraversa più nemmeno la parte alta del disegno.",
+    "Collisione a sagoma per casse, forzieri e barili: non si attraversa più nemmeno la parte alta del disegno, e restano solidi anche una volta aperti.",
     "Vibrazione del telefono per indizi (Biscotto), missioni, tesori e eventi: si spegne dal menu «Vibrazione».",
     "Niente erba sui sentieri e nel campo (isola 1 e 2): restano terra e sabbia pulite.",
     "Erba più ricca: prato fitto a più strati di verde e, vicino all'acqua, ciuffi alti con le spighe.",
@@ -8747,7 +8747,7 @@ UI.openMenu=function(){
   c.querySelectorAll('.mn').forEach(b=>b.onclick=()=>{UI._mt=b.dataset.mn;c.querySelectorAll('.mn').forEach(x=>x.setAttribute('aria-selected',x===b));c.querySelectorAll('.mp').forEach(x=>x.hidden=x.dataset.mp!==UI._mt)});
   const setT=(id,ic,sub)=>{const b=c.querySelector('#'+id);b.querySelector('i').textContent=ic;const m=b.querySelector('.ms');if(m)m.textContent=sub};
   c.querySelector('#mMus').onclick=()=>{auInit();muSet(!AU.mus);S.music=AU.mus;setT('mMus',AU.mus?'🎵':'🔕',AU.mus?'accesa':'spenta');c.querySelector('#mMus').classList.toggle('on',!!AU.mus);saveGame()};
-  c.querySelector('#mVib').onclick=()=>{HAP.on=!HAP.on;try{localStorage.setItem('sm_vib',HAP.on?'1':'0')}catch(_){}setT('mVib',HAP.on?'📳':'📴',HAP.on?'attiva':'spenta');c.querySelector('#mVib').classList.toggle('on',!!HAP.on);if(HAP.on)buzz([40,40,40])};
+  c.querySelector('#mVib').onclick=()=>{HAP.on=!HAP.on;try{localStorage.setItem('sm_vib',HAP.on?'1':'0')}catch(_){}setT('mVib',HAP.on?'📳':'📴',HAP.on?'attiva':'spenta');c.querySelector('#mVib').classList.toggle('on',!!HAP.on);if(HAP.on&&buzz([40,40,40])===false)UI.toast('Da qui il telefono non permette la vibrazione (la pagina nel browser o dentro un\'app la blocca). Nell\'app Android installata, aggiornata, funziona.',6500)};
   c.querySelector('#mSnd').onclick=()=>{auInit();auSet(!AU.on);S.sound=AU.on;setT('mSnd',AU.on?'🔊':'🔇',AU.on?'accesi':'spenti');c.querySelector('#mSnd').classList.toggle('on',!!AU.on)};
   c.querySelector('#mGfx').onclick=()=>{const o=['auto','bassa','media','alta'],n=o[(o.indexOf(GFX_CUR)+1)%4];GFX_CUR=n;try{localStorage.setItem('sette-mari-gfx',n)}catch(_){}
     if(n==='bassa'){DPRMAX=1;QL=2}else if(n==='alta'){DPRMAX=2;QL=0}else if(n==='media'){DPRMAX=WORLD===3?1.25:1.6;QL=0}else{DPRMAX=WORLD===3?1.25:1.6;QL=0}
@@ -11258,7 +11258,7 @@ function blkSync(dt){
   const px=Math.floor(P.x/TS),py=Math.floor((P.y-2)/TS);
   for(const e of E){
     if(!(e.type==='loot'||(e.type==='deco'&&BKS.includes(e.spr))))continue;
-    if(e.got||e.hid||e.inRoom){if(e.bk&&e.blocked){if(e.bkfull){insetT[tIdx(e.fp[0],e.fp[1])]++;e.bkfull=0}delBlock(e)}continue}
+    if(e.hid||e.inRoom||(e.got&&!sprOf(e))){if(e.bk&&e.blocked){if(e.bkfull){insetT[tIdx(e.fp[0],e.fp[1])]++;e.bkfull=0}delBlock(e)}continue}   // aperti restano solidi
     if(e.blocked||e.fp)continue;
     const tx=e.type==='loot'&&e.tx!=null?e.tx:Math.floor(e.x/TS),ty=e.type==='loot'&&e.ty!=null?e.ty:Math.floor((e.y-9)/TS);   // il corpo sta sopra la linea di base
     if(!inMap(tx,ty)||!walkT[tIdx(tx,ty)]||(tx===px&&ty===py))continue;
@@ -11341,7 +11341,7 @@ function sprOf(e){
 function obrBuild(){
   OBR.length=0;
   for(const e of E){
-    if(!e.bk||e.got||e.hid)continue;
+    if(!e.bk||e.hid)continue;
     const s=sprOf(e);if(!s)continue;
     const cx=e.x-s.ax+s.w/2,hw=s.w*.4,dp=Math.min(s.h*.6,36);
     const o={x0:cx-hw,x1:cx+hw,y0:e.y-dp,y1:e.y+2,e};
@@ -11352,12 +11352,13 @@ function obrBuild(){
 /* ---- vibrazione: indizi, tesori, missioni (si spegne dal menu) ---- */
 const HAP={on:(()=>{try{return localStorage.getItem('sm_vib')!=='0'}catch(e){return true}})(),t:0};
 function buzz(p){
-  if(!HAP.on)return;const n=Date.now();if(n-HAP.t<110)return;HAP.t=n;
+  if(!HAP.on)return false;const n=Date.now();if(n-HAP.t<110)return true;HAP.t=n;
   try{
     const C=window.Capacitor,PL=C&&C.Plugins,arr=Array.isArray(p)?p:[p];
-    if(PL&&PL.Haptics&&PL.Haptics.vibrate){let d=0;arr.forEach((v,i)=>{if(i%2===0)setTimeout(()=>{try{PL.Haptics.vibrate({duration:v})}catch(e){}},d);d+=v});return}
-    if(navigator.vibrate)navigator.vibrate(arr);
+    if(PL&&PL.Haptics&&PL.Haptics.vibrate){let d=0;arr.forEach((v,i)=>{if(i%2===0)setTimeout(()=>{try{PL.Haptics.vibrate({duration:v})}catch(e){}},d);d+=v});return true}
+    if(navigator.vibrate)return navigator.vibrate(arr)!==false;
   }catch(e){}
+  return false;
 }
 {const HP={quest:[40,60,40],relic:[30,50,30,50,70],cra:[18,50,18],ok:12,no:[22],thud:24,thunder:[70,40,90],hammer:14,chop:18,mine:18};
  const o=sfx;sfx=function(n){try{const v=HP[n];if(v)buzz(v)}catch(e){}return o.apply(this,arguments)}}
