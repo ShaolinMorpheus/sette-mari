@@ -42,36 +42,36 @@ var GfxNew=(function(){
   function sparkle(seed,cx,cy,w,h){const r=rnd(seed);for(let k=0;k<8;k++){g.fillStyle=['#fff8c8','#ffd36b','#ffffff'][k%3];g.beginPath();g.arc(cx+(r()-.5)*w,cy+(r()-.5)*h,1.3+r()*1.4,0,7);g.fill()}}
   const R=Math.round;
   function nature(){
-    const so=.6,oW=R(200*so),oH=R(212*so)+10;
+    const so=.54,oW=R(200*so),oH=R(212*so)+10;
     const oakS=(f,a)=>B(oW,oH,oW/2,oH-6,()=>{(a?oakA:oak)(oW/2,oH-6,so,f)});
-    const o0=oakS(false),o3=oakS(true),oa=oakS(false,true);
-    SP.tree=[o0,tint(o0,'hue-rotate(12deg) saturate(1.1)'),tint(o0,'hue-rotate(-8deg) saturate(1.1) brightness(.95)'),o3,tint(o3,'hue-rotate(12deg)'),oa,tint(o0,'brightness(1.1) saturate(.9)'),tint(oa,'hue-rotate(-22deg)')];
-    const sp_=.7,pW=R(170*sp_)+8,pH=R(205*sp_)+10;
+    const o0=oakS(false),o3=oakS(true);
+    SP.tree=[o0,tint(o0,'hue-rotate(12deg) saturate(1.1)'),tint(o0,'hue-rotate(-8deg) saturate(1.1) brightness(.95)'),o3,tint(o3,'hue-rotate(12deg)'),tint(o3,'hue-rotate(-8deg) brightness(.95)'),tint(o0,'brightness(1.1) saturate(.9)'),tint(o0,'hue-rotate(-14deg) brightness(.9)')];
+    const sp_=.63,pW=R(170*sp_)+8,pH=R(205*sp_)+10;
     const pn=B(pW,pH,pW/2,pH-6,()=>pine(pW/2,pH-6,sp_));
     SP.pine=[pn,tint(pn,'hue-rotate(18deg)'),tint(pn,'hue-rotate(-22deg) brightness(.95)'),tint(pn,'hue-rotate(40deg) saturate(.9)'),tint(pn,'hue-rotate(-45deg) saturate(1.2)')];
-    const sm=.62,mW=R(260*sm)+10,mH=R(290*sm)+10,mx=R(68*sm)+5;
+    const sm=.56,mW=R(260*sm)+10,mH=R(290*sm)+10,mx=R(68*sm)+5;
     const pm=(c)=>B(mW,mH,mx,mH-8,()=>palm(mx,mH-8,sm,false,c));
     const p1=pm(true),p0=pm(false);
     SP.palm=[p1,tint(p1,'hue-rotate(10deg)'),tint(p1,'hue-rotate(-10deg) brightness(1.04)')];
     SP.palm0=[p0,tint(p0,'hue-rotate(10deg)'),tint(p0,'hue-rotate(-10deg) brightness(1.04)')];
-    const kr=.7,rW=R(128*kr)+8,rH=R(70*kr)+14,k2=.78,r2W=R(84*k2)+8,r2H=R(50*k2)+14;
+    const kr=.63,rW=R(128*kr)+8,rH=R(70*kr)+14,k2=.7,r2W=R(84*k2)+8,r2H=R(50*k2)+14;
     const rk=()=>{rock(rW*.52,rH-8,kr)},rb=()=>{rock2(r2W/2,r2H-8,k2)};
     const spk=(fn,w,h,ax,ay,seed)=>B(w,h,ax,ay,()=>{fn();sparkle(seed,ax,ay-22,34,26)});
     SP.boulder=[B(rW,rH,rW*.52,rH-8,rk),B(r2W,r2H,r2W/2,r2H-8,rb),spk(rk,rW,rH,rW*.52,rH-8,3),spk(rb,r2W,r2H,r2W/2,r2H-8,5),tint(spk(rk,rW,rH,rW*.52,rH-8,7),'hue-rotate(20deg)',true)];
-    const kb=.6,bW=R(120*kb)+8,bH=R(76*kb)+12;
+    const kb=.54,bW=R(120*kb)+8,bH=R(76*kb)+12;
     const bs=(b,fl)=>B(bW,bH,bW/2,bH-8,()=>{OPT.berries=b;OPT.flowers=!b&&fl;OPT.fc=fl==2?'#ffb6cf':'#fff';bush(bW/2,bH-8,kb)});
     SP.bush=[bs(false,1),bs(false,2),tint(bs(false,1),'hue-rotate(12deg)')];
     SP.bush0=tint(bs(false,0),'saturate(.55) brightness(.92)');
     SP.berry=[bs(true),tint(bs(true),'hue-rotate(10deg)'),tint(bs(true),'hue-rotate(-10deg)')];SP.berry0=SP.bush0;
-    const ks=.5,tW=R(76*ks)+8,tH=R(58*ks)+12;
+    const ks=.45,tW=R(76*ks)+8,tH=R(58*ks)+12;
     SP.stump=B(tW,tH,tW/2,tH-8,()=>stump(tW/2,tH-8,ks));
   }
   function props(){
-    const kc=.66,cW=R(100*kc)+8,cH=R(106*kc)+12;
+    const kc=.6,cW=R(100*kc)+8,cH=R(106*kc)+12;
     const ch=(o)=>B(cW,cH,cW/2,cH-8,()=>chest(cW/2,cH-8,kc,o));
     const c0=[ch(false),ch(true)];
     SP.chest=[c0,[tint(c0[0],'hue-rotate(-12deg) saturate(.9)'),tint(c0[1],'hue-rotate(-12deg) saturate(.9)')],[tint(c0[0],'hue-rotate(180deg)'),tint(c0[1],'hue-rotate(180deg)')],[tint(c0[0],'hue-rotate(95deg) saturate(1.1)'),tint(c0[1],'hue-rotate(95deg) saturate(1.1)')]];
-    const kk=.58,wW=R(80*kk)+8,wH=R(76*kk)+12;
+    const kk=.52,wW=R(80*kk)+8,wH=R(76*kk)+12;
     const br=B(wW,wH,wW/2,wH-8,()=>barrel(wW/2,wH-8,kk));
     SP.barrel=[br,tint(br,'hue-rotate(-14deg) brightness(.92)')];
     SP.crate=B(wW,wH,wW/2,wH-8,()=>crate(wW/2,wH-8,kk));
