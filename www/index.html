@@ -4415,7 +4415,7 @@ function updateWeather(dt){
   for(const q of WX.thunder)if(q.d<=0)sfx(q.big?'thunder':'thunder2');
   WX.thunder=WX.thunder.filter(q=>q.d>0);
   if(S.up.torch&&S.torchOn&&P.mode==='raft'&&w.k==='storm'&&WX.i>.9&&Math.random()<dt*.05){S.torchOn=false;UI.toast('Il vento ha spento la torcia.');UI.sync()}
-  torchTick();caveStep(dt);hutStep(dt);try{cave1Tick(dt)}catch(e){console.error('grotta1',e)}try{rsTick(dt)}catch(e){console.error('zattera',e)}
+  torchTick();caveStep(dt);hutStep(dt);try{cave1Tick(dt)}catch(e){console.error('grotta1',e)}try{rsTick(dt)}catch(e){console.error('zattera',e)}try{blkSync(dt)}catch(e){console.error('blk',e)}
   if(window.auWeather)auWeather(WX.i,w.k==='storm'?1:0);
   // luna: un avviso la sera
   if(S.tod>=19.6&&S.tod<22&&S.moonSaid!==nightIdx()){
@@ -5709,6 +5709,9 @@ const AFTER=[
 ];
 const CHANGELOG=[
   {v:"0.11.2",d:"8 nov 2026",t:"Capanna con candele, torcia più chiara e tante rifiniture",n:[
+    "Casse, forzieri, barili e matasse di corda ora sono solidi: non si attraversano più (scompare l'ostacolo quando il forziere è stato aperto).",
+    "Password di «Novità» e «Solo per me»: tastiera tutta dentro al gioco, così non compare più quella verticale di Android.",
+    "Lo scheletro della grotta è stato ridisegnato: teschio con bandana, costole, bacino, braccia con il biglietto, gambe e stivali.",
     "Mare pulito: le stanze interne di capanna e grotta non si vedono più da fuori quando navighi in alto, quindi niente più capanne, barili e casse in mezzo all'acqua.",
     "La zattera ora serve a qualcosa (isola 1 e 2): in mare aperto galleggiano casse e barili da ripescare passandoci vicino; di giorno ogni tanto spunta una balena che lascia una cassa, e la sera può comparire una nave fantasma con il suo tesoro.",
     "Pietre, rottami e cespugli vengono spostati in punti ben visibili anche se la chioma di un albero li copre solo un po' (isola 1 e isola 2).",
@@ -8585,7 +8588,7 @@ function journalBody(){
     if(S.c2||WORLD===2){h+='<h3>Pagine del diario di J. ('+Object.keys(pr).length+'/4)</h3>';for(let i=0;i<4;i++)h+='<p class="sm">'+(pr[i]?uEsc(Ch2.PG[i]):'— non ancora trovata —')+'</p>'}
     return h}
   if(jTab==='r')return Extra.collectionHtml();
-  if(!newsOK)return'<div class="news"><h4>Area riservata</h4><p style="font-weight:700;font-size:13.5px">Solo l\'admin può accedere.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn" id="nwGo">Entra</button></div><p id="nwErr" style="color:#b3261e;font-weight:800;font-size:13px;min-height:18px;margin:6px 0 0"></p></div>';
+  if(!newsOK)return'<div class="news"><h4>Area riservata</h4><p style="font-weight:700;font-size:13.5px">Solo l\'admin può accedere.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" readonly inputmode="none" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn" id="nwGo">Entra</button></div><p id="nwErr" style="color:#b3261e;font-weight:800;font-size:13px;min-height:18px;margin:6px 0 0"></p></div>';
   return'<div class="news">'+CHANGELOG.map(c=>'<h4>v'+c.v+' · '+c.d+' — '+uEsc(c.t)+'</h4><ul>'+c.n.map(x=>'<li>'+uEsc(x)+'</li>').join('')+'</ul>').join('')+'</div>';
 }
 let newsOK=false;
@@ -8600,17 +8603,17 @@ function journalDraw(){
   {const be=c.querySelector('#nwEd');if(be)be.onclick=()=>{uShow('journal',false);setTimeout(edStart,150)}}
   for(const[id,h]of[['nwE3','#w3'],['nwE4','#w4'],['nwE5','#w5']]){const b=c.querySelector('#'+id);if(b)b.onclick=()=>{try{localStorage.setItem('sm_edx_auto','1');if(h==='#w4')localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go(h);location.reload()}}
   const go=c.querySelector('#nwGo');
-  if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
+  if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');journalDraw()}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()};pwKb(c,tryPw)}
   c.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{jTab=b.dataset.t;sfx('tap');journalDraw()});
   c.querySelectorAll('[data-track]').forEach(b=>b.onclick=()=>{S.side=b.dataset.track;sfx('tap');UI.syncObj();journalDraw()});
 }
 UI.openAdmin=function(){
   const body=()=>{
-    if(!newsOK)return'<h2>Solo per me</h2><p class="sm">Area riservata: serve la password.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn gold" id="nwGo">Entra</button></div><p class="sm" id="nwErr" style="color:#a02818;font-weight:700"></p><div class="row"><button class="btn" id="shNo">Chiudi</button></div>';
+    if(!newsOK)return'<h2>Solo per me</h2><p class="sm">Area riservata: serve la password.</p><div class="row" style="gap:8px;margin-top:8px"><input id="nwPw" type="password" autocomplete="off" readonly inputmode="none" placeholder="Password" style="flex:1;min-width:0;padding:10px 12px;border-radius:10px;border:2px solid #7a5a34;font:700 15px inherit"><button class="btn gold" id="nwGo">Entra</button></div><p class="sm" id="nwErr" style="color:#a02818;font-weight:700"></p><div class="row"><button class="btn" id="shNo">Chiudi</button></div>';
     return'<h2>Solo per me</h2><h3>Editor</h3><div class="row" style="flex-wrap:wrap"><button class="btn" id="nwEd">Editor mappa</button><button class="btn" id="nwE3">Editor galeone</button><button class="btn" id="nwE4">Editor interno nave</button><button class="btn" id="nwE5">Editor viaggio finale</button></div><h3>Prova le missioni</h3><div class="row" style="flex-wrap:wrap"><button class="btn" id="nwC3">Capitolo 3 (battaglia)</button><button class="btn" id="nwC4">Assalto al galeone</button><button class="btn" id="nwC5">Il grande viaggio</button></div><h3>Versione</h3><div class="row"><button class="btn" id="nwVer">'+verLbl()+'</button></div><div class="row"><button class="btn" id="shNo">Chiudi</button></div>'};
   const wire=c=>{
     const go=c.querySelector('#nwGo');
-    if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');sheetFor(body(),wire)}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()}}
+    if(go){const tryPw=()=>{const v=(c.querySelector('#nwPw').value||'').trim();if(pwHash(v)===260412130){newsOK=true;sfx('ok');sheetFor(body(),wire)}else{c.querySelector('#nwErr').textContent='Password errata.';sfx('tap')}};go.onclick=tryPw;c.querySelector('#nwPw').onkeydown=e=>{if(e.key==='Enter')tryPw()};pwKb(c,tryPw)}
     {const nv=c.querySelector('#nwVer');if(nv)nv.onclick=verSwitch}
     const nc=c.querySelector('#nwC4');if(nc)nc.onclick=()=>{try{localStorage.setItem('sm_c34',JSON.stringify({pris:0,silver:0,hull:8,max:8,kills:3,t:0,shots:0,hits:0}))}catch(e){}__go('#w4');location.reload()};
     {const b3=c.querySelector('#nwC3');if(b3)b3.onclick=()=>{__go('#w3');location.reload()};const b5=c.querySelector('#nwC5');if(b5)b5.onclick=()=>{__go('#w5');location.reload()}}
@@ -8619,6 +8622,21 @@ UI.openAdmin=function(){
   };
   sheetFor(body(),wire);
 };
+/* tastiera della password dentro al gioco: la tastiera di Android compare in verticale perché il gioco è ruotato */
+function pwKb(c,go){
+  const inp=c.querySelector('#nwPw');if(!inp||c.querySelector('#pwkb'))return;
+  inp.readOnly=true;inp.setAttribute('inputmode','none');
+  let up=false;
+  const rows=['1234567890','qwertyuiop','asdfghjkl','^zxcvbnm<','.,!?-_@#$%&*+=/'];
+  const d=document.createElement('div');d.id='pwkb';d.style.cssText='display:flex;flex-direction:column;gap:3px;margin:6px 0 0;user-select:none;-webkit-user-select:none';
+  rows.forEach(r=>{const row=document.createElement('div');row.style.cssText='display:flex;gap:3px;justify-content:center';
+    [...r].forEach(ch=>{const b=document.createElement('button');b.type='button';b.className='btn';b.style.cssText='min-width:0;flex:1;max-width:46px;height:27px;padding:0;font-weight:800;font-size:14px';b.textContent=ch==='^'?'⇧':ch==='<'?'⌫':ch;b.dataset.k=ch;row.appendChild(b)});d.appendChild(row)});
+  d.onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=b.dataset.k;try{sfx('tap')}catch(x){}
+    if(k==='<')inp.value=inp.value.slice(0,-1);
+    else if(k==='^'){up=!up;d.querySelectorAll('button').forEach(x=>{const q=x.dataset.k;if(/^[a-z]$/.test(q))x.textContent=up?q.toUpperCase():q})}
+    else{inp.value+=(up&&/^[a-z]$/.test(k))?k.toUpperCase():k;if(up){up=false;d.querySelectorAll('button').forEach(x=>{const q=x.dataset.k;if(/^[a-z]$/.test(q))x.textContent=q})}}};
+  inp.parentNode.insertAdjacentElement('afterend',d);
+}
 let jSeen={};
 UI.openJournal=function(tab){
   jSeen=Object.assign({},(S&&S.jnew)||{});if(S)S.jnew={};
@@ -10942,17 +10960,6 @@ function drawCvBraz(g,e,t){
   }else{g.fillStyle='#1c1612';g.beginPath();g.ellipse(0,-17,10,3,0,0,7);g.fill();g.fillStyle='#4a3c30';g.fillRect(-5,-19,3,2);g.fillRect(2,-19,3,2)}
   g.restore();
 }
-function drawCvSkel(g,e,t){
-  g.save();g.translate(e.x,e.y);shadow(g,0,4,26,7,.35);
-  g.fillStyle='#4a3a2a';g.fillRect(-16,-34,32,38);              // sasso dietro
-  g.fillStyle='#d8cdb0';g.strokeStyle='#3a3226';g.lineWidth=1.6;
-  g.beginPath();g.arc(-2,-26,8,0,7);g.fill();g.stroke();       // teschio
-  g.fillStyle='#14100a';g.fillRect(-6,-28,3,4);g.fillRect(0,-28,3,4);g.fillRect(-3,-21,4,2);
-  g.fillStyle='#7a1c24';g.beginPath();g.moveTo(-10,-31);g.quadraticCurveTo(-2,-42,6,-31);g.lineTo(5,-30);g.quadraticCurveTo(-2,-37,-9,-30);g.closePath();g.fill();  // bandana
-  g.fillStyle='#d8cdb0';g.fillRect(-8,-17,12,3);g.fillRect(-7,-12,10,3);g.fillRect(-6,-7,8,3);g.fillRect(4,-12,10,3);g.fillRect(12,-6,8,3);   // ossa
-  g.fillStyle='#e8dcb8';g.fillRect(-16,-4,12,8);g.strokeRect(-16,-4,12,8);                  // biglietto
-  g.restore();
-}
 function drawCvSm(g,e,t){
   const open=!!(S.flags&&S.flags.cave1Small);
   g.save();g.translate(e.x,e.y);shadow(g,0,4,22,7,.4);
@@ -11213,6 +11220,81 @@ function rsDraw(g,t){
   if(E.k==='whale')nvWhaleDraw(g,Object.assign({},E,{st:'idle'}),t);else rsGhostDraw(g,E,t);
 }
 
+/* ====== v0.12q: collisioni di casse/barili/forzieri, scheletro realistico ====== */
+const BK={t:0};
+const BKS=['barrel0','barrel1','crate','coil'];
+function blkSync(dt){
+  if(!(WORLD===1||WORLD===2)||!S||!S.live)return;
+  BK.t-=dt;if(BK.t>0)return;BK.t=.4;
+  const px=Math.floor(P.x/TS),py=Math.floor((P.y-2)/TS);
+  for(const e of E){
+    if(!(e.type==='loot'||(e.type==='deco'&&BKS.includes(e.spr))))continue;
+    if(e.got||e.hid||e.inRoom){if(e.bk&&e.blocked)delBlock(e);continue}
+    if(e.blocked||e.fp)continue;
+    const tx=e.type==='loot'&&e.tx!=null?e.tx:Math.floor(e.x/TS),ty=e.type==='loot'&&e.ty!=null?e.ty:Math.floor((e.y-1)/TS);
+    if(!inMap(tx,ty)||!walkT[tIdx(tx,ty)]||(tx===px&&ty===py))continue;
+    if(huReg(tx,ty)||((tx>=CV_X0&&tx<CV_X0+CV_W&&ty>=CV_Y0&&ty<CV_Y0+CV_H)))continue;
+    addBlock(e,tx,ty,1,1);e.bk=1;
+  }
+}
+function drawCvSkel(g,e,t){
+  const B1='#efe5c8',B2='#c9bd98',B3='#8e8466',L='#2a2418';
+  const bone=(x1,y1,x2,y2,w)=>{g.lineCap='round';g.strokeStyle=L;g.lineWidth=w+2.2;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.strokeStyle=B2;g.lineWidth=w;g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();g.strokeStyle=B1;g.lineWidth=w*.45;g.beginPath();g.moveTo(x1-.6,y1-.6);g.lineTo(x2-.6,y2-.6);g.stroke()};
+  const knob=(x,y,r)=>{g.fillStyle=B1;g.strokeStyle=L;g.lineWidth=1.2;g.beginPath();g.arc(x,y,r,0,7);g.fill();g.stroke()};
+  g.save();g.translate(e.x,e.y);
+  shadow(g,0,4,34,9,.45);
+  // stoffa strappata di giubba dietro le costole
+  g.fillStyle='#2c3a44';g.strokeStyle='#10171c';g.lineWidth=1.4;
+  g.beginPath();g.moveTo(-17,-46);g.quadraticCurveTo(-21,-30,-15,-17);g.lineTo(-11,-12);g.lineTo(-7,-17);g.lineTo(-3,-11);g.lineTo(2,-16);g.lineTo(7,-10);g.lineTo(12,-17);g.quadraticCurveTo(20,-31,16,-46);g.closePath();g.fill();g.stroke();
+  g.fillStyle='rgba(0,0,0,.35)';g.fillRect(-12,-44,24,26);
+  // gambe stese verso chi guarda
+  bone(-5,-15,-15,-2,4.2);bone(5,-15,14,-1,4.2);
+  bone(-15,-2,-24,10,3.6);bone(14,-1,23,11,3.6);
+  knob(-15,-2,3.1);knob(14,-1,3.1);
+  // stivali consumati
+  g.fillStyle='#3a2a1c';g.strokeStyle=L;g.lineWidth=1.6;
+  g.beginPath();g.moveTo(-28,6);g.lineTo(-20,6);g.lineTo(-19,15);g.lineTo(-31,14);g.closePath();g.fill();g.stroke();
+  g.beginPath();g.moveTo(19,7);g.lineTo(27,7);g.lineTo(29,16);g.lineTo(17,15);g.closePath();g.fill();g.stroke();
+  // bacino
+  g.fillStyle=B2;g.strokeStyle=L;g.lineWidth=1.6;g.beginPath();g.ellipse(0,-15,12,6,0,0,7);g.fill();g.stroke();
+  g.fillStyle='rgba(20,14,6,.7)';g.beginPath();g.ellipse(-4.5,-15,2.6,2.2,0,0,7);g.fill();g.beginPath();g.ellipse(4.5,-15,2.6,2.2,0,0,7);g.fill();
+  // colonna vertebrale
+  for(let i=0;i<8;i++){g.fillStyle=i%2?B2:B1;g.strokeStyle=L;g.lineWidth=1;g.beginPath();g.roundRect(-2.6,-20-i*3.3,5.2,3,1.2);g.fill();g.stroke()}
+  // costole
+  for(let i=0;i<5;i++){const y=-26-i*4.4,w=14-Math.abs(i-1.6)*1.4;
+    for(const s of[-1,1]){
+      g.strokeStyle=L;g.lineWidth=4;g.beginPath();g.moveTo(s*2,y);g.quadraticCurveTo(s*w,y-3.5,s*(w-3),y+4);g.stroke();
+      g.strokeStyle=i%2?B2:B1;g.lineWidth=2.1;g.beginPath();g.moveTo(s*2,y);g.quadraticCurveTo(s*w,y-3.5,s*(w-3),y+4);g.stroke()}}
+  g.strokeStyle=B2;g.lineWidth=3;g.beginPath();g.moveTo(0,-30);g.lineTo(0,-44);g.stroke();     // sterno
+  // clavicole + braccia
+  bone(-2,-46,-14,-44,3);bone(2,-46,14,-44,3);
+  bone(-14,-44,-21,-31,3.4);bone(-21,-31,-12,-21,3);knob(-21,-31,2.6);
+  bone(14,-44,20,-30,3.4);bone(20,-30,17,-17,3);knob(20,-30,2.6);
+  // biglietto stretto nella mano sinistra
+  g.save();g.translate(-12,-20);g.rotate(-.25);g.fillStyle='#eadcb4';g.strokeStyle='#5a4a2c';g.lineWidth=1.2;g.fillRect(-6,-4,12,9);g.strokeRect(-6,-4,12,9);
+  g.strokeStyle='#7a6a48';g.lineWidth=.8;for(let k=0;k<3;k++){g.beginPath();g.moveTo(-4,-2+k*3);g.lineTo(4,-2+k*3);g.stroke()}g.restore();
+  for(const[x,y]of[[-12,-19],[-9,-17],[17,-17],[20,-15],[15,-15]])knob(x,y,1.5);   // dita
+  // teschio
+  g.save();g.translate(0,-54);g.rotate(.1);
+  const gr=g.createRadialGradient(-3,-4,1,0,0,11);gr.addColorStop(0,'#f6eed6');gr.addColorStop(.7,B1);gr.addColorStop(1,B3);
+  g.fillStyle=gr;g.strokeStyle=L;g.lineWidth=1.8;g.beginPath();g.ellipse(0,0,9.5,9,0,0,7);g.fill();g.stroke();
+  g.beginPath();g.roundRect(-5.5,5,11,6,2);g.fillStyle=B2;g.fill();g.stroke();                       // mandibola
+  g.strokeStyle='#4a4028';g.lineWidth=.9;for(let k=-4;k<=4;k+=2){g.beginPath();g.moveTo(k,5.6);g.lineTo(k,10.4);g.stroke()}
+  g.fillStyle='#0d0a06';g.beginPath();g.ellipse(-3.8,-.6,2.9,3.3,-.1,0,7);g.fill();g.beginPath();g.ellipse(3.8,-.6,2.9,3.3,.1,0,7);g.fill();   // orbite
+  g.beginPath();g.moveTo(0,2.6);g.lineTo(-1.8,6);g.lineTo(1.8,6);g.closePath();g.fill();                                                          // naso
+  g.strokeStyle='rgba(60,48,26,.8)';g.lineWidth=.9;g.beginPath();g.moveTo(3,-8.4);g.lineTo(5.4,-4.5);g.lineTo(4.2,-2);g.stroke();                  // crepa
+  // bandana slavata
+  g.fillStyle='#7a2a30';g.strokeStyle='#2c0c10';g.lineWidth=1.2;
+  g.beginPath();g.moveTo(-9.4,-3.6);g.quadraticCurveTo(0,-13,9.4,-3.6);g.lineTo(8.6,-1);g.quadraticCurveTo(0,-9,-8.6,-1);g.closePath();g.fill();g.stroke();
+  g.beginPath();g.moveTo(8.8,-3);g.lineTo(14,-1);g.lineTo(11.5,1.8);g.lineTo(13.5,5.5);g.lineTo(8.4,.5);g.closePath();g.fill();g.stroke();
+  g.restore();
+  // ossa sparse e polvere
+  g.fillStyle=B2;g.strokeStyle=L;g.lineWidth=1;
+  g.save();g.translate(-27,-1);g.rotate(.5);g.fillRect(-5,-1.2,10,2.4);g.strokeRect(-5,-1.2,10,2.4);g.restore();
+  g.save();g.translate(27,3);g.rotate(-.3);g.fillRect(-4,-1.2,8,2.4);g.strokeRect(-4,-1.2,8,2.4);g.restore();
+  g.restore();
+}
+
 /* ---- 12d_kb.js ---- */
 /* ====== TASTIERA DEL GIOCO: quando il telefono è in verticale la schermata è ruotata, ma la tastiera di sistema no.
    Per scrivere i nomi usiamo una tastiera nostra, che ruota con il gioco ====== */
@@ -11463,7 +11545,7 @@ function frameErr(err){   // un errore in un singolo passo non deve congelare tu
 }
 /* ===== EDITOR MAPPA (solo admin: Diario → Novità → «Editor mappa») ===== */
 const ED={on:false,sel:null,drag:null,pan:null,pt:new Map(),pinch0:0,ed:{mv:{},del:[],add:[],vv:{},t:[]},undo:[],grid:true,bound:false,brush:null,size:2.5,paint:null,dirty:false};
-const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184],"plot_banco":[1540,1274],"t6":[1963,1536],"r8":[3168,1052],"y11":[1638,972],"t18":[1832,964],"t62":[1698,964],"t59":[1830,1536],"t4":[1777,1492],"lt_cr10":[1968,1650],"t50":[1785,1624]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}},"1":{"mv":{"b12":[2178,1492],"plot_falo":[1474,1230],"plot_banco":[1628,1230],"lamp7":[1826,1223],"plot_capanna":[1342,1186],"lookout":[1201,1118],"lamp2":[1122,1135],"lt_old":[1380,810],"oldcamp":[1329,744],"lamp1":[1518,915],"b2":[1386,876],"t4":[1260,1712],"lamp3":[1210,1575],"lamp5":[946,1883],"t51":[1656,1624],"lamp8":[1738,1399]},"del":["feedback"],"add":[{"t":"deco","s":"lamp","f":0,"x":1738,"y":1047,"id":"ed1"},{"t":"deco","s":"lamp","f":0,"x":1078,"y":1487,"id":"ed2"},{"t":"deco","s":"lamp","f":0,"x":770,"y":2103,"id":"ed3"},{"t":"deco","s":"lamp","f":0,"x":1034,"y":2191,"id":"ed4"},{"t":"deco","s":"lamp","f":0,"x":1430,"y":1487,"id":"ed5"},{"t":"deco","s":"lamp","f":0,"x":2002,"y":1443,"id":"ed6"},{"t":"deco","s":"lamp","f":0,"x":2574,"y":1311,"id":"ed7"},{"t":"deco","s":"lamp","f":0,"x":1254,"y":871,"id":"ed8"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
+const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184],"plot_banco":[1540,1274],"t6":[1963,1536],"r8":[3168,1052],"y11":[1638,972],"t18":[1832,964],"t62":[1698,964],"t59":[1830,1536],"t4":[1777,1492],"lt_cr10":[1968,1650],"t50":[1785,1624]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}},"1":{"mv":{"b12":[2178,1492],"plot_falo":[1474,1230],"plot_banco":[1628,1230],"lamp7":[1826,1223],"plot_capanna":[1342,1186],"lookout":[1201,1118],"lamp2":[1122,1135],"lt_old":[1380,810],"oldcamp":[1329,744],"lamp1":[1518,915],"b2":[1386,876],"t4":[1260,1712],"lamp3":[1210,1575],"lamp5":[946,1883],"t51":[1656,1624],"lamp8":[1738,1399],"y3":[1782,702],"d1":[1764,660],"m0":[1738,651],"fg3":[3576,1176],"fg0":[3558,1122],"fg2":[3684,1164],"fg1":[3708,1116],"r0":[1962,942]},"del":["feedback"],"add":[{"t":"deco","s":"lamp","f":0,"x":1738,"y":1047,"id":"ed1"},{"t":"deco","s":"lamp","f":0,"x":1078,"y":1487,"id":"ed2"},{"t":"deco","s":"lamp","f":0,"x":770,"y":2103,"id":"ed3"},{"t":"deco","s":"lamp","f":0,"x":1034,"y":2191,"id":"ed4"},{"t":"deco","s":"lamp","f":0,"x":1430,"y":1487,"id":"ed5"},{"t":"deco","s":"lamp","f":0,"x":2002,"y":1443,"id":"ed6"},{"t":"deco","s":"lamp","f":0,"x":2574,"y":1311,"id":"ed7"},{"t":"deco","s":"lamp","f":0,"x":1254,"y":871,"id":"ed8"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
 const EDKEY='sm_edits_w'+WORLD;
 const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{},t:(o&&o.t)||[]});
 function edStore(){try{localStorage.setItem(EDKEY,JSON.stringify(ED.ed))}catch(e){}}
