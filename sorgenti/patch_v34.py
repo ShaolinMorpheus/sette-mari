@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+import sys
+P='/home/claude/work/base_index.html'
+src=open(P,encoding='utf8').read()
+def rep(old,new,cnt=1):
+    global src
+    n=src.count(old)
+    if n!=cnt:
+        print('PATCH34 FAIL (%d trovati, attesi %d):'%(n,cnt),old[:110].replace('\n','\\n')); sys.exit(1)
+    src=src.replace(old,new)
+NEW=open('/home/claude/work/new31.js',encoding='utf8').read()
+rep("/* ---- 12d_kb.js ---- */",NEW+"\n/* ---- 12d_kb.js ---- */")
+rep("v:(r()*(pine?4:6))|0","v:(r()*(pine?NGV.p:NGV.t))|0",2)
+rep("initNatureSprites();initStructSprites();initPropSprites();","initNatureSprites();initStructSprites();initPropSprites();if(GFXN){try{GfxNew.nature()}catch(e){console.error('gfx',e)}}")
+rep("T('mVer','🔁',verLbl(),null)","T('mGfxN','🧪','Grafica di prova',GFXN?'accesa':'spenta','tgl'+(GFXN?' on':''))+T('mVer','🔁',verLbl(),null)")
+rep("  c.querySelector('#mVer').onclick=verSwitch;","  {const gb=c.querySelector('#mGfxN');if(gb)gb.onclick=gfxSwitch}\n  c.querySelector('#mVer').onclick=verSwitch;")
+rep('    "Diario, nuova scheda «Statistiche»','''    "Grafica di prova (Menu → Grafica di prova): sabbie di più tipi, conchiglie, capesante, stelle marine, legni, rocce piccole, funghi, felci ed erbe di sottobosco, gabbiani con ombra, tartarughe, pesci, un gufo di notte, più tipi di alberi, noci di cocco più grandi e un mare più bello. Il tasto «Grafica» (Auto, Bassa, Media, Alta) resta quello di prima.",
+    "Diario, nuova scheda «Statistiche»''')
+rep("if(coco){for(const[ox,oy]of[[-6,6],[4,8],[-1,13]])ball(g,hx+ox,hy+oy,6.5,","if(coco){for(const[ox,oy]of(GFXN?[[-9,7],[6,9],[-2,17],[-3,-1]]:[[-6,6],[4,8],[-1,13]]))ball(g,hx+ox,hy+oy,GFXN?9.2:6.5,")
+rep("sand=mixc(sand,[250,240,200],sstep(.1,.16,s)*.18*(1-n1));","sand=mixc(sand,[250,240,200],sstep(.1,.16,s)*.18*(1-n1));if(GFXN){const nS=NZ.fbm(tx*.35+70,ty*.35+20,2);sand=mixc(sand,[248,240,214],clamp((nS-.55)*3,0,.55));sand=mixc(sand,[206,172,108],clamp((.42-nS)*3,0,.5))}")
+rep("let c=mixc(sand,gr,gT);","if(GFXN)gr=mixc(gr,[84,98,46],fF*.3);let c=mixc(sand,gr,gT);")
+rep("g.quadraticCurveTo(x,y-2+r()*4,x+7,y+r()*3);g.stroke()}\n  }\n  g.restore();","g.quadraticCurveTo(x,y-2+r()*4,x+7,y+r()*3);g.stroke()}\n  }\n  if(GFXN){try{GfxNew.decor(g)}catch(e){console.error('decor',e)}}\n  g.restore();")
+rep("  drawBeach(g,t,vx0,vy0,vx1,vy1);\n","  drawBeach(g,t,vx0,vy0,vx1,vy1);\n  if(GFXN&&WORLD<3){try{GfxNew.under(g,t,vx0,vy0,vx1,vy1)}catch(e){}}\n")
+rep("  ambLeaves(t,vx0,vy0,vx1,vy1);drawParts(g);","  if(GFXN&&WORLD<3){try{GfxNew.over(g,t,vx0,vy0,vx1,vy1)}catch(e){}}\n  ambLeaves(t,vx0,vy0,vx1,vy1);drawParts(g);")
+rep("let c=waterRGB(dd);","let c=GFXN?waterNew(dd):waterRGB(dd);")
+rep("const kk=(n-.5)*26*(1-dd*.55);","const kk=(n-.5)*26*(1-dd*.55)*(GFXN?.4:1);")
+rep("A*=clamp(.5+fn*1.1,0,1);","A*=GFXN?clamp(.85+fn*.5,0,1):clamp(.5+fn*1.1,0,1);")
+rep("B*=clamp(fn*1.5-.1,0,1)*.7;","B*=clamp(fn*1.5-.1,0,1)*(GFXN?1:.7);")
+rep("const w=Math.pow(clamp((a-.55)*2.6,0,1),1.6);","const w=GFXN?clamp((a-.64)*10,0,1):Math.pow(clamp((a-.55)*2.6,0,1),1.6);")
+rep("g.globalAlpha=.2;g.fillStyle=p0;","g.globalAlpha=GFXN?.36:.2;g.fillStyle=p0;")
+rep("g.globalAlpha=.15;g.fillStyle=p1;","g.globalAlpha=GFXN?.28:.15;g.fillStyle=p1;")
+rep('window.Pirati={X2,RS,','window.Pirati={SP,GFXN:()=>GFXN,X2,RS,')
+open(P,'w',encoding='utf8').write(src)
+print('patch34 ok')
