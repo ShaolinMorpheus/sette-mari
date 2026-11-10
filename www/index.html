@@ -130,6 +130,7 @@ body[data-hand=left] #tkR{left:auto;right:var(--gr)}
 #hintb b{font-family:var(--f-d);font-weight:400;font-size:17px;color:var(--coral);display:block}
 #rot{display:none;position:absolute;left:50%;top:calc(70px + var(--st));transform:translateX(-50%);background:rgba(20,10,4,.82);color:#ffe9b0;border:2px solid #ffd45a;border-radius:999px;padding:7px 16px;font-weight:800;font-size:13px;z-index:20;pointer-events:none;text-align:center;width:max-content;max-width:calc(100% - 32px)}
 body.rot #app{position:fixed;left:0;top:0;width:var(--sh);height:var(--sw);transform-origin:0 0;transform:translateX(var(--sw)) rotate(90deg)}
+body.rot.rot2 #app{transform:translateY(var(--sh)) rotate(-90deg)}
 body.rot{--gl:6px;--gr:6px;--st:0px;--sb:0px}   /* telefono in verticale: il gioco è ruotato, i bordi sicuri del telefono non coincidono con i suoi: riquadri negli angoli */
 #svI{font-style:normal;font-size:11px;color:#bff2a0;opacity:0;margin-left:2px}
 #svI.on{animation:svf 1.6s ease-out}
@@ -400,6 +401,11 @@ body.ts1{--tz:1.15}body.ts2{--tz:1.3}
 (function(){var d=document,b=d.body,r=d.documentElement.style;
 function f(){var w=innerWidth,h=innerHeight;r.setProperty('--sw',w+'px');r.setProperty('--sh',h+'px');b.classList.toggle('rot',h>w*1.08)}
 f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,250)});
+/* telefono in verticale con rotazione automatica spenta: se lo giri dall'altra parte, il gioco si capovolge da solo */
+(function(){var ax=0,n=0;addEventListener('devicemotion',function(e){var a=e.accelerationIncludingGravity;if(!a||a.x==null)return;
+ ax=n++?ax*.8+a.x*.2:a.x;if(!b.classList.contains('rot'))return;
+ var w=b.classList.contains('rot2');if(ax<-5)w=true;else if(ax>5)w=false;
+ if(w!==b.classList.contains('rot2')){b.classList.toggle('rot2',w);try{dispatchEvent(new Event('resize'))}catch(_){}}},{passive:true})})();
 /* niente zoom: pizzico, doppio tocco, ctrl+rotella, ctrl +/- */
 var no=function(e){e.preventDefault()};
 d.addEventListener('gesturestart',no);d.addEventListener('gesturechange',no);d.addEventListener('gestureend',no);
@@ -5746,6 +5752,7 @@ const CHANGELOG=[
     "Niente erba sui sentieri e nel campo (isola 1 e 2): restano terra e sabbia pulite.",
     "Isola più viva: rocce più piccole (alcune al posto delle grandi), fiori gialli e bianchi nell'erba, conchiglie, legni sulla riva, funghetti e tartarughe nel mare.",
     "Grafica di prova: palma e alberi normali ora sono disegni artistici con ombra vera (prova con immagini generate da IA).",
+    "Telefono in verticale con la rotazione automatica spenta: se lo giri dall'altra parte, il gioco si capovolge da solo (menu compreso).",
     "Funghi di bosco: ogni giorno ne spuntano alcuni nel bosco. Crudi non si mangiano, ma con la legna, il cocco o il pesce diventano tre nuove ricette.",
     "Le scritte di missione completata ora arrivano una alla volta, più lente. Il pappagallo spiega come usare la mappa del tesoro e, in zattera, si posa in cima al palo. I gabbiani ora volano sull'isola e non seguono più lo schermo.",
     "Il mercante di passaggio ora ha lo stesso stile del tuo personaggio, la barca a remi del gioco con le casse accanto, e sceglie una spiaggia libera, mai dietro agli alberi.",
@@ -8617,7 +8624,7 @@ UI.openBigMap=function(){
   const cv=$('mapCv');cv.style.cursor='pointer';
   cv.onclick=ev=>{
     const r=cv.getBoundingClientRect(),rot=document.body.classList.contains('rot');
-    const u=rot?(ev.clientY-r.top)/r.height:(ev.clientX-r.left)/r.width,v=rot?(r.right-ev.clientX)/r.width:(ev.clientY-r.top)/r.height;
+    const r2=rot&&document.body.classList.contains('rot2'),u=rot?(r2?(r.bottom-ev.clientY):(ev.clientY-r.top))/r.height:(ev.clientX-r.left)/r.width,v=rot?(r2?(ev.clientX-r.left):(r.right-ev.clientX))/r.width:(ev.clientY-r.top)/r.height;
     const mv=mapView(),kk=cv.height/600*mv.z,tx=((u*cv.width-cv.width*mv.ox)/kk+990*mv.cx)/990*MW,ty=((v*cv.height-cv.height/2)/kk+600*mv.cy)/600*MH;
     if(S.mapMark&&hyp(S.mapMark[0]-tx,S.mapMark[1]-ty)<3)S.mapMark=null;else S.mapMark=[Math.round(tx*10)/10,Math.round(ty*10)/10];
     sfx('tap');const g=cv.getContext('2d');g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,cv.width,cv.height);drawMapView(g,drawBigMap,cv.width,cv.height);saveGame(true);
@@ -12307,7 +12314,7 @@ function parrotHit(x,y){
 UI.inputReset=function(){joyReset();for(const k in TANK)TANK[k]=0;document.querySelectorAll('.tk').forEach(b=>b.classList.remove('on'))};
 function cvPt(e){   // coordinate del tocco dentro il canvas (tiene conto della rotazione in verticale)
   const r=cv.getBoundingClientRect();
-  return document.body.classList.contains('rot')?[e.clientY-r.top,r.right-e.clientX]:[e.clientX-r.left,e.clientY-r.top];
+  const B_=document.body.classList;return B_.contains('rot')?(B_.contains('rot2')?[r.bottom-e.clientY,e.clientX-r.left]:[e.clientY-r.top,r.right-e.clientX]):[e.clientX-r.left,e.clientY-r.top];
 }
 function initInput(){
   cv.addEventListener('contextmenu',e=>e.preventDefault());
