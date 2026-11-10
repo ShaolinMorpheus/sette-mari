@@ -12,7 +12,7 @@ NEW=open('/home/claude/work/new31.js',encoding='utf8').read()
 rep("/* ---- 12d_kb.js ---- */",NEW+"\n/* ---- 12d_kb.js ---- */")
 rep("v:(r()*(pine?4:6))|0","v:(r()*(pine?NGV.p:NGV.t))|0",2)
 rep("initNatureSprites();initStructSprites();initPropSprites();","initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN)GfxNew.nature()}catch(e){console.error('gfx',e)}")
-rep("T('mVer','🔁',verLbl(),null)","T('mGfxN','🧪','Grafica di prova',GFXN?'accesa':'spenta','tgl'+(GFXN?' on':''))+T('mVer','🔁',verLbl(),null)")
+rep("T('mVer','🔁',verLbl(),null)","T('mGfxN','🧪','Grafica di prova',GFXN?'accesa · b36':'spenta · b36','tgl'+(GFXN?' on':''))+T('mVer','🔁',verLbl(),null)")
 rep("  c.querySelector('#mVer').onclick=verSwitch;","  {const gb=c.querySelector('#mGfxN');if(gb)gb.onclick=gfxSwitch}\n  c.querySelector('#mVer').onclick=verSwitch;")
 rep('    "Diario, nuova scheda «Statistiche»','''    "Isola più viva: rocce più piccole (alcune al posto delle grandi), fiori gialli e bianchi nell'erba, conchiglie, legni sulla riva, funghetti e tartarughe nel mare.",
     "Il mercante di passaggio ora ha lo stesso stile del tuo personaggio, la barca a remi del gioco con le casse accanto, e sceglie una spiaggia libera, mai dietro agli alberi.",
