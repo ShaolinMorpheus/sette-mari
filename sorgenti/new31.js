@@ -302,9 +302,11 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
       const dp=pathDist(tx+.5,ty+.5),fF=forestF(tx+.5,ty+.5),dcE=hyp(tx+.5-C0.x,(ty+.5-C0.y)*1.15);
       if(dp<1.3||dcE<6.2)continue;
       const X=()=>(DC++,(tx+.1+r()*.8)*TS),Y=()=>(ty+.1+r()*.8)*TS;
+      const nP=hyp((tx+.5-POND.x)/(POND.rx+2.8),(ty+.5-POND.y)/(POND.ry+2.8))<1;   // il laghetto non e' mare: niente conchiglie, stelle marine, ricci o legni
       if(gT<.5){                                       // sabbia
         const q=r()/2.4;
-        if(s>.04&&s<.2&&q<.07){const k=(r()*(FULL?5:3))|0,x=X(),y=Y(),sc=.28+r()*.08;
+        if(nP){}
+        else if(s>.04&&s<.2&&q<.07){const k=(r()*(FULL?5:3))|0,x=X(),y=Y(),sc=.28+r()*.08;
           if(k===0)scallop(x,y,sc);else if(k===1)spiralShell(x,y,sc);else if(k===2)coneShell(x,y,sc,r()*6);else if(k===3)starfish(x,y,sc,r()*6);else urchin(x,y,sc*.9)}
         else if(s>.07&&s<.14&&q<.085){driftwood(X(),Y(),.4+r()*.15,r()*3.1-1.5)}
         else if(s>.1&&q<.1){const x=X(),y=Y();if(FULL&&r()<.5)coconut(x,y,.3,r()<.3);else rock2(x,y,.24+r()*.08)}
@@ -345,7 +347,7 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
     if(!AN)mkAn();
     if(!GFXN)return;const q=(typeof QL!=='undefined'&&QL>=3),FULL=GFXN;
     for(let i=0;i<GLINTS.length;i+=9){
-      const gl=GLINTS[i];if(gl[0]<vx0-60||gl[0]>vx1+60||gl[1]<vy0-60||gl[1]>vy1+60)continue;
+      const gl=GLINTS[i];if(gl[0]<vx0-60||gl[0]>vx1+60||gl[1]<vy0-60||gl[1]>vy1+60)continue;if(inPondPx(gl[0],gl[1],2.2))continue;
       const k=i%3;
       if(k===0){const a=t*.12+i,x=gl[0]+Math.sin(a)*34,y=gl[1]+Math.cos(a*.8)*22,rot=Math.atan2(Math.cos(a*.8)*-22*.8,Math.cos(a)*34);
         gg.save();gg.translate(x+3,y+4);gg.rotate(rot);gg.globalAlpha=.16;gg.filter='brightness(0)';drawSp(gg,AN.turtle,0,0);gg.restore();
