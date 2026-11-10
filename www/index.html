@@ -402,10 +402,13 @@ body.ts1{--tz:1.15}body.ts2{--tz:1.3}
 function f(){var w=innerWidth,h=innerHeight;r.setProperty('--sw',w+'px');r.setProperty('--sh',h+'px');b.classList.toggle('rot',h>w*1.08)}
 f();addEventListener('resize',f);addEventListener('orientationchange',function(){setTimeout(f,250)});
 /* telefono in verticale con rotazione automatica spenta: se lo giri dall'altra parte, il gioco si capovolge da solo */
-(function(){var ax=0,n=0;addEventListener('devicemotion',function(e){var a=e.accelerationIncludingGravity;if(!a||a.x==null)return;
- ax=n++?ax*.8+a.x*.2:a.x;if(!b.classList.contains('rot'))return;
- var w=b.classList.contains('rot2');if(ax<-5)w=true;else if(ax>5)w=false;
- if(w!==b.classList.contains('rot2')){b.classList.toggle('rot2',w);try{dispatchEvent(new Event('resize'))}catch(_){}}},{passive:true})})();
+(function(){var ax=0,n=0,ev=0,mode='a';try{mode=localStorage.getItem('sm_rot')||'a'}catch(_){}
+function set(w){if(w!==b.classList.contains('rot2')){b.classList.toggle('rot2',w);try{dispatchEvent(new Event('resize'))}catch(_){}}}
+function upd(){if(mode==='n')set(false);else if(mode==='f')set(true)}
+function feed(v){ax=n++?ax*.8+v*.2:v;if(mode!=='a')return;if(ax<-5)set(true);else if(ax>5)set(false)}
+addEventListener('devicemotion',function(e){var a=e.accelerationIncludingGravity;if(!a||a.x==null)return;ev=1;feed(a.x)},{passive:true});
+addEventListener('deviceorientation',function(e){if(ev===1||e.gamma==null)return;ev=2;feed(-e.gamma/90*9.8)},{passive:true});
+window.smRot={mode:function(){return mode},set:function(m){mode=m;try{localStorage.setItem('sm_rot',m)}catch(_){}if(m==='a'){ax=0;n=0}upd()},ok:function(){return ev>0}};upd()})();
 /* niente zoom: pizzico, doppio tocco, ctrl+rotella, ctrl +/- */
 var no=function(e){e.preventDefault()};
 d.addEventListener('gesturestart',no);d.addEventListener('gesturechange',no);d.addEventListener('gestureend',no);
@@ -8651,6 +8654,7 @@ function qCard(id){
   return h+'</div>';
 }
 const IS_STABLE=/stabile/i.test(location.pathname);
+const rotLbl=()=>{const m=smRot.mode();return m==='n'?'normale':m==='f'?'capovolto':smRot.ok()?'automatica':'automatica (nessun sensore)'};
 const verLbl=()=>IS_STABLE?'Torna alla versione nuova':'Versione stabile (prima delle novità)';
 function verSwitch(){
   try{localStorage.setItem('sm_ver',IS_STABLE?'nuova':'stabile')}catch(e){}
@@ -8811,7 +8815,7 @@ UI.openMenu=function(){
    +tabs.map(t=>'<button class="mn" data-mn="'+t[0]+'" aria-selected="'+(UI._mt===t[0])+'"><i>'+t[1]+'</i>'+t[2]+'</button>').join('')
    +'</div><div class="mpn">'
    +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mVib',HAP.on?'📳':'📴','Vibrazione',HAP.on?'attiva':'spenta','tgl'+(HAP.on?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mGfx','🎨','Grafica',GFX_NAMES[GFX]||'Auto')+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra'))
-   +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+(SMAds.available()?T('mAd','🎁','Guarda un video','scorta in regalo')+T('mPriv','🔒','Privacy',null):'')+T('mJ','📖','Novità',null)+T('mAdm','🔐','Solo per me',null)+(WORLD>=3?T('mHome','🏝️','Torna all\'isola','tocca due volte'):'')+T('mGfxN','🧪','Grafica di prova',GFXN?'accesa · b36':'spenta · b36','tgl'+(GFXN?' on':''))+T('mVer','🔁',verLbl(),null)+(WORLD===2?T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
+   +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+(SMAds.available()?T('mAd','🎁','Guarda un video','scorta in regalo')+T('mPriv','🔒','Privacy',null):'')+T('mJ','📖','Novità',null)+T('mAdm','🔐','Solo per me',null)+(WORLD>=3?T('mHome','🏝️','Torna all\'isola','tocca due volte'):'')+T('mRot','🔄','Rotazione schermo',rotLbl(),'')+T('mGfxN','🧪','Grafica di prova',GFXN?'accesa · b36':'spenta · b36','tgl'+(GFXN?' on':''))+T('mVer','🔁',verLbl(),null)+(WORLD===2?T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
    +pnl('gd','<div class="mhd2">Guardaroba</div>'+T('mWh',wI('hat'),'Cappello',wearName('hat'))+T('mWo',wI('out'),'Abito',wearName('out'))+(YD.avail()?T('mSh','⛵','Nave',YD.lookName())+T('mYd','⚓','Cantiere navale',YD.yardName()):'')+T('mPhoto','📷','Foto ricordo',PHO.sub())+'<p class="sm">Cappelli e abiti si trovano giocando: casse, raccolti, ricette, capitoli. Quelli che mancano sono elencati con un indizio.</p>')
    +(hasP?pnl('pp','<div class="mhd2">Pappagallo</div>'+T('mPn','🦜','Nome',pn('Biscotto')+' · tocca per rinominare')+(hasH?T('mPh',curH?'<img alt="" src="'+phatImg(curH.id)+'">':'🚫','Cappellino',curH?curH.n:'Nessuno'):'<p class="sm">Troverai dei cappellini per il pappagallo durante il viaggio.</p>')):'')
    +pnl('lg',I18N.langs.map(l=>T('mLg_'+l,l.toUpperCase(),I18N.names[l],null,l===I18N.lang?'sel':'')).join(''))+pnl('ai',T('mHow','❓','Come si gioca',null)+T('mTut','🧭','Tutorial',null))
@@ -8864,6 +8868,7 @@ UI.openMenu=function(){
   c.querySelector('#mJ').onclick=()=>{uShow('menu',false);UI.openJournal('n')};
   c.querySelector('#mAdm').onclick=()=>{uShow('menu',false);UI.openAdmin()};
   {const mh=c.querySelector('#mHome');if(mh){let arm=0;mh.onclick=()=>{if(!arm){arm=1;setT('mHome','🏝️','Sicuro? Tocca ancora');setTimeout(()=>{arm=0;try{setT('mHome','🏝️','tocca due volte')}catch(e){}},3500);return}try{history.replaceState(null,'',location.pathname)}catch(e){}location.reload()}}}
+  {const rb=c.querySelector('#mRot');if(rb)rb.onclick=()=>{const m=smRot.mode(),nx=m==='a'?'n':m==='n'?'f':'a';smRot.set(nx);setT('mRot','🔄',rotLbl())}}
   {const gb=c.querySelector('#mGfxN');if(gb)gb.onclick=gfxSwitch}
   c.querySelector('#mVer').onclick=verSwitch;
   c.querySelector('#mSave').onclick=()=>{saveGame();setT('mSave','✅','Salvato!')};
