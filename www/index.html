@@ -857,7 +857,7 @@ function bakeDecor(g){
     // tracce di alghe e legni portati dal mare lungo la battigia
     if(s>.075&&s<.13&&r()<.08){const x=(tx+r())*TS,y=(ty+r())*TS;g.strokeStyle='rgba(70,60,36,.55)';g.lineWidth=2;g.beginPath();g.moveTo(x-6,y);g.quadraticCurveTo(x,y-2+r()*4,x+7,y+r()*3);g.stroke()}
   }
-  if(GFXN){try{GfxNew.decor(g)}catch(e){console.error('decor',e)}}
+  try{GfxNew.decor(g)}catch(e){console.error('decor',e)}
   g.restore();
 }
 
@@ -4616,7 +4616,7 @@ function drawPalm(g,e,t){
 }
 function drawRock(g,e){
   if(!e.alive){drawSp(g,SP.rubble,e.x,e.y);return}
-  g.save();g.translate(e.x+(e.shake>0?Math.sin(e.shake*80)*2:0),e.y);shadow(g,6,3,34,10,.28);drawSp(g,SP.boulder[e.v],0,0,1);g.restore();
+  g.save();g.translate(e.x+(e.shake>0?Math.sin(e.shake*80)*2:0),e.y);shadow(g,6,3,(e.v===1||e.v===3)?22:34,(e.v===1||e.v===3)?7:10,.28);drawSp(g,SP.boulder[e.v],0,0,1);g.restore();
 }
 function drawBush(g,e,t){
   g.save();g.translate(e.x,e.y);shadow(g,4,3,26,8,.22);
@@ -5181,7 +5181,7 @@ function render(t){
   if(smN){g.save();g.translate(FIX.smoke[0]*TS,FIX.smoke[1]*TS);drawCampFire(g,t);g.restore()}
   drawPondLevel(g,t);
   drawBeach(g,t,vx0,vy0,vx1,vy1);
-  if(GFXN&&WORLD<3){try{GfxNew.under(g,t,vx0,vy0,vx1,vy1)}catch(e){}}
+  if(WORLD<3){try{GfxNew.under(g,t,vx0,vy0,vx1,vy1)}catch(e){}}
   drawSkyFx1(g,t,vx0,vy0,vx1,vy1);
   computeTarget();
   drawTargetRing(g,t);
@@ -5200,6 +5200,7 @@ function render(t){
   }
   if(WORLD===3){for(const q of Ch3.vis())list.push(q)}else{list.push(P);if(S.flags.parrot)list.push(PAR);if(P.mode==='raft')list.push(RAFTSAIL)}
   const key=o=>o.type==='c3'?o.s.y:o===P?P.y:o===PAR?PAR.y+4:o===RAFTSAIL?P.y+Math.sin(P.hd)*7+7:sortY(o);
+  try{if(WORLD<3&&X2.merHere())list.push(X2.merE())}catch(e){}
   list.sort((a,b)=>key(a)-key(b));
   for(const e of list){
     if(e.type==='c3'){Ch3.drawShip(g,e,t);continue}
@@ -5226,6 +5227,7 @@ function render(t){
       case'npc':drawNpc(g,e,t);break;
       case'c4':Ch4.drawEnt(g,e,t);break;
       case'thief':drawThief(g,e,t);break;
+      case'mer':X2.merDraw(g,t);break;
     }
   }
   drawWParrot(g,EID.wparrot,t);
@@ -5733,7 +5735,9 @@ const CHANGELOG=[
     "Collisione a sagoma per casse, forzieri e barili: non si attraversa più nemmeno la parte alta del disegno, e restano solidi anche una volta aperti.",
     "Vibrazione del telefono per indizi (Biscotto), missioni, tesori e eventi: si spegne dal menu «Vibrazione».",
     "Niente erba sui sentieri e nel campo (isola 1 e 2): restano terra e sabbia pulite.",
-    "Grafica di prova (Menu → Grafica di prova): sabbie di più tipi, conchiglie, capesante, stelle marine, legni, rocce piccole, funghi, felci ed erbe di sottobosco, gabbiani con ombra, tartarughe, pesci, un gufo di notte, più tipi di alberi, noci di cocco più grandi e un mare più bello. Il tasto «Grafica» (Auto, Bassa, Media, Alta) resta quello di prima.",
+    "Isola più viva: rocce più piccole (alcune al posto delle grandi), fiori gialli e bianchi nell'erba, conchiglie, legni sulla riva, funghetti e tartarughe nel mare.",
+    "Il mercante di passaggio ora ha lo stesso stile del tuo personaggio, la barca a remi del gioco con le casse accanto, e sceglie una spiaggia libera, mai dietro agli alberi.",
+    "Menu → Grafica di prova (facoltativa): in più sabbie diverse, felci, tronchi, gabbiani, pesci, un gufo di notte, noci di cocco più grandi e un mare più bello. Il tasto «Grafica» resta quello di prima.",
     "Diario, nuova scheda «Statistiche»: tempo di gioco, passi, miglia in mare, pesci, colpi perfetti, tesori e tanto altro.",
     "Diario, nuova scheda «Da fare»: cosa puoi fare adesso, in un colpo d'occhio.",
     "Incarico del giorno: ogni giorno Biscotto ti chiede una cosa semplice, con un piccolo premio (e il conto dei giorni di fila).",
@@ -11466,7 +11470,7 @@ X2.botTick=function(){
   const x=X2.st(),td=X2.today();
   if(S.day<2)return;
   if(!x.bt||x.bt.d!==td){
-    const cs=NV.cands(true);if(!cs.length)return;
+    let cs=NV.cands(true);if(!cs.length)return;{const fr=cs.filter(s=>!E.some(e=>(e.type==='tree'||e.type==='pine'||e.type==='palm'||e.type==='rock'||e.type==='bush'||e.type==='berry'||e.type==='plot')&&hyp(e.x/TS-(s[0]+.5),e.y/TS-(s[1]+.8))<4.5));if(fr.length)cs=fr}
     const rr=mulberry(td*53+WORLD*11),s=cs[(rr()*cs.length)|0];
     NV.rmGlints(e=>e.dly);x.bt={d:td,x:s[0],y:s[1],g:0};
   }
@@ -11561,28 +11565,21 @@ X2.merOpen=function(){
   });
   sheetFor(body(),wire);
 };
+X2.merE=function(){const m=X2.st().mr;return{type:'mer',x:(m.x+.5)*TS,y:(m.y+.8)*TS}};
+X2.mspec=function(){return CH.merc||(CH.merc={name:'Mercante',skin:'#e0aa82',hair:'#3a2a1a',beard:'#cfc6b2',mustache:1,coat:'#2f6b4a',coat2:'#1d4430',pants:'#5a3a2a',shirt:'#f1ede0',hat:'bucket',hatc:'#d9b86a',w:1.04,tall:1})};
 X2.merDraw=function(g,t){
   const m=X2.st().mr;if(!X2.merHere())return;
   const x=(m.x+.5)*TS,y=(m.y+.8)*TS,bob=Math.sin(t*2)*1.2;
   g.save();g.translate(x,y);g.lineJoin='round';g.lineCap='round';
-  shadow(g,0,6,40,9,.26);
-  // la barca tirata in secco
-  g.fillStyle='#8a5a2a';g.strokeStyle='#3a2410';g.lineWidth=3;
-  g.beginPath();g.moveTo(-52,-6);g.quadraticCurveTo(-40,16,0,16);g.quadraticCurveTo(40,16,54,-8);g.lineTo(-52,-6);g.closePath();g.fill();g.stroke();
-  g.fillStyle='#b98248';g.fillRect(-40,-8,82,5);
-  g.strokeStyle='#3a2410';g.lineWidth=3;g.beginPath();g.moveTo(26,-6);g.lineTo(26,-64);g.stroke();
-  g.fillStyle='#e8b23a';g.strokeStyle='#7a4a08';g.lineWidth=2;g.beginPath();g.moveTo(26,-64);g.lineTo(52+bob,-56);g.lineTo(26,-46);g.closePath();g.fill();g.stroke();
-  // casse di merce
-  g.fillStyle='#c98a4a';g.strokeStyle='#3a2410';g.lineWidth=2.4;g.fillRect(-44,-24,22,18);g.strokeRect(-44,-24,22,18);
-  g.fillStyle='#d9a85a';g.fillRect(-36,-38,18,14);g.strokeRect(-36,-38,18,14);
-  // il mercante: giubba verde, cappello a tesa larga
-  g.translate(-2,-6+bob*.5);
-  g.fillStyle='#2f6b4a';g.strokeStyle='#17301f';g.lineWidth=2.4;g.beginPath();g.moveTo(-10,0);g.lineTo(-8,-24);g.lineTo(8,-24);g.lineTo(10,0);g.closePath();g.fill();g.stroke();
-  g.fillStyle='#e8b98a';g.beginPath();g.arc(0,-31,8,0,7);g.fill();g.stroke();
-  g.fillStyle='#5a3a1a';g.beginPath();g.ellipse(0,-37,15,4,0,0,7);g.fill();g.stroke();g.beginPath();g.moveTo(-8,-38);g.quadraticCurveTo(0,-52,8,-38);g.closePath();g.fill();g.stroke();
-  g.fillStyle='#17301f';g.beginPath();g.arc(-3,-31,1.2,0,7);g.arc(3,-31,1.2,0,7);g.fill();
+  // la barca a remi tirata in secco, con la merce accanto
+  drawSp(g,SP.rowboat,-6,6,1.1);
+  g.strokeStyle='#5a3a1a';g.lineWidth=3;g.beginPath();g.moveTo(-6,-4);g.lineTo(-6,-58);g.stroke();
+  g.fillStyle='#e8b23a';g.beginPath();g.moveTo(-6,-58);g.quadraticCurveTo(12+bob,-56,20+bob*2,-48);g.quadraticCurveTo(10,-46,-6,-42);g.closePath();g.fill();g.strokeStyle='rgba(90,56,10,.7)';g.lineWidth=1.2;g.stroke();
+  drawSp(g,SP.crate,-58,10,1);drawSp(g,SP.barrel[1],-72,16,1);
+  drawSp(g,SP.crate,-46,-4,.9);
   g.restore();
-  twinkle(g,x+30,y-70,t,7,1.3,'#ffe27a');
+  drawChar(g,x+52,y+10,{k:X2.mspec(),dir:'f',flip:true,t:t,walk:0,moving:false,look:0});
+  twinkle(g,x+30,y-72,t,7,1.3,'#ffe27a');
 };
 
 /* ---- le missioni di Biscotto: brevi, una alla volta, per ogni isola ---- */
@@ -11671,7 +11668,7 @@ X2.step=function(){
 };
 X2.draw=function(g,t){
   if(!S||!S.live||!X2.isl()||inRoom())return;
-  X2.secDraw(g);X2.merDraw(g,t);
+  X2.secDraw(g);
 };
 X2.mini=function(g,mxw,myw){
   if(!S||!S.live||!X2.isl()||!X2.merHere())return;
@@ -12056,9 +12053,13 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
     SP.tree=[...t0,tint(t0[0],'hue-rotate(14deg) saturate(1.1)'),tint(t0[3],'hue-rotate(-10deg) brightness(.96)')];
     SP.pine=[...p0,tint(p0[1],'hue-rotate(16deg)')];
   }
+  function base(){
+    const sm=(b,k)=>sp(R(b.w*k),R(b.h*k),gg=>{gg.drawImage(b.c,0,0,b.w*k,b.h*k)},b.ax*k,b.ay*k);
+    SP.boulder[1]=sm(SP.boulder[1],.62);SP.boulder[3]=sm(SP.boulder[3],.55);
+  }
   /* ---- decorazioni fisse sul terreno (cotte una volta nella mappa) ---- */
   function decor(L){
-    g=L;NOSH=false;const r=rnd(5151);let DC=0,GR=0,FO=0;
+    g=L;NOSH=false;const FULL=GFXN,r=rnd(5151);let DC=0,GR=0,FO=0;
     const fern=(x,y,s)=>{g.save();g.translate(x,y);g.scale(s,s);g.lineCap='round';for(let k=-3;k<=3;k++){const a=-1.57+k*.42,len=26+(3-Math.abs(k))*3;g.strokeStyle='#2f7a34';g.lineWidth=5;g.beginPath();g.moveTo(0,0);g.quadraticCurveTo(Math.cos(a)*len*.5,Math.sin(a)*len*.6-6,Math.cos(a)*len,Math.sin(a)*len*.7+4);g.stroke();g.strokeStyle='#58b04a';g.lineWidth=2.4;g.stroke()}g.restore()};
     const clover=(x,y,s)=>{for(let k=0;k<5;k++){g.fillStyle=k%2?'rgba(150,210,100,.55)':'rgba(90,160,70,.5)';g.beginPath();g.ellipse(x+(r()-.5)*14*s,y+(r()-.5)*8*s,4*s,2.4*s,r()*3,0,7);g.fill()}};
     const longgrass=(x,y,s)=>{g.save();g.translate(x,y);g.scale(s,s);g.lineCap='round';for(let k=0;k<7;k++){const a=(k-3)*.2;g.strokeStyle=k%2?'#7cc44f':'#4f9a3c';g.lineWidth=3;g.beginPath();g.moveTo(k*2-6,0);g.quadraticCurveTo(k*3-9+a*20,-16,a*60,-30-(k%3)*4);g.stroke()}g.restore()};
@@ -12070,30 +12071,30 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
       const dp=pathDist(tx+.5,ty+.5),fF=forestF(tx+.5,ty+.5),dcE=hyp(tx+.5-C0.x,(ty+.5-C0.y)*1.15);
       if(dp<1.3||dcE<6.2)continue;
       const X=()=>(DC++,(tx+.1+r()*.8)*TS),Y=()=>(ty+.1+r()*.8)*TS;
-      if(gT<.5){                                       // sabbia: conchiglie, stelle marine, ricci, legni
+      if(gT<.5){                                       // sabbia
         const q=r()/2.4;
-        if(s>.04&&s<.2&&q<.07){const k=(r()*5)|0,x=X(),y=Y(),sc=.3+r()*.08;
-          if(k===0)starfish(x,y,sc,r()*6);else if(k===1)scallop(x,y,sc);else if(k===2)spiralShell(x,y,sc);else if(k===3)coneShell(x,y,sc,r()*6);else urchin(x,y,sc*.9)}
-        else if(s>.07&&s<.14&&q<.082){driftwood(X(),Y(),.4+r()*.15,r()*3.1-1.5)}
-        else if(s>.1&&q<.092){const x=X(),y=Y();if(r()<.5)coconut(x,y,.3,r()<.3);else rock2(x,y,.28+r()*.1)}
-        else if(s>.14&&q<.09){dry(X(),Y(),.7+r()*.4)}
+        if(s>.04&&s<.2&&q<.07){const k=(r()*(FULL?5:3))|0,x=X(),y=Y(),sc=.28+r()*.08;
+          if(k===0)scallop(x,y,sc);else if(k===1)spiralShell(x,y,sc);else if(k===2)coneShell(x,y,sc,r()*6);else if(k===3)starfish(x,y,sc,r()*6);else urchin(x,y,sc*.9)}
+        else if(s>.07&&s<.14&&q<.085){driftwood(X(),Y(),.4+r()*.15,r()*3.1-1.5)}
+        else if(s>.1&&q<.1){const x=X(),y=Y();if(FULL&&r()<.5)coconut(x,y,.3,r()<.3);else rock2(x,y,.24+r()*.08)}
+        else if(FULL&&s>.14&&q<.12){dry(X(),Y(),.7+r()*.4)}
       }else{                                           // erba e sottobosco
         const q=r()/3;GR++;if(fF>.3)FO++;
         if(fF>.3){
-          if(q<.018)logp(X(),Y(),30+r()*14,5+r()*2,r()*.7-.35);
-          else if(q<.034){const cc=capCols[(r()*4)|0];mushroom(X(),Y(),.28+r()*.08,cc[0],cc[1],false)}
-          else if(q<.048)rock2(X(),Y(),.3+r()*.12);
-          else if(q<.09)fern(X(),Y(),.5+r()*.25);
-          else if(q<.13)tuft(X(),Y(),.38+r()*.12);
-          else if(q<.15)clover(X(),Y(),1);
+          if(q<.02)rock2(X(),Y(),.26+r()*.1);
+          else if(q<.045){const cc=capCols[(r()*4)|0];mushroom(X(),Y(),.26+r()*.07,cc[0],cc[1],false)}
+          else if(q<.06)blossom(X(),Y(),.38+r()*.08,'#ffd23f');
+          else if(FULL&&q<.075)logp(X(),Y(),30+r()*14,5+r()*2,r()*.7-.35);
+          else if(FULL&&q<.11)fern(X(),Y(),.5+r()*.25);
+          else if(FULL&&q<.14)tuft(X(),Y(),.38+r()*.12);
         }else{
-          if(q<.014)rock2(X(),Y(),.28+r()*.1);
-          else if(q<.03)logp(X(),Y(),26+r()*10,4.5,r()*.7-.35);
-          else if(q<.05)daisy(X(),Y(),.42+r()*.1);
-          else if(q<.066)blossom(X(),Y(),.42+r()*.1,['#ff8fa3','#c8a8ff','#ffd23f','#ffffff'][(r()*4)|0]);
-          else if(q<.09)longgrass(X(),Y(),.7+r()*.5);
-          else if(q<.11)clover(X(),Y(),1);
-          else if(q<.122)mushroom(X(),Y(),.28,'#e8452c','#fff',false);
+          if(q<.015)rock2(X(),Y(),.24+r()*.1);
+          else if(q<.045)blossom(X(),Y(),.38+r()*.08,['#ffd23f','#ffd23f','#ffffff','#ff8fa3'][(r()*4)|0]);
+          else if(q<.07)daisy(X(),Y(),.38+r()*.08);
+          else if(q<.083)mushroom(X(),Y(),.26,'#e8452c','#fff',false);
+          else if(FULL&&q<.1)logp(X(),Y(),26+r()*10,4.5,r()*.7-.35);
+          else if(FULL&&q<.13)longgrass(X(),Y(),.7+r()*.5);
+          else if(FULL&&q<.15)clover(X(),Y(),1);
         }
       }
     }
@@ -12111,14 +12112,14 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
   }
   function under(gg,t,vx0,vy0,vx1,vy1){
     if(!AN)mkAn();
-    const q=(typeof QL!=='undefined'&&QL>=3);
+    const q=(typeof QL!=='undefined'&&QL>=3),FULL=GFXN;
     for(let i=0;i<GLINTS.length;i+=19){
       const gl=GLINTS[i];if(gl[0]<vx0-60||gl[0]>vx1+60||gl[1]<vy0-60||gl[1]>vy1+60)continue;
       const k=i%3;
       if(k===0){const a=t*.12+i,x=gl[0]+Math.sin(a)*34,y=gl[1]+Math.cos(a*.8)*22,rot=Math.atan2(Math.cos(a*.8)*-22*.8,Math.cos(a)*34);
         gg.save();gg.translate(x+3,y+4);gg.rotate(rot);gg.globalAlpha=.16;gg.filter='brightness(0)';drawSp(gg,AN.turtle,0,0);gg.restore();
         gg.save();gg.translate(x,y);gg.rotate(rot);gg.globalAlpha=.9;drawSp(gg,AN.turtle,0,0);gg.restore()}
-      else if(k===1&&!q){for(let f=0;f<4;f++){const a=t*.5+i+f*.9,x=gl[0]+Math.cos(a)*26+f*7,y=gl[1]+Math.sin(a)*16+f*4;
+      else if(FULL&&k===1&&!q){for(let f=0;f<4;f++){const a=t*.5+i+f*.9,x=gl[0]+Math.cos(a)*26+f*7,y=gl[1]+Math.sin(a)*16+f*4;
         gg.save();gg.translate(x,y);gg.rotate(a+1.57);gg.globalAlpha=.4;drawSp(gg,AN.fish,0,0);gg.restore()}}
     }
   }
@@ -12146,7 +12147,7 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
       }
     }
   }
-  return{nature,decor,under,over,on:()=>GFXN};
+  return{nature,base,decor,under,over,on:()=>GFXN};
 })();
 function waterNew(d){const a=waterRGB(.05),b=waterRGB(.27),c=waterRGB(.8);const s1=sstep(.12,.16,d),s2=sstep(.38,.42,d);let o=mixc(mixc(a,b,s1),c,s2);const e=Math.max(1-Math.abs(d-.14)/.012,1-Math.abs(d-.4)/.012,0);if(e>0)o=mixc(o,[235,255,255],.32*e);return o}
 function gfxSwitch(){try{localStorage.setItem('sm_gfx',GFXN?'old':'new')}catch(e){}try{saveGame(true)}catch(e){}location.reload()}
@@ -12785,7 +12786,7 @@ async function boot(){
   cv=$('cv');ctx=cv.getContext('2d');
   const setP=(p,t)=>{$('lbar').firstElementChild.style.width=Math.round(p*100)+'%';if(t)$('lTxt').textContent=t};
   setP(.02,'Preparo i disegni…');await nextTick();
-  initNatureSprites();initStructSprites();initPropSprites();if(GFXN){try{GfxNew.nature()}catch(e){console.error('gfx',e)}}
+  initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN)GfxNew.nature()}catch(e){console.error('gfx',e)}
   SP.scaf.zattera=mkScaffold(150,70);
   setP(.08,'Disegno il mare…');await nextTick();
   edtPre();
