@@ -26,7 +26,7 @@ rep("g.translate(e.x,e.y+2);g.fillStyle='rgba(20,14,6,.28)';g.beginPath();g.elli
 rep("if(bs.art){if(bs.sh){g.save();g.globalAlpha=.30;g.transform(1,0,-.55,-.30,0,0);g.drawImage(bs.sh,-bs.ax,-bs.ay,bs.w,bs.h);g.restore()}g.fillStyle='rgba(20,14,6,.28)';g.beginPath();g.ellipse(0,2,bs.w*.34,bs.w*.1,0,0,7);g.fill()}","if(bs.art)artGround(g,bs,1,bs.w*.4);")
 rep("drawSp(g,bs,0,0,1);g.restore();","drawSp(g,bs,0,bs.art?3:0,1);g.restore();")
 # rocce spaccate
-rep("if(rs.art){g.save();g.translate(e.x,e.y);if(rs.sh){g.save();g.globalAlpha=.28;g.transform(1,0,-.55,-.30,0,0);g.drawImage(rs.sh,-rs.ax,-rs.ay,rs.w,rs.h);g.restore()}g.restore()}\n    drawSp(g,rs,e.x,e.y);return}","if(rs.art){g.save();g.translate(e.x,e.y);artGround(g,rs,1,rs.w*.36);drawSp(g,rs,0,2,1);g.restore();return}\n    drawSp(g,rs,e.x,e.y);return}")
+rep("if(rs.art){g.save();g.translate(e.x,e.y);if(rs.sh){g.save();g.globalAlpha=.28;g.transform(1,0,-.55,-.30,0,0);g.drawImage(rs.sh,-rs.ax,-rs.ay,rs.w,rs.h);g.restore()}g.restore()}\n    drawSp(g,rs,e.x,e.y);return}","if(rs.art){g.save();g.translate(e.x,e.y);if(rs.sh){g.globalAlpha=.20;g.drawImage(rs.sh,-rs.ax+4,-rs.ay+7,rs.w,rs.h);g.globalAlpha=.36;g.drawImage(rs.sh,-rs.ax+1.5,-rs.ay+3.5,rs.w,rs.h);g.globalAlpha=1}drawSp(g,rs,0,1,1);g.restore();return}\n    drawSp(g,rs,e.x,e.y);return}")
 # cespugli
 rep("if(bsp.art){if(bsp.sh){g.save();g.globalAlpha=.26;g.transform(1,0,-.55,-.30,0,0);g.drawImage(bsp.sh,-bsp.ax,-bsp.ay,bsp.w,bsp.h);g.restore()}g.fillStyle='rgba(20,14,6,.26)';g.beginPath();g.ellipse(0,2,bsp.w*.38,bsp.w*.1,0,0,7);g.fill()}","if(bsp.art)artGround(g,bsp,1,bsp.w*.38);")
 rep("drawSp(g,bsp,0,0,1);g.restore();","drawSp(g,bsp,0,bsp.art?3:0,1);g.restore();")

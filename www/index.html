@@ -4635,7 +4635,7 @@ function drawPalm(g,e,t){
 }
 function drawRock(g,e){
   if(!e.alive){const rs=(GFXN&&SP.rubbleS&&(e.v===1||e.v===3))?SP.rubbleS:SP.rubble;
-    if(rs.art){g.save();g.translate(e.x,e.y);artGround(g,rs,1,rs.w*.36);drawSp(g,rs,0,2,1);g.restore();return}
+    if(rs.art){g.save();g.translate(e.x,e.y);if(rs.sh){g.globalAlpha=.20;g.drawImage(rs.sh,-rs.ax+4,-rs.ay+7,rs.w,rs.h);g.globalAlpha=.36;g.drawImage(rs.sh,-rs.ax+1.5,-rs.ay+3.5,rs.w,rs.h);g.globalAlpha=1}drawSp(g,rs,0,1,1);g.restore();return}
     drawSp(g,rs,e.x,e.y);return}
   const bs=SP.boulder[e.v];g.save();g.translate(e.x+(e.shake>0?Math.sin(e.shake*80)*2:0),e.y);
   if(bs.art)artGround(g,bs,1,bs.w*.4);
