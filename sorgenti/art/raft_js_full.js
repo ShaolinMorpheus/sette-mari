@@ -21,7 +21,7 @@ GfxNew.raft=function(){
   // angolo di destinazione della vela: sottovento, mai dritta verso prua
   RA.tgt=(o,hd,t,nrm)=>{const w=RA.wind(t),d=nrm(w.a-(hd+Math.PI));
     let sg=d>=0?1:-1;if(Math.abs(d)<.15&&o.wsg)sg=o.wsg;o.wsg=sg;
-    const m=Math.max(.4,Math.min(1.25,Math.abs(d)));
+    const m=Math.max(.25,Math.min(.8,Math.abs(d)*.45));
     const tgt=hd+Math.PI+sg*m,sn=Math.sin(w.a-tgt);
     if(Math.abs(sn)>.12)o.side=sn>0?1:-1;
     return tgt};
@@ -38,9 +38,9 @@ GfxNew.raft=function(){
     if(sh>.01){g.globalAlpha=Math.min(1,sh);g.drawImage(im._d,0,0)}
     if(hl>.01){g.globalAlpha=Math.min(1,hl);g.drawImage(im._l,0,0)}
     g.restore()};
-  const NU=7,NV=6;
+  const NU=9,NV=7;
   RA.draw=(g,mx,my,o,t,red)=>{
-    const w=RA.wind(t),ws=w.s,a=o.a,ca=Math.cos(a),sa=Math.sin(a),dx=(ca<0?-1:1)*Math.max(.8,Math.abs(ca)),dy=(sa<0?-1:1)*Math.sqrt(1-dx*dx)*.5,flip=dx<0;
+    const w=RA.wind(t),ws=w.s,a=o.a,ca=Math.cos(a),sa=Math.sin(a),dx=(ca<0?-1:1)*Math.max(.3,Math.abs(ca)),dy=(sa<0?-1:1)*Math.sqrt(1-dx*dx)*.5,flip=dx<0;
     const tb=o.side>=0?1:-1;o.bs=(o.bs===undefined?tb:o.bs)+(tb-(o.bs===undefined?tb:o.bs))*.1;
     const sd=o.bs,nx=-dy*2*sd*.5,ny=dx*.5*sd;
     const L=78,Z0=46,Z1=132,bil=(9+13*Math.min(ws,1.2))*(1+.13*Math.sin(t*(1.5+ws*2)));
