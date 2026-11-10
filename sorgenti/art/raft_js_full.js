@@ -34,9 +34,9 @@ GfxNew.raft=function(){
     const a=(x0*(v1-v2)+x1*(v2-v0)+x2*(v0-v1))/den,b=(y0*(v1-v2)+y1*(v2-v0)+y2*(v0-v1))/den,
       c=(x0*(u2-u1)+x1*(u0-u2)+x2*(u1-u0))/den,d=(y0*(u2-u1)+y1*(u0-u2)+y2*(u1-u0))/den,
       e=(x0*(u1*v2-u2*v1)+x1*(u2*v0-u0*v2)+x2*(u0*v1-u1*v0))/den,f=(y0*(u1*v2-u2*v1)+y1*(u2*v0-u0*v2)+y2*(u0*v1-u1*v0))/den;
-    g.transform(a,b,c,d,e,f);g.drawImage(im,0,0);
-    if(sh>.01){g.fillStyle='rgba(40,26,12,'+sh.toFixed(3)+')';g.fillRect(0,0,im.naturalWidth,im.naturalHeight)}
-    if(hl>.01){g.fillStyle='rgba(255,246,222,'+hl.toFixed(3)+')';g.fillRect(0,0,im.naturalWidth,im.naturalHeight)}
+    g.transform(a,b,c,d,e,f);g.drawImage(im,0,0);if(!im._d){const sil=(col)=>{const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);x.globalCompositeOperation='source-in';x.fillStyle=col;x.fillRect(0,0,c.width,c.height);return c};im._d=sil('#281a0c');im._l=sil('#fff6de')}
+    if(sh>.01){g.globalAlpha=Math.min(1,sh);g.drawImage(im._d,0,0)}
+    if(hl>.01){g.globalAlpha=Math.min(1,hl);g.drawImage(im._l,0,0)}
     g.restore()};
   const NU=7,NV=6;
   RA.draw=(g,mx,my,o,t,red)=>{
