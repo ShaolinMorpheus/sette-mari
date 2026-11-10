@@ -33,6 +33,10 @@ var GfxNew=(function(){
     const clover=(x,y,s)=>{for(let k=0;k<5;k++){g.fillStyle=k%2?'rgba(150,210,100,.55)':'rgba(90,160,70,.5)';g.beginPath();g.ellipse(x+(r()-.5)*14*s,y+(r()-.5)*8*s,4*s,2.4*s,r()*3,0,7);g.fill()}};
     const longgrass=(x,y,s)=>{g.save();g.translate(x,y);g.scale(s,s);g.lineCap='round';for(let k=0;k<7;k++){const a=(k-3)*.2;g.strokeStyle=k%2?'#7cc44f':'#4f9a3c';g.lineWidth=3;g.beginPath();g.moveTo(k*2-6,0);g.quadraticCurveTo(k*3-9+a*20,-16,a*60,-30-(k%3)*4);g.stroke()}g.restore()};
     const dry=(x,y,s)=>{g.save();g.translate(x,y);g.scale(s,s);g.lineCap='round';for(let k=0;k<6;k++){g.strokeStyle=['#c8b46a','#d8c47a','#a89650'][k%3];g.lineWidth=2.4;g.beginPath();g.moveTo(k*2.4-6,0);g.quadraticCurveTo(k*3-9,-10,(k-2.5)*5,-20);g.stroke()}g.restore()};
+    const gtuft=(x,y,s)=>{const G=GfxNew.gimg;
+      if(G&&G.complete&&G.naturalWidth){const w=(15+r()*9)*(s>.6?1.1:.95),h=w*1.04;g.fillStyle='rgba(20,30,10,.18)';g.beginPath();g.ellipse(x+1,y+1,w*.38,w*.1,0,0,7);g.fill();
+        g.save();g.translate(x,y+1);if(r()<.5)g.scale(-1,1);g.drawImage(G,-w/2,-h+2,w,h);g.restore()}
+      else tuft(x,y,s)};
     const PC=['#ffd23f','#ffd23f','#ff8fa3','#c8a8ff','#ff6a5a','#7ab8ff','#ffffff','#ff9a3c'];
     const capCols=[['#e8452c','#fff'],['#d9a441','#fff4d0'],['#b25fd0','#f3e0ff'],['#e8e0cf','#cfc2a8']];
     for(let ty=0;ty<MH;ty++)for(let tx=0;tx<MW;tx++){
@@ -57,16 +61,16 @@ var GfxNew=(function(){
           else if(q<.045){const cc=capCols[(r()*4)|0];mushroom(X(),Y(),.26+r()*.07,cc[0],cc[1],false)}
           else if(q<.06)blossom(X(),Y(),.38+r()*.08,PC[(r()*PC.length)|0]);
           else if(FULL&&q<.075)logp(X(),Y(),30+r()*14,5+r()*2,r()*.7-.35);
-          else if(FULL&&q<.11)fern(X(),Y(),.5+r()*.25);
-          else if(FULL&&q<.14)tuft(X(),Y(),.38+r()*.12);
+          else if(FULL&&q<.1)fern(X(),Y(),.5+r()*.25);
+          else if(FULL&&q<.17)gtuft(X(),Y(),.38+r()*.12);
         }else{
           if(q<.015)rock2(X(),Y(),.24+r()*.1);
           else if(q<.045)blossom(X(),Y(),.38+r()*.08,PC[(r()*PC.length)|0]);
           else if(q<.07)daisy(X(),Y(),.38+r()*.08);
           else if(q<.083)mushroom(X(),Y(),.26,'#e8452c','#fff',false);
           else if(FULL&&q<.1)logp(X(),Y(),26+r()*10,4.5,r()*.7-.35);
-          else if(FULL&&q<.13)longgrass(X(),Y(),.7+r()*.5);
-          else if(FULL&&q<.15)clover(X(),Y(),1);
+          else if(FULL&&q<.17)gtuft(X(),Y(),.7+r()*.5);
+          else if(FULL&&q<.19)clover(X(),Y(),1);
         }
       }
     }
