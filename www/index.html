@@ -4831,12 +4831,12 @@ function sailState(key,hd,t,fixed){
   const nrm=a=>{while(a>Math.PI)a-=6.2832;while(a<-Math.PI)a+=6.2832;return a};
   if(!fixed&&dt>0){const turn=nrm(hd-o.ph)/dt;if(Math.abs(turn)>.35)o.side=turn>0?-1:1}
   o.ph=hd;
-  let tgt=hd+Math.PI+o.side*.78;if(GFXN&&GfxNew.rart)tgt=GfxNew.rart.tgt(o,hd,t,nrm);
+  let tgt=hd+Math.PI+o.side*.78;if(GfxNew.rart)tgt=GfxNew.rart.tgt(o,hd,t,nrm);
   o.a+=nrm(tgt-o.a)*(1-Math.exp(-dt*3.2));
   return o;
 }
 function drawSailProc(g,mx,my,o,t,red){
-  if(GFXN&&GfxNew.rart&&GfxNew.rart.ok()){GfxNew.rart.draw(g,mx,my,o,t,red);return}
+  if(GfxNew.rart&&GfxNew.rart.ok()){GfxNew.rart.draw(g,mx,my,o,t,red);return}
   const a=o.a,dx=Math.cos(a),dy=Math.sin(a)*.5,sd=o.side;
   const nx=-Math.sin(a)*sd,ny=Math.cos(a)*.5*sd;
   const L=66,Z0=44,Z1=136,bil=10+Math.sin(t*1.9)*1.6;
@@ -5765,7 +5765,7 @@ const CHANGELOG=[
     "Grafica di prova: palma, alberi, pino, rocce, cespugli, bacche, erba, ceppo e il relitto ora sono disegni artistici con ombra vera (prova con immagini generate da IA).",
     "Telefono in verticale con la rotazione automatica spenta: se lo giri dall'altra parte, il gioco si capovolge da solo (menu compreso).",
     "Il laghetto non è mare: niente più conchiglie, stelle marine, granchi o legni sulla sabbia intorno al laghetto.",
-    "Grafica di prova: la zattera (scafo, albero e vele) ora è un disegno d'arte. Il vento cambia direzione e forza: la vela si gonfia, sventola e si gira da sola sottovento, seguendo la rotta della zattera.",
+    "La zattera (scafo, albero e vele) ora è un disegno d'arte. Il vento cambia direzione e forza: la vela si gonfia, sventola e si gira da sola sottovento, seguendo la rotta della zattera.",
     "Funghi di bosco: ogni giorno ne spuntano alcuni nel bosco. Crudi non si mangiano, ma con la legna, il cocco o il pesce diventano tre nuove ricette.",
     "Le scritte di missione completata ora arrivano una alla volta, più lente. Il pappagallo spiega come usare la mappa del tesoro e, in zattera, si posa in cima al palo. I gabbiani ora volano sull'isola e non seguono più lo schermo.",
     "Il mercante di passaggio ora ha lo stesso stile del tuo personaggio, la barca a remi del gioco con le casse accanto, e sceglie una spiaggia libera, mai dietro agli alberi.",
@@ -12972,7 +12972,7 @@ async function boot(){
   cv=$('cv');ctx=cv.getContext('2d');
   const setP=(p,t)=>{$('lbar').firstElementChild.style.width=Math.round(p*100)+'%';if(t)$('lTxt').textContent=t};
   setP(.02,'Preparo i disegni…');await nextTick();
-  initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN){GfxNew.nature();GfxNew.art();GfxNew.raft()}}catch(e){console.error('gfx',e)}
+  initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN){GfxNew.nature();GfxNew.art()}GfxNew.raft()}catch(e){console.error('gfx',e)}
   SP.scaf.zattera=mkScaffold(150,70);
   setP(.08,'Disegno il mare…');await nextTick();
   edtPre();
