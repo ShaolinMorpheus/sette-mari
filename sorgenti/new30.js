@@ -65,6 +65,38 @@ X2.botTick=function(){
   }
   if(!x.bt.g&&!EID.x2bot){const e=NV.mkGlint({id:'x2bot',gk:'bottle',gv:0,tx:x.bt.x,ty:x.bt.y});e.dly=1}
 };
+/* ---- funghi di bosco: ogni giorno ne spuntano alcuni nel bosco; da cotti, in ricetta ---- */
+X2.muTick=function(){
+  if(!X2.isl()||S.day<2)return;
+  const x=X2.st(),td=X2.today();
+  if(!x.mu||x.mu.d!==td||x.mu.w!==WORLD){
+    let cs=NV.cands(false);if(!cs.length)return;
+    const fo=cs.filter(s=>forestF(s[0]+.5,s[1]+.5)>.25);if(fo.length>=4)cs=fo;
+    const rr=mulberry(td*71+WORLD*13);
+    NV.rmGlints(e=>e.mu);
+    x.mu={d:td,w:WORLD,l:NV.pick(cs,6,5,rr).map(q=>[q[0],q[1],0])};
+  }
+  x.mu.l.forEach((q,i)=>{if(!q[2]&&!EID['x2mu'+i]){const e=NV.mkGlint({id:'x2mu'+i,gk:'funghi',gv:i,tx:q[0],ty:q[1]});e.mu=1}});
+};
+X2.muGet=function(e){
+  const x=X2.st(),i=+String(e.id).slice(4);if(x.mu&&x.mu.l[i])x.mu.l[i][2]=1;
+  sparkBurst(e.x,e.y-8,6);
+  gain('funghetti',1+(Math.random()<.4?1:0),e.x,e.y-14);
+};
+X2.mushDraw=function(g,e,t){
+  if(e.got)return;
+  const i=e.gv|0,P2=[['#b5532e','#f3d9b0'],['#c8a24a','#fff1cf'],['#9a4a2a','#f0d8b8'],['#d8643a','#fff']];
+  const c=P2[i%4];
+  g.save();g.translate(e.x,e.y);shadow(g,0,2,13,3.6,.26);
+  const m=(ox,oy,sc,cc)=>{g.save();g.translate(ox,oy);g.scale(sc,sc);g.lineJoin='round';
+    g.fillStyle='#efe3c4';g.strokeStyle='#4a3a22';g.lineWidth=1.3;g.beginPath();g.moveTo(-2.4,0);g.lineTo(-1.8,-8);g.lineTo(1.8,-8);g.lineTo(2.4,0);g.closePath();g.fill();g.stroke();
+    g.fillStyle=cc[0];g.beginPath();g.moveTo(-8.5,-7);g.bezierCurveTo(-9,-17,9,-17,8.5,-7);g.bezierCurveTo(4,-5.4,-4,-5.4,-8.5,-7);g.fill();g.stroke();
+    g.fillStyle=cc[1];for(const[dx,dy,r]of[[-3.5,-11.5,1.3],[2.2,-13,1.1],[4,-9.6,.9]]){g.beginPath();g.arc(dx,dy,r,0,7);g.fill()}
+    g.restore()};
+  m(-7,1,.78,c);m(6,2,1,c);m(-1,-3,.6,P2[(i+1)%4]);
+  const k=.5+.5*Math.sin(t*2+i);g.globalAlpha=.5*k;g.fillStyle='#fff6c0';g.beginPath();g.arc(9,-18,1.6,0,7);g.fill();
+  g.restore();
+};
 X2.botOpen=function(e){
   const x=X2.st();if(x.bt)x.bt.g=1;x.bn=(x.bn||0)+1;
   sparkBurst(e.x,e.y-14,14);sfx('relic');
@@ -85,7 +117,9 @@ X2.botOpen=function(e){
 X2.huntStart=function(){
   const x=X2.st(),cs=NV.cands(false).filter(s=>hyp(s[0]+.5-P.x/TS,s[1]+.5-P.y/TS)>=10);
   if(!cs.length)return false;
-  const s=X2.rnd(cs);x.th={x:s[0],y:s[1]};X2._ht=3;return true;
+  const s=X2.rnd(cs);x.th={x:s[0],y:s[1]};X2._ht=3;
+  setTimeout(()=>{try{if(S.flags.parrot)say(PAR,'Cra! Una mappa! Cammina in giro: più ti avvicini alla X, più senti caldo. Freddo… tiepido… caldo… FUOCO!',8)}catch(e){}},3500);
+  return true;
 };
 X2.huntTick=function(dt){
   const x=X2.st(),h=x.th;if(!h||P.mode!=='walk'||inRoom())return;
@@ -93,10 +127,10 @@ X2.huntTick=function(dt){
   if(d<1.15){
     x.th=null;x.thn=(x.thn||0)+1;
     sparkBurst(P.x,P.y-10,22);sfx('relic');
-    gain('rottami',2,P.x,P.y-20);gain('corda',2,P.x,P.y-36);
-    const pc=X2.piece();if(pc)NV.addCol(pc[0],pc[1],true);else gain('tela',1,P.x,P.y-52);
-    addXp(25);
+    const pc=X2.piece();
     UI.banner('Tesoro trovato!','Sotto la sabbia c\'era un sacchetto.'+(pc?'\nPer il Quaderno: '+X2.pieceName(pc):''));
+    gain('rottami',2,P.x,P.y-20);gain('corda',2,P.x,P.y-36);
+    setTimeout(()=>{try{if(pc)NV.addCol(pc[0],pc[1],true);else gain('tela',1,P.x,P.y-52);addXp(25)}catch(e){}},1200);
     saveGame(true);return;
   }
   X2._ht-=dt;if(X2._ht>0)return;X2._ht=2.4;
@@ -252,7 +286,7 @@ X2.tick=function(dt){
   X2.step();
 };
 X2.step=function(){
-  if(S.day>=2){X2.dlTick();X2.botTick();X2.smTick();X2.secTick()}
+  if(S.day>=2){X2.dlTick();X2.botTick();X2.muTick();X2.smTick();X2.secTick()}
   X2.merTick();
 };
 X2.draw=function(g,t){
@@ -353,6 +387,6 @@ X2.fitStart=function(){
 /* ---- agganci ---- */
 {
   try{const st=document.createElement('style');st.textContent='.x2r{margin:8px 0}.x2r>div{display:flex;gap:10px;align-items:center;font:700 13.5px var(--f-b);padding:7px 10px;border-radius:12px;background:rgba(0,0,0,.09);margin-bottom:6px}.x2r>div>span{font-size:20px;width:26px;text-align:center;flex:none}.x2r small{opacity:.82;font-weight:700}.x2s b{font-size:22px}.x2s div{font-size:12px;padding:6px}';document.head.appendChild(st)}catch(e){}
-  const c0=NV.collect;NV.collect=function(e){if(e&&e.dly){X2.botOpen(e);return}return c0(e)};
+  const c0=NV.collect;NV.collect=function(e){if(e&&e.dly){X2.botOpen(e);return}if(e&&e.mu){X2.muGet(e);return}return c0(e)};
   const b0=NV.onBegin;NV.onBegin=function(){b0();try{X2.onBegin()}catch(e){}};
 }

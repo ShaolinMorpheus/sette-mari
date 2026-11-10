@@ -16,21 +16,12 @@ rep("T('mVer','🔁',verLbl(),null)","T('mGfxN','🧪','Grafica di prova',GFXN?'
 rep("  c.querySelector('#mVer').onclick=verSwitch;","  {const gb=c.querySelector('#mGfxN');if(gb)gb.onclick=gfxSwitch}\n  c.querySelector('#mVer').onclick=verSwitch;")
 rep('    "Diario, nuova scheda «Statistiche»','''    "Isola più viva: rocce più piccole (alcune al posto delle grandi), fiori gialli e bianchi nell'erba, conchiglie, legni sulla riva, funghetti e tartarughe nel mare.",
     "Il mercante di passaggio ora ha lo stesso stile del tuo personaggio, la barca a remi del gioco con le casse accanto, e sceglie una spiaggia libera, mai dietro agli alberi.",
-    "Menu → Grafica di prova (facoltativa): in più sabbie diverse, felci, tronchi, gabbiani, pesci, un gufo di notte, noci di cocco più grandi e un mare più bello. Il tasto «Grafica» resta quello di prima.",
+    "Menu → Grafica di prova (facoltativa): in più sabbie diverse, felci, tronchi, gabbiani, pesci, un gufo di notte, tartarughe nel mare e noci di cocco più grandi. Il tasto «Grafica» resta quello di prima.",
     "Diario, nuova scheda «Statistiche»''')
 rep("if(coco){for(const[ox,oy]of[[-6,6],[4,8],[-1,13]])ball(g,hx+ox,hy+oy,6.5,","if(coco){for(const[ox,oy]of(GFXN?[[-9,7],[6,9],[-2,17],[-3,-1]]:[[-6,6],[4,8],[-1,13]]))ball(g,hx+ox,hy+oy,GFXN?9.2:6.5,")
-rep("sand=mixc(sand,[250,240,200],sstep(.1,.16,s)*.18*(1-n1));","sand=mixc(sand,[250,240,200],sstep(.1,.16,s)*.18*(1-n1));if(GFXN){const nS=NZ.fbm(tx*.35+70,ty*.35+20,2);sand=mixc(sand,[248,240,214],clamp((nS-.55)*3,0,.55));sand=mixc(sand,[206,172,108],clamp((.42-nS)*3,0,.5))}")
-rep("let c=mixc(sand,gr,gT);","if(GFXN)gr=mixc(gr,[84,98,46],fF*.3);let c=mixc(sand,gr,gT);")
 rep("g.quadraticCurveTo(x,y-2+r()*4,x+7,y+r()*3);g.stroke()}\n  }\n  g.restore();","g.quadraticCurveTo(x,y-2+r()*4,x+7,y+r()*3);g.stroke()}\n  }\n  try{GfxNew.decor(g)}catch(e){console.error('decor',e)}\n  g.restore();")
 rep("  drawBeach(g,t,vx0,vy0,vx1,vy1);\n","  drawBeach(g,t,vx0,vy0,vx1,vy1);\n  if(WORLD<3){try{GfxNew.under(g,t,vx0,vy0,vx1,vy1)}catch(e){}}\n")
 rep("  ambLeaves(t,vx0,vy0,vx1,vy1);drawParts(g);","  if(GFXN&&WORLD<3){try{GfxNew.over(g,t,vx0,vy0,vx1,vy1)}catch(e){}}\n  ambLeaves(t,vx0,vy0,vx1,vy1);drawParts(g);")
-rep("let c=waterRGB(dd);","let c=GFXN?waterNew(dd):waterRGB(dd);")
-rep("const kk=(n-.5)*26*(1-dd*.55);","const kk=(n-.5)*26*(1-dd*.55)*(GFXN?.4:1);")
-rep("A*=clamp(.5+fn*1.1,0,1);","A*=GFXN?clamp(.85+fn*.5,0,1):clamp(.5+fn*1.1,0,1);")
-rep("B*=clamp(fn*1.5-.1,0,1)*.7;","B*=clamp(fn*1.5-.1,0,1)*(GFXN?1:.7);")
-rep("const w=Math.pow(clamp((a-.55)*2.6,0,1),1.6);","const w=GFXN?clamp((a-.64)*10,0,1):Math.pow(clamp((a-.55)*2.6,0,1),1.6);")
-rep("g.globalAlpha=.2;g.fillStyle=p0;","g.globalAlpha=GFXN?.36:.2;g.fillStyle=p0;")
-rep("g.globalAlpha=.15;g.fillStyle=p1;","g.globalAlpha=GFXN?.28:.15;g.fillStyle=p1;")
 rep("shadow(g,6,3,34,10,.28);drawSp(g,SP.boulder[e.v],0,0,1)","shadow(g,6,3,(e.v===1||e.v===3)?22:34,(e.v===1||e.v===3)?7:10,.28);drawSp(g,SP.boulder[e.v],0,0,1)")
 rep("      case'thief':drawThief(g,e,t);break;","      case'thief':drawThief(g,e,t);break;\n      case'mer':X2.merDraw(g,t);break;")
 rep("  list.sort((a,b)=>key(a)-key(b));","  try{if(WORLD<3&&X2.merHere())list.push(X2.merE())}catch(e){}\n  list.sort((a,b)=>key(a)-key(b));")
