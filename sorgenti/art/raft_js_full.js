@@ -52,7 +52,7 @@ GfxNew.raft=function(){
       const bb=sf*fv*bil+Math.sin(t*fs+s*3.4+v*2.2)*fa*sf*.8;
       const lift=-Math.abs(bb)*.08*v;
       P.push([mx+dx*u+nx*bb,my+dy*u+ny*bb-z+lift]);
-      Q.push([(flip?1-s:s)*iw,v*ih,bb])}}
+      Q.push([s*iw,v*ih,bb])}}
     g.save();
     g.drawImage(RA.mast,mx-8.25,my-156,16.5,156);
     for(let j=0;j<NV;j++)for(let i=0;i<NU;i++){
