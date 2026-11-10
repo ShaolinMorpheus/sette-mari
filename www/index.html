@@ -874,6 +874,11 @@ function bakeDecor(g){
 /* ====== SPRITE: natura (alberi, palme, rocce, cespugli, scogliera) ====== */
 const SP={};
 function sp(w,h,fn,ax,ay){const[c,x]=mk(w,h);fn(x,w,h);return{c,w,h,ax:ax==null?w/2:ax,ay:ay==null?h-4:ay}}
+/* sprite d'arte appoggiati al terreno: ombra proiettata morbida + ombra di contatto alla base */
+function artGround(g,s,k,cw){k=k||1;const sk=(s.sink||3)*k;
+  if(s.sh){g.save();g.translate(0,sk-1);g.globalAlpha=.27;g.transform(k,0,-.45*k,-.27*k,0,0);g.drawImage(s.sh,-s.ax,-s.ay,s.w,s.h);g.restore()}
+  const CT=artGround.CT||(artGround.CT=(()=>{const c=document.createElement('canvas');c.width=128;c.height=40;const x=c.getContext('2d');x.translate(64,20);x.scale(1,.31);const q=x.createRadialGradient(0,0,0,0,0,64);q.addColorStop(0,'rgba(12,9,4,.66)');q.addColorStop(.5,'rgba(12,9,4,.44)');q.addColorStop(1,'rgba(12,9,4,0)');x.fillStyle=q;x.beginPath();x.arc(0,0,64,0,7);x.fill();return c})());
+  const w=cw*2.5*k;g.drawImage(CT,-w/2,sk*.5-w*.156-1,w,w*.3125)}
 function drawSp(g,s,x,y,k,al){k=k||1;if(al!=null)g.globalAlpha=al;g.drawImage(s.c,x-s.ax*k,y-s.ay*k,s.w*k,s.h*k);if(al!=null)g.globalAlpha=1}
 function ball(g,cx,cy,r,c0,c1,c2,stroke){
   const q=g.createRadialGradient(cx-r*.35,cy-r*.42,r*.08,cx,cy,r);q.addColorStop(0,c0);q.addColorStop(.55,c1);q.addColorStop(1,c2);
@@ -4594,26 +4599,25 @@ function spriteOf(name){
 }
 /* ---- disegno di ogni tipo di oggetto ---- */
 function drawStump(g,e,isPine){const s=SP.stump;if(!s.art){drawSp(g,s,e.x,e.y+2);return}
-  const k=isPine?.72:(e.type==='tree'&&e.v%2?.8:1);g.save();g.translate(e.x,e.y+2);g.fillStyle='rgba(20,14,6,.28)';g.beginPath();g.ellipse(2,1,17*k,5*k,0,0,7);g.fill();drawSp(g,s,0,0,k);g.restore()}
+  const k=isPine?.72:(e.type==='tree'&&e.v%2?.8:1);g.save();g.translate(e.x,e.y+2);artGround(g,s,k,13);drawSp(g,s,0,2*k,k);g.restore()}
 function drawTree(g,e,t){
   const isPine=e.type==='pine',s=isPine?SP.pine[e.v]:SP.tree[e.v];
   if(!e.alive&&(!e.fall||e.fall>=1)){drawStump(g,e,isPine);return}
   if(!e.alive){drawStump(g,e,isPine)}
   g.save();g.translate(e.x,e.y);
   const k=(e.alive?(.35+.65*e.grow):1)*(e.id==='mast'?1.75:1);
-  if(e.alive){if(s.art){if(s.sh){g.save();g.globalAlpha=.30;g.transform(k,0,-.55*k,-.30*k,0,0);g.drawImage(s.sh,-s.ax,-s.ay,s.w,s.h);g.restore()}g.fillStyle='rgba(20,14,6,.30)';g.beginPath();g.ellipse(1,2,12*k,4*k,0,0,7);g.fill()}else shadow(g,10*k,2,(isPine?24:32)*k,11*k,.26)}
+  if(e.alive){if(s.art){artGround(g,s,k,isPine?19:18)}else shadow(g,10*k,2,(isPine?24:32)*k,11*k,.26)}
   let al=1;
   if(!e.alive){const f=e.fall;g.rotate(f*f*1.5*(e.fdir||1));al=1-clamp((f-.55)/.45,0,1)}
   else{const sh=e.shake>0?Math.sin(e.shake*70)*.06*(e.shake/.3):0;g.transform(1,0,Math.sin(t*1.1+e.x*.013)*.012+sh,1,0,0)}
   if(e.flip)g.scale(-1,1);
-  drawSp(g,s,0,0,k,al<1?al:null);
+  drawSp(g,s,0,s.art?3*k:0,k,al<1?al:null);
   g.restore();
 }
 function drawPalm(g,e,t){
   const s=(e.coco?SP.palm:SP.palm0)[e.v];
   if(s.art){g.save();g.translate(e.x,e.y);
-    if(s.sh){g.save();g.globalAlpha=.30;g.transform(1,0,-.55,-.30,0,0);g.drawImage(s.sh,-s.ax,-s.ay,s.w,s.h);g.restore()}
-    g.fillStyle='rgba(20,14,6,.30)';g.beginPath();g.ellipse(1,2,13,4,0,0,7);g.fill();
+    artGround(g,s,1,20);g.translate(0,3);
     const sh0=e.shake>0?Math.sin(e.shake*60)*.05*(e.shake/.4):0;g.transform(1,0,Math.sin(t*1.4+e.x*.02)*.02+sh0,1,0,0);drawSp(g,s,0,0,1);g.restore();return}
   g.save();g.translate(e.x,e.y);shadow(g,22,2,34,10,.26);
   const sand=elevT[tIdx(e.tx,e.ty)]<WL+.2;
@@ -4631,17 +4635,17 @@ function drawPalm(g,e,t){
 }
 function drawRock(g,e){
   if(!e.alive){const rs=(GFXN&&SP.rubbleS&&(e.v===1||e.v===3))?SP.rubbleS:SP.rubble;
-    if(rs.art){g.save();g.translate(e.x,e.y);if(rs.sh){g.save();g.globalAlpha=.28;g.transform(1,0,-.55,-.30,0,0);g.drawImage(rs.sh,-rs.ax,-rs.ay,rs.w,rs.h);g.restore()}g.restore()}
+    if(rs.art){g.save();g.translate(e.x,e.y);artGround(g,rs,1,rs.w*.36);drawSp(g,rs,0,2,1);g.restore();return}
     drawSp(g,rs,e.x,e.y);return}
   const bs=SP.boulder[e.v];g.save();g.translate(e.x+(e.shake>0?Math.sin(e.shake*80)*2:0),e.y);
-  if(bs.art){if(bs.sh){g.save();g.globalAlpha=.30;g.transform(1,0,-.55,-.30,0,0);g.drawImage(bs.sh,-bs.ax,-bs.ay,bs.w,bs.h);g.restore()}g.fillStyle='rgba(20,14,6,.28)';g.beginPath();g.ellipse(0,2,bs.w*.34,bs.w*.1,0,0,7);g.fill()}
-  else shadow(g,6,3,(e.v===1||e.v===3)?22:34,(e.v===1||e.v===3)?7:10,.28);drawSp(g,bs,0,0,1);g.restore();
+  if(bs.art)artGround(g,bs,1,bs.w*.4);
+  else shadow(g,6,3,(e.v===1||e.v===3)?22:34,(e.v===1||e.v===3)?7:10,.28);drawSp(g,bs,0,bs.art?3:0,1);g.restore();
 }
 function drawBush(g,e,t){
   const bsp=e.type==='berry'?(e.ready?SP.berry[e.v]:SP.berry0):(e.ready?SP.bush[e.v]:SP.bush0);
   g.save();g.translate(e.x,e.y);
-  if(bsp.art){if(bsp.sh){g.save();g.globalAlpha=.26;g.transform(1,0,-.55,-.30,0,0);g.drawImage(bsp.sh,-bsp.ax,-bsp.ay,bsp.w,bsp.h);g.restore()}g.fillStyle='rgba(20,14,6,.26)';g.beginPath();g.ellipse(0,2,bsp.w*.38,bsp.w*.1,0,0,7);g.fill()}else shadow(g,4,3,26,8,.22);
-  g.transform(1,0,Math.sin(t*1.7+e.x)*.02,1,0,0);drawSp(g,bsp,0,0,1);g.restore();
+  if(bsp.art)artGround(g,bsp,1,bsp.w*.38);else shadow(g,4,3,26,8,.22);
+  g.transform(1,0,Math.sin(t*1.7+e.x)*.02,1,0,0);drawSp(g,bsp,0,bsp.art?3:0,1);g.restore();
 }
 function twinkle(g,x,y,t,sz,ph,col){
   const a=.5+.5*Math.sin(t*3+ph);g.save();g.translate(x,y);g.globalAlpha=.35+.65*a;g.fillStyle=col||'#fff6c0';
@@ -5769,6 +5773,7 @@ const CHANGELOG=[
     "Il laghetto non è mare: niente più conchiglie, stelle marine, granchi o legni sulla sabbia intorno al laghetto.",
     "La zattera (scafo, albero e vele) ora è un disegno d'arte. Il vento cambia direzione e forza: la vela si gonfia, sventola e si gira da sola sottovento, seguendo la rotta della zattera.",
     "Grafica di prova: rocce spaccate dal piccone (grande e piccola) e cespuglio senza liane ora sono disegni d'arte. Le tende del campo dei Fuggiaschi non compaiono più in mare. Sulla mappa non si vedono più i quadratini delle casse.",
+    "Grafica di prova: alberi, palme, rocce, cespugli e ceppi ora poggiano bene sul terreno, con ombra di contatto alla base e ombra proiettata più morbida.",
     "Funghi di bosco: ogni giorno ne spuntano alcuni nel bosco. Crudi non si mangiano, ma con la legna, il cocco o il pesce diventano tre nuove ricette.",
     "Le scritte di missione completata ora arrivano una alla volta, più lente. Il pappagallo spiega come usare la mappa del tesoro e, in zattera, si posa in cima al palo. I gabbiani ora volano sull'isola e non seguono più lo schermo.",
     "Il mercante di passaggio ora ha lo stesso stile del tuo personaggio, la barca a remi del gioco con le casse accanto, e sceglie una spiaggia libera, mai dietro agli alberi.",
