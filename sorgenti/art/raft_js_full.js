@@ -26,7 +26,7 @@ GfxNew.raft=function(){
     if(Math.abs(sn)>.12)o.side=sn>0?1:-1;
     return tgt};
   // triangolo texturizzato
-  const tri=(g,im,x0,y0,x1,y1,x2,y2,u0,v0,u1,v1,u2,v2,sh)=>{
+  const tri=(g,im,x0,y0,x1,y1,x2,y2,u0,v0,u1,v1,u2,v2,sh,hl)=>{
     const den=u0*(v1-v2)+u1*(v2-v0)+u2*(v0-v1);if(Math.abs(den)<1e-6)return;
     const cx=(x0+x1+x2)/3,cy=(y0+y1+y2)/3,ex=(a,b)=>{const dx=a-cx,dy=b-cy,l=Math.hypot(dx,dy)||1;return[a+dx/l*.7,b+dy/l*.7]};
     const A=ex(x0,y0),B=ex(x1,y1),C=ex(x2,y2);
@@ -36,13 +36,14 @@ GfxNew.raft=function(){
       e=(x0*(u1*v2-u2*v1)+x1*(u2*v0-u0*v2)+x2*(u0*v1-u1*v0))/den,f=(y0*(u1*v2-u2*v1)+y1*(u2*v0-u0*v2)+y2*(u0*v1-u1*v0))/den;
     g.transform(a,b,c,d,e,f);g.drawImage(im,0,0);
     if(sh>.01){g.fillStyle='rgba(40,26,12,'+sh.toFixed(3)+')';g.fillRect(0,0,im.naturalWidth,im.naturalHeight)}
+    if(hl>.01){g.fillStyle='rgba(255,246,222,'+hl.toFixed(3)+')';g.fillRect(0,0,im.naturalWidth,im.naturalHeight)}
     g.restore()};
   const NU=7,NV=6;
   RA.draw=(g,mx,my,o,t,red)=>{
-    const w=RA.wind(t),ws=w.s,a=o.a,dx=Math.cos(a),dy=Math.sin(a)*.5,flip=dx<0;
+    const w=RA.wind(t),ws=w.s,a=o.a,ca=Math.cos(a),sa=Math.sin(a),dx=(ca<0?-1:1)*Math.max(.8,Math.abs(ca)),dy=(sa<0?-1:1)*Math.sqrt(1-dx*dx)*.5,flip=dx<0;
     const tb=o.side>=0?1:-1;o.bs=(o.bs===undefined?tb:o.bs)+(tb-(o.bs===undefined?tb:o.bs))*.1;
-    const sd=o.bs,nx=-Math.sin(a)*sd,ny=Math.cos(a)*.5*sd;
-    const L=78,Z0=46,Z1=132,bil=(4+10*Math.min(ws,1.2))*(1+.13*Math.sin(t*(1.5+ws*2)));
+    const sd=o.bs,nx=-dy*2*sd*.5,ny=dx*.5*sd;
+    const L=78,Z0=46,Z1=132,bil=(9+13*Math.min(ws,1.2))*(1+.13*Math.sin(t*(1.5+ws*2)));
     const fa=.8+2.6*ws,fs=2.6+3.4*ws;
     const im=RA.sail[red?1:0],iw=im.naturalWidth,ih=im.naturalHeight;
     const P=[],Q=[];
@@ -56,8 +57,8 @@ GfxNew.raft=function(){
     g.drawImage(RA.mast,mx-8.25,my-156,16.5,156);
     for(let j=0;j<NV;j++)for(let i=0;i<NU;i++){
       const k=j*(NU+1)+i,p00=P[k],p10=P[k+1],p01=P[k+NU+1],p11=P[k+NU+2],q00=Q[k],q10=Q[k+1],q01=Q[k+NU+1],q11=Q[k+NU+2];
-      const sh=Math.max(0,Math.min(.2,.07+(q10[2]-q00[2])*-.012*(sd>=0?1:-1)));
-      tri(g,im,p00[0],p00[1],p10[0],p10[1],p01[0],p01[1],q00[0],q00[1],q10[0],q10[1],q01[0],q01[1],sh);
-      tri(g,im,p10[0],p10[1],p11[0],p11[1],p01[0],p01[1],q10[0],q10[1],q11[0],q11[1],q01[0],q01[1],sh)}
+      const sl=((q10[2]-q00[2])+(q01[2]-q00[2])*.4)*(sd>=0?1:-1),sh=Math.max(0,Math.min(.42,.12-sl*.045)),hl=Math.max(0,Math.min(.22,sl*.04-.02));
+      tri(g,im,p00[0],p00[1],p10[0],p10[1],p01[0],p01[1],q00[0],q00[1],q10[0],q10[1],q01[0],q01[1],sh,hl);
+      tri(g,im,p10[0],p10[1],p11[0],p11[1],p01[0],p01[1],q10[0],q10[1],q11[0],q11[1],q01[0],q01[1],sh,hl)}
     g.restore()};
 };
