@@ -3645,12 +3645,14 @@ function hint(id){if(S&&!S.hints[id]&&U.hintFn){U.hintFn(id)}}
 
 /* ---- movimento ---- */
 /* collisione del giocatore: scatola (rettangolo) contro le tile; i tronchi di alberi e palme bloccano solo il tronco, non tutta la tile */
+const WOV=new Map(),WLC=11;   // muri modificati dall'editor: cella 11 px -> 1 muro, 0 libero
 const PLB={capanna:[-84,70,88,2],banco:[-75,70,52,2],falo:[-36,36,30,6]};let PLL=null;
 function plotArtOn(e){return GFXN&&e.st===2&&PLB[e.pid]&&SP[e.pid]&&SP[e.pid].art&&!(e.pid==='falo'&&!SP.falo.fl)}
 function plotList(){return PLL||(PLL=E.filter(e=>e.type==='plot'))}
 function plotTile(tx,ty){if(!GFXN)return false;for(const e of plotList()){if(!plotArtOn(e))continue;const f=e.fp;if(tx>=f[0]&&tx<f[0]+f[2]&&ty>=f[1]&&ty<f[1]+f[3])return true}return false}
 function plotHit(x,y,rx,ry){if(!GFXN)return false;for(const e of plotList()){if(!plotArtOn(e))continue;const f=e.fp,cx=(f[0]+f[2]/2)*TS,y1=(f[1]+f[3])*TS,b=PLB[e.pid];if(x+rx>cx+b[0]&&x-rx<cx+b[1]&&y+ry>y1-b[2]&&y-ry<y1+b[3])return true}return false}
 function boxFree(x,y,rx,ry){
+  if(WOV.size){const w=WOV.get(((y/WLC)|0)*20000+((x/WLC)|0));if(w===1)return false;if(w===0){const tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(inMap(tx,ty)&&seaT[tIdx(tx,ty)]!==1&&!mesaT[tIdx(tx,ty)])return true}}
   if(plotHit(x,y,rx,ry))return false;
   if(window.__obrDirty){window.__obrDirty=0;try{obrBuild()}catch(_){}}
   if(window.__leafHit&&window.__leafHit(x,y))return false;
@@ -5804,7 +5806,7 @@ const CHANGELOG=[
     "Grafica di prova: capanna, banco da lavoro e ingresso della miniera (la grotta buia) ora sono disegni d'arte, con ombra proiettata e ombra di contatto sul terreno.",
     "Grafica di prova: fiori, funghi (anche quelli da raccogliere), felci, ciuffi d\'erba, erba secca, trifoglio, conchiglie, stelle marine, ricci, noci di cocco, legni e sassi ora sono disegni d\'arte.",
     "Collisioni: casse, forzieri, barili e corda bloccano tutto il corpo disegnato (non si attraversano più) e non c'è più il muro invisibile davanti.",
-        "Editor mappa: nuovo tasto «Muri» che mostra in rosso dove il personaggio non può passare (muri invisibili compresi).",
+        "Editor mappa: tasto «Muri»: mostra in rosso dove il personaggio non può passare e permette di disegnare o cancellare i muri a mano (finiscono nel «Codice»).",
     "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
         "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
         "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
@@ -12771,7 +12773,7 @@ function frameErr(err){   // un errore in un singolo passo non deve congelare tu
 const ED={on:false,sel:null,drag:null,pan:null,pt:new Map(),pinch0:0,ed:{mv:{},del:[],add:[],vv:{},t:[]},undo:[],grid:true,bound:false,brush:null,size:2.5,paint:null,dirty:false};
 const ED_BAKED={"2":{"mv":{"t16":[1832,1184],"t103":[1604,1096],"d8":[1608,1530],"c2cannon":[2316,1128],"lt_cr5":[2190,840],"m11":[2046,739],"b22":[1758,786],"lt_cr14":[1692,828],"b2":[1650,786],"lt_pg0":[1506,762],"d19":[1476,696],"t58":[1565,788],"d10":[1146,1056],"plot_capanna":[1078,1230],"rx7":[946,1272],"t2":[1647,1712],"lt_cr6":[1314,1974],"p28":[1166,2020],"nave":[3062,1998],"m7":[3322,1751],"p41":[3322,1976],"lt_cr9":[3012,1572],"c2boat":[3168,1548],"d5":[3174,1482],"m1":[3234,1487],"p23":[3058,1492],"rx4":[3806,1140],"t7":[3668,1184],"plot_banco":[1540,1274],"t6":[1963,1536],"r8":[3168,1052],"y11":[1638,972],"t18":[1832,964],"t62":[1698,964],"t59":[1830,1536],"t4":[1777,1492],"lt_cr10":[1968,1650],"t50":[1785,1624]},"del":["feedback"],"add":[{"t":"palm","s":null,"v":1,"f":0,"x":3850,"y":1228,"id":"ed1"},{"t":"palm","v":2,"f":0,"x":3894,"y":1360,"id":"ed2"},{"t":"palm","v":2,"f":0,"x":3674,"y":1536,"id":"ed3"},{"t":"tree","s":null,"v":5,"f":0,"x":3717,"y":1140,"id":"ed4"},{"t":"berry","s":null,"v":2,"f":0,"x":3720,"y":1206,"id":"ed5"},{"t":"deco","s":"barrel1","f":0,"x":3529,"y":1188,"id":"ed6"},{"t":"tree","v":5,"f":0,"x":3756,"y":1228,"id":"ed7"}],"vv":{}},"1":{"mv":{"b12":[2178,1492],"plot_falo":[1474,1230],"plot_banco":[1628,1230],"lamp7":[1826,1223],"plot_capanna":[1342,1186],"lookout":[1201,1118],"lamp2":[1122,1135],"lt_old":[1380,810],"oldcamp":[1329,744],"lamp1":[1518,915],"b2":[1386,876],"t4":[1260,1712],"lamp3":[1210,1575],"lamp5":[946,1883],"t51":[1656,1624],"lamp8":[1738,1399],"y3":[1782,702],"d1":[1764,660],"m0":[1738,651],"fg3":[6656,1176],"fg0":[6638,1122],"fg2":[6764,1164],"fg1":[6788,1116],"r0":[1962,942]},"del":["feedback"],"add":[{"t":"deco","s":"lamp","f":0,"x":1738,"y":1047,"id":"ed1"},{"t":"deco","s":"lamp","f":0,"x":1078,"y":1487,"id":"ed2"},{"t":"deco","s":"lamp","f":0,"x":770,"y":2103,"id":"ed3"},{"t":"deco","s":"lamp","f":0,"x":1034,"y":2191,"id":"ed4"},{"t":"deco","s":"lamp","f":0,"x":1430,"y":1487,"id":"ed5"},{"t":"deco","s":"lamp","f":0,"x":2002,"y":1443,"id":"ed6"},{"t":"deco","s":"lamp","f":0,"x":2574,"y":1311,"id":"ed7"},{"t":"deco","s":"lamp","f":0,"x":1254,"y":871,"id":"ed8"}],"vv":{}}};   // @@EDBAKED@@ mappa definitiva: { "1":{mv,del,add,vv}, "2":{...} }
 const EDKEY='sm_edits_w'+WORLD;
-const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{},t:(o&&o.t)||[]});
+const edNorm=o=>({mv:(o&&o.mv)||{},del:(o&&o.del)||[],add:(o&&o.add)||[],vv:(o&&o.vv)||{},t:(o&&o.t)||[],wl:(o&&o.wl)||[]});
 function edStore(){try{localStorage.setItem(EDKEY,JSON.stringify(ED.ed))}catch(e){}}
 const edOk=e=>!['crab','mraft','thief','npc','cdeco','glint'].includes(e.type)&&e.spr!=='hut'&&e.spr!=='cave'&&!/^nv_/.test(e.spr||'')&&!/^(cav|cvr|h_)/.test(e.id||'')&&e.x>0&&e.y>0&&e.x<WW&&e.y<WH;
 const ED_NAMES={reef:'Scoglio in mare',tree:'Albero',pine:'Pino',palm:'Palma',rock:'Roccia',bush:'Cespuglio',berry:'Cespuglio di bacche',rockpool:'Pozza di molluschi',debris:'Rottami',bottle:'Bottiglia',loot:'Cassa / oggetto',wparrot:'Pappagallo selvatico'};
@@ -12810,6 +12812,7 @@ function edMake(d){
 }
 function edApply(o){
   if(!o)return;o=edNorm(o);
+  for(const c of o.wl)WOV.set(c[1]*20000+c[0],c[2]);
   for(const id of o.del){const e=EID[id];if(e)edRemove(e)}
   for(const d of o.add)edMake(d);
   for(const id in o.mv){const e=EID[id];if(e&&edOk(e))edMove(e,o.mv[id][0],o.mv[id][1])}
@@ -12817,7 +12820,7 @@ function edApply(o){
 }
 function edBoot(){
   try{if(ED_BAKED&&ED_BAKED[WORLD])edApply(ED_BAKED[WORLD])}catch(e){console.warn('ED baked',e)}
-  try{const l=JSON.parse(localStorage.getItem(EDKEY)||'null');ED.ed=edNorm(l);edApply(ED.ed)}catch(e){console.warn('ED local',e)}
+  try{const l=JSON.parse(localStorage.getItem(EDKEY)||'null');ED.ed=edNorm(l);edApply(ED.ed);ED._lm=new Map(ED.ed.wl.map(c=>[c[1]*20000+c[0],c]))}catch(e){console.warn('ED local',e)}
 }
 function edRec(e){
   if(e.id.indexOf('ed')===0){const d=ED.ed.add.find(a=>a.id===e.id);if(d){d.x=Math.round(e.x);d.y=Math.round(e.y);d.v=e.v;d.f=e.flip?1:0}}
@@ -12867,7 +12870,7 @@ function edPalette(){
       const d={t:p[1],s:p[2]||null,v:null,f:0,x:cx,y:cy};if(tpl.v!=null)d.v=(Math.random()*Math.max(1,edMaxV(tpl)))|0;edNew(d)})});
 }
 function edNamesLocal(){try{return JSON.parse(localStorage.getItem('sm_edit_names')||'{}')}catch(e){return{}}}
-function edCodeStr(){if(ED.x)return ED.x.code();const o={w:WORLD,mv:ED.ed.mv,del:ED.ed.del,add:ED.ed.add,vv:ED.ed.vv,t:ED.ed.t};const n=edNamesLocal();if(Object.keys(n).length)o.names=n;return JSON.stringify(o)}
+function edCodeStr(){if(ED.x)return ED.x.code();const o={w:WORLD,mv:ED.ed.mv,del:ED.ed.del,add:ED.ed.add,vv:ED.ed.vv,t:ED.ed.t};if(ED.ed.wl&&ED.ed.wl.length)o.wl=ED.ed.wl;const n=edNamesLocal();if(Object.keys(n).length)o.names=n;return JSON.stringify(o)}
 async function edSaveFile(code,st){
   const name='sette-mari-mappa-m'+WORLD+'.json',C=window.Capacitor,PL=C&&C.Plugins;
   try{
@@ -12925,7 +12928,7 @@ function edUI(){
   const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg,body.edit #c3,body.edit #c3ov,body.edit #c4{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edBar [hidden]{display:none!important}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
   document.head.appendChild(st);
   bar=document.createElement('div');bar.id='edBar';
-  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edAp">Anteprima costa</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edWl">Muri</button><button class="btn" id="edRs">Azzera</button>';
+  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edAp">Anteprima costa</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edWl">Muri</button><button class="btn" id="edWa" hidden>Disegna muro</button><button class="btn" id="edWd" hidden>Cancella muro</button><button class="btn" id="edWs" hidden>Pennello M</button><button class="btn" id="edRs">Azzera</button>';
   document.body.appendChild(bar);
   const sel=document.createElement('div');sel.id='edSel';document.body.appendChild(sel);
   const $$=id=>bar.querySelector('#'+id);
@@ -12937,7 +12940,10 @@ function edUI(){
   $$('edZm').onclick=()=>{cam.uz=clamp(cam.uz/1.25,edZmin(),2.2);camClamp()};
   $$('edZp').onclick=()=>{cam.uz=clamp(cam.uz*1.25,edZmin(),2.2);camClamp()};
   $$('edGr').onclick=()=>{ED.grid=!ED.grid};
-  $$('edWl').onclick=()=>{ED.walls=!ED.walls;$$('edWl').classList.toggle('gold',!!ED.walls)};
+  $$('edWl').onclick=()=>{if(ED.x){UI.toast('Qui non è disponibile.',1800);return}ED.walls=!ED.walls;if(!ED.walls)ED.wm=null;edWB()};
+  $$('edWa').onclick=()=>{ED.wm=ED.wm==='add'?null:'add';ED.brush=null;edBar2();ED.sel=null;edLabel();edWB();if(ED.wm)UI.toast('Disegna: trascina il dito dove vuoi un muro.',2400)};
+  $$('edWd').onclick=()=>{ED.wm=ED.wm==='del'?null:'del';ED.brush=null;edBar2();ED.sel=null;edLabel();edWB();if(ED.wm)UI.toast('Cancella: trascina il dito sul rosso per togliere il muro.',2600)};
+  $$('edWs').onclick=()=>{ED.ws=((ED.ws==null?1:ED.ws)+1)%3;edWB()};
   let rs=0;$$('edRs').onclick=()=>{if(!rs){rs=1;$$('edRs').textContent='Sicuro? Tocca ancora';setTimeout(()=>{rs=0;$$('edRs').textContent='Azzera'},3000);return}try{if(ED.x)ED.x.reset();else localStorage.removeItem(EDKEY)}catch(e){}location.reload()};
 }
 function edBind(){
@@ -12946,6 +12952,7 @@ function edBind(){
     const[sx,sy]=cvPt(e);ED.pt.set(e.pointerId,[sx,sy]);
     if(ED.pt.size===2){const a=[...ED.pt.values()];ED.pinch0=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);ED.drag=null;ED.pan=null;return}
     const[wx,wy]=edW(sx,sy);
+    if(ED.walls&&ED.wm&&!ED.brush){ED.wp={lx:wx,ly:wy,rec:new Map()};edWPaint(wx,wy,ED.wm==='add'?1:0,ED.wp.rec);return}
     if(ED.brush){ED.paint={lx:wx,ly:wy,n:0};edPaint(wx,wy);return}
     const h=edHit(wx,wy);
     if(h){ED.sel=h;ED.drag={e:h,wx,wy,x0:h.x,y0:h.y,moved:false};edLabel()}
@@ -12953,6 +12960,7 @@ function edBind(){
   const mv=e=>{if(!ED.on)return;e.stopImmediatePropagation();e.preventDefault();
     const[sx,sy]=cvPt(e);if(!ED.pt.has(e.pointerId))return;ED.pt.set(e.pointerId,[sx,sy]);
     if(ED.pt.size===2){const a=[...ED.pt.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]);if(ED.pinch0>10){cam.uz=clamp(cam.uz*d/ED.pinch0,edZmin(),2.2);camClamp()}ED.pinch0=d;return}
+    if(ED.wp){const[wx,wy]=edW(sx,sy),d=Math.hypot(wx-ED.wp.lx,wy-ED.wp.ly),n=Math.max(1,Math.ceil(d/5));for(let i=1;i<=n;i++)edWPaint(ED.wp.lx+(wx-ED.wp.lx)*i/n,ED.wp.ly+(wy-ED.wp.ly)*i/n,ED.wm==='add'?1:0,ED.wp.rec);ED.wp.lx=wx;ED.wp.ly=wy;return}
     if(ED.paint){const[wx,wy]=edW(sx,sy);if(Math.hypot(wx-ED.paint.lx,wy-ED.paint.ly)>ED.size*TS*.55){ED.paint.lx=wx;ED.paint.ly=wy;edPaint(wx,wy)}return}
     if(ED.drag){const D=ED.drag,[wx,wy]=edW(sx,sy),e2=D.e;
       let nx=D.x0+(wx-D.wx),ny=D.y0+(wy-D.wy);
@@ -12962,6 +12970,7 @@ function edBind(){
       if(D.moved&&(nx!==e2.x||ny!==e2.y)){if(ED.x)ED.x.move(e2,nx,ny);else edMove(e2,nx,ny)}}
     else if(ED.pan){const P0=ED.pan,z=camZoom();cam.x=P0.cx-(sx-P0.sx)/z;cam.y=P0.cy-(sy-P0.sy)/z;camClamp();if(Math.hypot(sx-P0.sx,sy-P0.sy)>6)P0.moved=true}};
   const up=e=>{if(!ED.on)return;e.stopImmediatePropagation();ED.pt.delete(e.pointerId);
+    if(ED.wp){const rec=ED.wp.rec;ED.wp=null;edStore();if(rec.size)ED.undo.push(()=>edWUndo(rec));return}
     if(ED.paint){const n=ED.paint.n;ED.paint=null;if(n)ED.undo.push(()=>{ED.ed.t.splice(ED.ed.t.length-n,n);edStore()});return}
     if(ED.drag){const D=ED.drag;if(D.moved){if(ED.x){const px=D.prev,en=D.e;ED.x.save();ED.undo.push(()=>{ED.x.move(en,px[0],px[1]);ED.x.save()})}else{edRec(D.e);const px=D.prev,en=D.e;ED.undo.push(()=>{edMove(en,px[0],px[1]);edRec(en)})}}ED.drag=null}
     if(ED.pan){if(!ED.pan.moved){ED.sel=null;edLabel()}ED.pan=null}};
@@ -12982,6 +12991,23 @@ function edStop(){
   camClamp();saveGame();ED.brush=null;
   if(ED.dirty){edtPreview()}
 }
+function edWB(){const b=document.getElementById('edBar');if(!b)return;const q=i=>b.querySelector('#'+i);q('edWl').classList.toggle('gold',!!ED.walls);['edWa','edWd','edWs'].forEach(i=>q(i).hidden=!ED.walls);q('edWa').classList.toggle('gold',ED.wm==='add');q('edWd').classList.toggle('gold',ED.wm==='del');q('edWs').textContent='Pennello '+['S','M','L'][ED.ws==null?1:ED.ws]}
+function edWPaint(wx,wy,v,rec){
+  const r=[1,2,4][ED.ws==null?1:ED.ws],cx0=Math.floor(wx/WLC),cy0=Math.floor(wy/WLC);if(!ED._lm)ED._lm=new Map();
+  for(let j=-r;j<=r;j++)for(let i=-r;i<=r;i++){
+    if(i*i+j*j>r*r+r*.5)continue;const cx=cx0+i,cy=cy0+j;if(cx<0||cy<0)continue;const k=cy*20000+cx;
+    if(rec.has(k))continue;let c=ED._lm.get(k);rec.set(k,[WOV.get(k),c?c[2]:undefined]);
+    WOV.set(k,v);if(c)c[2]=v;else{c=[cx,cy,v];ED._lm.set(k,c);ED.ed.wl.push(c)}
+  }
+  ED.dirty=true;
+}
+function edWUndo(rec){
+  for(const[k,pv]of rec){
+    if(pv[0]===undefined)WOV.delete(k);else WOV.set(k,pv[0]);
+    const c=ED._lm.get(k);if(c){if(pv[1]===undefined){ED._lm.delete(k);const i=ED.ed.wl.indexOf(c);if(i>=0)ED.ed.wl.splice(i,1)}else c[2]=pv[1]}
+  }
+  edStore();
+}
 function edWalls(g,z,vx0,vy0,vx1,vy1){
   try{
     if(window.__obrDirty){window.__obrDirty=0;obrBuild()}
@@ -12991,6 +13017,7 @@ function edWalls(g,z,vx0,vy0,vx1,vy1){
       const tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(!inMap(tx,ty)||seaT[tIdx(tx,ty)]===1)continue;
       if(!boxFree(x,y,9,5))g.fillRect(x-st/2,y-st/2,st,st);
     }
+    for(const[k,v]of WOV){const cx=(k%20000)*WLC,cy=Math.floor(k/20000)*WLC;if(cx<vx0-WLC||cx>vx1||cy<vy0-WLC||cy>vy1)continue;g.fillStyle=v?'rgba(255,0,200,.5)':'rgba(60,255,120,.45)';g.fillRect(cx,cy,WLC,WLC)}
     g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1.5/z;
     for(const o of OBR)g.strokeRect(o.x0,o.y0,o.x1-o.x0,o.y1-o.y0);
   }catch(_){}
