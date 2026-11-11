@@ -3645,7 +3645,14 @@ function hint(id){if(S&&!S.hints[id]&&U.hintFn){U.hintFn(id)}}
 
 /* ---- movimento ---- */
 /* collisione del giocatore: scatola (rettangolo) contro le tile; i tronchi di alberi e palme bloccano solo il tronco, non tutta la tile */
+const PLB={capanna:[-84,70,88,2],banco:[-75,70,52,2],falo:[-36,36,30,6]};let PLL=null;
+function plotArtOn(e){return GFXN&&e.st===2&&PLB[e.pid]&&SP[e.pid]&&SP[e.pid].art&&!(e.pid==='falo'&&!SP.falo.fl)}
+function plotList(){return PLL||(PLL=E.filter(e=>e.type==='plot'))}
+function plotTile(tx,ty){if(!GFXN)return false;for(const e of plotList()){if(!plotArtOn(e))continue;const f=e.fp;if(tx>=f[0]&&tx<f[0]+f[2]&&ty>=f[1]&&ty<f[1]+f[3])return true}return false}
+function plotHit(x,y,rx,ry){if(!GFXN)return false;for(const e of plotList()){if(!plotArtOn(e))continue;const f=e.fp,cx=(f[0]+f[2]/2)*TS,y1=(f[1]+f[3])*TS,b=PLB[e.pid];if(x+rx>cx+b[0]&&x-rx<cx+b[1]&&y+ry>y1-b[2]&&y-ry<y1+b[3])return true}return false}
 function boxFree(x,y,rx,ry){
+  if(plotHit(x,y,rx,ry))return false;
+  if(window.__obrDirty){window.__obrDirty=0;try{obrBuild()}catch(_){}}
   if(window.__leafHit&&window.__leafHit(x,y))return false;
   if(typeof OBR!=='undefined'&&OBR.length)for(const o of OBR){if(x+rx>o.x0&&x-rx<o.x1&&y+ry>o.y0&&y-ry<o.y1)return false}
   const x0=Math.floor((x-rx)/TS),x1=Math.floor((x+rx)/TS),y0=Math.floor((y-ry)/TS),y1=Math.floor((y+ry)/TS);
@@ -3659,10 +3666,10 @@ function boxFree(x,y,rx,ry){
         if(c[0]>=ax&&c[0]<ax+TS&&c[1]>=ay&&c[1]<ay+TS&&elev(c[0]/TS,c[1]/TS)<WL+.012)return false;
       }
     }
-    if(b>sm){
+    if(b>sm&&!plotTile(tx,ty)){
       if(b-sm>insetT[i])return false;
       const bx0=tx*TS+8,bx1=tx*TS+TS-8,by0=ty*TS+9,by1=ty*TS+TS-5;   // solo la parte centrale dell'oggetto
-      if(x+rx>bx0&&x-rx<bx1&&y+ry>by0&&y-ry<by1)return false;
+      if(!(OBRT[i]>=b-sm)&&x+rx>bx0&&x-rx<bx1&&y+ry>by0&&y-ry<by1)return false;
     }
     if(sm>0){   // solo il tronco: circa 16 px di larghezza, ai piedi dell'albero
       const bx0=tx*TS+14,bx1=tx*TS+30,by0=ty*TS+27,by1=ty*TS+43;
@@ -5796,7 +5803,8 @@ const CHANGELOG=[
     "Grafica di prova: alberi, palme, rocce, cespugli e ceppi ora poggiano bene sul terreno, con ombra di contatto alla base e ombra proiettata più morbida.",
     "Grafica di prova: capanna, banco da lavoro e ingresso della miniera (la grotta buia) ora sono disegni d'arte, con ombra proiettata e ombra di contatto sul terreno.",
     "Grafica di prova: fiori, funghi (anche quelli da raccogliere), felci, ciuffi d\'erba, erba secca, trifoglio, conchiglie, stelle marine, ricci, noci di cocco, legni e sassi ora sono disegni d\'arte.",
-    "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
+    "Collisioni: casse, forzieri, barili e corda bloccano tutto il corpo disegnato (non si attraversano più) e non c'è più il muro invisibile davanti.",
+        "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
         "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
         "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
     "Grafica di prova: forzieri e bauli (chiusi e aperti, in ferro e in oro) e falò sono ora disegni d'arte. La fiamma del falò si muove, guizza e ogni tanto scoppietta lanciando faville.",
@@ -11453,7 +11461,7 @@ function drawCvSkel(g,e,t){
 }
 
 /* collisione che segue la sagoma vera dell'oggetto (il corpo sta sopra la linea di base, non nel riquadro sotto) */
-const OBR=[];
+const OBR=[],OBRT={};
 function sprOf(e){
   try{
     if(e.type==='deco')return e.spr==='barrel0'?SP.barrel[0]:e.spr==='barrel1'?SP.barrel[1]:e.spr==='crate'?SP.crate:e.spr==='coil'?SP.coil:null;
@@ -11466,14 +11474,14 @@ function sprOf(e){
   return null;
 }
 function obrBuild(){
-  OBR.length=0;
+  OBR.length=0;for(const k in OBRT)delete OBRT[k];
   for(const e of E){
     if(!e.bk||e.hid)continue;
     const s=sprOf(e);if(!s)continue;
-    const cx=e.x-s.ax+s.w/2,hw=s.w*.4,dp=Math.min(s.h*.6,36);
-    const o={x0:cx-hw,x1:cx+hw,y0:e.y-dp,y1:e.y+2,e};
+    const cx=e.x-s.ax+s.w/2,hw=s.w*(s.art?.47:.4),dp=s.art?Math.min(s.ay*.92,54):Math.min(s.h*.6,36);
+    const o={x0:cx-hw,x1:cx+hw,y0:e.y-dp,y1:e.y+(s.art?1:2),e};
     if(P.x>o.x0-12&&P.x<o.x1+12&&P.y>o.y0-12&&P.y<o.y1+12)continue;   // se ci sei già dentro, esci prima
-    OBR.push(o);
+    OBR.push(o);if(e.fp){const ti=tIdx(e.fp[0],e.fp[1]);OBRT[ti]=(OBRT[ti]||0)+1}
   }
 }
 /* ---- vibrazione: indizi, tesori, missioni (si spegne dal menu) ---- */
@@ -13144,7 +13152,7 @@ async function boot(){
   cv=$('cv');ctx=cv.getContext('2d');
   const setP=(p,t)=>{$('lbar').firstElementChild.style.width=Math.round(p*100)+'%';if(t)$('lTxt').textContent=t};
   setP(.02,'Preparo i disegni…');await nextTick();
-  initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN){GfxNew.nature();GfxNew.art();GfxNew.rub();GfxNew.bld();GfxNew.chest();GfxNew.props()}GfxNew.raft()}catch(e){console.error('gfx',e)}
+  initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN){GfxNew.nature();GfxNew.art();GfxNew.rub();GfxNew.bld();GfxNew.chest();GfxNew.props();window.__obrDirty=1}GfxNew.raft()}catch(e){console.error('gfx',e)}
   SP.scaf.zattera=mkScaffold(150,70);
   setP(.08,'Disegno il mare…');await nextTick();
   edtPre();
