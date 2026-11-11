@@ -3666,10 +3666,10 @@ function boxFree(x,y,rx,ry){
         if(c[0]>=ax&&c[0]<ax+TS&&c[1]>=ay&&c[1]<ay+TS&&elev(c[0]/TS,c[1]/TS)<WL+.012)return false;
       }
     }
-    if(b>sm&&!plotTile(tx,ty)){
+    if(b>sm&&!plotTile(tx,ty)&&!(OBRT[i]>=b-sm)){
       if(b-sm>insetT[i])return false;
       const bx0=tx*TS+8,bx1=tx*TS+TS-8,by0=ty*TS+9,by1=ty*TS+TS-5;   // solo la parte centrale dell'oggetto
-      if(!(OBRT[i]>=b-sm)&&x+rx>bx0&&x-rx<bx1&&y+ry>by0&&y-ry<by1)return false;
+      if(x+rx>bx0&&x-rx<bx1&&y+ry>by0&&y-ry<by1)return false;
     }
     if(sm>0){   // solo il tronco: circa 16 px di larghezza, ai piedi dell'albero
       const bx0=tx*TS+14,bx1=tx*TS+30,by0=ty*TS+27,by1=ty*TS+43;
@@ -5804,7 +5804,8 @@ const CHANGELOG=[
     "Grafica di prova: capanna, banco da lavoro e ingresso della miniera (la grotta buia) ora sono disegni d'arte, con ombra proiettata e ombra di contatto sul terreno.",
     "Grafica di prova: fiori, funghi (anche quelli da raccogliere), felci, ciuffi d\'erba, erba secca, trifoglio, conchiglie, stelle marine, ricci, noci di cocco, legni e sassi ora sono disegni d\'arte.",
     "Collisioni: casse, forzieri, barili e corda bloccano tutto il corpo disegnato (non si attraversano più) e non c'è più il muro invisibile davanti.",
-        "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
+        "Editor mappa: nuovo tasto «Muri» che mostra in rosso dove il personaggio non può passare (muri invisibili compresi).",
+    "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
         "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
         "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
     "Grafica di prova: forzieri e bauli (chiusi e aperti, in ferro e in oro) e falò sono ora disegni d'arte. La fiamma del falò si muove, guizza e ogni tanto scoppietta lanciando faville.",
@@ -12924,7 +12925,7 @@ function edUI(){
   const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg,body.edit #c3,body.edit #c3ov,body.edit #c4{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edBar [hidden]{display:none!important}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
   document.head.appendChild(st);
   bar=document.createElement('div');bar.id='edBar';
-  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edAp">Anteprima costa</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edRs">Azzera</button>';
+  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edAp">Anteprima costa</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edWl">Muri</button><button class="btn" id="edRs">Azzera</button>';
   document.body.appendChild(bar);
   const sel=document.createElement('div');sel.id='edSel';document.body.appendChild(sel);
   const $$=id=>bar.querySelector('#'+id);
@@ -12936,6 +12937,7 @@ function edUI(){
   $$('edZm').onclick=()=>{cam.uz=clamp(cam.uz/1.25,edZmin(),2.2);camClamp()};
   $$('edZp').onclick=()=>{cam.uz=clamp(cam.uz*1.25,edZmin(),2.2);camClamp()};
   $$('edGr').onclick=()=>{ED.grid=!ED.grid};
+  $$('edWl').onclick=()=>{ED.walls=!ED.walls;$$('edWl').classList.toggle('gold',!!ED.walls)};
   let rs=0;$$('edRs').onclick=()=>{if(!rs){rs=1;$$('edRs').textContent='Sicuro? Tocca ancora';setTimeout(()=>{rs=0;$$('edRs').textContent='Azzera'},3000);return}try{if(ED.x)ED.x.reset();else localStorage.removeItem(EDKEY)}catch(e){}location.reload()};
 }
 function edBind(){
@@ -12980,11 +12982,25 @@ function edStop(){
   camClamp();saveGame();ED.brush=null;
   if(ED.dirty){edtPreview()}
 }
+function edWalls(g,z,vx0,vy0,vx1,vy1){
+  try{
+    if(window.__obrDirty){window.__obrDirty=0;obrBuild()}
+    const st=Math.max(5,Math.sqrt((vx1-vx0)*(vy1-vy0)/16000));
+    g.fillStyle='rgba(255,40,40,.38)';
+    for(let y=Math.floor(vy0/st)*st;y<vy1;y+=st)for(let x=Math.floor(vx0/st)*st;x<vx1;x+=st){
+      const tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(!inMap(tx,ty)||seaT[tIdx(tx,ty)]===1)continue;
+      if(!boxFree(x,y,9,5))g.fillRect(x-st/2,y-st/2,st,st);
+    }
+    g.strokeStyle='rgba(255,255,255,.7)';g.lineWidth=1.5/z;
+    for(const o of OBR)g.strokeRect(o.x0,o.y0,o.x1-o.x0,o.y1-o.y0);
+  }catch(_){}
+}
 function edDraw(){
   if(!ED.on||(!ED.x&&(inCave()||inHut())))return;
   const g=ctx,z=camZoom();
   g.setTransform(DPR*z,0,0,DPR*z,DPR*(VW/2-cam.x*z),DPR*(VH/2-cam.y*z));
   const vx0=cam.x-VW/2/z,vy0=cam.y-VH/2/z,vx1=cam.x+VW/2/z,vy1=cam.y+VH/2/z;
+  if(ED.walls&&!ED.x)edWalls(g,z,vx0,vy0,vx1,vy1);
   if(ED.x){edxDraw(g,z,vx0,vy0,vx1,vy1);return}
   if(ED.grid){g.strokeStyle='rgba(255,255,255,.14)';g.lineWidth=1/z;g.beginPath();for(let x=Math.floor(vx0/TS)*TS;x<vx1;x+=TS){g.moveTo(x,vy0);g.lineTo(x,vy1)}for(let y=Math.floor(vy0/TS)*TS;y<vy1;y+=TS){g.moveTo(vx0,y);g.lineTo(vx1,y)}g.stroke()}
   if(ED.grid){const all=EDT_BK.map(p=>[p,1]).concat(ED.ed.t.map(p=>[p,0]));const col={b:'255,220,120',g:'110,200,90',s:'60,140,255'};
