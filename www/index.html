@@ -2195,7 +2195,7 @@ function drawPortrait(cv,key){
   g.save();
   const bg=g.createRadialGradient(W*.4,H*.3,4,W/2,H/2,W*.75);bg.addColorStop(0,'#fff3c8');bg.addColorStop(1,'#d9a85a');
   g.fillStyle=bg;g.fillRect(0,0,W,H);
-  if(key==='biscotto'){g.translate(W*.46,H*.56);g.scale(W/32,W/32);drawParrot(g,0,0,{t:0,s:1.1,perch:1,hat:S&&S.phat})}
+  if(key==='biscotto'){const q=W/24.5;g.translate(W*.5-8*q,H*.5+10.6*q);g.scale(q,q);drawParrot(g,0,0,{t:0,s:1,perch:1,hat:S&&S.phat})}
   else if((typeof key==='string'?CH[key]:key).cap){const k=typeof key==='string'?CH[key]:key,sc=W/36;g.translate(W/2,H*.5+59*sc);g.scale(sc,sc);drawChar(g,0,0,{k,dir:'f',noShadow:1,t:0})}
   else{const k=typeof key==='string'?CH[key]:key;const sc=W/34,hy=-45*(k.tall||1);g.translate(W/2,H*.56-hy*sc);g.scale(sc,sc);drawChar(g,0,0,{k,dir:'f',noShadow:1,t:0})}
   g.restore();
@@ -4947,15 +4947,15 @@ function drawRaftSail(g,t){
 }
 function drawParrotEnt(g,t){
   const e=PAR;
-  if(e.perch)drawParrot(g,e.x,e.y-e.alt,{t,flip:e.flip,s:.82,perch:true,gy:e.alt,hat:S&&S.phat});
-  else drawParrot(g,e.x,e.y-e.alt,{t:t*(e.fl),flip:e.flip,s:.82,gy:e.alt,hat:S&&S.phat});
+  if(e.perch)drawParrot(g,e.x,e.y-e.alt,{t,flip:e.flip,s:.88,perch:true,gy:e.alt,hat:S&&S.phat});
+  else drawParrot(g,e.x,e.y-e.alt,{t:t*(e.fl),flip:e.flip,s:.88,gy:e.alt,hat:S&&S.phat});
 }
 function updateParrot(dt,t){
   const e=PAR;e.ph+=dt;
   if(!S||!S.flags.parrot){e.x=P.x-30;e.y=P.y;return}
   if(P.mode==='raft'&&WORLD!==3){const c_=Math.cos(P.hd),s_=Math.sin(P.hd),mx_=P.x+c_*13.3,my_=P.y+8+s_*13.3,k_=1-Math.exp(-dt*6);e.x+=(mx_-e.x)*k_;e.y+=(my_+6-e.y)*k_;e.alt+=(150-e.alt)*k_;e.perch=true;e.fl=0;e.flip=c_<0;return}
   e.perch=false;
-  let tx=P.x+(P.flip?30:-30),ty=P.y-6;
+  let tx=P.x+(P.flip?54:-54),ty=P.y-12;
   if(SC.e&&SC.t<7){tx=SC.e.x+Math.sin(SC.t*2)*26;ty=SC.e.y-8}
   const dx=tx-e.x,dy=ty-e.y,d=hyp(dx,dy);
   const k=1-Math.exp(-dt*(SC.e&&SC.t<7?2.6:d>200?3:5));e.x+=dx*k;e.y+=dy*k;
@@ -5829,6 +5829,7 @@ const CHANGELOG=[
     "Casse, forzieri e botti: il muro è sempre pieno, si gira attorno senza entrare; se un oggetto compare addosso, il personaggio viene spinto fuori piano piano.",
     "Barili e casse del relitto ora hanno il muro sulla sagoma (prima ci si entrava); muro più aderente, si può sfiorare l'oggetto.",
     "Pappagallo Biscotto ridisegnato ad acquerello, con tutti i cappellini; 8 cappellini nuovi da sbloccare (cocco, vichingo, mago, ghirlanda, Natale, festa, occhiali, elica).",
+    "Biscotto segue un po' più lontano ed è leggermente più grande; il ritratto nei dialoghi è centrato sul volto.",
     "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
         "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
         "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
