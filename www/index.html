@@ -5796,7 +5796,8 @@ const CHANGELOG=[
     "Grafica di prova: alberi, palme, rocce, cespugli e ceppi ora poggiano bene sul terreno, con ombra di contatto alla base e ombra proiettata più morbida.",
     "Grafica di prova: capanna, banco da lavoro e ingresso della miniera (la grotta buia) ora sono disegni d'arte, con ombra proiettata e ombra di contatto sul terreno.",
     "Grafica di prova: fiori, funghi (anche quelli da raccogliere), felci, ciuffi d\'erba, erba secca, trifoglio, conchiglie, stelle marine, ricci, noci di cocco, legni e sassi ora sono disegni d\'arte.",
-    "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
+    "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
+        "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
         "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
     "Grafica di prova: forzieri e bauli (chiusi e aperti, in ferro e in oro) e falò sono ora disegni d'arte. La fiamma del falò si muove, guizza e ogni tanto scoppietta lanciando faville.",
     "Funghi di bosco: ogni giorno ne spuntano alcuni nel bosco. Crudi non si mangiano, ma con la legna, il cocco o il pesce diventano tre nuove ricette.",
@@ -12067,7 +12068,7 @@ function urchin(x,y,s){
   g.restore();
 }
 function spiralShell(x,y,s){
-  if(DA.sh('spiral',x,y,s,118))return;
+  if(DA.sh('spiral',x,y,s,78))return;
   g.save();g.translate(x,y);g.rotate(-.5);g.scale(s,s);shadow(2,22,40,8,.22);
   const W=[[34,0,24],[8,0,20],[-12,0,15],[-28,0,10],[-38,0,6]];
   for(const[a,b,r]of W)path(()=>{g.ellipse(a,b,r*1.15,r,0,0,7)},'#f6c9b0');
@@ -12077,7 +12078,7 @@ function spiralShell(x,y,s){
   g.restore();
 }
 function scallop(x,y,s){
-  if(DA.sh('scallop',x,y,s,116))return;
+  if(DA.sh('scallop',x,y,s,76))return;
   g.save();g.translate(x,y);g.scale(s,s);shadow(2,10,44,9,.22);
   path(()=>{g.moveTo(0,18);for(let i=0;i<=7;i++){const a=-2.55+i*(1.97/7),a2=-2.55+(i+.5)*(1.97/7);g.quadraticCurveTo(Math.cos(a2)*58,Math.sin(a2)*58+18,Math.cos(a+1.97/7)*46,Math.sin(a+1.97/7)*46+18)}g.closePath()},'#f2a68a');
   g.strokeStyle='rgba(150,70,50,.55)';g.lineWidth=2.4;for(let i=0;i<=7;i++){const a=-2.55+i*(1.97/7);g.beginPath();g.moveTo(0,18);g.lineTo(Math.cos(a)*44,Math.sin(a)*44+18);g.stroke()}
@@ -12085,7 +12086,7 @@ function scallop(x,y,s){
   g.restore();
 }
 function coneShell(x,y,s,rot){
-  if(DA.sh('cone',x,y,s,88,rot))return;
+  if(DA.sh('cone',x,y,s,64,rot))return;
   g.save();g.translate(x,y);g.rotate(rot||0);g.scale(s,s);shadow(2,18,36,7,.22);
   path(()=>{g.moveTo(-40,0);g.lineTo(18,-20);g.quadraticCurveTo(38,0,18,20);g.closePath()},'#ecc890');
   g.save();g.beginPath();g.moveTo(-40,0);g.lineTo(18,-20);g.quadraticCurveTo(38,0,18,20);g.closePath();g.clip();
