@@ -875,10 +875,26 @@ function bakeDecor(g){
 const SP={};
 function sp(w,h,fn,ax,ay){const[c,x]=mk(w,h);fn(x,w,h);return{c,w,h,ax:ax==null?w/2:ax,ay:ay==null?h-4:ay}}
 /* sprite d'arte appoggiati al terreno: ombra proiettata morbida + ombra di contatto alla base */
+/* sprite d'arte appoggiati al terreno: ombra di contatto sotto l'intera base (tutti i lati), ombra proiettata morbida e alone */
+function artBlur(src,r,rad,al){const c=document.createElement('canvas');c.width=src.width;c.height=src.height;const x=c.getContext('2d');
+  x.globalAlpha=al*.5;x.drawImage(src,0,0);x.globalAlpha=al;const n=10;
+  for(let i=0;i<n;i++){const t=i/n*6.283;x.drawImage(src,Math.cos(t)*rad*r,Math.sin(t)*rad*r)}
+  return c}
+function artPrep(s){
+  const r=s.c.width/s.w,band=Math.min(Math.max(s.h*.2,6),18),P=4,fh=band*.8+P*2;
+  const f=document.createElement('canvas');f.width=Math.ceil((s.w+P*2)*r);f.height=Math.ceil(fh*r);const x=f.getContext('2d');
+  x.drawImage(s.c,0,Math.max(0,(s.ay-band)*r),s.c.width,band*r,P*r,P*r,s.w*r,band*.8*r);
+  x.globalCompositeOperation='source-in';x.fillStyle='#08120a';x.fillRect(0,0,f.width,f.height);
+  s.fp=artBlur(f,r,3,.17);s.fpB=band*.8;s.fpP=P;
+  if(s.sh)s.shb=artBlur(s.sh,r,1.3,.2);
+}
 function artGround(g,s,k,cw){k=k||1;const sk=(s.sink||3)*k;
-  if(s.sh){g.save();g.translate(0,sk-1);g.globalAlpha=.27;g.transform(k,0,-.45*k*(s.shk||1),-.27*k*(s.shk||1),0,0);g.drawImage(s.sh,-s.ax,-s.ay,s.w,s.h);g.restore()}
-  const CT=artGround.CT||(artGround.CT=(()=>{const c=document.createElement('canvas');c.width=128;c.height=40;const x=c.getContext('2d');x.translate(64,20);x.scale(1,.31);const q=x.createRadialGradient(0,0,0,0,0,64);q.addColorStop(0,'rgba(12,9,4,.66)');q.addColorStop(.5,'rgba(12,9,4,.44)');q.addColorStop(1,'rgba(12,9,4,0)');x.fillStyle=q;x.beginPath();x.arc(0,0,64,0,7);x.fill();return c})());
-  const w=cw*2.5*k;g.drawImage(CT,-w/2,sk*.5-w*.156-1,w,w*.3125)}
+  if(s.sh&&!s.fp&&s.c&&s.c.width)artPrep(s);
+  const CT=artGround.CT||(artGround.CT=(()=>{const c=document.createElement('canvas');c.width=128;c.height=40;const x=c.getContext('2d');x.translate(64,20);x.scale(1,.31);const q=x.createRadialGradient(0,0,0,0,0,64);q.addColorStop(0,'rgba(12,9,4,.62)');q.addColorStop(.55,'rgba(12,9,4,.36)');q.addColorStop(1,'rgba(12,9,4,0)');x.fillStyle=q;x.beginPath();x.arc(0,0,64,0,7);x.fill();return c})());
+  const w=cw*2.7*k;g.drawImage(CT,-w/2,sk*.5-w*.156-1,w,w*.3125);
+  if(s.sh){const q=s.shb||s.sh;g.save();g.translate(0,sk-1);g.globalAlpha=s.shb?.34:.27;g.transform(k,0,-.45*k*(s.shk||1),-.27*k*(s.shk||1),0,0);g.drawImage(q,-s.ax,-s.ay,s.w,s.h);g.restore()}
+  if(s.fp){const P=s.fpP;g.save();g.globalAlpha=.92;g.drawImage(s.fp,(-s.ax-P)*k,(-(P+s.fpB)+1)*k+sk*.35,(s.w+P*2)*k,(s.fpB+P*2)*k);g.restore()}
+}
 function drawSp(g,s,x,y,k,al){k=k||1;if(al!=null)g.globalAlpha=al;g.drawImage(s.c,x-s.ax*k,y-s.ay*k,s.w*k,s.h*k);if(al!=null)g.globalAlpha=1}
 function ball(g,cx,cy,r,c0,c1,c2,stroke){
   const q=g.createRadialGradient(cx-r*.35,cy-r*.42,r*.08,cx,cy,r);q.addColorStop(0,c0);q.addColorStop(.55,c1);q.addColorStop(1,c2);
@@ -5780,7 +5796,8 @@ const CHANGELOG=[
     "Grafica di prova: alberi, palme, rocce, cespugli e ceppi ora poggiano bene sul terreno, con ombra di contatto alla base e ombra proiettata più morbida.",
     "Grafica di prova: capanna, banco da lavoro e ingresso della miniera (la grotta buia) ora sono disegni d'arte, con ombra proiettata e ombra di contatto sul terreno.",
     "Grafica di prova: fiori, funghi (anche quelli da raccogliere), felci, ciuffi d\'erba, erba secca, trifoglio, conchiglie, stelle marine, ricci, noci di cocco, legni e sassi ora sono disegni d\'arte.",
-    "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
+    "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
+        "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
     "Grafica di prova: forzieri e bauli (chiusi e aperti, in ferro e in oro) e falò sono ora disegni d'arte. La fiamma del falò si muove, guizza e ogni tanto scoppietta lanciando faville.",
     "Funghi di bosco: ogni giorno ne spuntano alcuni nel bosco. Crudi non si mangiano, ma con la legna, il cocco o il pesce diventano tre nuove ricette.",
     "Le scritte di missione completata ora arrivano una alla volta, più lente. Il pappagallo spiega come usare la mappa del tesoro e, in zattera, si posa in cima al palo. I gabbiani ora volano sull'isola e non seguono più lo schermo.",
