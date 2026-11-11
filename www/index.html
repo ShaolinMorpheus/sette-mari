@@ -12965,7 +12965,7 @@ function edUI(){
   const st=document.createElement('style');st.textContent='body.edit #hud,body.edit #joyGhost,body.edit #joy,body.edit #tank,body.edit #ctr,body.edit #act,body.edit #bcol,body.edit #hintb,body.edit #tut,body.edit #obj,body.edit #qbanner,body.edit #mini,body.edit #bJ,body.edit #bM,body.edit #chal,body.edit #res,body.edit #tl,body.edit #clock,body.edit #dlg,body.edit #c3,body.edit #c3ov,body.edit #c4{display:none!important}#edBar,#edSel{position:fixed;z-index:60;display:flex;gap:6px;align-items:center;flex-wrap:wrap;font:800 13px var(--f-b,Arial)}#edBar{top:8px;left:8px;right:8px}#edBar [hidden]{display:none!important}#edSel{left:8px;right:8px;bottom:10px;justify-content:center;background:rgba(40,24,10,.88);border:2px solid #6a4426;border-radius:14px;padding:7px 10px;color:#ffe9b0}#edSel small{opacity:.7}#edBar .btn,#edSel .btn{padding:7px 11px;font-size:13px}';
   document.head.appendChild(st);
   bar=document.createElement('div');bar.id='edBar';
-  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edAp">Anteprima costa</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edWl">Muri</button><button class="btn" id="edWa" hidden>Disegna muro</button><button class="btn" id="edWd" hidden>Cancella muro</button><button class="btn" id="edWs" hidden>Pennello M</button><button class="btn" id="edRs">Azzera</button>';
+  bar.innerHTML='<button class="btn gold" id="edX">Esci</button><button class="btn" id="edSv">Salva</button><button class="btn" id="edCd">Codice</button><button class="btn" id="edUn">↶ Annulla</button><button class="btn" id="edTr">Terreno</button><button class="btn" id="edAp">Anteprima costa</button><button class="btn" id="edNm">Nomi</button><button class="btn gold" id="edHand" hidden>Muovi</button><button class="btn" id="edZm">−</button><button class="btn" id="edZp">+</button><button class="btn" id="edGr">Griglia</button><button class="btn" id="edWl">Muri</button><button class="btn" id="edWa" hidden>Disegna muro</button><button class="btn" id="edWd" hidden>Cancella muro</button><button class="btn" id="edWs" hidden>Quadrato 44 px</button><button class="btn" id="edRs">Azzera</button>';
   document.body.appendChild(bar);
   const sel=document.createElement('div');sel.id='edSel';document.body.appendChild(sel);
   const $$=id=>bar.querySelector('#'+id);
@@ -12980,7 +12980,7 @@ function edUI(){
   $$('edWl').onclick=()=>{if(ED.x){UI.toast('Qui non è disponibile.',1800);return}ED.walls=!ED.walls;if(!ED.walls)ED.wm=null;edWB()};
   $$('edWa').onclick=()=>{ED.wm=ED.wm==='add'?null:'add';ED.brush=null;edBar2();ED.sel=null;edLabel();edWB();if(ED.wm)UI.toast('Disegna: trascina il dito dove vuoi un muro.',2400)};
   $$('edWd').onclick=()=>{ED.wm=ED.wm==='del'?null:'del';ED.brush=null;edBar2();ED.sel=null;edLabel();edWB();if(ED.wm)UI.toast('Cancella: trascina il dito sul rosso per togliere il muro.',2600)};
-  $$('edWs').onclick=()=>{ED.ws=((ED.ws==null?1:ED.ws)+1)%3;edWB()};
+  $$('edWs').onclick=()=>{ED.ws=((ED.ws==null?2:ED.ws)+1)%4;edWB()};
   let rs=0;$$('edRs').onclick=()=>{if(!rs){rs=1;$$('edRs').textContent='Sicuro? Tocca ancora';setTimeout(()=>{rs=0;$$('edRs').textContent='Azzera'},3000);return}try{if(ED.x)ED.x.reset();else localStorage.removeItem(EDKEY)}catch(e){}location.reload()};
 }
 function edBind(){
@@ -13028,11 +13028,12 @@ function edStop(){
   camClamp();saveGame();ED.brush=null;
   if(ED.dirty){edtPreview()}
 }
-function edWB(){const b=document.getElementById('edBar');if(!b)return;const q=i=>b.querySelector('#'+i);q('edWl').classList.toggle('gold',!!ED.walls);['edWa','edWd','edWs'].forEach(i=>q(i).hidden=!ED.walls);q('edWa').classList.toggle('gold',ED.wm==='add');q('edWd').classList.toggle('gold',ED.wm==='del');q('edWs').textContent='Pennello '+['S','M','L'][ED.ws==null?1:ED.ws]}
+function edWB(){const b=document.getElementById('edBar');if(!b)return;const q=i=>b.querySelector('#'+i);q('edWl').classList.toggle('gold',!!ED.walls);['edWa','edWd','edWs'].forEach(i=>q(i).hidden=!ED.walls);q('edWa').classList.toggle('gold',ED.wm==='add');q('edWd').classList.toggle('gold',ED.wm==='del');q('edWs').textContent='Quadrato '+(edWn()*WLC)+' px'}
+const edWn=()=>[1,2,4,8][ED.ws==null?2:ED.ws];
 function edWPaint(wx,wy,v,rec){
-  const r=[1,2,4][ED.ws==null?1:ED.ws],cx0=Math.floor(wx/WLC),cy0=Math.floor(wy/WLC);if(!ED._lm)ED._lm=new Map();
-  for(let j=-r;j<=r;j++)for(let i=-r;i<=r;i++){
-    if(i*i+j*j>r*r+r*.5)continue;const cx=cx0+i,cy=cy0+j;if(cx<0||cy<0)continue;const k=cy*20000+cx;
+  const n=edWn(),cx0=Math.floor(wx/WLC/n)*n,cy0=Math.floor(wy/WLC/n)*n;if(!ED._lm)ED._lm=new Map();
+  for(let j=0;j<n;j++)for(let i=0;i<n;i++){
+    const cx=cx0+i,cy=cy0+j;if(cx<0||cy<0)continue;const k=cy*20000+cx;
     if(rec.has(k))continue;let c=ED._lm.get(k);rec.set(k,[WOV.get(k),c?c[2]:undefined]);
     WOV.set(k,v);if(c)c[2]=v;else{c=[cx,cy,v];ED._lm.set(k,c);ED.ed.wl.push(c)}
   }
@@ -13049,6 +13050,7 @@ function edWalls(g,z,vx0,vy0,vx1,vy1){
   try{
     if(window.__obrDirty){window.__obrDirty=0;obrBuild()}
     const st=Math.max(5,Math.sqrt((vx1-vx0)*(vy1-vy0)/16000));
+    if(ED.wm){const sq=edWn()*WLC;g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=1/z;g.beginPath();for(let x=Math.floor(vx0/sq)*sq;x<vx1;x+=sq){g.moveTo(x,vy0);g.lineTo(x,vy1)}for(let y=Math.floor(vy0/sq)*sq;y<vy1;y+=sq){g.moveTo(vx0,y);g.lineTo(vx1,y)}g.stroke()}
     g.fillStyle='rgba(255,40,40,.38)';
     for(let y=Math.floor(vy0/st)*st;y<vy1;y+=st)for(let x=Math.floor(vx0/st)*st;x<vx1;x+=st){
       const tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(!inMap(tx,ty)||seaT[tIdx(tx,ty)]===1)continue;

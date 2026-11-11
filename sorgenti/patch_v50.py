@@ -19,6 +19,7 @@ rep("function edDraw(){\n  if(!ED.on||(!ED.x&&(inCave()||inHut())))return;\n  co
   try{
     if(window.__obrDirty){window.__obrDirty=0;obrBuild()}
     const st=Math.max(5,Math.sqrt((vx1-vx0)*(vy1-vy0)/16000));
+    if(ED.wm){const sq=edWn()*WLC;g.strokeStyle='rgba(255,255,255,.5)';g.lineWidth=1/z;g.beginPath();for(let x=Math.floor(vx0/sq)*sq;x<vx1;x+=sq){g.moveTo(x,vy0);g.lineTo(x,vy1)}for(let y=Math.floor(vy0/sq)*sq;y<vy1;y+=sq){g.moveTo(vx0,y);g.lineTo(vx1,y)}g.stroke()}
     g.fillStyle='rgba(255,40,40,.38)';
     for(let y=Math.floor(vy0/st)*st;y<vy1;y+=st)for(let x=Math.floor(vx0/st)*st;x<vx1;x+=st){
       const tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(!inMap(tx,ty)||seaT[tIdx(tx,ty)]===1)continue;
@@ -43,17 +44,18 @@ rep("t:(o&&o.t)||[]});","t:(o&&o.t)||[],wl:(o&&o.wl)||[]});")
 rep("  if(!o)return;o=edNorm(o);\n","  if(!o)return;o=edNorm(o);\n  for(const c of o.wl)WOV.set(c[1]*20000+c[0],c[2]);\n")
 rep("edApply(ED.ed)}catch(e){console.warn('ED local',e)}","edApply(ED.ed);ED._lm=new Map(ED.ed.wl.map(c=>[c[1]*20000+c[0],c]))}catch(e){console.warn('ED local',e)}")
 rep("t:ED.ed.t};const n=edNamesLocal();","t:ED.ed.t};if(ED.ed.wl&&ED.ed.wl.length)o.wl=ED.ed.wl;const n=edNamesLocal();")
-rep('<button class="btn" id="edWl">Muri</button>','<button class="btn" id="edWl">Muri</button><button class="btn" id="edWa" hidden>Disegna muro</button><button class="btn" id="edWd" hidden>Cancella muro</button><button class="btn" id="edWs" hidden>Pennello M</button>')
+rep('<button class="btn" id="edWl">Muri</button>','<button class="btn" id="edWl">Muri</button><button class="btn" id="edWa" hidden>Disegna muro</button><button class="btn" id="edWd" hidden>Cancella muro</button><button class="btn" id="edWs" hidden>Quadrato 44 px</button>')
 rep("$$('edWl').onclick=()=>{ED.walls=!ED.walls;$$('edWl').classList.toggle('gold',!!ED.walls)};",
 """$$('edWl').onclick=()=>{if(ED.x){UI.toast('Qui non è disponibile.',1800);return}ED.walls=!ED.walls;if(!ED.walls)ED.wm=null;edWB()};
   $$('edWa').onclick=()=>{ED.wm=ED.wm==='add'?null:'add';ED.brush=null;edBar2();ED.sel=null;edLabel();edWB();if(ED.wm)UI.toast('Disegna: trascina il dito dove vuoi un muro.',2400)};
   $$('edWd').onclick=()=>{ED.wm=ED.wm==='del'?null:'del';ED.brush=null;edBar2();ED.sel=null;edLabel();edWB();if(ED.wm)UI.toast('Cancella: trascina il dito sul rosso per togliere il muro.',2600)};
-  $$('edWs').onclick=()=>{ED.ws=((ED.ws==null?1:ED.ws)+1)%3;edWB()};""")
-rep("function edWalls(g,z,vx0,vy0,vx1,vy1){","""function edWB(){const b=document.getElementById('edBar');if(!b)return;const q=i=>b.querySelector('#'+i);q('edWl').classList.toggle('gold',!!ED.walls);['edWa','edWd','edWs'].forEach(i=>q(i).hidden=!ED.walls);q('edWa').classList.toggle('gold',ED.wm==='add');q('edWd').classList.toggle('gold',ED.wm==='del');q('edWs').textContent='Pennello '+['S','M','L'][ED.ws==null?1:ED.ws]}
+  $$('edWs').onclick=()=>{ED.ws=((ED.ws==null?2:ED.ws)+1)%4;edWB()};""")
+rep("function edWalls(g,z,vx0,vy0,vx1,vy1){","""function edWB(){const b=document.getElementById('edBar');if(!b)return;const q=i=>b.querySelector('#'+i);q('edWl').classList.toggle('gold',!!ED.walls);['edWa','edWd','edWs'].forEach(i=>q(i).hidden=!ED.walls);q('edWa').classList.toggle('gold',ED.wm==='add');q('edWd').classList.toggle('gold',ED.wm==='del');q('edWs').textContent='Quadrato '+(edWn()*WLC)+' px'}
+const edWn=()=>[1,2,4,8][ED.ws==null?2:ED.ws];
 function edWPaint(wx,wy,v,rec){
-  const r=[1,2,4][ED.ws==null?1:ED.ws],cx0=Math.floor(wx/WLC),cy0=Math.floor(wy/WLC);if(!ED._lm)ED._lm=new Map();
-  for(let j=-r;j<=r;j++)for(let i=-r;i<=r;i++){
-    if(i*i+j*j>r*r+r*.5)continue;const cx=cx0+i,cy=cy0+j;if(cx<0||cy<0)continue;const k=cy*20000+cx;
+  const n=edWn(),cx0=Math.floor(wx/WLC/n)*n,cy0=Math.floor(wy/WLC/n)*n;if(!ED._lm)ED._lm=new Map();
+  for(let j=0;j<n;j++)for(let i=0;i<n;i++){
+    const cx=cx0+i,cy=cy0+j;if(cx<0||cy<0)continue;const k=cy*20000+cx;
     if(rec.has(k))continue;let c=ED._lm.get(k);rec.set(k,[WOV.get(k),c?c[2]:undefined]);
     WOV.set(k,v);if(c)c[2]=v;else{c=[cx,cy,v];ED._lm.set(k,c);ED.ed.wl.push(c)}
   }
