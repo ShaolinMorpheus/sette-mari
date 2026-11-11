@@ -3654,7 +3654,7 @@ function plotHit(x,y,rx,ry){if(!GFXN)return false;for(const e of plotList()){if(
 function boxFree(x,y,rx,ry){
   if(window.__obrDirty){window.__obrDirty=0;try{obrBuild()}catch(_){}}
   if(typeof OBR!=='undefined'&&OBR.length)for(const o of OBR){
-    if(x+rx>o.x0&&x-rx<o.x1&&y+ry>o.y0&&y-ry<o.y1){if(!o.rs)return false;for(const r of o.rs)if(x+rx>r[0]&&x-rx<r[1]&&y+ry>r[2]&&y-ry<r[3])return false}}
+    {const qx=rx*.45,qy=ry*.6;if(x+qx>o.x0&&x-qx<o.x1&&y+qy>o.y0&&y-qy<o.y1){if(!o.rs)return false;for(const r of o.rs)if(x+qx>r[0]&&x-qx<r[1]&&y+qy>r[2]&&y-qy<r[3])return false}}}
   if(WOV.size){const w=WOV.get(((y/WLC)|0)*20000+((x/WLC)|0));if(w===1)return false;if(w===0){const tx=Math.floor(x/TS),ty=Math.floor(y/TS);if(inMap(tx,ty)&&seaT[tIdx(tx,ty)]!==1&&!mesaT[tIdx(tx,ty)])return true}}
   if(plotHit(x,y,rx,ry))return false;
   if(window.__leafHit&&window.__leafHit(x,y))return false;
@@ -5817,6 +5817,7 @@ const CHANGELOG=[
     "Baule di legno (cassa) più piccolo; muri invisibili di casse, forzieri e botti ora seguono esattamente la forma disegnata, anche da aperti.",
     "Muri di casse e botti: restano sulla forma anche vicino all'oggetto e non si può più passare dai buchi cancellati; niente più salti strani.",
     "Casse, forzieri e botti: il muro è sempre pieno, si gira attorno senza entrare; se un oggetto compare addosso, il personaggio viene spinto fuori piano piano.",
+    "Barili e casse del relitto ora hanno il muro sulla sagoma (prima ci si entrava); muro più aderente, si può sfiorare l'oggetto.",
     "Conchiglie più piccole (a spirale, a ventaglio e a cono) in «Grafica di prova».",
         "Ombre più realistiche: ogni oggetto d'arte ha ora un'ombra scura sotto tutta la base (su ogni lato) e un'ombra proiettata più morbida, così appoggia bene a terra e non sembra volare.",
         "Grafica di prova: casse (chiuse e aperte), barili e matassa di corda sono ora disegni d'arte.",
@@ -11506,7 +11507,7 @@ function sprMask(s){
 function obrBuild(){
   OBR.length=0;for(const k in OBRT)delete OBRT[k];
   for(const e of E){
-    if(!e.bk||e.hid)continue;
+    if(!(e.bk||e.blocked)||e.hid)continue;
     const s=sprOf(e);if(!s)continue;
     const m=s.art?sprMask(s):null;let o;
     if(m){
