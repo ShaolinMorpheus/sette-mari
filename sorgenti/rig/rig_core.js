@@ -58,9 +58,10 @@ function drawRig(g,x,y,o){
       const hx=(k?1:-1)*(back?-1:1)*(back?215:232),f=hx>0?1:-1;
       let l1,l2;
       if(tool&&k){l1=-a[0];l2=-a[1]}
-      else if(mv){l1=(k?s2:s1)*.24*f;l2=0}
+      else if(mv){l1=-.05;l2=.05}
       else{l1=-.07;l2=.1}
-      g.save();g.translate(hx,hipY-bob-500);if(f<0)g.scale(-1,1);
+      const sw3=(mv&&!tool)?(k?s2:s1):0;
+      g.save();g.translate(hx,hipY-bob-500+sw3*34);if(f<0)g.scale(-1,1);g.scale(1,1-sw3*.1);
       rgArm(g,P+'-braccio-sup-dx',P+'-avambraccio-dx',l1,l2,k?hook(rgH(P+'-avambraccio-dx')-100):null);g.restore()};
     g.save();g.translate(0,-bob);
     if(back){arm(0);arm(1)}
