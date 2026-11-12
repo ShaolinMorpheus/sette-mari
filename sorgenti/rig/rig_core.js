@@ -6,13 +6,15 @@ function rgW(n){return RIG.dim[n][0]}function rgH(n){return RIG.dim[n][1]}
 function rgFace(t,o){if(o&&o.emote)return o.emote;var c=(t*1000)%3400;return c>3250?'r4-occhi-chiusi':'r4-neutra'}
 /* braccio a due pezzi: spalla a1, gomito a2 (rispetto al braccio); hook = disegno attrezzo alla mano */
 function rgArm(g,up,lo,a1,a2,hook){
-  g.save();g.rotate(a1);rgD(g,up,rgW(up)/2,40);
-  g.translate(0,rgH(up)-70);g.rotate(a2);
+  g.save();g.rotate(a1);
+  g.save();g.translate(0,rgH(up)-120);g.rotate(a2);
   if(hook)hook(g);
-  rgD(g,lo,rgW(lo)/2,40);g.restore()}
+  rgD(g,lo,rgW(lo)/2,90);g.restore();
+  rgD(g,up,rgW(up)/2,40);g.restore()}
 function rgLeg(g,th,sh,a1,a2,shx){
-  g.save();g.rotate(a1);rgD(g,th,rgW(th)/2,40);
-  g.translate(0,rgH(th)-70);g.rotate(a2);rgD(g,sh,shx==null?rgW(sh)/2:shx,40);g.restore()}
+  g.save();g.rotate(a1);
+  g.save();g.translate(0,rgH(th)-110);g.rotate(a2);rgD(g,sh,shx==null?rgW(sh)/2:shx,90);g.restore();
+  rgD(g,th,rgW(th)/2,40);g.restore()}
 function drawRig(g,x,y,o){
   const K=RIG.K,t=o.t||0,back=o.dir==='b',side=!!o.side&&!back,mv=o.moving?1:0,ph=o.walk||0,sw=o.swing,tool=o.tool;
   const s1=Math.sin(ph),s2=-s1;
@@ -39,7 +41,7 @@ function drawRig(g,x,y,o){
     g.save();g.translate(0,hipY-60);rgD(g,'r3-bacino',rgW('r3-bacino')/2,rgH('r3-bacino')*.35);g.restore();
     g.save();g.translate(0,hipY-300);rgD(g,'r3-busto',rgW('r3-busto')/2,rgH('r3-busto')/2);g.restore();
     g.restore();
-    g.save();g.translate(25,hipY-bob-640);rgD(g,'r3-testa',rgW('r3-testa')*.45,rgH('r3-testa')*.85);g.restore();
+    g.save();g.translate(22,hipY-bob-520);rgD(g,'r3-testa',rgW('r3-testa')*.45,rgH('r3-testa')*.85);g.restore();
     arm(1);
   }else{
     const P=back?'r2':'r1';
@@ -49,20 +51,24 @@ function drawRig(g,x,y,o){
     // sollevamento del piede nel passo
     const legW=(k)=>{const L=k?'dx':'sx',s=k?s2:s1;const lift=mv?Math.max(0,s)*70:0;
       g.save();g.translate((k?1:-1)*78*(back?-1:1),hipY);
-      rgD(g,P+'-coscia-'+L,rgW(P+'-coscia-'+L)/2,40);
-      g.translate(0,rgH(P+'-coscia-'+L)-70-lift);rgD(g,P+'-stinco-'+L,rgW(P+'-stinco-'+L)/2,40);g.restore()};
+      g.save();g.translate(0,rgH(P+'-coscia-'+L)-110-lift);rgD(g,P+'-stinco-'+L,rgW(P+'-stinco-'+L)/2,90);g.restore();
+      rgD(g,P+'-coscia-'+L,rgW(P+'-coscia-'+L)/2,40);g.restore()};
     legW(0);legW(1);
-    const arm=(k)=>{const a=armA(k);const L=k?'dx':'sx';
-      const hx=(k?1:-1)*(back?-1:1)*215;
-      g.save();g.translate(hx,hipY-bob-500);
-      const mir=(k?-1:1)*(back?-1:1),sw2=mv&&!tool;rgArm(g,P+'-braccio-sup-'+L,P+'-avambraccio-'+L,sw2?a[0]*(back?-1:1):a[0]*mir,a[1]*mir,k?hook(rgH(P+'-avambraccio-'+L)-100):null);g.restore()};
+    const arm=(k)=>{const a=armA(k);
+      const hx=(k?1:-1)*(back?-1:1)*(back?215:232),f=hx>0?1:-1;
+      let l1,l2;
+      if(tool&&k){l1=-a[0];l2=-a[1]}
+      else if(mv){l1=(k?s2:s1)*.24*f;l2=0}
+      else{l1=-.07;l2=.1}
+      g.save();g.translate(hx,hipY-bob-500);if(f<0)g.scale(-1,1);
+      rgArm(g,P+'-braccio-sup-dx',P+'-avambraccio-dx',l1,l2,k?hook(rgH(P+'-avambraccio-dx')-100):null);g.restore()};
     g.save();g.translate(0,-bob);
-    if(back){arm(0);arm(1)}else arm(0);
+    if(back){arm(0);arm(1)}
     g.save();g.translate(0,hipY-40);rgD(g,P+'-bacino',rgW(P+'-bacino')/2,rgH(P+'-bacino')*.5);g.restore();
     g.save();g.translate(0,hipY-300);rgD(g,P+'-busto',rgW(P+'-busto')/2,rgH(P+'-busto')/2);g.restore();
     const hn=back?'r2-testa':rgFace(t,o);
     g.save();g.translate(0,hipY-560);rgD(g,hn,rgW(hn)/2,rgH(hn)*.88);g.restore();
-    if(!back)arm(1);
+    if(!back){arm(0);arm(1)}
     g.restore();
   }
   g.restore();
