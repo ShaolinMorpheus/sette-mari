@@ -8,8 +8,8 @@ def rep(old,new,cnt=1):
     if n!=cnt:
         print('PATCH65 FAIL (%d, attesi %d):'%(n,cnt),old[:100]);sys.exit(1)
     src=src.replace(old,new)
-art=open('/home/claude/work/r3d/rig_art6.json').read()
-core=open('/home/claude/work/r3d/rig_core6.js').read()
+art=open('/home/claude/work/r3d/rig_art7.json').read()
+core=open('/home/claude/work/r3d/rig_core7.js').read()
 js="var RIGT=false;try{RIGT=localStorage.getItem('sm_rigt')==='1'}catch(e){}\nvar RIGART="+art+";\n"+core+"\n"
 rep("/* ---- 12d_kb.js ---- */",js+"/* ---- 12d_kb.js ---- */")
 rep("  drawChar(g,P.x,P.y,{k:hs,dir:P.cl&&P.cl.ph===2?'b':P.dir,","  (RIGT&&RIG.ok?drawRig:drawChar)(g,P.x,P.y,{k:hs,dir:P.cl&&P.cl.ph===2?'b':P.dir,")
