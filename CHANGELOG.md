@@ -1,0 +1,215 @@
+# Sette Mari — Registro delle modifiche
+
+## 13 nov 2026 – Personaggio 3D di prova
+- «Grafica personaggio prova»: modello 3D (fronte, spalle, profilo), camminata, colpi di accetta/piccone, nuova testa disegnata (espressioni normale, sorriso, urlo), spalle più basse, personaggio più grande.
+- Cappelli ridisegnati (11) e agganciati alla testa nelle tre viste; 8 cappelli nuovi (bandana nera e a righe, tricorni di cuoio/logoro/blu/con piuma bianca, cappello con la piuma, morione scuro) da sbloccare salendo di livello (Lv 4–12); icone del guardaroba dai nuovi disegni.
+
+## 0.8 – 4 nov 2026
+- Capitolo 3 «Il Convoglio» e interno della nave spagnola (3 ponti) integrati in `index.html` (si apre da «Capitolo 3 (bozza)»); traduzioni EN/DE/ES/FR.
+- Il galeone si abborda; suoni di abbordaggio e riparazione; suggerimento sul tasto «Abborda!»; salvataggio dopo il salvataggio di Pip e Dodo.
+- Missione principale sempre fissa nel Diario; secondaria seguita come seconda riga.
+- Nuovo verso del pappagallo (tre varianti); banco da lavoro ridisegnato; lanterne più lontane dal cartello; priorità interazione bacche/liane sull'albero.
+- Mare: scie di spuma, ombre, riflessi, fumo dalle navi in avaria.
+
+## v0.6.1 · 2 nov 2026 — Storia
+- Reliquie del Cormorano: ogni oggetto ha un nome, un ruolo e un destino (vivo, morto, disperso).
+- Capitolo 2: è Tito a parlarti della nave; alla cala scopri che è la Sirena di Giacomo Marrone (J.).
+- Scena della sagoma sulla duna all'arrivo; fiducia di Tito: 3 invece di 5.
+- Biscotto indica le casse dei Fuggiaschi ancora chiuse; finale «Tutti a bordo» più lungo.
+- Pad di movimento fisso; muro invisibile della zattera rimosso.
+
+## v0.6 · 30 ott 2026 — Capitolo 2: La Baia dei Fuggiaschi
+- Copia di sicurezza: «Salva file» ora apre il menu di condivisione di Android (Drive, File, Telegram, WhatsApp…) e salva davvero il file; su iPhone usa il menu Condividi.
+- Minimappa: falò, banco da lavoro e capanna, una volta costruiti, hanno ciascuno il proprio simbolo.
+- Joystick (cerchio tratteggiato) spostato più al centro e più in alto.
+- Spiaggia del relitto: sistemati i muri invisibili. Il barile vicino al relitto bloccava la zona sotto di sé e lo scafo bloccava mezza tile oltre le estremità.
+- Minimappa: i quadratini gialli delle piazzole non si vedono più prima della costruzione.
+- Falò: il suggerimento ora dice dove trovare l'acciarino (barile del nostromo, all'estremità est del relitto).
+- Joystick di nuovo mobile (compare sotto il dito), con il cerchio sempre visibile un po' più verso il centro.
+- Teaser iniziale: testi più piccoli e la nave resta nell'acqua.
+- Aggiornamento dell'APK: ora l'app è firmata sempre con la stessa chiave, quindi si installa sopra la versione precedente.
+- Audio: quando metti l'app in background il suono si ferma, e riparte quando torni nel gioco.
+- Teaser iniziale: la nave resta sempre visibile sopra il riquadro del testo.
+- Piazzole di costruzione (falò, capanna, zattera…): si attraversano a piedi; diventano solide solo a costruzione finita. Se premi «Costruisci» stando sopra, il personaggio si sposta davanti e poi costruisce.
+- Toccando un materiale mancante (per esempio la corda) nei costi di costruzione e dei miglioramenti, compare dove trovarlo. Lo stesso toccando le risorse in alto.
+- Joystick spostato un po' verso il centro.
+- Le due battute del capitano all'inizio ora escono dopo il tutorial, senza coprire le istruzioni.
+- Joystick fisso: sta sempre nello stesso punto e non si sposta più sotto il dito; si illumina quando lo usi.
+- Tutorial: il joystick e il pulsante di interazione si illuminano e hanno una manina che li indica. Se salti il tutorial, la manina indica il joystick finché non ti muovi.
+- «Capitolo 1» compare solo dopo il tutorial (finito o saltato).
+- Mappa dal Pino Alto: riempie tutto il riquadro, gli angoli dell'isola non sono più tagliati e la didascalia sta nel mare, senza coprire l'isola.
+- Codice di salvataggio più corto (circa la metà o meno): il testo da copiare è compresso. I vecchi codici funzionano ancora.
+- Zattera incastrata: se resta addosso a uno scoglio o alla riva, viene riportata subito sull'acqua libera più vicina.
+- Limiti leggibili: i pulsanti di cibo, acqua e pesce e il riquadro delle risorse mostrano quanto hai e il massimo (per esempio 10/10); diventano rossi quando sei al limite.
+- Grotta: senza torcia ora dice «forse è meglio che accenda una torcia».
+- La mappa è ingrandita sull'isola, così l'isola occupa quasi tutto lo schermo.
+- Sulla mappa si vede anche dove si trova Biscotto quando è lontano dalla tua vista, e il segno dell'ultimo posto che ha guardato dura molto di più.
+- Tuono nuovo: crepitio secco, strappo, poi un rombo che rotola e si perde con l'eco, con diverse variazioni a ogni fulmine.
+- Il pulsante dei molluschi ora dice «Raccogli molluschi».
+- Nuovo Zaino di corda (Banco da lavoro): raddoppia il limite di cibo, acqua e pesce.
+- Registro dei pesci con le icone di ogni specie (nel Diario e quando peschi): le specie non ancora scoperte restano con il «?».
+- Mappa dalla capanna molto più grande, a tutto schermo, con la ✕ rossa in alto a destra al posto del tasto Chiudi (il testo della mappa sparisce da solo dopo qualche secondo).
+- Meno muri invisibili: si può camminare fino al bordo dell'acqua anche dove la sabbia sporge in una casella di mare, e rocce, barili, casse e simili bloccano solo la parte centrale della casella.
+- Scorte con un limite: molluschi 12, bacche 12, cocchi 10, pesce crudo 8, pesce arrosto 8. Oltre il limite compare «Scorta piena» (le scorte in eccesso già raccolte vengono ridotte al limite).
+- Vicino al mare scuoti, molluschi, taglio e simili compaiono solo se sei quasi addosso all'oggetto: altrimenti puoi pescare.
+- Riquadro delle risorse più piccolo: icone e numeri ridotti, mostra solo le risorse che hai.
+- Nuovo relitto nel Capitolo 2: la nave dei Fuggiaschi è uno scafo rovesciato con la chiglia in aria e le coste a vista (niente più cannonata).
+- Vicino al mare la pesca ha la precedenza su scuoti e molluschi; taglio legna, scuoti, molluschi, rocce, liane e bacche si attivano solo da molto più vicino.
+- Menu rifatto: elenco di categorie a sinistra (Audio e schermo, Partita, Pappagallo, Aiuto) e interruttori a destra, con tasto ✕ per chiudere.
+- Nella scheda Pappagallo trovi il nome (tocca per rinominare) e il Cappellino; le icone dei cappelli mostrano la vera skin sul pappagallo, non una emoji.
+- Dialoghi tra i pirati molto più rari: una sola frase alla volta, distanziate di almeno 40 secondi, e solo se sei abbastanza vicino.
+- Menu e mappa non risultano più tagliati in alto sul telefono in verticale: ora scorrono sempre.
+- Il tasto «Parla» con i pirati compare solo quando sei davvero vicino.
+- Cappellino del pappagallo: ogni cappello ha la sua icona (anche nel Menu).
+- Le frasi del pappagallo restano scritte più a lungo (circa il 70% in più).
+- Biscotto: quando va a guardare qualcosa, sulla mappa grande (non sulla minimappa) compare un cerchio rosso «è stato qui» sul posto, finché non lo raggiungi.
+- Capitolo 2: il «!» (e il «?») sopra i personaggi compare anche sulla minimappa e sulla mappa grande.
+- Capitolo 2: il suggerimento sulla fiducia compare dopo la prima chiacchierata, senza anticipare niente.
+- Campo più vivo: di sera si siedono attorno al fuoco, di notte tornano alla tenda, commentano la pioggia e le missioni in corso.
+- Ogni personaggio: richiesta del giorno (+fiducia, esperienza), regalo preferito (+2 fiducia) e un indovinello al giorno (piccolo premio).
+- Nuova missione secondaria «I tesori dei Fuggiaschi»: 5 casse nascoste sulle quattro isolette e sulla collina; premio finale con cappellino per Biscotto.
+- Un solo salvataggio per partita: la prima isola e la Baia stanno nello stesso slot e si passa dall'una all'altra senza perdere nulla (anche per le partite già iniziate).
+- Menu riorganizzato in gruppi (Audio e schermo, Partita, Pappagallo, Aiuto, Attenzione) con icone; suoni, musica e testo mostrano lo stato sul tasto.
+- Passando da un'isola all'altra, risorse, attrezzi, ricette, cappellini, livello, fame e sete ora restano gli stessi (prima ogni isola aveva il suo zaino).
+- Zattera: si può scendere anche da punti della costa dove prima non compariva il pulsante (scogli, rocce, tratti rocciosi).
+- Vedetta / Pino Alto: ora vedi il personaggio salire la scaletta (e scendere dopo aver guardato la mappa).
+- La mappa dall'alto sta tutta in una pagina, senza scorrimento, anche sui telefoni con schermo basso; nel Capitolo 2 mostra i luoghi della Baia.
+- Capitolo 2: navigando verso ovest il gioco chiede se vuoi tornare alla prima isola (e dalla prima, verso la Baia, se vuoi sbarcare di nuovo).
+- Capitolo 2: Menu > «Il campo dei Fuggiaschi» > «Torna al Capitolo 1» riporta alla prima isola; il progresso del Capitolo 2 resta salvato e si riprende sbarcando di nuovo sulla Baia.
+- Cartello dei capitani spostato: non è più davanti alla capanna.
+- Diario → Stagione 1: il Capitolo 2 ora risulta «Giocabile» (e «Completato» a fine capitolo); sistemati anche i testi dell'obiettivo.
+- La nave dei Fuggiaschi ha un aspetto diverso dal relitto del Cormorano (vele azzurre, scafo verde-grigio).
+- Capitolo 2: se scendi dalla zattera sulla terraferma, la zattera torna da sola alla spiaggia di casa (resta dove la lasci solo sulle isolette).
+- I fuggiaschi ora si muovono per il campo: vanno vicino ad alberi, fuoco, bancarella e mare e commentano; ogni tanto due di loro si parlano.
+- Dopo il Capitolo 1 la domanda di sbarco compare da qualunque punto della costa della Baia, non solo dal punto di arrivo.
+- Avvicinandoti alla Baia dopo il Capitolo 1 ora puoi sbarcare e iniziare il Capitolo 2 (prima compariva «non ancora disponibile»).
+- Nuovo Capitolo 2 «La Baia dei Fuggiaschi»: a fine Capitolo 1 compare «Continua: Capitolo 2» (il salvataggio del capitolo 1 resta in copia di sicurezza).
+- Nuova isola grande, più della prima: campo dei Fuggiaschi, cala con la nave, grotta, collina con il Pino Maestro, isoletta a est (solo in zattera).
+- Quattro personaggi con fiducia a cuori: Ferro (sempre serio), Nives, Gnocco e Tito. Chiacchierare ogni giorno e fare le loro richieste aumenta la fiducia.
+- 13 missioni principali: costruisci la nave in 3 pezzi (albero, timone, vele), poi scegli come partire.
+- 8 missioni secondarie: banchetto, attrezzi, coltello, lite delle razioni, chi ha bevuto l'acqua, turni di guardia notturni contro i ladri, isola orientale, diario di J.
+- Bancarella di Nives (scambi, sconto con la fiducia) e cucina di Gnocco (ricette nuove).
+- Scelte che contano: 5 finali diversi (L'Ordine di Ferro, Il passeggero clandestino, Tutti a bordo, Il fuoco di Ferro, La fuga); a fine capitolo puoi rigiocare la partenza.
+- Menu > «Il campo dei Fuggiaschi»: fiducia, pezzi della nave, pagine del diario e finali.
+
+## v0.5 · 29 ott 2026 — Raccolta, tempeste vere, pappagallo utile e copia di sicurezza
+- Zattera: non può più comparire nel laghetto (se era finita lì, torna alla spiaggia di casa).
+- Orologio: di sera accanto all'icona del meteo compare la fase della luna (se piove restano entrambe le icone).
+- Tempesta: la missione ora dice «resta vicino alla capanna» e un cerchio tratteggiato sul terreno mostra la zona sicura (si illumina quando sei dentro).
+- Mappa grande: tocca la minimappa (o premi M) per aprire la mappa dell'isola; puoi piantare una bandierina rossa toccando un punto.
+- Isola più viva: di notte lucciole, pipistrelli, gufo e rane vicino al laghetto; di giorno farfalle e gabbiani.
+- Cucina: al falò puoi cucinare il pesce e preparare 5 ricette (spiedino, cocco, zuppa, dolce, banchetto) con effetti come energia o sete più lenta; nuovo Ricettario in Raccolta.
+- Pesca con abilità: quando abbocca devi toccare «Tira!» quando l'indicatore è nella zona verde; colpo perfetto = un pesce in più.
+- Campo personalizzabile: dal banco da lavoro aggiungi lanterne, bandiera, tavolo, amaca (riposa) e cartello. Le lanterne illuminano di notte.
+- Zattera migliorabile: vela rinforzata (più veloce) e scafo rinforzato (urti più morbidi), con un aspetto diverso; la tempesta in zattera ora regge 4 cuori.
+- Pappagallo: battute e indizi nuovi, commenti quando costruisci falò, capanna, banco o zattera, e ogni tanto ti porta una risorsa utile (cocco se hai sete, cibo se hai fame).
+- Cappellini per il pappagallo (bandana, cuoco, monocolo): si trovano nelle casse sparse e si scelgono dal Menu.
+- 3 slot di salvataggio: scegli la partita dalla schermata iniziale o dal Menu > Partite salvate.
+- Dimensione del testo: Menu > Testo (Normale, Grande, Molto grande).
+- Zattera: il pulsante «Salpa» compare solo molto vicino alla zattera, e mai se c'è un granchio da catturare a portata. I granchi non scappano più verso la zattera e fuggono più lentamente.
+- Forzieri e casse ridisegnati: il forziere ha fasce di ferro e serratura dorata e, aperto, mostra l'oro; le casse hanno assi con la X e, aperte, un po' di paglia e bottino.
+- Casse sparse per l'isola (6): ognuna si può aprire una volta sola e dà materiali. Biscotto le trova quando fai ricognizione.
+- Granchi: uno dei due sull'isolotto a volte non si lasciava prendere (niente pulsante «Cattura»). Ora i granchi restano sempre dove puoi raggiungerli e il raggio di cattura è più ampio.
+- Rete da pesca: ora si vede sul mare, rotonda con i galleggianti rossi; nuova icona.
+- Meno forzieri in giro: nel relitto resta solo la cassa del carpentiere (le altre sono un barile e una cassetta); le reliquie sono oggetti che luccicano sulla sabbia.
+- Pesca: 8 specie con rarità (comune, non comune, raro, rarissimo). Alcune escono solo di giorno, di notte, con la pioggia o con la luna piena; la cernia vuole la canna rinforzata.
+- Nuovo Diario > Raccolta: registro del pescatore e reliquie, con indizi per quelle che mancano.
+- 5 reliquie dell'equipaggio del Cormorano nascoste sull'isola. Trovarle tutte rivela l'intera mappa.
+- Tre nuove missioni secondarie: Reliquie del Cormorano, Registro del pescatore, Notte di tempesta.
+- Tempeste con conseguenze: allo scoperto aumentano sete e fame e la torcia può spegnersi; la capanna è un riparo vero; sulla zattera cadono lampi (cerchio rosso di avviso) e un colpo costa un tronco.
+- Biscotto avvisa prima di una tempesta e fiuta i tesori vicini.
+- Dormire nella capanna fa passare la tempesta.
+- Musica nuova per alba, tramonto e isolotti; onde sulla riva; suono per le reliquie.
+- Copia di sicurezza: dal Menu puoi copiare o scaricare il salvataggio e ripristinarlo su un altro dispositivo.
+- La schermata di fine capitolo mostra anche specie pescate e reliquie trovate.
+
+## v0.4 · 28 ott 2026 — Meteo, notte con torcia, granchi, musica e sfida finale
+- Salvataggio automatico ogni secondo (prima ogni 10): se chiudi di colpo il browser perdi al massimo un secondo di gioco.
+- Cartello dei capitani vicino al relitto: tocca «Leggi» per scrivere idee o problemi. Il messaggio arriva a me con il tuo nome (funziona dal link ufficiale del gioco).
+- Joystick multitouch: puoi muoverti e toccare i pulsanti (mangia, bevi, pesce, torcia) nello stesso momento.
+- Il cerchio di selezione sulle rocce ora è un ovale più grande ai piedi della roccia, ben visibile.
+- Minimappa corretta: il segnale del personaggio ora corrisponde al punto giusto (la mappa era leggermente schiacciata in verticale).
+- Spiaggia: puoi camminare sulla sabbia bagnata fino alla schiuma, senza muri invisibili prima della riva.
+- Minimappa: compare un piccolo simbolo della zattera; se è lontana resta sul bordo e ti indica la direzione.
+- Cappello da capitano: si trova nella cassa dei naufraghi sull'isolotto a sud-est. Fino a quel momento il personaggio porta una bandana rossa da pirata. Chi aveva già aperto la cassa può riaprirla per prenderlo.
+- Muri invisibili: alberi e palme bloccano solo il tronco (non più tutta la tile) e il personaggio scivola attorno agli spigoli invece di fermarsi.
+- Camminata: braccia alternate, una sale e l'altra scende (davanti e dietro); di profilo il braccio lontano sta dietro il corpo e quello vicino davanti.
+- Animazioni più naturali: quando cammini di lato il personaggio si vede di profilo e braccia e gambe oscillano davvero avanti e indietro (di fronte o di spalle resta la vista frontale), accetta, piccone e martello con carica e colpo, torcia tenuta davvero in mano (il braccio resta fermo, l'altro si muove).
+- Diario → Stagione 1: capitoli e novità previste durante la stagione (orto, essicatore, app Android), indicate come «In programma»: non sono ancora disponibili e non hanno una data. In una sezione a parte, dopo la Stagione 1: Multigiocatore, coming soon.
+- Il relitto del Cormorano ha ora un vero squarcio da cannonata: schegge di legno, costole a vista e un'asse che penzola, al posto della macchia nera.
+- Tutorial iniziale in 6 passi (muoversi, azione, bere, mangiare…): si può saltare e si rivede dal menu.
+- Meteo: pioggia e tempeste con fulmini e tuoni. La pioggia ti segue sullo schermo, i fulmini illuminano il cielo e il suono arriva con un piccolo ritardo. L'orologio mostra il tempo.
+- Pozza: si riempie con la pioggia e sale di livello, con il sole evapora piano e può restare vuota (se bevi troppo). A pozza vuota non si beve: serve aspettare la pioggia.
+- Luna: ogni notte ha la sua fase. Più la luna è piena, più c'è luce; con la luna nuova e il maltempo il buio è fitto.
+- Torcia (si costruisce al Banco: legna e corda): si accende e si spegne col pulsante dedicato e fa luce di notte.
+- Pesca potenziata: canna migliore (più pesci abboccano) e rete da pesca (più sicura e fino a 3 pesci per volta). Entrambe si costruiscono al Banco.
+- Granchi: corrono sulla spiaggia e sugli isolotti e scappano se ti avvicini. «Cattura» per prenderli: danno pesce.
+- Biscotto parla molto più spesso mentre giri per la mappa (pioggia, luna, sete, fame, granchi, zattera…). Ogni tanto può anche andare in ricognizione e ti indica un oggetto nascosto con un segno sulla mappa.
+- Due nuove missioni sugli isolotti: «Il fuoco dei naufraghi» (accendi il falò dell'isolotto sud) e «Granchi dell'isolotto» (prendi due granchi sull'isolotto nord).
+- Musica di sottofondo (giorno, notte, tempesta, mare) e nuovi suoni: passi su sabbia ed erba, uccelli, grilli, gabbiani, tuoni, torcia, rete, granchi. Dal menu c'è il pulsante «Musica» per spegnerla.
+- Sfida di fine capitolo: la traversata verso l'Isola dei Fuggiaschi ora è una tempesta. La corrente ti spinge indietro, i fulmini cadono dove vedi il cerchio rosso: schivali (hai 3 cuori). Se li perdi torni al punto di partenza e riprovi.
+- Messaggi in basso (tutorial, avvisi come «Nuova missione», suggerimenti): ora stanno in un'unica colonna e si impilano senza coprirsi mai; quando c'è un dialogo salgono sopra di esso. I fumetti del pappagallo li evitano.
+- Torcia solo di notte: il pulsante compare solo di notte (dalle 19:30 alle 6:18) e al mattino la torcia si spegne da sola.
+- Tuono più realistico: uno schiocco secco seguito da un brontolio profondo che rotola e si spegne; i tuoni lontani sono più bassi e più morbidi.
+- Relitto del Cormorano: i rottami si recuperano una volta sola, non tornano più col passare del tempo.
+- Tastiera del gioco: con il telefono in verticale la tastiera di sistema restava dritta mentre il gioco è girato. Ora per scrivere i nomi compare una tastiera nostra, girata come il gioco (con «Fatto» per chiuderla).
+- Se scrivi il nome del Capitano (o cambi Capitano/Capitana) e premi «Continua», il nome viene aggiornato e salvato. Prima valeva solo con «Nuova partita».
+- Livello del Capitano: tagliare, raccogliere, pescare, costruire e completare missioni dà esperienza. Il livello (Lv) e la barra stanno sotto l'orologio; salendo le azioni diventano un po' più rapide (fino a -28% al livello 15). I salvataggi vecchi ricevono già l'esperienza dei progressi fatti.
+- Nuovo pulsante «Rinomina…» nel menu per cambiare il nome del pappagallo quando vuoi (anche se l'avevi già trovato).
+- Il nome e l'aspetto del Capitano si ricordano tra una partita e l'altra: se non c'è un salvataggio, il campo nome si riempie da solo con l'ultimo usato.
+- Il riquadro della missione ora è compatto: mostra solo il titolo. Toccalo per leggere tutto; si riapre da solo quando cambia l'obiettivo e si richiude appena ti muovi.
+- Il pappagallo parla meno spesso (come prima della v0.4).
+- Il pappagallo non ha più un nome fisso: quando lo conquisti ti chiede «Ti potrei chiamare…» e scegli tu come chiamarlo. Il nome resta per sempre (nei salvataggi vecchi resta Biscotto).
+- Anche la schermata di caricamento e la prima schermata sono in orizzontale, senza girarsi all'avvio.
+- Zoom bloccato: niente più pizzico con le dita, doppio tocco o ctrl+rotella.
+- Torcia migliorata: dove arriva la sua luce la notte torna chiara come di giorno, con un colore caldo e giallastro, e sfuma ai bordi. Anche falò e fuochi illuminano così.
+- Quando trovi la canna da pesca (o costruisci torcia, rete e canna rinforzata) compare il messaggio «Hai ottenuto…».
+- Il gioco ora si chiama «Sette Mari» (Stagione 1).
+- L'avviso di nuova missione resta a schermo 8 secondi.
+- Schermo intero in verticale: riquadri e bussola ora stanno negli angoli, senza il margine di troppo.
+- I fumetti del pappagallo non finiscono più sotto il riquadro della missione: se coprirebbe l'interfaccia, si spostano sotto di lui.
+- Tolta la scelta dei comandi dal menu: resta solo il joystick a destra.
+- Vecchi salvataggi: restano compatibili, ma qualche albero già tagliato può ricomparire.
+
+## v0.3 · 27 ott 2026 — Comandi invertiti e pappagallo che parla
+- Comandi invertiti: il joystick si usa con il pollice destro (metà destra dello schermo), il pulsante azione, Mangia e Bevi stanno in basso a sinistra. Con i pulsanti: sterzo e azione a sinistra, avanti/indietro a destra. Dal menu puoi scambiare i lati (anche per mancini).
+- La pagina Novità è ora riservata all'admin e protetta da password.
+- Se la zattera ormeggiata si trova dove da terra non si arriva (scogliera, alberi), al caricamento viene spostata nel punto raggiungibile più vicino.
+- Vicino alla zattera ormeggiata compare sempre «Salpa» (mai Pesca o Bevi), in qualsiasi direzione guardi. La zattera resta sempre dove l'hai lasciata, non torna più alla spiaggia di casa.
+- Scendere dalla zattera: «Scendi» compare solo con la riva a portata di mano e ti mette sulla tile di terra vicina, non più lontano.
+- Gli isolotti raggiungibili hanno ora un piccolo accampamento di naufraghi con una cassa da aprire (corda, rottami, pietra, noci di cocco).
+- L'Isola dei Fuggiaschi è più lontana: la traversata è più lunga (e la mappa un po' più larga). Resta irraggiungibile fino al prossimo capitolo.
+- Le palme ora hanno radici, un rialzo di terra, ciuffi d'erba e un'ombra di contatto: non sembrano più sospese.
+- La zattera resta dove scendi: se sbarchi su un'altra isola la trovi ormeggiata e puoi ripartire da lì con «Salpa». Chi era già rimasto bloccato su un'isola la ritrova vicino alla riva.
+- Meno avvisi quando urti gli scogli (uno ogni tanto) e le notifiche sono più piccole e più in basso, fuori dal centro dello schermo.
+- Mela e pesce separati: la mela mangia noci, bacche e molluschi; se hai del pesce compare un pulsante apposta (crudo +14 fame, cotto sul falò +38).
+- Se sete o fame restano a zero troppo a lungo il Capitano sviene: perde il 40% di legna, pietra, corda e rottami (mai la tela) e si risveglia dopo un paio d'ore. Prima c'è un avviso.
+- Rottami, molluschi, liane e bacche non finiscono più nascosti dietro agli alberi: se una chioma li copriva quasi del tutto, ora stanno in un punto vicino ben visibile. Se un albero li copre solo in parte, restano com'erano.
+- Il pappagallo selvatico sta sempre in cima all'albero e si vede sopra tutte le chiome, anche quando altri alberi gli stanno davanti.
+- Il pappagallo selvatico si posa su un albero diverso a ogni nuova partita. Finché non lo conquisti, quell'albero non si può tagliare: al suo posto compare «Avvicinati».
+- Il richiamo del pappagallo è più difficile da seguire: il marcatore indica una zona del bosco, non più un punto preciso.
+- Nuovo schermo di gioco: in alto a sinistra sete, fame, giorno e materiali, con diario e menu subito a fianco; la bussola sta in alto a destra e la missione in corso nel mezzo.
+- Se tieni il telefono in verticale, il gioco si ruota da solo in orizzontale e occupa tutto lo schermo: basta girare il telefono di lato.
+- Salvataggio automatico più frequente (ogni 10 secondi e quando esci): compare una piccola spunta verde accanto all'orologio. Se il browser non permette di salvare, il gioco te lo dice.
+- Nuovo pulsante «Schermo intero» nel menu, per nascondere le barre del browser (dove il browser lo permette).
+- Più robusto contro i blocchi dei comandi: un tocco rimasto «appeso» non ferma più il joystick, un errore isolato non congela il gioco e il Capitano incastrato viene rimesso su una casella libera. Nel menu c'è anche «Sblocca comandi».
+- L'orologio (giorno e ora) ora sta sotto le barre di sete e fame.
+- Corretto: vicino al relitto il pulsante poteva scegliere «Esamina» invece di raccogliere la vela (o altri oggetti). Ora gli oggetti da raccogliere hanno la precedenza.
+- Tolta la scritta fissa «Gira il telefono in orizzontale».
+- Toccando Biscotto (o premendo P da computer) parla: brevi frasi su ciò che è successo sull'isola, con una risposta del Capitano. Le frasi cambiano con l'avanzare della storia e, se hai molta sete o fame, te lo ricorda.
+
+## v0.2 · 27 ott 2026 — Naufrago: sopravvivenza, joystick, schermo orizzontale
+- Schermo in orizzontale. Si cammina con il joystick (trascina il pollice nella metà sinistra dello schermo). Niente più tocco per camminare.
+- Pulsante azione a destra: compare vicino a ciò che puoi usare e cambia nome (Taglia, Scuoti, Raccogli, Bevi, Pesca, Cucina, Costruisci, Salpa…). Un secondo schema, con due frecce avanti/indietro e due per sterzare, si sceglie dal menu.
+- Nuova storia, ispirata alle avventure di Francis Drake: parti naufrago e da solo su un'isola più grande. Prima acqua e cibo, poi attrezzi, fuoco e riparo. Niente ciurma, niente battute a ogni frase.
+- Sete e fame: bevi al laghetto, cogli noci di cocco e bacche, cerca molluschi, pesca e cuoci sul fuoco. Se arrivi a zero il Capitano rallenta, ma non muore.
+- Capitolo 1 «Naufrago»: 10 missioni principali, una bussola da ritrovare, un pappagallo da incontrare nel bosco, un panorama dal Pino Alto e una zattera per raggiungere la seconda isola.
+- Minimappa con bussola e nebbia dell'esplorazione: la mappa si scopre camminando. Senza bussola le indicazioni sono a parole (nord-est, circa 40 passi).
+- Grafica più realistica: mare turchese con onde, riflessi e schiuma, spiagge ampie, colline in rilievo, ombre e vegetazione nuove. Si riduce da sola sui telefoni più lenti.
+- Seconda isola: all'arrivo vedi l'accampamento dei fuggiaschi (tende, fuoco, barche). Per ora non si sbarca: se ne parla nel prossimo capitolo.
+- Scogli in mare: urtarli rallenta la zattera, ma c'è sempre un passaggio libero.
+- Il vecchio salvataggio della v0.1 non è compatibile: la storia riparte da capo.
+
+## v0.1 · 26 ott 2026 — Prima bozza della Stagione 1
+- Prima isola da esplorare, vista dall'alto con effetto 3D, con relitto, laghetto, scogliera e rovine.
+- Covo da ricostruire (falò, capanna, banco, torre, molo), missioni, giorno e notte, minimappa e salvataggio nel browser.
