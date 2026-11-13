@@ -231,7 +231,7 @@ function applyHead(view,P){
   hplane.rotation.set(0,0,0);
   if(view==='front'){hplane.position.set(cx,cy,8)}
   else if(view==='back'){hplane.rotation.y=Math.PI;hplane.position.set(-cx,cy,-8)}
-  else{hplane.rotation.y=-Math.PI/2;hplane.position.set(-8,cy,cx)}
+  else{hplane.rotation.set(0,-Math.PI/2,.07);hplane.position.set(-8,cy+1.5,cx-5.5)}
 }
 window.applyHead=applyHead;
 Promise.all(Object.keys(hmeta).map(k=>new Promise(r=>{const im=new Image();im.onload=()=>{const t=new T.Texture(im);t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.needsUpdate=true;HT[k]=t;r()};im.src='heads/'+k+'.png'}))).then(()=>{window.ready=true});
