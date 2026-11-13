@@ -1,0 +1,133 @@
+<!doctype html><meta charset=utf8><body style="margin:0;background:transparent"><canvas id=c width=640 height=700></canvas>
+<script type=module>
+import * as T from './node_modules/three/build/three.module.js';
+const W=640,H=700;
+const renderer=new T.WebGLRenderer({canvas:document.getElementById('c'),alpha:true,antialias:true,preserveDrawingBuffer:true});
+renderer.setSize(W,H,false);renderer.setClearColor(0,0);
+const scene=new T.Scene();
+const tone=new T.DataTexture(new Uint8Array([120,120,120,255, 190,190,190,255, 255,255,255,255]),3,1,T.RGBAFormat);tone.minFilter=tone.magFilter=T.NearestFilter;tone.needsUpdate=true;
+scene.add(new T.AmbientLight(0xffffff,1.15));
+const dl=new T.DirectionalLight(0xfff1dd,2.2);dl.position.set(-30,80,70);scene.add(dl);
+const dl2=new T.DirectionalLight(0xffffff,.6);dl2.position.set(40,30,-60);scene.add(dl2);
+const OUT=1.0;
+const outCache={};
+function outMatFor(d){const k=d.toFixed(4);if(outCache[k])return outCache[k];const m=new T.MeshBasicMaterial({color:0x3a2216,side:T.BackSide});
+m.onBeforeCompile=s=>{s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','vec3 transformed = position + normalize(normal)*'+k+';')};m.customProgramCacheKey=()=>'o'+k;return outCache[k]=m}
+const mats={};
+function M(c){return mats[c]||(mats[c]=new T.MeshToonMaterial({color:c,gradientMap:tone}))}
+const C={skin:0xf2c7a2,skin2:0xe2ac86,hair:0x6b4126,beard:0x5b3823,red:0xc9423b,red2:0xa8332f,shirt:0xf0e7d6,belt:0x2a2828,gold:0xe6b73c,pants:0x3b6296,boot:0x70432a,glass:0x7b625a,white:0xffffff,black:0x1b1512,patch:0xd9c7a0,mouth:0x9c3b34};
+function mesh(geo,col,o={}){const m=new T.Mesh(geo,M(col));if(o.p)m.position.set(...o.p);if(o.s)m.scale.set(...o.s);if(o.r)m.rotation.set(...o.r);
+  if(!o.noOut){const sc=o.s?(o.s[0]+o.s[1]+o.s[2])/3:1;const h=new T.Mesh(geo,outMatFor(OUT/sc));m.add(h)}return m}
+const sph=(r)=>new T.SphereGeometry(r,28,20),cyl=(a,b,h)=>new T.CylinderGeometry(a,b,h,28),box=(x,y,z)=>new T.BoxGeometry(x,y,z);
+const root=new T.Group();scene.add(root);
+const body=new T.Group();root.add(body);   // tutto quello che sta sopra i fianchi
+const torso=new T.Group();torso.position.y=32;body.add(torso);
+const T0=(o,y)=>{o.position.y-=32;torso.add(o);return o}  // aiuto: coordinate mondo -> locali torso
+// torso
+const jacket=mesh(new T.CapsuleGeometry(12.5,12,8,24),C.red,{p:[0,44-32,0],s:[1.18,1,.8]});torso.add(jacket);
+const hem=mesh(cyl(13.6,14.6,5),C.red,{p:[0,34.5-32,0],s:[1.15,1,.82]});torso.add(hem);
+const belt=mesh(cyl(14.3,14.3,3.6),C.belt,{p:[0,36.8-32,0],s:[1.15,1,.82]});torso.add(belt);
+const buckle=mesh(box(6,4.4,1.6),C.gold,{p:[0,36.8-32,11.2]});torso.add(buckle);
+const vshape=new T.Shape();vshape.moveTo(-5,0);vshape.lineTo(5,0);vshape.lineTo(0,-11);vshape.closePath();
+const vee=new T.Mesh(new T.ShapeGeometry(vshape),M(C.shirt));vee.position.set(0,56.5-32,10.9);torso.add(vee);
+for(const [x,y] of [[-6.5,51],[6.5,51],[-6.5,45],[6.5,45]]){torso.add(mesh(box(2.6,2.6,1),C.gold,{p:[x,y-32,10.6],noOut:true}))}
+for(const sx of [-1,1]){torso.add(mesh(sph(4.4),C.red2,{p:[sx*7.5,57.5-32,3.5],s:[1.1,.8,1.3]}))}
+// toppa sulla schiena
+torso.add(mesh(box(11,8.5,.8),C.patch,{p:[0,47-32,-10],noOut:true}));
+torso.add(mesh(box(12.4,9.8,.5),C.hair,{p:[0,47-32,-9.8],noOut:true}));
+// collo e testa
+const neck=mesh(cyl(4.2,4.6,5),C.skin,{p:[0,60-32,0]});torso.add(neck);
+const head=new T.Group();head.position.y=79-32;torso.add(head);
+const hp=(o)=>{o.position.y-=79;return o}
+const skull=mesh(sph(1),C.skin,{p:[0,0,0],s:[20.5,19.5,19]});head.add(skull);
+for(const sx of [-1,1]){head.add(mesh(sph(1),C.skin,{p:[sx*20,-1,0],s:[3.2,5,4.6]}));
+  head.add(mesh(sph(1),C.skin2,{p:[sx*20.8,-1,.2],s:[1.5,3.2,3],noOut:true}));}
+head.add(mesh(new T.TorusGeometry(1.7,.38,8,16),C.gold,{p:[-21.5,-5,0],r:[0,Math.PI/2,0],noOut:true}));
+// capelli
+const hm2=new T.MeshToonMaterial({color:C.hair,gradientMap:tone,side:T.DoubleSide});
+const hairTop=new T.Mesh(new T.SphereGeometry(1,36,18,0,Math.PI*2,0,1.5),hm2);hairTop.position.set(0,3,-5);hairTop.scale.set(21.4,21,19.6);head.add(hairTop);
+const hairBack=new T.Mesh(new T.SphereGeometry(1,36,18,Math.PI,Math.PI,.5,1.75),hm2);hairBack.position.set(0,3,-5);hairBack.scale.set(21.4,21,19.6);head.add(hairBack);
+for(const h of [hairTop,hairBack]){const o=new T.Mesh(h.geometry,outMatFor(OUT/20.7));h.add(o)}
+head.add(mesh(sph(1),C.hair,{p:[0,13.5,4.5],s:[19.2,5.5,12],r:[.35,0,0]}));
+
+// barba
+head.add(mesh(sph(1),C.beard,{p:[0,-10.5,8],s:[13.5,8.5,10]}));
+for(const sx of [-1,1]){head.add(mesh(sph(1),C.beard,{p:[sx*16.2,-6.5,3.5],s:[3.2,7.5,7]}))}
+head.add(mesh(new T.CapsuleGeometry(.7,3.4,4,8),C.mouth,{p:[0,-8.6,17.8],r:[0,0,Math.PI/2],noOut:true}));
+// naso
+head.add(mesh(sph(1),C.skin2,{p:[0,-1.5,18.3],s:[3.4,3,3.6]}));
+// occhi, occhiali, sopracciglia
+for(const sx of [-1,1]){const ex=sx*7.6,ey=2.4;
+  head.add(mesh(sph(1),C.white,{p:[ex,ey,16.6],s:[4.6,5,2.4],noOut:true}));
+  head.add(mesh(sph(1),C.black,{p:[ex,ey-.2,18.1],s:[2.8,3.1,1.4],noOut:true}));
+  head.add(mesh(sph(1),C.white,{p:[ex+.8,ey+.9,19],s:[.7,.7,.4],noOut:true}));
+  head.add(mesh(new T.TorusGeometry(5.5,.75,10,28),C.glass,{p:[ex,ey,18.4],noOut:true}));
+  head.add(mesh(box(8,1.6,1.4),C.hair,{p:[ex,ey+7.4,17.4],r:[0,0,-sx*.12],noOut:true}));}
+head.add(mesh(box(4.2,.8,.8),C.glass,{p:[0,3,19],noOut:true}));
+for(const sx of [-1,1]){head.add(mesh(box(.8,.8,12),C.glass,{p:[sx*13,3,12.8],noOut:true}))}
+// braccia
+function makeArm(sx){const sh=new T.Group();sh.position.set(sx*16.5,54.5-32,0);
+  sh.add(mesh(sph(4.9),C.red,{}));
+  sh.add(mesh(cyl(4.7,4.5,7.5),C.red,{p:[0,-4,0]}));
+  const el=new T.Group();el.position.y=-7.4;sh.add(el);
+  el.add(mesh(sph(4.5),C.red,{noOut:true}));
+  el.add(mesh(cyl(4.5,4.3,6.5),C.red,{p:[0,-3.4,0]}));
+  el.add(mesh(cyl(4.9,4.9,2.4),C.shirt,{p:[0,-7.6,0]}));
+  el.add(mesh(sph(4.2),C.skin,{p:[0,-11.8,0]}));
+  const hand=new T.Object3D();hand.position.set(0,-11.8,0);el.add(hand);
+  torso.add(sh);return {sh,el,hand}}
+const armL=makeArm(1),armR=makeArm(-1);   // armL = lato +x
+// gambe
+function makeLeg(sx){const hip=new T.Group();hip.position.set(sx*6.6,32,0);body.add(hip);
+  hip.add(mesh(cyl(5.9,5.6,15),C.pants,{p:[0,-7,0]}));hip.add(mesh(sph(5.9),C.pants,{noOut:true}));
+  const kn=new T.Group();kn.position.y=-14.5;hip.add(kn);
+  kn.add(mesh(sph(5.5),C.pants,{noOut:true}));
+  kn.add(mesh(cyl(5.4,5.3,4),C.pants,{p:[0,-2,0]}));
+  kn.add(mesh(cyl(6.1,6.1,3),C.boot,{p:[0,-4.3,0]}));
+  kn.add(mesh(cyl(5.7,5.8,9),C.boot,{p:[0,-8.5,0]}));
+  kn.add(mesh(box(11,5,15),C.boot,{p:[0,-15.6,3.2]}));
+  kn.add(mesh(sph(1),C.boot,{p:[0,-15.6,10.5],s:[5.5,2.5,3.2]}));
+  return {hip,kn}}
+const legL=makeLeg(1),legR=makeLeg(-1);
+const R=(o,x,y,z)=>o.rotation.set(x,y,z);
+const pose=(P)=>{
+  const ph=(P.t||0)*Math.PI*2,s=Math.sin(ph),c=Math.cos(ph);
+  body.position.y=0;torso.rotation.set(0,0,0);head.rotation.set(0,0,0);
+  for(const l of [legL,legR]){R(l.hip,0,0,0);R(l.kn,0,0,0)}
+  for(const a of [armL,armR]){R(a.sh,0,0,0);R(a.el,0,0,0)}
+  if(P.mode==='walk'){
+    body.position.y=Math.abs(s)*2.0-.6;
+    const la=s*.62,ra=-s*.62; // angolo avanti
+    R(legL.hip,-la,0,0);R(legR.hip,-ra,0,0);
+    R(legL.kn,Math.max(0,c)*1.0+.04,0,0);R(legR.kn,Math.max(0,-c)*1.0+.04,0,0);
+    R(armL.sh,-ra*.8,0,-.06);R(armR.sh,-la*.8,0,.06);   // braccio opposto alla gamba
+    R(armL.el,-(.3+Math.max(0,ra)*.6),0,0);R(armR.el,-(.3+Math.max(0,la)*.6),0,0);
+    torso.rotation.y=s*.12;torso.rotation.x=.06;head.rotation.y=-s*.08;
+  }else if(P.mode==='idle'){
+    const b=Math.sin(ph);body.position.y=b*.35;R(armL.sh,0,0,-.1);R(armR.sh,0,0,.1);
+    R(armL.el,-.12,0,0);R(armR.el,-.12,0,0);
+  }else if(P.mode==='strike'){
+    const k=P.k;
+    const A=[[-2.95,.45,-.35],[-1.35,.35,-.55],[-.45,.3,-.8]][k-1];
+    // braccia unite davanti: entrambe ruotano in avanti e leggermente verso il centro
+    R(armL.sh,A[0],0,A[1]*.0+(-A[1]*.2));R(armR.sh,A[0],0,A[1]*.0+(A[1]*.2));
+    {const zz=k===1?.5:.28;armL.sh.rotation.z=-zz;armR.sh.rotation.z=zz;}
+    R(armL.el,A[2]-.0,0,0);R(armR.el,A[2],0,0);
+    torso.rotation.x=[-.12,.14,.4][k-1];head.rotation.x=[.1,0,.3][k-1];
+    body.position.y=[1.2,-.8,-3][k-1];
+    const w=[.08,.2,.32][k-1];R(legL.hip,-w,0,0);R(legR.hip,w,0,0);
+    R(legL.kn,[0,.2,.45][k-1],0,0);R(legR.kn,[0,.2,.45][k-1],0,0);
+  }
+  scene.updateMatrixWorld(true);
+};
+const cam=new T.OrthographicCamera(-60*W/H,60*W/H,60,-60,1,500);
+const EL=22*Math.PI/180,D=200;
+function setView(v){const az={front:0,back:Math.PI,side:-Math.PI/2}[v];
+  cam.position.set(Math.sin(az)*Math.cos(EL)*D,50+Math.sin(EL)*D,Math.cos(az)*Math.cos(EL)*D);cam.lookAt(0,50,0);cam.updateMatrixWorld(true);cam.updateProjectionMatrix()}
+function scr(v3){const p=v3.clone().project(cam);return [(p.x+1)/2*W,(1-p.y)/2*H]}
+window.shot=(view,P)=>{setView(view);pose(P);renderer.render(scene,cam);
+  const hl=new T.Vector3(),hr=new T.Vector3();armL.hand.getWorldPosition(hl);armR.hand.getWorldPosition(hr);
+  const mid=hl.clone().add(hr).multiplyScalar(.5);
+  return {png:renderer.domElement.toDataURL('image/png'),anchor:scr(new T.Vector3(0,0,0)),hl:scr(hl),hr:scr(hr),hm:scr(mid)}};
+window.ready=true;
+</script>
