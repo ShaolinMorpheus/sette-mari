@@ -1,5 +1,5 @@
 /* ---- personaggio 3D a fotogrammi (grafica personaggio prova) ---- */
-var RIG={ok:false,im:{},dim:RIGART.dim,anc:RIGART.anc,KF:0.0902,hand:RIGART.hand};
+var RIG={ok:false,im:{},dim:RIGART.dim,anc:RIGART.anc,KF:0.105,hand:RIGART.hand};
 (function(){var n=0,tot=0;for(var k in RIGART.img)tot++;for(var k in RIGART.img){(function(k){var i=new Image();i.onload=function(){if(++n===tot)RIG.ok=true};i.src='data:image/webp;base64,'+RIGART.img[k];RIG.im[k]=i})(k)}})();
 var RIGANG={fronte:{r:.25,c1:.12,c2:2.1,c3:2.8},spalle:{r:.25,c1:.12,c2:2.1,c3:2.8},profilo:{r:.35,c1:.1,c2:1.5,c3:2.6}};
 function drawRig(g,x,y,o){
