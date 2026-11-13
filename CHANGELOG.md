@@ -215,3 +215,5 @@
 - Covo da ricostruire (falò, capanna, banco, torre, molo), missioni, giorno e notte, minimappa e salvataggio nel browser.
 
 - Cappelli ridisegnati: i capelli non spuntano più attorno ai cappelli. Rimossi i cappelli non ridisegnati (paglia, pescatore, turbante, navigatore, boscaiolo, guardia, berretto di Tito, tela cerata); la bandana iniziale usa quella a righe.
+
+- Giacca rossa del Capitano ridisegnata da Muse (55 frame): camminata in 4 direzioni, torcia accesa, ascia, piccone e colpi. Solo in «Grafica personaggio prova»; gli altri abiti restano col modello 3D.
