@@ -5,18 +5,18 @@ const W=760,H=800;
 const renderer=new T.WebGLRenderer({canvas:document.getElementById('c'),alpha:true,antialias:true,preserveDrawingBuffer:true});
 renderer.setSize(W,H,false);renderer.setClearColor(0,0);
 const scene=new T.Scene();
-const tone=new T.DataTexture(new Uint8Array([120,120,120,255, 190,190,190,255, 255,255,255,255]),3,1,T.RGBAFormat);tone.minFilter=tone.magFilter=T.NearestFilter;tone.needsUpdate=true;
-scene.add(new T.AmbientLight(0xffffff,1.15));
-const dl=new T.DirectionalLight(0xfff1dd,2.2);dl.position.set(-30,80,70);scene.add(dl);
+const tone=new T.DataTexture(new Uint8Array([165,165,165,255, 205,205,205,255, 240,240,240,255, 255,255,255,255]),4,1,T.RGBAFormat);tone.minFilter=tone.magFilter=T.LinearFilter;tone.needsUpdate=true;
+scene.add(new T.AmbientLight(0xfff4ea,.95));
+const dl=new T.DirectionalLight(0xfff1dd,1.45);dl.position.set(-30,80,70);scene.add(dl);
 const dl2=new T.DirectionalLight(0xffffff,.6);dl2.position.set(40,30,-60);scene.add(dl2);
-const OUT=1.0;
+const OUT=.42;
 const outCache={};
-function outMatFor(d){const k=d.toFixed(4);if(outCache[k])return outCache[k];const m=new T.MeshBasicMaterial({color:0x3a2216,side:T.BackSide});
+function outMatFor(d){const k=d.toFixed(4);if(outCache[k])return outCache[k];const m=new T.MeshBasicMaterial({color:0x6e4a36,side:T.BackSide});
 m.onBeforeCompile=s=>{s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','vec3 transformed = position + normalize(normal)*'+k+';')};m.customProgramCacheKey=()=>'o'+k;return outCache[k]=m}
 const mats={};
 function M(c){return mats[c]||(mats[c]=new T.MeshToonMaterial({color:c,gradientMap:tone}))}
-const C={skin:0xf2c7a2,skin2:0xe2ac86,hair:0x6b4126,beard:0x5b3823,red:0xc9423b,red2:0xa8332f,shirt:0xf0e7d6,belt:0x2a2828,gold:0xe6b73c,pants:0x3b6296,boot:0x70432a,glass:0x7b625a,white:0xffffff,black:0x1b1512,patch:0xd9c7a0,mouth:0x9c3b34};
-function mesh(geo,col,o={}){const m=new T.Mesh(geo,M(col));if(o.p)m.position.set(...o.p);if(o.s)m.scale.set(...o.s);if(o.r)m.rotation.set(...o.r);
+const C={skin:0xf6d2b4,skin2:0xe9b394,hair:0x80512f,beard:0x6b4430,red:0xd9584d,red2:0xbf453f,shirt:0xf5ecdc,belt:0x3b3533,gold:0xeabf4f,pants:0x4b76a8,boot:0x7f553a,glass:0x7b625a,white:0xfffaf0,black:0x2a1d17,patch:0xe3d3ae,mouth:0xb04a43};
+function mesh(geo,col,o={}){const m=new T.Mesh(geo,o.flat?new T.MeshBasicMaterial({color:col}):M(col));if(o.p)m.position.set(...o.p);if(o.s)m.scale.set(...o.s);if(o.r)m.rotation.set(...o.r);
   if(!o.noOut){const sc=o.s?(o.s[0]+o.s[1]+o.s[2])/3:1;const h=new T.Mesh(geo,outMatFor(OUT/sc));m.add(h)}return m}
 const sph=(r)=>new T.SphereGeometry(r,28,20),cyl=(a,b,h)=>new T.CylinderGeometry(a,b,h,28),box=(x,y,z)=>new T.BoxGeometry(x,y,z);
 const root=new T.Group();scene.add(root);
@@ -39,9 +39,9 @@ torso.add(mesh(box(12.4,9.8,.5),C.hair,{p:[0,47-32,-9.8],noOut:true}));
 const neck=mesh(cyl(4.2,4.6,5),C.skin,{p:[0,60-32,0]});torso.add(neck);
 const head=new T.Group();head.position.y=79-32;torso.add(head);
 const hp=(o)=>{o.position.y-=79;return o}
-const skull=mesh(sph(1),C.skin,{p:[0,0,0],s:[20.5,19.5,19]});head.add(skull);
-for(const sx of [-1,1]){head.add(mesh(sph(1),C.skin,{p:[sx*20,-1,0],s:[3.2,5,4.6]}));
-  head.add(mesh(sph(1),C.skin2,{p:[sx*20.8,-1,.2],s:[1.5,3.2,3],noOut:true}));}
+const skull=mesh(sph(1),0xf4c29f,{p:[0,0,0],s:[20.5,19.5,19],flat:true});head.add(skull);
+for(const sx of [-1,1]){head.add(mesh(sph(1),0xf4c29f,{p:[sx*20,-1,0],s:[3.2,5,4.6],flat:true}));
+  head.add(mesh(sph(1),0xe8a07e,{p:[sx*20.8,-1,.2],s:[1.5,3.2,3],noOut:true,flat:true}));}
 head.add(mesh(new T.TorusGeometry(1.7,.38,8,16),C.gold,{p:[-21.5,-5,0],r:[0,Math.PI/2,0],noOut:true}));
 // capelli
 const hm2=new T.MeshToonMaterial({color:C.hair,gradientMap:tone,side:T.DoubleSide});
@@ -51,20 +51,63 @@ for(const h of [hairTop,hairBack]){const o=new T.Mesh(h.geometry,outMatFor(OUT/2
 head.add(mesh(sph(1),C.hair,{p:[0,13.5,4.5],s:[19.2,5.5,12],r:[.35,0,0]}));
 
 // barba
-head.add(mesh(sph(1),C.beard,{p:[0,-10.5,8],s:[13.5,8.5,10]}));
-for(const sx of [-1,1]){head.add(mesh(sph(1),C.beard,{p:[sx*16.2,-6.5,3.5],s:[3.2,7.5,7]}))}
+head.add(mesh(sph(1),C.beard,{p:[0,-13.6,8.6],s:[9.6,6,8.4]}));
+for(const sx of [-1,1])head.add(mesh(sph(1),C.beard,{p:[sx*4.2,-5.4,17.3],s:[4,1.6,1.6],r:[0,0,-sx*.25],noOut:true}));
+
 head.add(mesh(new T.CapsuleGeometry(.7,3.4,4,8),C.mouth,{p:[0,-8.6,17.8],r:[0,0,Math.PI/2],noOut:true}));
-// naso
-head.add(mesh(sph(1),C.skin2,{p:[0,-1.5,18.3],s:[3.4,3,3.6]}));
-// occhi, occhiali, sopracciglia
-for(const sx of [-1,1]){const ex=sx*7.6,ey=2.4;
-  head.add(mesh(sph(1),C.white,{p:[ex,ey,16.6],s:[4.6,5,2.4],noOut:true}));
-  head.add(mesh(sph(1),C.black,{p:[ex,ey-.2,18.1],s:[2.8,3.1,1.4],noOut:true}));
-  head.add(mesh(sph(1),C.white,{p:[ex+.8,ey+.9,19],s:[.7,.7,.4],noOut:true}));
-  head.add(mesh(new T.TorusGeometry(5.5,.75,10,28),C.glass,{p:[ex,ey,18.4],noOut:true}));
-  head.add(mesh(box(8,1.6,1.4),C.hair,{p:[ex,ey+7.4,17.4],r:[0,0,-sx*.12],noOut:true}));}
-head.add(mesh(box(4.2,.8,.8),C.glass,{p:[0,3,19],noOut:true}));
-for(const sx of [-1,1]){head.add(mesh(box(.8,.8,12),C.glass,{p:[sx*13,3,12.8],noOut:true}))}
+// viso (variabile): occhi, occhiali, sopracciglia, naso, bocca
+const faceG=new T.Group();head.add(faceG);
+const FACES={
+ E:{an:.30,look:.9,open:1,gold:1,blush:1,scar:0},
+ F:{an:.44,look:-.4,open:0,gold:0,blush:0,scar:1},
+ G:{an:.32,look:.6,open:1,gold:1,blush:1,scar:1,bruise:1}};
+const FS=1024,PX=FS/41;
+const X=x=>(x+20.5)*PX,Y=y=>(19.5-y)*PX,L=v=>v*PX;
+function faceTex(v){const F=FACES[v];const cv=document.createElement('canvas');cv.width=cv.height=FS;const g=cv.getContext('2d');
+  const ell=(x,y,rx,ry,col,rot=0)=>{g.fillStyle=col;g.beginPath();g.ellipse(X(x),Y(y),L(rx),L(ry),rot,0,7);g.fill()};
+  // guance
+  if(F.blush){ell(-12.2,-3.4,4.8,3,'#ea9a86');ell(12.2,-3.4,4.8,3,'#ea9a86')}
+  // occhi
+  for(const sx of [-1,1]){const ex=sx*7.8,ey=1.4;
+    if(F.bruise&&sx>0){ell(ex,ey-.2,6.2,6.4,'#8a5a93');}
+    ell(ex,ey,4.7,5.2,'#ffffff');
+    ell(ex+F.look*1.1,ey-.4,2.7,3.2,'#241813');
+    ell(ex+F.look*1.1+.9,ey+.8,.85,.85,'#ffffff');
+    // palpebra superiore: riga scura sopra l'occhio
+    g.strokeStyle='#4a2a1a';g.lineWidth=L(.55);g.lineCap='round';g.beginPath();g.ellipse(X(ex),Y(ey),L(4.7),L(5.2),0,Math.PI*1.1,Math.PI*1.9);g.stroke();
+    // sopracciglio spesso e arrotondato
+    g.save();g.translate(X(ex),Y(ey+7.4));g.rotate(-sx*F.an);g.strokeStyle='#6a3a22';g.lineWidth=L(2.5);g.lineCap='round';
+    g.beginPath();g.moveTo(-L(4.2),0);g.quadraticCurveTo(0,-L(.8),L(4.2),0);g.stroke();g.restore();}
+  // naso piatto con ombra su un lato
+  g.fillStyle='#ea9570';g.beginPath();g.ellipse(X(0),Y(-2.4),L(4.3),L(3.6),0,0,7);g.fill();
+  g.fillStyle='#d97e5c';g.beginPath();g.ellipse(X(1.2),Y(-3.2),L(3),L(2.6),0,-.6,Math.PI*.8);g.lineTo(X(1.2),Y(-3.2));g.fill();
+  ell(-1.2,-1.1,1.4,1,'#f6b99b');
+  // baffi
+  g.fillStyle='#6b3b24';for(const sx of [-1,1]){g.save();g.translate(X(sx*3.4),Y(-5.6));g.rotate(-sx*.25);g.beginPath();g.ellipse(0,0,L(3.6),L(1.3),0,0,7);g.fill();g.restore()}
+  // bocca
+  if(F.open){
+    g.fillStyle='#7e1c24';g.beginPath();g.moveTo(X(-5.2),Y(-7.7));g.quadraticCurveTo(X(0),Y(-6.6),X(5.2),Y(-7.7));g.quadraticCurveTo(X(4.2),Y(-12.2),X(0),Y(-12.4));g.quadraticCurveTo(X(-4.2),Y(-12.2),X(-5.2),Y(-7.7));g.fill();
+    g.fillStyle='#ffffff';g.beginPath();g.moveTo(X(-4.6),Y(-7.8));g.quadraticCurveTo(X(0),Y(-6.9),X(4.6),Y(-7.8));g.lineTo(X(4.2),Y(-9.2));g.quadraticCurveTo(X(0),Y(-8.3),X(-4.2),Y(-9.2));g.fill();
+    if(F.gold){g.fillStyle='#f2b928';g.fillRect(X(.9),Y(-9),L(1.9),L(1.7))}
+    g.fillStyle='#d8434b';g.beginPath();g.ellipse(X(0),Y(-11.3),L(2.9),L(1.2),0,0,7);g.fill();
+  }else{
+    g.strokeStyle='#8c2d2d';g.lineWidth=L(.9);g.lineCap='round';g.beginPath();g.moveTo(X(-4),Y(-8.2));g.quadraticCurveTo(X(0),Y(-9.2),X(4.6),Y(-7.2));g.stroke();
+  }
+  if(F.scar){g.strokeStyle='#cf6f66';g.lineWidth=L(.6);g.lineCap='round';g.beginPath();g.moveTo(X(-14.5),Y(-1));g.lineTo(X(-11.5),Y(-7));g.stroke();
+    g.lineWidth=L(.4);for(const t of [.3,.6]){const px=-14.5+3*t,py=-1-6*t;g.beginPath();g.moveTo(X(px-.9),Y(py+.4));g.lineTo(X(px+.9),Y(py-.4));g.stroke()}}
+  const tex=new T.CanvasTexture(cv);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=8;return tex}
+let decal=null;
+function buildFace(v){
+  while(faceG.children.length)faceG.remove(faceG.children[0]);
+  const geo=new T.SphereGeometry(1,72,48,Math.PI/2-1.2,2.4,.4,2.3);
+  const pos=geo.attributes.position,uv=geo.attributes.uv;
+  for(let i=0;i<pos.count;i++){uv.setXY(i,(pos.getX(i)*20.5+20.5)/41,(pos.getY(i)*19.5+19.5)/39)}
+  const m=new T.Mesh(geo,new T.MeshBasicMaterial({map:faceTex(v),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}));
+  m.scale.set(20.7,19.7,19.2);faceG.add(m);
+  // naso 3D (per il profilo): stesso colore del naso piatto
+  faceG.add(mesh(sph(1),0xea9570,{p:[0,-2.4,17.6],s:[3.6,3.2,3.4],flat:true,noOut:true}));
+}
+window.buildFace=buildFace;buildFace('E');
 // braccia
 function makeArm(sx){const sh=new T.Group();sh.position.set(sx*16.5,54.5-32,0);
   sh.add(mesh(sph(4.9),C.red,{}));
@@ -161,9 +204,35 @@ const EL=22*Math.PI/180,D=200;
 function setView(v){const az={front:0,back:Math.PI,side:-Math.PI/2}[v];
   cam.position.set(Math.sin(az)*Math.cos(EL)*D,58+Math.sin(EL)*D,Math.cos(az)*Math.cos(EL)*D);cam.lookAt(0,58,0);cam.updateMatrixWorld(true);cam.updateProjectionMatrix()}
 function scr(v3){const p=v3.clone().project(cam);return [(p.x+1)/2*W,(1-p.y)/2*H]}
-window.shot=(view,P)=>{setView(view);pose(P);renderer.render(scene,cam);
+window.shot=(view,P)=>{setView(view);pose(P);applyHead(view,P);renderer.render(scene,cam);
   const hl=new T.Vector3(),hr=new T.Vector3();armL.hand.getWorldPosition(hl);armR.hand.getWorldPosition(hr);
   const mid=hl.clone().add(hr).multiplyScalar(.5);
   return {png:renderer.domElement.toDataURL('image/png'),anchor:scr(new T.Vector3(0,0,0)),hl:scr(hl),hr:scr(hr),hm:scr(mid)}};
-window.ready=true;
+window.faceShot=(v,azDeg)=>{buildFace(v);pose({mode:'idle',t:0});
+  const half=27,asp=W/H;const c2=new T.OrthographicCamera(-half*asp,half*asp,half,-half,1,500);
+  const az=azDeg*Math.PI/180,e=10*Math.PI/180;
+  c2.position.set(Math.sin(az)*Math.cos(e)*D,80+Math.sin(e)*D,Math.cos(az)*Math.cos(e)*D);c2.lookAt(0,79,0);
+  renderer.render(scene,c2);return renderer.domElement.toDataURL('image/png')};
+
+// ---- testa disegnata (Muse) su piano ----
+const HS=.106,CHIN=-21,REFY=470;
+const hmeta={f0:260,s0:200,b0:260,f1:260,s1:200,f2:260,s2:200};
+const HT={};let hplane=null;
+for(const c of head.children)c.visible=false;
+const hmat=new T.MeshBasicMaterial({transparent:true,side:T.DoubleSide,alphaTest:.02});
+hplane=new T.Mesh(new T.PlaneGeometry(1,1),hmat);head.add(hplane);hplane.visible=true;
+function applyHead(view,P){
+  let e=0;if(P&&(P.mode==='chop'||P.mode==='strike')){const u=P.u==null?0:P.u;e=(u>=.3&&u<.62)?2:(u>=.1&&u<.3?1:0)}
+  const k=(view==='back'?'b':view==='side'?'s':'f')+(view==='back'?0:e);
+  const t=HT[k];hmat.map=t;hmat.needsUpdate=true;
+  const w=t.image.width*HS,h=t.image.height*HS;hplane.scale.set(w,h,1);
+  const cx=(t.image.width/2-hmeta[k])*HS;   // centro piano rispetto al riferimento
+  const cy=CHIN+(REFY-t.image.height/2)*HS;
+  hplane.rotation.set(0,0,0);
+  if(view==='front'){hplane.position.set(cx,cy,8)}
+  else if(view==='back'){hplane.rotation.y=Math.PI;hplane.position.set(-cx,cy,-8)}
+  else{hplane.rotation.y=-Math.PI/2;hplane.position.set(-8,cy,cx)}
+}
+window.applyHead=applyHead;
+Promise.all(Object.keys(hmeta).map(k=>new Promise(r=>{const im=new Image();im.onload=()=>{const t=new T.Texture(im);t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.needsUpdate=true;HT[k]=t;r()};im.src='heads/'+k+'.png'}))).then(()=>{window.ready=true});
 </script>

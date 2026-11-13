@@ -10,7 +10,7 @@ for n in names:
 pad=6;CROP=tuple(int(v) for v in (max(0,x0-pad),max(0,y0-pad),min(760,x1+pad+1),min(800,y1+pad+1)))
 print('crop',CROP)
 anc=meta['fronte-fermo']['anchor'];ANC=[anc[0]-CROP[0],anc[1]-CROP[1]]
-S=.45;out={};dims={};hand={}
+S=.55;out={};dims={};hand={}
 for n in names:
     im=Image.open('out/%s.png'%n).convert('RGBA').crop(CROP)
     sm=im.resize((int(im.width*S),int(im.height*S)),Image.LANCZOS)
