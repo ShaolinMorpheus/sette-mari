@@ -1,6 +1,6 @@
 import cv2,numpy as np,glob,os,json
 from PIL import Image
-D3='/home/claude/work/torch3d/out/';DM='/home/claude/work/cap55/'
+D3='/home/claude/work/torch3d/out/';DM=os.environ.get('MUSE_DIR','/home/claude/work/cap55d/')
 sift=cv2.SIFT_create(6000)
 def matte(rgb):
     h,w=rgb.shape[:2];f=rgb.astype(np.float32)

@@ -3,7 +3,7 @@ var RIG={ok:false,im:{},dim:RIGART.dim,anc:RIGART.anc,KF:0.105,hand:RIGART.hand,
 (function(){var n=0,tot=0;for(var k in RIGART.img)tot++;for(var k in RIGART.img){(function(k){var i=new Image();i.onload=function(){if(++n===tot)RIG.ok=true};i.src='data:image/webp;base64,'+RIGART.img[k];RIG.im[k]=i})(k)}})();
 var RIGANG={fronte:{r:.25,c1:.12,c2:2.1,c3:2.8},spalle:{r:.25,c1:.12,c2:2.1,c3:2.8},profilo:{r:.35,c1:.1,c2:1.5,c3:2.6}};
 /* frame disegnati da Muse (solo Giacca rossa del Capitano) */
-var RIGM={ok:false,im:{},hq:RIGMART.hq,hand:RIGMART.hand,dim:RIGMART.dim};
+var RIGM={ok:false,im:{},hq:RIGMART.hq,hand:RIGMART.hand,dim:RIGMART.dim,anc:RIGMART.anc};
 (function(){var n=0,tot=0;for(var k in RIGMART.img)tot++;for(var k in RIGMART.img){(function(k){var i=new Image();i.onload=function(){if(++n===tot)RIGM.ok=true};i.src='data:image/webp;base64,'+RIGMART.img[k];RIGM.im[k]=i})(k)}})();
 function RIGMZ(o,v,back,side,tool,sw,mv,ph){
   if(!RIGM.ok||!o.k||(o.k.oid&&o.k.oid!=='o_cap'))return null;
@@ -45,7 +45,7 @@ function drawRig(g,x,y,o){
     n=v+'-'+(mv?'cammina-'+(1+Math.floor((((ph/(Math.PI*2))%1)+1)%1*8)):'fermo');
     const h=RIG.hand[n];hp=side?h.hr:h.hl;ang=RIGANG[v].r;
   }
-  const d=RIG.dim[n],ax=RIG.anc[0],ay=RIG.anc[1];
+  const d=MZ?RIGM.dim:RIG.dim[n],ax=MZ?RIGM.anc[0]:RIG.anc[0],ay=MZ?RIGM.anc[1]:RIG.anc[1];
   const IM0=MZ?RIGM.im[MZ.k]:RIG.im[n],HQ=MZ?RIGM.hq[MZ.k]:(RIG.hq&&RIG.hq[n]);
   const ht=()=>{if(!hp)return;g.save();g.translate(hp[0],hp[1]);g.rotate(ang);g.scale(1/KF,1/KF);drawTool(g,tool);g.restore()};
   if(tool&&back&&!MZ)ht();
