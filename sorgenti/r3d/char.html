@@ -207,7 +207,8 @@ function scr(v3){const p=v3.clone().project(cam);return [(p.x+1)/2*W,(1-p.y)/2*H
 window.shot=(view,P)=>{setView(view);pose(P);applyHead(view,P);renderer.render(scene,cam);
   const hl=new T.Vector3(),hr=new T.Vector3();armL.hand.getWorldPosition(hl);armR.hand.getWorldPosition(hr);
   const mid=hl.clone().add(hr).multiplyScalar(.5);
-  return {png:renderer.domElement.toDataURL('image/png'),anchor:scr(new T.Vector3(0,0,0)),hl:scr(hl),hr:scr(hr),hm:scr(mid)}};
+  const hh=new T.Vector3(),hu=new T.Vector3(0,20,0);head.getWorldPosition(hh);head.localToWorld(hu);
+  return {png:renderer.domElement.toDataURL('image/png'),anchor:scr(new T.Vector3(0,0,0)),hl:scr(hl),hr:scr(hr),hm:scr(mid),hh:scr(hh),hu:scr(hu)}};
 window.faceShot=(v,azDeg)=>{buildFace(v);pose({mode:'idle',t:0});
   const half=27,asp=W/H;const c2=new T.OrthographicCamera(-half*asp,half*asp,half,-half,1,500);
   const az=azDeg*Math.PI/180,e=10*Math.PI/180;
