@@ -11,7 +11,7 @@ m="/* ---- 12d_kb.js ---- */"
 assert src.count(m)==1
 src=src.replace(m,fn+m)
 assert src.count("Per ora senza cappello.")==1
-src=src.replace("Per ora senza cappello.","Con tutti i cappelli.")
+src=src.replace("Per ora senza cappello.","Con i cappelli ridisegnati (11) e 8 cappelli nuovi, da sbloccare salendo di livello.")
 assert src.count('farm:{GC,DRYR,WEAR,')==1
 src=src.replace('farm:{GC,DRYR,WEAR,','farm:{drawRig,hatOnly,RIG,GC,DRYR,WEAR,')
 open(P,'w',encoding='utf8').write(src);print('patch66 ok',len(blk))

@@ -10,13 +10,13 @@ for n in names:
 pad=6;CROP=tuple(int(v) for v in (max(0,x0-pad),max(0,y0-pad),min(760,x1+pad+1),min(800,y1+pad+1)))
 print('crop',CROP)
 anc=meta['fronte-fermo']['anchor'];ANC=[anc[0]-CROP[0],anc[1]-CROP[1]]
-S=.55;out={};dims={};hand={};hd={}
+S=.55;out={};dims={};hand={};hd={};hq={}
 import math
 for n in names:
     im=Image.open('out/%s.png'%n).convert('RGBA').crop(CROP)
     sm=im.resize((int(im.width*S),int(im.height*S)),Image.LANCZOS)
     b=io.BytesIO();sm.save(b,'WEBP',quality=82,method=6);out[n]=base64.b64encode(b.getvalue()).decode();dims[n]=list(im.size)
-    m=meta[n];hd[n]=[m['hh'][0]-anc[0],m['hh'][1]-anc[1],math.atan2(m['hu'][0]-m['hh'][0],-(m['hu'][1]-m['hh'][1]))];hand[n]={'hm':[m['hm'][0]-anc[0],m['hm'][1]-anc[1]],'hl':[m['hl'][0]-anc[0],m['hl'][1]-anc[1]],'hr':[m['hr'][0]-anc[0],m['hr'][1]-anc[1]]}
+    m=meta[n];hq[n]=[[p[0]-anc[0],p[1]-anc[1]] for p in m['hq']];hd[n]=[m['hh'][0]-anc[0],m['hh'][1]-anc[1],math.atan2(m['hu'][0]-m['hh'][0],-(m['hu'][1]-m['hh'][1]))];hand[n]={'hm':[m['hm'][0]-anc[0],m['hm'][1]-anc[1]],'hl':[m['hl'][0]-anc[0],m['hl'][1]-anc[1]],'hr':[m['hr'][0]-anc[0],m['hr'][1]-anc[1]]}
 fh=Image.open('out/fronte-fermo.png').getbbox();print('altezza figura px',fh[3]-fh[1])
-json.dump({'img':out,'dim':dims,'anc':ANC,'hand':hand,'hd':hd},open('rig_art7.json','w'))
+json.dump({'img':out,'dim':dims,'anc':ANC,'hand':hand,'hd':hd,'hq':hq},open('rig_art7.json','w'))
 print(len(out),sum(len(v) for v in out.values())//1024,'KB')

@@ -1,5 +1,5 @@
 /* ---- personaggio 3D a fotogrammi (grafica personaggio prova) ---- */
-var RIG={ok:false,im:{},dim:RIGART.dim,anc:RIGART.anc,KF:0.105,hand:RIGART.hand,hd:RIGART.hd,HS:12.8,HY:.7};
+var RIG={ok:false,im:{},dim:RIGART.dim,anc:RIGART.anc,KF:0.105,hand:RIGART.hand,hd:RIGART.hd,hq:RIGART.hq,hat:{},hatok:false,HS:12.8,HY:.7};
 (function(){var n=0,tot=0;for(var k in RIGART.img)tot++;for(var k in RIGART.img){(function(k){var i=new Image();i.onload=function(){if(++n===tot)RIG.ok=true};i.src='data:image/webp;base64,'+RIGART.img[k];RIG.im[k]=i})(k)}})();
 var RIGANG={fronte:{r:.25,c1:.12,c2:2.1,c3:2.8},spalle:{r:.25,c1:.12,c2:2.1,c3:2.8},profilo:{r:.35,c1:.1,c2:1.5,c3:2.6}};
 function drawRig(g,x,y,o){
@@ -25,7 +25,19 @@ function drawRig(g,x,y,o){
   const ht=()=>{if(!hp)return;g.save();g.translate(hp[0],hp[1]);g.rotate(ang);g.scale(1/KF,1/KF);drawTool(g,tool);g.restore()};
   if(tool&&back)ht();
   g.drawImage(RIG.im[n],-ax,-ay,d[0],d[1]);
-  if(o.k&&o.k.hat&&o.k.hat!=='bald'&&typeof hatOnly==='function'&&RIG.hd&&RIG.hd[n]){const q=RIG.hd[n];g.save();g.translate(q[0],q[1]);g.rotate(q[2]);g.scale(RIG.HS,RIG.HS);try{hatOnly(g,o.k,back,side,RIG.HY,9.6)}catch(e){}g.restore()}
+  if(o.k&&o.k.hat&&o.k.hat!=='bald'){
+    const nm=RIGHATMAP(o.k),ha=nm&&RIGHAT.art[nm],q=RIG.hq&&RIG.hq[n];
+    if(ha&&q&&RIG.hatok){
+      const kk=back?'b':side?'s':'f',im=RIG.hat[nm+'_'+kk],Wc=RIGHAT.WC[kk],Hc=RIGHAT.H;
+      g.save();g.transform((q[1][0]-q[0][0])/Wc,(q[1][1]-q[0][1])/Wc,(q[2][0]-q[0][0])/Hc,(q[2][1]-q[0][1])/Hc,q[0][0],q[0][1]);
+      g.drawImage(im,-RIGHAT.ML,-RIGHAT.MT,ha['w'+kk],ha.h);g.restore();
+    }else if(typeof hatOnly==='function'&&RIG.hd&&RIG.hd[n]){const q2=RIG.hd[n];g.save();g.translate(q2[0],q2[1]);g.rotate(q2[2]);g.scale(RIG.HS,RIG.HS);try{hatOnly(g,o.k,back,side,RIG.HY,9.6)}catch(e){}g.restore()}
+  }
   if(tool&&!back)ht();
   g.restore();
 }
+
+/* cappelli disegnati (Muse): un livello per vista, agganciato al piano della testa */
+(function(){var n=0,tot=0;for(var nm in RIGHAT.art)for(var k of ['f','s','b'])tot++;
+ for(var nm in RIGHAT.art)for(var k of ['f','s','b']){(function(nm,k){var i=new Image();i.onload=function(){if(++n===tot)RIG.hatok=true};i.src='data:image/webp;base64,'+RIGHAT.art[nm][k];RIG.hat[nm+'_'+k]=i})(nm,k)}})();
+function RIGHATMAP(k){var r=k.rig;if(r&&RIGHAT.map[r])return RIGHAT.map[r];return null}

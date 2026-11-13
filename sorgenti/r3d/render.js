@@ -5,5 +5,5 @@ const p=await b.newPage({viewport:{width:760,height:800}});p.on('pageerror',e=>c
 await p.goto('http://localhost:8765/char.html');await p.waitForFunction('window.ready',null,{timeout:20000});
 const jobs=JSON.parse(process.argv[2]);if(process.argv[3]==='face'){fs.mkdirSync('out2',{recursive:true});for(const j of jobs){const d=await p.evaluate(([v,a])=>window.faceShot(v,a),[j.v,j.az]);fs.writeFileSync('out2/'+j.name+'.png',Buffer.from(d.split(',')[1],'base64'))}await b.close();srv.close();return}fs.mkdirSync('out',{recursive:true});const meta={};
 for(const j of jobs){const r=await p.evaluate(([v,P])=>window.shot(v,P),[j.view,j.pose]);
- fs.writeFileSync('out/'+j.name+'.png',Buffer.from(r.png.split(',')[1],'base64'));meta[j.name]={anchor:r.anchor,hm:r.hm,hl:r.hl,hr:r.hr,hh:r.hh,hu:r.hu}}
+ fs.writeFileSync('out/'+j.name+'.png',Buffer.from(r.png.split(',')[1],'base64'));meta[j.name]={anchor:r.anchor,hm:r.hm,hl:r.hl,hr:r.hr,hh:r.hh,hu:r.hu,hq:r.hq}}
 fs.writeFileSync('out/meta.json',JSON.stringify(meta));await b.close();srv.close()})()
