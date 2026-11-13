@@ -24,7 +24,18 @@ function drawRig(g,x,y,o){
   const d=RIG.dim[n],ax=RIG.anc[0],ay=RIG.anc[1];
   const ht=()=>{if(!hp)return;g.save();g.translate(hp[0],hp[1]);g.rotate(ang);g.scale(1/KF,1/KF);drawTool(g,tool);g.restore()};
   if(tool&&back)ht();
-  g.drawImage(RIG.im[n],-ax,-ay,d[0],d[1]);
+  var __hn=(o.k&&o.k.hat&&o.k.hat!=='bald')?RIGHATMAP(o.k):null,__hq=RIG.hq&&RIG.hq[n],__he=__hn&&RIGHAT.E&&RIGHAT.E[__hn]&&RIG.hatok&&__hq?RIG.hat[__hn+'_E'+(back?'b':side?'s':'f')]:null;
+  if(__he){
+    const im0=RIG.im[n],sx=im0.width/d[0];let tc=RIG.tc;if(!tc){tc=RIG.tc=document.createElement('canvas')}
+    if(tc.width<im0.width||tc.height<im0.height){tc.width=im0.width;tc.height=im0.height}
+    const tg=tc.getContext('2d');tg.setTransform(1,0,0,1,0,0);tg.globalCompositeOperation='source-over';tg.clearRect(0,0,tc.width,tc.height);tg.drawImage(im0,0,0);
+    const kk=back?'b':side?'s':'f',Wc=RIGHAT.WC[kk],Hc=RIGHAT.H,q=__hq;
+    tg.globalCompositeOperation='destination-out';
+    tg.setTransform(sx,0,0,sx,ax*sx,ay*sx);tg.transform((q[1][0]-q[0][0])/Wc,(q[1][1]-q[0][1])/Wc,(q[2][0]-q[0][0])/Hc,(q[2][1]-q[0][1])/Hc,q[0][0],q[0][1]);
+    tg.drawImage(__he,-RIGHAT.ML,-RIGHAT.MT,RIGHAT.art[__hn]['w'+kk],RIGHAT.art[__hn].h);
+    tg.setTransform(1,0,0,1,0,0);tg.globalCompositeOperation='source-over';
+    g.drawImage(tc,0,0,im0.width,im0.height,-ax,-ay,d[0],d[1]);
+  }else g.drawImage(RIG.im[n],-ax,-ay,d[0],d[1]);
   if(o.k&&o.k.hat&&o.k.hat!=='bald'){
     const nm=RIGHATMAP(o.k),ha=nm&&RIGHAT.art[nm],q=RIG.hq&&RIG.hq[n];
     if(ha&&q&&RIG.hatok){
@@ -38,6 +49,7 @@ function drawRig(g,x,y,o){
 }
 
 /* cappelli disegnati (Muse): un livello per vista, agganciato al piano della testa */
-(function(){var n=0,tot=0;for(var nm in RIGHAT.art)for(var k of ['f','s','b'])tot++;
- for(var nm in RIGHAT.art)for(var k of ['f','s','b']){(function(nm,k){var i=new Image();i.onload=function(){if(++n===tot)RIG.hatok=true};i.src='data:image/webp;base64,'+RIGHAT.art[nm][k];RIG.hat[nm+'_'+k]=i})(nm,k)}})();
+(function(){var n=0,tot=0;for(var nm in RIGHAT.art)for(var k of ['f','s','b'])tot+=2;
+ for(var nm in RIGHAT.art)for(var k of ['f','s','b']){(function(nm,k){var i=new Image();i.onload=function(){if(++n===tot)RIG.hatok=true};i.src='data:image/webp;base64,'+RIGHAT.art[nm][k];RIG.hat[nm+'_'+k]=i;
+  var e=new Image();e.onload=function(){if(++n===tot)RIG.hatok=true};e.src='data:image/webp;base64,'+RIGHAT.E[nm][k];RIG.hat[nm+'_E'+k]=e})(nm,k)}})();
 function RIGHATMAP(k){var r=k.rig;if(r&&RIGHAT.map[r])return RIGHAT.map[r];return null}

@@ -19,7 +19,6 @@ new="""
 (function(){
   const N=[
    {id:'h_bandanera',n:'Bandana nera',l:4,spec:{hat:'bandana',hatc:'#1a1a1e'}},
-   {id:'h_bandarighe',n:'Bandana a righe',l:5,spec:{hat:'bandana',hatc:'#d85a4a'}},
    {id:'h_cuoio',n:'Tricorno di cuoio',l:6,spec:{hat:'tricorn',hatc:'#7a5232',trim:'#b08a50'}},
    {id:'h_logoro',n:'Tricorno logoro',l:7,spec:{hat:'tricorn',hatc:'#2a2a2e',trim:'#6a5a30'}},
    {id:'h_cappiuma',n:'Cappello con la piuma',l:8,spec:{hat:'straw',hatc:'#8a5a30'}},
@@ -29,6 +28,8 @@ new="""
   for(const it of N){if(WEAR.some(w=>w.id===it.id))continue;
     const w={id:it.id,k:'hat',n:it.n,hint:'Raggiungi il livello '+it.l+'.',own:()=>NV.lvOk(it.l),spec:it.spec};
     WEAR.push(w);WRH[it.id]=it.spec}
+  /* cappelli senza disegno nuovo: tolti dal gioco */
+  for(const id of ['h_paglia','h_pesc','h_turb','h_viagg','h_bosc','h_guardia','h_tito','h_tela']){const i=WEAR.findIndex(w=>w.id===id);if(i>=0)WEAR.splice(i,1);delete WRH[id]}
 })();
 """
 rep("/* ---- 12d_kb.js ---- */",new+"/* ---- 12d_kb.js ---- */")

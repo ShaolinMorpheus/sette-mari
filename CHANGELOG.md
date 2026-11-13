@@ -213,3 +213,5 @@
 ## v0.1 · 26 ott 2026 — Prima bozza della Stagione 1
 - Prima isola da esplorare, vista dall'alto con effetto 3D, con relitto, laghetto, scogliera e rovine.
 - Covo da ricostruire (falò, capanna, banco, torre, molo), missioni, giorno e notte, minimappa e salvataggio nel browser.
+
+- Cappelli ridisegnati: i capelli non spuntano più attorno ai cappelli. Rimossi i cappelli non ridisegnati (paglia, pescatore, turbante, navigatore, boscaiolo, guardia, berretto di Tito, tela cerata); la bandana iniziale usa quella a righe.
