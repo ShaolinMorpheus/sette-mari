@@ -41,6 +41,19 @@ Ciclo di camminata: quello del Capitano — passo1/3 gambe vicine e dritte,
 passo2/4 falcata larga alternata, testa e busto alla stessa altezza in
 tutti i passi (verificato mettendo i frame in fila).
 
+## Correzione profili (14 nov sera, su segnalazione dell'utente)
+Nei profili (destro e sinistro, fermo e passo1–4):
+- cintura SOTTILE: fascia marrone di 8–10 px con fibbia, alta come nel
+  Capitano — il bacino NON è più marrone;
+- sotto la cintura i pantaloni blu medio vanno dalla vita allo stivale,
+  gamba posteriore attaccata al bacino, gambe della stessa lunghezza;
+- il braccio è trattato come struttura verticale: manica bianca con pieghe
+  e ombra (ombreggiatura dalla luce vera, non più piatta) che continua
+  davanti a cintura e pantaloni e finisce in un polsino grigio chiaro
+  e nella mano; la cintura passa dietro il braccio.
+Fronte e spalle: solo allineata l'ombreggiatura di maniche e polsini,
+il resto è invariato. Sagome e controlli rifatti: coincidenze come sopra.
+
 ## File
 - frame/: 20 frame camminata (fronte, profilo-destro, profilo-sinistro,
   spalle × fermo, passo1–4), PNG in base64 (una riga).
