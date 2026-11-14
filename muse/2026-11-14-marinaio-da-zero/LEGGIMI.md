@@ -54,6 +54,24 @@ Nei profili (destro e sinistro, fermo e passo1–4):
 Fronte e spalle: solo allineata l'ombreggiatura di maniche e polsini,
 il resto è invariato. Sagome e controlli rifatti: coincidenze come sopra.
 
+## Pulizia dei grigi nei profili (14 nov sera, su segnalazione dell'utente)
+Solo profili destro e sinistro (fermo e passo1–4):
+- punta dello stivale davanti in passo2 e passo4: il rettangolo grigio
+  è diventato marrone come il resto dello stivale;
+- punta della barba sul mento: da grigia a marrone scuro come il resto
+  della barba;
+- manica: niente più chiazze grigie — bianco con ombre calde beige
+  (l'ombreggiatura sfuma verso il beige, il polsino è beige chiaro).
+Controllo pixel per pixel (grigio neutro = canali quasi uguali,
+luminosità sotto 200, dentro la sagoma; esenti solo occhio e fibbia):
+grigi residui per frame — profilo-destro: fermo 1, passo1 5, passo2 1,
+passo3 5, passo4 3; profilo-sinistro: fermo 1, passo1 1, passo2 6,
+passo3 1, passo4 5 (pixel isolati di bordo, non macchie).
+Le sovrapposizioni in controllo/ sono state rifatte per tutti i 20 frame:
+la sagoma coincide col Capitano (le differenze numeriche, 125–254 px,
+sono i pixel chiari di bordo che cambiano soglia con la ricolorazione
+e la grana rimossa — la forma non cambia).
+
 ## File
 - frame/: 20 frame camminata (fronte, profilo-destro, profilo-sinistro,
   spalle × fermo, passo1–4), PNG in base64 (una riga).
