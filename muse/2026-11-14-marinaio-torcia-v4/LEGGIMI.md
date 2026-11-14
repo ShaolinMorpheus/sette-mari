@@ -6,6 +6,17 @@ delle gambe, bacino e altezza del busto identici a quelli del Capitano;
 cambiano solo i vestiti (maglia a righe bianche e blu, pantaloni blu navy)
 e la testa del marinaio.
 
+**Aggiornamento (rifacimento pixel per pixel)**: i frame sono ora copie
+esatte dei frame del Capitano — sagoma, gambe, stivali, bacino, braccio e
+torcia identici pixel per pixel (verifica numerica: fuori da giacca e
+pantaloni i pixel sono uguali al 100%) — con la sola texture dei vestiti
+sostituita: maglia a righe bianche/blu dipinta e pantaloni navy presi dai
+frame del marinaio. Nessun bottone, colletto o dettaglio della giacca
+rossa resta. In profilo il braccio con la torcia è piegato davanti al
+petto come nel Capitano, e in passo1/passo3 le gambe sono vicine con lo
+stivale posteriore a terra. Le righe sono regolari e continue, senza
+buchi, e la maglia scende fino alla cintura.
+
 ## Regole applicate
 
 - passo1 e passo3: gambe vicine, passaggio centrale; passo2 e passo4:
