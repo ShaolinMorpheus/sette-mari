@@ -17,4 +17,5 @@ rep("const hero=WEAR.filter(x=>x.k!=='par'),","const hero=WEAR.filter(x=>x.k!=='
 rep("{id:'o_mar',k:'out',n:'Maglia da marinaio',hint:'Sopravvivi fino al giorno 4.',own:()=>(S.day||1)>=4,","{id:'o_mar',k:'out',n:'Maglia da marinaio',hint:'Sopravvivi fino al giorno 4.',own:()=>RIGT||(S.day||1)>=4,")
 rep('Menu → Partita → «Grafica personaggio prova» (facoltativa)','Maglia da marinaio ridisegnata da Muse (camminata, torcia, ascia, piccone). Per ora nel Guardaroba restano solo Giacca rossa e Maglia da marinaio: gli altri abiti tornano quando saranno ridisegnati. Menu → Partita → «Grafica personaggio prova» (facoltativa)') if False else None
 rep('Giacca rossa del Capitano ridisegnata da Muse: camminata, torcia accesa, ascia e piccone.','Giacca rossa del Capitano e Maglia da marinaio ridisegnate da Muse: camminata, torcia accesa, ascia e piccone. Nel Guardaroba restano solo questi due abiti: gli altri tornano quando saranno ridisegnati.')
+rep("(RIGT&&RIG.ok?drawRig:drawChar)(g,P.x,P.y,{k:hs,","(RIGT&&RIG.ok&&!(hs.oid&&hs.oid!=='o_cap'&&!(hs.oid==='o_mar'&&RIGMAR))?drawRig:drawChar)(g,P.x,P.y,{k:hs,")
 open(P,'w',encoding='utf8').write(src);print('patch71 ok')
