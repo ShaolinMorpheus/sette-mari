@@ -108,4 +108,32 @@ Capitano (differenze 21–69 px, solo grana e bordi chiari); sotto la
 cintura i pixel sono quelli del gruppo 1 (differenza 0, mani escluse:
 la mano del lato torcia è quella sulla torcia); profili senza grigi
 neutri (residui 0–13 pixel isolati di bordo per frame).
+
+## Correzione gruppo 2 — bacino e gambe dal gruppo 1 (14 nov, ore 20:24)
+Su richiesta: i bacini dei frame torcia oscillavano diversamente dalla
+camminata. I 20 frame sono stati ricomposti così:
+- BASE = il frame del gruppo 1 della stessa vista e passo, intero:
+  dalla cintura in giù (cintura, pantaloni, gambe, stivali) è identico
+  al gruppo 1 PIXEL PER PIXEL, e anche testa, collo e busto sono quelli
+  del gruppo 1 (stessa linea di spalle, stesso collo).
+- Dal gruppo 2 precedente è stato preso SOLO il braccio con la torcia
+  (manica, mano, manico, fiamma), spostato in orizzontale quanto serve
+  perché la spalla cada su quella del gruppo 1 (spostamenti da -44 a
+  +19 px secondo vista e passo, allineamento sul centro della testa).
+  La mano libera resta quella del gruppo 1; la mano del gruppo 1 sul
+  lato torcia è cancellata (il braccio è alzato sulla torcia); la mano
+  lontana del gruppo 2 sotto la cintura NON è riportata (appartiene
+  alla sua posizione di bacino e finirebbe nel posto sbagliato).
+- Sotto la cintura le uniche differenze dal gruppo 1 sono gli elementi
+  della torcia stessa: il manico che scende davanti alla coscia nei
+  profili e la mano con la punta del manico di fronte.
+Controlli RIFATTI in controllo/: sovrapposizione al 50% del frame
+torcia sul frame SENZA torcia dello stesso passo (come richiesto).
+Sotto la cintura coincidono: differenze fuori dagli elementi della
+torcia = 0 pixel in tutti i 20 frame; testa mai toccata (differenza 0).
+Note: nel profilo-sinistro passo4 la fiamma resta vicina alla punta
+del naso, come nel frame torcia del Capitano (le due teste, camminata
+e torcia, sono disegnate diversamente in partenza). Nei profili in
+falcata, nel punto dove la mano del gruppo 1 è stata cancellata resta
+una piccola ombra raccordata alla punta della cintura.
 STATO: gruppo 2 pronto
