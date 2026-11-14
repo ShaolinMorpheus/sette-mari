@@ -1,82 +1,82 @@
-# Marinaio a righe — frame con torcia v7 (solo fronte e profilo-destro, passo1–4)
+# Marinaio a righe — frame con torcia v7 (set completo, 20 frame)
 
-Correzione mirata delle gambe nei frame di profilo, chiesta il 14 nov:
-nei frame torcia-profilo passo1 e passo3 del marinaio la gamba dietro
-era alzata (posa di corsa). Qui il problema è risolto e dimostrato con
-le immagini di controllo allegate.
+Aggiornamento della v7 nella stessa cartella, come richiesto il 14 nov:
+le gambe di profilo approvate NON sono state toccate (verifica: sotto
+la cintura i frame di profilo-destro passo1–4 sono pixel per pixel
+quelli già consegnati). Il resto è stato ripulito e il set completato.
 
-## Il problema era nella base, e va detto
+## Pulizie fatte
 
-Confrontando i frame del Capitano del set di lavoro:
-- i suoi frame di CAMMINATA (01-capitano-rosso_profilo-destro-*) hanno
-  il ciclo giusto: passo1 e passo3 gambe vicine, quasi dritte, due
-  stivali a terra; passo2 e passo4 falcata larga.
-- i suoi frame TORCIA di profilo (01-capitano-rosso_torcia-profilo-
-  destro-passo1 e passo3) hanno invece la gamba dietro ALZATA, posa di
-  corsa: sono incoerenti con la sua camminata. Le versioni precedenti
-  del marinaio, copiando quei frame, hanno ereditato la posa di corsa.
+- BUSTO: la maglia ora è un riempimento a righe campionate riga per
+  riga dal fermo del marinaio della stessa vista: righe bianche/blu
+  regolari, continue e orizzontali, con i bordi della sagoma del
+  Capitano (niente tessuto che sborda dietro la schiena o dalle
+  maniche, niente pannelli estranei). Maniche bianche con ombreggiatura
+  leggera e contorno pulito, come nei frame senza torcia. Sul dorso
+  (spalle) la toppa beige del Capitano è coperta dalle righe.
+- VISO IN PROFILO: trapianto pulito della testa del fermo del
+  marinaio (profilo-destro-fermo), allineata sugli occhi: la macchia
+  marrone vicino alla bocca — resti del volto del Capitano rimasti
+  accanto alla fiamma — è eliminata. Verifica numerica: i pixel del
+  viso disegnato coincidono con quelli del fermo; le sole differenze
+  (circa 500 pixel su ~11.800) sono il bordo inferiore del collo sotto
+  il colletto e i pixel coperti da torcia e mano, che restano del
+  Capitano.
+- FRONTE PASSO2 (e gli altri fronte): la macchia sulla cintura è
+  tolta — la cintura è ricopiata dai frame del marinaio e ripulita
+  (fibbia dorata conservata); anche il triangolo chiaro sotto la
+  cintura è ora navy come i pantaloni.
 
-Perciò in questa v7, nei frame di profilo, la parte dalla cintura in
-giù è presa dai frame di CAMMINATA del Capitano (stessa vista, stesso
-passo), allineata alla sua cintura nel frame torcia (la figura torcia
-sta ~8–12 px più in basso di quella di camminata: l'allineamento è
-fatto sulla linea della cintura, e la base dei piedi resta quella del
-frame torcia). Nei frame di fronte la parte sotto la cintura è quella
-del frame torcia stesso, intatta. In entrambi i casi, sotto la cintura
-l'unico cambiamento di colore è pantaloni jeans → navy (e l'orlo della
-giacca → navy).
+## Frame aggiunti in questo aggiornamento
 
-## File di partenza di ogni frame
+- torcia-fronte-fermo e torcia-profilo-destro-fermo (stesso metodo
+  degli altri frame della vista).
+- torcia-profilo-sinistro, fermo e passo1–4: specchio esatto del
+  profilo destro.
+- torcia-spalle, fermo e passo1–4: sopra la cintura dai frame torcia
+  del Capitano; sotto la cintura le gambe sono quelle dei frame di
+  CAMMINATA del Capitano (01-capitano-rosso_spalle-*), allineate alla
+  cintura, come per il profilo; la toppa beige sul dorso è coperta
+  dalle righe della maglia.
 
-Per tutti gli 8 frame:
-- SOPRA LA CINTURA (busto, braccio, mano, torcia): base
-  `01-capitano-rosso_torcia-<vista>-<passo>.png`
-- TESTA: `02-marinaio-righe_<vista>-fermo.png` (frame senza torcia)
-- MAGLIA: texture da `02-marinaio-righe_<vista>-<passo>.png`
-- SOTTO LA CINTURA, fronte: `01-capitano-rosso_torcia-fronte-<passo>.png`
-  (intatto, solo pantaloni navy)
-- SOTTO LA CINTURA, profilo-destro:
-  `01-capitano-rosso_profilo-destro-<passo>.png` (camminata del
-  Capitano, allineata alla cintura; solo pantaloni navy)
+## Base e gambe (riepilogo, come nella prima v7)
+
+- Fronte: sotto la cintura = frame torcia del Capitano, intatto,
+  solo pantaloni jeans → navy.
+- Profilo destro/sinistro e spalle: sotto la cintura = frame di
+  camminata del Capitano della stessa vista e passo, allineati alla
+  linea della cintura del frame torcia (la figura torcia sta qualche
+  pixel più in basso; la base dei piedi resta quella del frame
+  torcia); solo pantaloni → navy. Motivo: i frame torcia di profilo
+  del Capitano (passo1 e passo3) hanno la gamba dietro alzata, posa
+  di corsa, incoerente con la sua camminata.
 
 ## Controllo di sovrapposizione (cartella controllo/)
 
-Ogni `controllo/<nome>.png` è il frame del marinaio al 50% di
-trasparenza sopra il frame del Capitano di riferimento (fronte: il
-frame torcia; profilo: la camminata allineata alla cintura). Sopra la
-cintura il doppio contorno è atteso (pose diverse: torcia contro
-camminata, testa e vestiti diversi); il controllo riguarda gambe e
-stivali. Esito per frame, verificato anche numericamente (differenza
-di sagoma sotto la cintura = 0 in tutti i frame):
+Ogni `controllo/<nome>.png` è il frame del marinaio al 50% sopra il
+frame del Capitano di riferimento (fronte: frame torcia; profilo e
+spalle: camminata allineata alla cintura; profilo sinistro: specchio
+del controllo destro). Sopra la cintura il doppio contorno è atteso
+(pose e vestiti diversi); il controllo riguarda gambe e stivali.
+Esito, verificato anche numericamente (differenza di sagoma sotto la
+cintura = 0 in tutti i frame):
 
-- torcia-fronte-passo1: sovrapposizione gambe coincide — SÌ
-- torcia-fronte-passo2: sovrapposizione gambe coincide — SÌ
-- torcia-fronte-passo3: sovrapposizione gambe coincide — SÌ
-- torcia-fronte-passo4: sovrapposizione gambe coincide — SÌ
-- torcia-profilo-destro-passo1: sovrapposizione gambe coincide — SÌ
-  (gambe vicine, due stivali a terra; niente più gamba alzata)
-- torcia-profilo-destro-passo2: sovrapposizione gambe coincide — SÌ
-- torcia-profilo-destro-passo3: sovrapposizione gambe coincide — SÌ
-  (gambe vicine, due stivali a terra; niente più gamba alzata)
-- torcia-profilo-destro-passo4: sovrapposizione gambe coincide — SÌ
-
-Altri controlli: nessuna macchia vicino alla bocca (rimossi i resti
-del volto del Capitano rimasti vicino alla fiamma), nessun pezzo di
-tessuto che sborda in vita (orlo ridipinto navy), righe della maglia
-continue, nessun dettaglio rosso/dorato residuo della giacca.
+- torcia-fronte × fermo, passo1–4: sovrapposizione gambe — SÌ (×5)
+- torcia-profilo-destro × fermo, passo1–4: sovrapposizione gambe — SÌ (×5)
+- torcia-profilo-sinistro × fermo, passo1–4: sovrapposizione gambe — SÌ (×5, specchio)
+- torcia-spalle × fermo, passo1–4: sovrapposizione gambe — SÌ (×5)
 
 ## Contenuto
 
-- `frame/` — 8 file `.png.b64`: torcia-fronte passo1–4 e
-  torcia-profilo-destro passo1–4. Canvas 336×376, sfondo verde.
-- `controllo/` — gli 8 controlli di sovrapposizione `.png.b64`
+- `frame/` — 20 file `.png.b64`: le 4 viste × fermo e passo1–4.
+  Canvas 336×376, sfondo verde uniforme.
+- `controllo/` — 20 controlli di sovrapposizione `.png.b64`
   (decodificare con `base64 -d nome.png.b64 > nome.png`).
-- `elenco.txt` — gli 8 frame in ordine.
+- `elenco.txt` — i 20 frame in ordine di gioco.
 
 ## Cosa NON cambia
 
-- Gli altri frame del marinaio e del Capitano: invariati. Se i frame
-  torcia di profilo del Capitano vanno corretti alla radice (gambe
-  della camminata anche lì), è un lavoro a parte da chiedere a parte.
+- Gli altri frame del marinaio (camminata e colpi) e tutti i frame
+  del Capitano: invariati.
 
 STATO: pronto
