@@ -1,4 +1,29 @@
-# Consegna: abiti del personaggio — corpi senza testa
+# Consegna: abiti del personaggio
+
+## CAMBIO DI METODO — personaggi COMPLETI (da ora in poi)
+
+Da questa consegna ogni abito è un **personaggio completo**: testa e corpo
+disegnati insieme, come la Giacca rossa del Capitano — stessi frame con
+viso, capelli, barba e orecchino. Niente più corpi senza testa.
+Riferimento fisso per viso e capelli: i 55 frame del Capitano. Stesso
+volto, stessa scala (canvas 336×376), stesso punto di appoggio dei piedi,
+stessi nomi dei frame. Continuità curata tra i passi: testa e busto alla
+stessa altezza in tutti i frame, gambe mai incrociate, nessun salto tra
+una posa e l'altra.
+
+### marinaio completo
+
+`02-marinaio-completo/` — 55 frame completi in `frame/` (`.png.b64`) +
+`elenco.txt`, con le correzioni alle gambe già fatte per la versione
+senza testa: passi 1 e 3 dei profili e passi 2 e 4 di fronte con una
+gamba avanti e una dietro, ben separate; colpi con gambe piantate e
+separate.
+
+STATO: pronto
+
+---
+
+## Consegna precedente — corpi senza testa (metodo sostituito)
 
 I 6 abiti del set approvato ridisegnati come **corpi senza testa**: il gioco
 aggiunge testa e cappello. Non sono disegnati viso, capelli, orecchino né
@@ -6,12 +31,16 @@ cappello; il collo finisce pulito alla base della testa, nella stessa
 posizione dei frame del Capitano (giacca rossa). Stessa scala (canvas
 336×376), stesso punto di appoggio dei piedi, sfondo trasparente.
 
-Consegna **uno abito alla volta** come richiesto: il marinaio è completo;
-gli altri seguono dopo l'ok.
-
 | Abito | Cartella | Stato |
 |---|---|---|
-| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) — **marinaio v4** (ultime correzioni):
+| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) — **marinaio v4** |
+| 03 esploratore | — | sostituito dal metodo completo |
+| 04 marsina di velluto | — | sostituito dal metodo completo |
+| 05 corsaro nero | — | sostituito dal metodo completo |
+| 06 navigatore | — | sostituito dal metodo completo |
+| 07 giubba corsaro | — | sostituito dal metodo completo |
+
+**marinaio v4** (ultime correzioni alla versione senza testa):
 - torcia-fronte-passo3: busto intero e simmetrico, spalle alla stessa
   altezza, niente taglio a metà.
 - fronte-passo2 e fronte-passo4: busto nitido come gli altri frame,
@@ -33,13 +62,6 @@ gli altri seguono dopo l'ok.
   profilo destro, profilo sinistro, spalle; fermo + passo1–4), torcia
   (stesse 4 viste), colpi in profilo destro (mani nude 1–3, ascia 1–6,
   piccone 1–6).
-
-## Note tecniche
-
-- I corpi derivano dai frame approvati dello stesso abito (stesso disegno,
-  stessa scala): testa rimossa alla base del collo, sfondo reso trasparente.
-- Fiamma della torcia sempre presente e stessa dimensione; attrezzi e mani
-  integri anche nelle pose con braccia alzate.
 
 ## Cosa NON deve cambiare
 
