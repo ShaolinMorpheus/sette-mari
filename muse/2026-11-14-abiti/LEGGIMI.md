@@ -11,13 +11,16 @@ stessi nomi dei frame. Continuità curata tra i passi: testa e busto alla
 stessa altezza in tutti i frame, gambe mai incrociate, nessun salto tra
 una posa e l'altra.
 
-### marinaio completo
+### marinaio completo v2
 
 `02-marinaio-completo/` — 55 frame completi in `frame/` (`.png.b64`) +
 `elenco.txt`, con le correzioni alle gambe già fatte per la versione
 senza testa: passi 1 e 3 dei profili e passi 2 e 4 di fronte con una
 gamba avanti e una dietro, ben separate; colpi con gambe piantate e
 separate.
+**v2**: nei 10 frame di spalle (camminata e torcia) tolto il riquadro
+chiaro/tabacco sul dorso: le righe bianche e blu della maglia ora sono
+continue fino al collo.
 
 STATO: pronto
 
