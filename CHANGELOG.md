@@ -222,3 +222,4 @@
 
 ## Mappa di prova
 - Menu → Partita → «Mappa di prova» (spenta di default): terra, sabbia, erba e acqua con le texture ad acquerello di Muse; forma e collisioni invariate. Cambio con ricarica.
+- Mappa di prova v2: texture dettagliate (erba, terra) stese a piena risoluzione, ripetute ogni ~8 celle; riva animata (avanza e si ritira lungo tutta la costa, fascia d'acqua bassa, schiuma sul bordo mobile).
