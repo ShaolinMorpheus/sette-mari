@@ -219,3 +219,6 @@
 - Giacca rossa del Capitano ridisegnata da Muse (55 frame): camminata in 4 direzioni, torcia accesa, ascia, piccone e colpi. Solo in «Grafica personaggio prova»; gli altri abiti restano col modello 3D.
 
 - Capitano di Muse: torcia di fronte tenuta con il braccio teso di lato e gambe corrette nella camminata.
+
+## Mappa di prova
+- Menu → Partita → «Mappa di prova» (spenta di default): terra, sabbia, erba e acqua con le texture ad acquerello di Muse; forma e collisioni invariate. Cambio con ricarica.
