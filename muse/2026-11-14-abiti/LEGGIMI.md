@@ -6,22 +6,29 @@ cappello; il collo finisce pulito alla base della testa, nella stessa
 posizione dei frame del Capitano (giacca rossa). Stessa scala (canvas
 336×376), stesso punto di appoggio dei piedi, sfondo trasparente.
 
-Consegna **uno abito alla volta** come richiesto: il marinaio è completo e
-pronto per il controllo; gli altri seguono dopo l'ok.
+Consegna **uno abito alla volta** come richiesto: il marinaio è completo;
+gli altri seguono dopo l'ok.
 
 | Abito | Cartella | Stato |
 |---|---|---|
-| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) — **marinaio v2 pulito** |
+| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) — **marinaio v3** |
 | 03 esploratore | — | in attesa di ok sul marinaio |
 | 04 marsina di velluto | — | in attesa |
 | 05 corsaro nero | — | in attesa |
 | 06 navigatore | — | in attesa |
 | 07 giubba corsaro | — | in attesa |
 
-**marinaio v2 pulito**: frame dei colpi (ascia e piccone con la testa
-chinata) ripuliti da ogni pezzetto isolato di capelli o pixel sopra le
-spalle; in tutti i 55 frame il collo finisce allo stesso modo, piatto e
-centrato, senza residui. Stessi nomi file della v1, aggiornati sul posto.
+**marinaio v3** (correzione definitiva):
+- Gambe: nessun frame con gambe incrociate o sovrapposte. Rifatti i passi
+  1 e 3 in profilo destro e sinistro (con e senza torcia) e i passi 2 e 4
+  di fronte: una gamba avanti e una dietro, ben separate. Pose dei colpi
+  controllate: gambe piantate e separate, nessuna da rifare.
+- Collo: nessun pezzo grigio o chiaro sulle spalle; il bordo alto del corpo
+  finisce pulito con i colori della maglia a righe (bianco e blu) fino al
+  colletto, in tutti i 55 frame, così la testa del gioco si appoggia senza
+  buchi.
+- Stessi nomi file, stessa scala, stessi piedi delle versioni precedenti;
+  file aggiornati sul posto.
 
 ## Contenuto di ogni cartella abito
 
@@ -45,4 +52,4 @@ centrato, senza residui. Stessi nomi file della v1, aggiornati sul posto.
 - Forma della mappa, posizioni, collisioni: invariati.
 - Testa, cappelli e giacca rossa del Capitano già integrati: invariati.
 
-STATO: in lavorazione
+STATO: pronto
