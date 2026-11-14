@@ -84,3 +84,28 @@ e la grana rimossa — la forma non cambia).
   mani-nude-colpo1–3, profilo-destro).
 
 STATO: pronto
+
+## Gruppo 2 — camminata con torcia (20 frame, 14 nov sera)
+Frame `02-marinaio-righe_torcia-<vista>-<passo>.png` (fronte,
+profilo-destro, profilo-sinistro, spalle; fermo e passo1–4), in frame/
+con le sovrapposizioni in controllo/ (50% sul frame torcia del
+Capitano: braccio, mano e torcia coincidono).
+Metodo: ogni frame è il frame TORCIA del Capitano ridipinto con la
+stessa ricetta del gruppo 1 (righe ancorate alla cintura, maniche
+bianche con ombre calde, cintura sottile nei profili, pantaloni blu
+medio, fibbia in metallo grigio, niente bottoni né residui rossi).
+Fiamma e manico della torcia sono i pixel del Capitano, protetti e mai
+ridipinti: la punta arancione resta sopra la mano e la torcia non
+galleggia (braccio e mano attaccati al corpo come nel Capitano, dita
+chiuse sul manico). Le GAMBE non sono quelle dei frame torcia del
+Capitano (in passo1/3 ha la gamba dietro alzata, posa di corsa): sono
+innestate dai frame del gruppo 1 della stessa vista e passo, allineate
+cintura su cintura alla posizione del frame torcia (i frame torcia del
+Capitano sono spostati rispetto ai suoi frame di camminata: fronte
+circa +30/+43 px in x, profili con cintura 7–13 px più in basso).
+Controlli: sopra la cintura la sagoma coincide col frame torcia del
+Capitano (differenze 21–69 px, solo grana e bordi chiari); sotto la
+cintura i pixel sono quelli del gruppo 1 (differenza 0, mani escluse:
+la mano del lato torcia è quella sulla torcia); profili senza grigi
+neutri (residui 0–13 pixel isolati di bordo per frame).
+STATO: gruppo 2 pronto
