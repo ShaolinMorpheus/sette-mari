@@ -38,7 +38,7 @@ for nm in R:
     a=comp[...,3:4];c=np.where(a>1,comp[...,:3]*255/np.maximum(a,1),0)
     rgba=np.dstack([np.clip(c,0,255),a]).astype(np.uint8)
     # tra mento e corpo: colma il vuoto del collo colonna per colonna, con colori dai bordi
-    hx3=meta[nm]['hh'][0];cx=int((hx3-CROP[0])*S);nc=int(NW*S)
+    hx3=meta[nm]['hh'][0];cx=int((hx3-CROP[0])*S);nc=int((NW if 'profilo' in nm else NW*1.7)*S)
     ha=wh[...,3]>128;ba=w[...,3]>128;mask=np.zeros((H,W),np.uint8)
     for x in range(max(0,cx-nc),min(W,cx+nc)):
         yh=np.where(ha[:,x])[0]
@@ -47,10 +47,11 @@ for nm in R:
         if not len(yb):continue
         yb=yh+yb.min()
         if ba[yh,x]:continue
-        if 0<yb-yh<45:mask[yh:yb,x]=255
+        if 0<yb-yh<60:mask[yh:yb,x]=255
     if mask.any():
-        m=cv2.dilate(mask,np.ones((3,3),np.uint8));rgb=cv2.inpaint(rgba[...,:3].copy(),m,5,cv2.INPAINT_TELEA)
-        rgba[...,:3]=np.where(mask[...,None]>0,rgb,rgba[...,:3]);rgba[...,3]=np.where(mask>0,255,rgba[...,3])
+        cream=np.array([228,224,208],np.uint8);mk=cv2.GaussianBlur(mask,(0,0),1.0)
+        al=(mk.astype(np.float32)/255)[...,None]
+        rgba[...,:3]=np.clip(rgba[...,:3]*(1-al)+cream*al,0,255).astype(np.uint8);rgba[...,3]=np.maximum(rgba[...,3],mk)
     im=Image.fromarray(rgba,'RGBA')
     b=io.BytesIO();im.save(b,'WEBP',quality=86,method=6);out['mar:'+nm]=base64.b64encode(b.getvalue()).decode();sheet.append((nm,im))
 J['img'].update(out);json.dump(J,open('rig_muse.json','w'))
