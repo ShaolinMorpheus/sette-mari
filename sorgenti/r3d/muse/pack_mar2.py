@@ -16,6 +16,12 @@ for nm,r in R.items():
     pm=ma.astype(np.float32);pm[...,:3]*=pm[...,3:4]/255
     w=cv2.warpAffine(pm,A[:2],(W,H),flags=cv2.INTER_AREA if S*np.hypot(M[0,0],M[1,0])<1 else cv2.INTER_LINEAR,borderValue=(0,0,0,0))
     a=w[...,3:4];c=np.where(a>1,w[...,:3]*255/np.maximum(a,1),0)
+    import matplotlib.colors as mc
+    hh=mc.rgb_to_hsv(np.clip(c,0,255)/255);yy=np.arange(H)[:,None]*np.ones((1,W))
+    yv=np.where(a[...,0]>20)[0];top,bot=(yv.min(),yv.max()) if len(yv) else (0,H)
+    mk=(hh[...,0]>.55)&(hh[...,0]<.72)&(hh[...,1]>.2)&(hh[...,2]<.55)&(yy>top+.62*(bot-top))
+    hh[...,2]=np.where(mk,np.minimum(hh[...,2]*1.55,.8),hh[...,2]);hh[...,1]=np.where(mk,hh[...,1]*.85,hh[...,1])
+    c=mc.hsv_to_rgb(hh)*255
     rgba=np.dstack([np.clip(c,0,255),a]).astype(np.uint8)
     im=Image.fromarray(rgba,'RGBA');b=io.BytesIO();im.save(b,'WEBP',quality=86,method=6);out['mar:'+nm]=base64.b64encode(b.getvalue()).decode();sheet[nm]=im
     q=meta[bn]['hq'] if bn in meta else meta[nm]['hq'];J['hq']['mar:'+nm]=[[p[0]-anc[0],p[1]-anc[1]] for p in q]
