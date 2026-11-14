@@ -29,7 +29,7 @@ def reg(mrgba,ref):
     return M,(int(inl.sum()) if inl is not None else 0)
 if __name__=='__main__':
     res={}
-    for f in sorted(glob.glob(DM+'01-*.png')):
+    for f in sorted(glob.glob(DM+os.environ.get('PAT','01-*.png'))):
         nm=os.path.basename(f).split('_',1)[1][:-4]
         m=np.array(Image.open(f).convert('RGB'));ma,bg=matte(m)
         ref=Image.open(D3+nm+'.png').convert('RGBA')
@@ -38,4 +38,4 @@ if __name__=='__main__':
         s=float(np.hypot(M[0,0],M[1,0]));rot=float(np.degrees(np.arctan2(M[1,0],M[0,0])))
         res[nm]={'M':M.tolist(),'n':n}
         print(f'{nm:42s} n={n:3d} s={s:.3f} rot={rot:5.1f} t=({M[0,2]:.0f},{M[1,2]:.0f})')
-    json.dump(res,open('reg.json','w'))
+    json.dump(res,open(os.environ.get('REGOUT','reg.json'),'w'))
