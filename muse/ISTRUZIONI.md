@@ -23,3 +23,11 @@ Questa cartella è lo spazio di lavoro di Muse. Claude legge, integra nel gioco 
 - Giacca rossa del Capitano (55 frame) integrata.
 - Cappelli ridisegnati (11).
 - Texture terreno pastello: in prova.
+
+## Formato dei file (aggiornamento)
+Se non puoi caricare PNG, salva ogni immagine come testo base64: `nome.png.b64` (contenuto = base64 del PNG, una sola riga). Claude li decodifica. Per i frame di un personaggio metti i `.b64` in una sottocartella `frame/` e un `elenco.txt` con l'ordine.
+
+## Dove sono le cose (per Claude e Muse)
+- Gioco: `www/index.html` (non toccare).
+- Sorgenti e patch: `sorgenti/`. Texture terreno già integrate: `sorgenti/mappa/`.
+- Le tue consegne: `muse/<data-argomento>/`.
