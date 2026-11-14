@@ -11,24 +11,18 @@ gli altri seguono dopo l'ok.
 
 | Abito | Cartella | Stato |
 |---|---|---|
-| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) — **marinaio v3** |
-| 03 esploratore | — | in attesa di ok sul marinaio |
-| 04 marsina di velluto | — | in attesa |
-| 05 corsaro nero | — | in attesa |
-| 06 navigatore | — | in attesa |
-| 07 giubba corsaro | — | in attesa |
-
-**marinaio v3** (correzione definitiva):
-- Gambe: nessun frame con gambe incrociate o sovrapposte. Rifatti i passi
-  1 e 3 in profilo destro e sinistro (con e senza torcia) e i passi 2 e 4
-  di fronte: una gamba avanti e una dietro, ben separate. Pose dei colpi
-  controllate: gambe piantate e separate, nessuna da rifare.
-- Collo: nessun pezzo grigio o chiaro sulle spalle; il bordo alto del corpo
-  finisce pulito con i colori della maglia a righe (bianco e blu) fino al
-  colletto, in tutti i 55 frame, così la testa del gioco si appoggia senza
-  buchi.
-- Stessi nomi file, stessa scala, stessi piedi delle versioni precedenti;
-  file aggiornati sul posto.
+| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) — **marinaio v4** (ultime correzioni):
+- torcia-fronte-passo3: busto intero e simmetrico, spalle alla stessa
+  altezza, niente taglio a metà.
+- fronte-passo2 e fronte-passo4: busto nitido come gli altri frame,
+  gambe ben separate.
+- In tutti i frame di spalle (camminata e torcia) il colletto della
+  maglia è disegnato completo — bianco con striscia blu — senza vuoto
+  tra le spalle.
+- Dalla v3 restano: gambe mai incrociate né sovrapposte (passi rifatti
+  nei profili e di fronte, colpi controllati), collo pulito con i colori
+  della maglia fino al colletto in tutti i 55 frame.
+- Stessi nomi file, stessa scala, stessi piedi; file aggiornati sul posto.
 
 ## Contenuto di ogni cartella abito
 
