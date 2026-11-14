@@ -11,12 +11,17 @@ pronto per il controllo; gli altri seguono dopo l'ok.
 
 | Abito | Cartella | Stato |
 |---|---|---|
-| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) |
+| 02 marinaio a righe | `02-marinaio-righe/` | COMPLETO (55 frame) — **marinaio v2 pulito** |
 | 03 esploratore | — | in attesa di ok sul marinaio |
 | 04 marsina di velluto | — | in attesa |
 | 05 corsaro nero | — | in attesa |
 | 06 navigatore | — | in attesa |
 | 07 giubba corsaro | — | in attesa |
+
+**marinaio v2 pulito**: frame dei colpi (ascia e piccone con la testa
+chinata) ripuliti da ogni pezzetto isolato di capelli o pixel sopra le
+spalle; in tutti i 55 frame il collo finisce allo stesso modo, piatto e
+centrato, senza residui. Stessi nomi file della v1, aggiornati sul posto.
 
 ## Contenuto di ogni cartella abito
 
