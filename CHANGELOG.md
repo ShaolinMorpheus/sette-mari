@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 – Marinaio da zero, menu a scorrimento
+- Maglia da marinaio ridisegnata da zero da Muse (camminata e torcia, tutte le viste), con corpo identico a torcia accesa e spenta e allineata al ciclo del Capitano. Pantaloni più chiari. Gli attacchi (ascia, piccone, mani nude) restano da rifare.
+- Di spalle la maschera della bandana non cancella più collo e maglia (rettangolo dorato).
+- Menu: la lista di «Partita» scorre col dito anche con lo schermo ruotato.
+
 ## 13 nov 2026 – Personaggio 3D di prova
 - «Grafica personaggio prova»: modello 3D (fronte, spalle, profilo), camminata, colpi di accetta/piccone, nuova testa disegnata (espressioni normale, sorriso, urlo), spalle più basse, personaggio più grande.
 - Cappelli ridisegnati (11) e agganciati alla testa nelle tre viste; 8 cappelli nuovi (bandana nera e a righe, tricorni di cuoio/logoro/blu/con piuma bianca, cappello con la piuma, morione scuro) da sbloccare salendo di livello (Lv 4–12); icone del guardaroba dai nuovi disegni.
