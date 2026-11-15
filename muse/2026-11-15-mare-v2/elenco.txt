@@ -1,0 +1,12 @@
+profondita-giorno.png.b64
+mare-largo-giorno.png.b64
+mare-medio-giorno.png.b64
+onde-increspature-giorno.png.b64
+riflessi-giorno.png.b64
+anteprima-mare.png.b64
+controllo/anteprima-3x3-mare-largo-giorno.png.b64
+controllo/anteprima-3x3-mare-medio-giorno.png.b64
+controllo/anteprima-3x3-onde-giorno.png.b64
+controllo/anteprima-3x3-riflessi-giorno.png.b64
+controllo/tavolozza-giorno-ingrandita.png.b64
+LEGGIMI.md
