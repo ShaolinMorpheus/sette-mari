@@ -54,3 +54,15 @@ controllo/02-marinaio-righe_spalle-passo2.png.b64
 controllo/02-marinaio-righe_spalle-passo3.png.b64
 controllo/02-marinaio-righe_spalle-passo4.png.b64
 foglio-taglio-v3.png.b64
+frame/02-marinaio-righe_torcia-profilo-sinistro-passo2.png.b64
+frame/02-marinaio-righe_torcia-profilo-sinistro-passo3.png.b64
+frame/02-marinaio-righe_torcia-profilo-sinistro-passo4.png.b64
+frame/02-marinaio-righe_torcia-fronte-fermo.png.b64
+frame/02-marinaio-righe_torcia-fronte-passo1.png.b64
+controllo/02-marinaio-righe_torcia-profilo-sinistro-passo2.png.b64
+controllo/02-marinaio-righe_torcia-profilo-sinistro-passo3.png.b64
+controllo/02-marinaio-righe_torcia-profilo-sinistro-passo4.png.b64
+controllo/02-marinaio-righe_torcia-fronte-fermo.png.b64
+controllo/02-marinaio-righe_torcia-fronte-passo1.png.b64
+foglio-gruppo-d.png.b64
+foglio-gruppo-d-fronte.png.b64

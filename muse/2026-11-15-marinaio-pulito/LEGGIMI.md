@@ -46,3 +46,13 @@ Su decisione dell'utente, i frame di camminata senza torcia vengono dal foglio i
 - Questi frame sostituiscono le versioni di camminata del metodo pulito consegnate con i gruppi A–C (stessi nomi in `frame/` e `controllo/`). I frame con la torcia restano quelli del metodo pulito.
 
 STATO: frame camminata (foglio v3) pronti
+
+## Gruppo D — consegnato
+
+`torcia-profilo-sinistro-passo2`, `torcia-profilo-sinistro-passo3`, `torcia-profilo-sinistro-passo4`, `torcia-fronte-fermo`, `torcia-fronte-passo1`, con lo stesso metodo pulito a programma (gambe dei profili dalla camminata del Capitano; nei fronte la posa è quella della base torcia del Capitano: braccio teso in basso di lato, torcia in mano).
+
+Correzione applicata in questo gruppo: la passata di chiusura della ridipintura tingeva di blu denim alcune parti in legno e cuoio (punta del manico sotto la mano e macchie sugli stivali, 300–600 px per frame). Ora i pixel in legno/cuoio della base che la passata aveva tinto di blu vengono ripristinati dalla base stessa, in tutti i frame del gruppo.
+
+Controlli gruppo D: testa senza modifiche sopra riga 145 in tutti i 5 frame; sagoma coincidente con la base (diff 0, 3 px in torcia-profilo-sinistro-passo3); manico e stivali senza più macchie blu (verifica a ingrandimento).
+
+STATO: gruppo D pronto
