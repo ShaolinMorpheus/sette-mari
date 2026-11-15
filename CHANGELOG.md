@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Vegetazione pastello di Muse (Mappa di prova)
+- Con «Mappa di prova» attiva (e la grafica nuova) palme, alberi, pini e cespugli usano gli sprite ridipinti da Muse nei colori del terreno nuovo. Stessa forma e ingombro: collisioni invariate.
 ## 15 nov 2026 (notte) – Via i rettangoli scuri sulla riva
 - Nella «Mappa di prova» la sabbia bagnata non lascia più chiazze rettangolari scure: la texture di Muse sfuma a zero ai bordi e, ripetuta, creava una griglia di celle. Ora poggia su un colore pieno uguale e la fascia è continua.
 ## 15 nov 2026 (notte) – Mare senza rettangoli
