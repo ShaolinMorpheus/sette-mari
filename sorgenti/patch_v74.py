@@ -37,16 +37,16 @@ rep("""    g.beginPath();
     g.restore()}""")
 rep("g.strokeStyle='rgba(112,92,56,'+(.1*(1-w)).toFixed(3)+')';g.lineWidth=14;g.beginPath();g.moveTo(px-tx*L-s.nx*10,py-ty*L-s.ny*10);g.lineTo(px+tx*L-s.nx*10,py+ty*L-s.ny*10);g.stroke();",
 "{const M=mareGet();g.save();g.globalAlpha=(dw<0?.34:.14)*(1-w);g.drawImage(M.sb,px+s.nx*16-52,py+s.ny*16-52,104,104);g.restore()}")
-rep("g.strokeStyle='rgba(255,255,255,'+(.14+.14*w).toFixed(3)+')';g.lineWidth=7;","g.lineCap='round';g.strokeStyle='rgba(255,255,255,'+(.14+.14*w).toFixed(3)+')';g.lineWidth=7;")
+rep("g.strokeStyle='rgba(255,255,255,'+(.14+.14*w).toFixed(3)+')';g.lineWidth=7;g.beginPath();g.moveTo(px-tx*L,py-ty*L);g.quadraticCurveTo(px+s.nx*4,py+s.ny*4,px+tx*L,py+ty*L);g.stroke();","")
+rep("g.strokeStyle='rgba(255,255,255,'+(.32+.3*w).toFixed(3)+')';g.lineWidth=2.2;g.setLineDash([9,5]);g.beginPath();g.moveTo(px-tx*L,py-ty*L);g.quadraticCurveTo(px+s.nx*4,py+s.ny*4,px+tx*L,py+ty*L);g.stroke();g.setLineDash([]);","")
 # schiuma a texture sul bordo mobile + scia sulla sabbia quando si ritira
-rep("g.stroke();g.setLineDash([]);\n    }\n    g.restore();\n  }\n  g.save();g.lineCap='round';\n  for(const s of SHORE){\n    if(PASTON&&QL<3)break;",
-"""g.stroke();g.setLineDash([]);
-    }
-    {const M=mareGet();if(M.ok){let k=0;for(const[s,w,off,amp,dw]of vis){if((k++)&1)continue;
+rep("    }\n    g.restore();\n  }\n  g.save();g.lineCap='round';\n  for(const s of SHORE){\n    if(PASTON&&QL<3)break;",
+"""    }
+    {const M=mareGet();if(M.ok){let k=0;for(const[s,w,off,amp,dw]of vis){
       const px=s.x+s.nx*(off+1),py=s.y+s.ny*(off+1),ang=Math.atan2(s.nx,-s.ny);
       g.save();g.translate(px,py);g.rotate(ang);
-      if(dw<0){g.globalAlpha=Math.min(.6,(1-w)*-dw*.9);g.drawImage(M.tr,-36,-36,72,36)}
-      g.globalAlpha=.42+.42*w;g.drawImage(M.ed,-36,-24,72,36);
+      if(dw<0){g.globalAlpha=Math.min(.45,(1-w)*-dw*.7);g.drawImage(M.tr,-36,-36,72,36)}
+      g.globalAlpha=.26+.3*w;g.drawImage(M.ed,-36,-24,72,36);
       g.restore()}}}
     g.restore();
   }
