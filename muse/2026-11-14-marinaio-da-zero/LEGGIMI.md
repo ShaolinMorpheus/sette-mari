@@ -136,4 +136,30 @@ del naso, come nel frame torcia del Capitano (le due teste, camminata
 e torcia, sono disegnate diversamente in partenza). Nei profili in
 falcata, nel punto dove la mano del gruppo 1 è stata cancellata resta
 una piccola ombra raccordata alla punta della cintura.
+
+## Seconda correzione gruppo 2 — braccio torcia DISEGNATO (15 nov)
+Su richiesta: le mani trapiantate restavano tonde e rosa, e il corpo
+sembrava spostato rispetto al bacino. Metodo cambiato, come indicato:
+- BASE = il frame senza torcia del gruppo 1, copiato INTERO: testa,
+  collo, busto, cintura, gambe, stivali e braccio libero sono identici
+  al gruppo 1 pixel per pixel. Niente del corpo è spostato.
+- Cambia solo il braccio della torcia, DISEGNATO da zero: la manica
+  parte dalla spalla del frame originale (bianca, con ombra calda e
+  polsino), la torcia è tenuta davanti al viso in posizione simile al
+  Capitano (di fronte: braccio in diagonale in basso fuori dalla
+  sagoma, come la posa approvata).
+- MANO: è la mano dello stesso frame senza torcia (stesso stile,
+  colore e grandezza), ruotata e messa sul manico con le dita chiuse
+  intorno al bastone. Mai una palla rosa.
+- TORCIA: manico marrone e fiamma arancione a GOCCIA in tutti i 20
+  frame, anche nei passi 1, 3 e 4 del profilo destro dove mancava.
+  Niente bande semitrasparenti.
+- Il vecchio braccio appeso è cancellato e dietro vengono prolungate
+  le righe della maglia e il denim dei pantaloni.
+Controlli in controllo/: sovrapposizione al 50% sul frame senza torcia
+con lo stesso nome — tutto coincide tranne il braccio con la torcia e
+la zona del vecchio braccio cancellato.
+Nota: nei profili in falcata (passo2 e passo4), nel punto dove il
+pannello del vecchio braccio incontrava la cintura resta un piccolo
+raccordo scuro di pochi pixel.
 STATO: gruppo 2 pronto
