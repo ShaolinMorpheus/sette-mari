@@ -41,10 +41,14 @@ buchi nelle gambe) venivano proprio dai ritocchi sui singoli frame già tagliati
     uniforme (203,228,172) come nei frame approvati.
 - I profili sinistri sono disegnati sui frame sinistri del Capitano,
   **non specchiati** dai destri.
-- Nei frame con la torcia la posa è quella del Capitano (braccio in avanti,
-  mano allo sterno): **fiamma e manico restano verbatim** e protetti, la
-  manica è a righe come negli altri frame, la mano è quella del Capitano
-  che stringe la torcia.
+- Nei frame con la torcia la posa sopra la cintura è quella del Capitano
+  (braccio in avanti, mano allo sterno): **fiamma e manico restano
+  verbatim** e protetti, la manica è a righe come negli altri frame, la
+  mano è quella del Capitano che stringe la torcia. **Le gambe invece
+  vengono dal frame di camminata con lo stesso nome** (vedi ritocchi
+  secondo giro): i frame torcia di profilo del Capitano hanno la gamba
+  dietro alzata in posa di corsa in passo1/3, il ciclo di camminata è
+  il riferimento giusto.
 
 ## Ritocchi chiesti il 15 nov (gruppo B), applicati anche al gruppo A
 
@@ -109,11 +113,76 @@ Capitano con lo stesso nome; `foglio-gruppo-a.png.b64` e
   linea diagonale morbida sul petto (segue la banda della manica del
   Capitano, che è orizzontale davanti al petto).
 
+## Ritocchi secondo giro (gruppo C, chiesti il 15 nov)
+
+1. **Contorno del braccio**: non più una linea grigia ondulata. Ora è
+   un contorno **morbido, scuro e sottile** che segue l'arco del
+   braccio dalla spalla al polsino: la maschera del braccio viene
+   prima smussata (chiusura/apertura, via i dentelli dei bottoni) e
+   la banda è lo straddle stretto del bordo smussato. Nei frame
+   torcia la **cucitura posteriore della manica sul petto è stata
+   tolta**: il contorno segue solo i bordi superiore e inferiore
+   della manica, il braccio esce dalla spalla come nel Capitano.
+2. **Gambe torcia dal ciclo di camminata**: in tutti i frame torcia
+   di profilo le righe sotto la cintura vengono dal frame di
+   camminata con lo stesso nome, allineate alla cintura (spostamento
+   verticale 5–13 px e, dove serve, orizzontale sulla mediana del
+   bacino; i frame torcia del Capitano non condividono sempre la
+   stessa ancora). Il manico della torcia, che scende sotto la
+   cintura, viene ripristinato verbatim sopra le gambe; la mano
+   pendente del frame di camminata viene cancellata (quel braccio è
+   su, con la torcia). In particolare **torcia-profilo-destro-passo1
+   è rifatto**: gamba dietro in diagonale all'indietro con lo stivale
+   a terra, come nel passo1 di camminata, non più quasi orizzontale.
+3. **Uniformità**: **profilo-destro-fermo e profilo-destro-passo1
+   sono rifatti con lo stesso metodo pulito** (maglia, braccio e
+   fibbia identici agli altri frame). Gli originali della scheda
+   restano intatti in `muse/2026-11-14-marinaio-da-zero/`.
+
+## Gruppo C — contenuto (8 frame)
+
+Nuovi:
+- `frame/02-marinaio-righe_torcia-profilo-destro-passo2.png.b64`
+- `frame/02-marinaio-righe_torcia-profilo-destro-passo3.png.b64`
+- `frame/02-marinaio-righe_torcia-profilo-destro-passo4.png.b64`
+- `frame/02-marinaio-righe_torcia-profilo-sinistro-fermo.png.b64`
+- `frame/02-marinaio-righe_torcia-profilo-sinistro-passo1.png.b64`
+
+Rimandati rifatti:
+- `frame/02-marinaio-righe_torcia-profilo-destro-passo1.png.b64` (gambe corrette)
+- `frame/02-marinaio-righe_profilo-destro-fermo.png.b64` (metodo pulito)
+- `frame/02-marinaio-righe_profilo-destro-passo1.png.b64` (metodo pulito)
+
+`foglio-gruppo-c.png.b64` è il foglio intero del gruppo prima del taglio.
+Le sovrapposizioni in `controllo/` sono al 50% con il frame del Capitano
+con lo stesso nome: nei frame torcia le gambe differiscono di proposito
+(sono quelle della camminata, si vede nella sovrapposizione sotto la
+cintura); tutto il resto coincide.
+
+## Controlli gruppo C (su ogni frame, anche a ingrandimento)
+
+- **Testa intatta**: 0 modifiche sopra la riga 145 in tutti gli 8 frame.
+- **Sagoma**: identica alla base ridipinta in 6 frame su 8; 15 px di
+  bordo in torcia-profilo-destro-passo2 (pixel di antialias sul bordo
+  tra pugno e pantaloni) e 3 px in torcia-profilo-sinistro-fermo.
+- **Gambe torcia**: passo1/3 vicine con stivali a terra, passo2/4 in
+  falcata, come la camminata; nessuna seconda mano sotto la cintura
+  (verificato a zoom su passo1, passo2 e passo4 destri e sui sinistri:
+  la mano libera che si vede in torcia-profilo-sinistro-fermo e
+  passo1 è quella del Capitano stesso, sotto la cintura).
+- **Braccio**: contorno sottile e continuo, niente linea ondulata sul
+  petto; nei torcia niente cucitura posteriore della manica.
+- **Fibbia**: presente in tutti gli 8 frame, piccola (29–48 px) e
+  chiara; cintura uniforme.
+
 ## Prossimi gruppi (in attesa di via libera dopo ogni gruppo)
 
-- Gruppo C: torcia-profilo-destro-passo2, passo3, passo4 e
-  torcia-profilo-sinistro-fermo, passo1.
-- Poi gli altri frame con la torcia, a gruppi da 5.
+- Gruppo D: torcia-profilo-sinistro-passo2, passo3, passo4 e
+  torcia-fronte-fermo, passo1.
+- Poi gli altri frame con la torcia (fronte, spalle), a gruppi da 5.
 - Alla fine gli attacchi (ascia, piccone, mani nude), a gruppi.
+- Restano fuori da questo rifacimento, perché approvati nel set
+  precedente e non citati negli ordini: fronte e spalle passi 1–4
+  senza torcia (fronte-fermo e spalle-fermo sono nella scheda tenuta).
 
-STATO: gruppo B pronto
+STATO: gruppo C pronto
