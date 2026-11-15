@@ -59,7 +59,9 @@ function drawRig(g,x,y,o){
     const kk=back?'b':side?'s':'f',Wc=RIGHAT.WC[kk],Hc=RIGHAT.H,q=__hq;
     tg.globalCompositeOperation='destination-out';
     tg.setTransform(sx,0,0,sx,ax*sx,ay*sx);tg.transform((q[1][0]-q[0][0])/Wc,(q[1][1]-q[0][1])/Wc,(q[2][0]-q[0][0])/Hc,(q[2][1]-q[0][1])/Hc,q[0][0],q[0][1]);
+    if(MZ&&back&&MZ.k.indexOf('mar:')===0){tg.save();tg.beginPath();tg.rect(-RIGHAT.ML-5,-RIGHAT.MT-5,RIGHAT.art[__hn]['w'+kk]+10,RIGHAT.art[__hn].h*0.78+5);tg.clip();}  /* marinaio di spalle: non cancellare il collo/la maglia sotto la bandana */
     tg.drawImage(__he,-RIGHAT.ML,-RIGHAT.MT,RIGHAT.art[__hn]['w'+kk],RIGHAT.art[__hn].h);
+    if(MZ&&back&&MZ.k.indexOf('mar:')===0)tg.restore();
     tg.setTransform(1,0,0,1,0,0);tg.globalCompositeOperation='source-over';
     g.drawImage(tc,0,0,im0.width,im0.height,-ax,-ay,d[0],d[1]);
   }else g.drawImage(IM0,-ax,-ay,d[0],d[1]);
