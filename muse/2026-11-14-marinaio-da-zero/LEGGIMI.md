@@ -162,4 +162,24 @@ la zona del vecchio braccio cancellato.
 Nota: nei profili in falcata (passo2 e passo4), nel punto dove il
 pannello del vecchio braccio incontrava la cintura resta un piccolo
 raccordo scuro di pochi pixel.
+
+## Terza correzione gruppo 2 — solo il braccio ridisegnato (15 nov)
+Su richiesta: corpo approvato e NON toccato (stessa base e stessa
+pulizia della versione precedente). Cambia solo il braccio torcia:
+- Manica larga come l'altro braccio del frame senza torcia (non più
+  il tubo enorme), bianca con piccole pieghe, ombre calde e polsino.
+- Braccio PIEGATO al gomito: l'avambraccio sale davanti al petto e la
+  mano è all'altezza dello sterno. Di profilo la torcia sta davanti
+  al petto, con la fiamma appena davanti alla linea del naso: viso,
+  barba e bocca restano sempre tutti visibili (controllato frame per
+  frame: sopra il collo le uniche differenze dal gruppo 1 sono fiamma
+  e manica sullo sfondo). Di fronte e di spalle la torcia sta a lato
+  del corpo.
+- Mano: quella del frame senza torcia (stessa pelle, stile e
+  grandezza), dita chiuse intorno al manico, mai nascosta.
+- Torcia invariata: manico marrone, fiamma arancione a goccia in
+  tutti i 20 frame. Niente bande semitrasparenti né macchie vicino
+  al braccio e alla spalla.
+Controlli in controllo/: sovrapposizione al 50% sul frame senza
+torcia con lo stesso nome — fuori dal braccio tutto coincide.
 STATO: gruppo 2 pronto
