@@ -56,3 +56,15 @@ Correzione applicata in questo gruppo: la passata di chiusura della ridipintura 
 Controlli gruppo D: testa senza modifiche sopra riga 145 in tutti i 5 frame; sagoma coincidente con la base (diff 0, 3 px in torcia-profilo-sinistro-passo3); manico e stivali senza più macchie blu (verifica a ingrandimento).
 
 STATO: gruppo D pronto
+
+## Gruppi E e F — consegnati (completamento torcia)
+
+`torcia-fronte-passo2`, `torcia-fronte-passo3`, `torcia-fronte-passo4`, `torcia-spalle-fermo`, `torcia-spalle-passo1` (gruppo E) e `torcia-spalle-passo2`, `torcia-spalle-passo3`, `torcia-spalle-passo4` (gruppo F), con lo stesso metodo pulito e la stessa correzione anti-macchie-blu del gruppo D. Con questi, i 20 frame con la torcia sono completi. Controlli: testa senza modifiche sopra riga 145 in tutti gli 8 frame; sagoma coincidente con la base (diff 0–5 px).
+
+## Attacchi — consegnati
+
+I 15 frame di attacco di profilo destro: `ascia-taglio1…6-profilo-destro`, `piccone-taglio1…6-profilo-destro`, `mani-nude-colpo1…3-profilo-destro`, ridipinti con lo stesso metodo pulito dalle basi del Capitano (bacino, gambe e piedi sono quelli delle basi, coincidenti col fermo; cambiano solo i vestiti). I frame del Capitano sono 384×426/427 (più grandi dei 336×376 della camminata): la ridipintura lavora alla scala della camminata e il frame viene riportato alla misura originale, stessa misura e posizione dell'attrezzo del Capitano.
+
+Correzione specifica degli attacchi: la ridipintura tendeva a tingere le lame di ascia e piccone come la maglia (righe o blu). Ora l'attrezzo viene ripristinato dalla base in tre passaggi: pixel in legno/cuoio tinti di blu, pixel d'acciaio fuori dalle classi del corpo, e tutta la parte oltre le mani (isolata tagliando la sagoma alle mani). Le lame risultano grigie come nelle basi (verifica a ingrandimento su tutti i 15 frame). Controlli: testa senza modifiche sopra riga 145 in tutti i 15; sagoma coincidente con la base (diff 0–2 px).
+
+STATO: set marinaio completo (camminata, torcia, attacchi) pronto
