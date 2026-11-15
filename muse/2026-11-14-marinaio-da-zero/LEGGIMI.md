@@ -227,4 +227,17 @@ specchiati). Petto e manica a righe, braccio staccato con contorno
 proprio, testa identica al frame approvato, cintura pulita con
 fibbia grigia. Controlli in controllo/: sovrapposizione al 50%
 con la versione precedente di ogni frame.
+
+## Correzione profili — gruppo con torcia (15 nov)
+Torcia-profilo-destro e torcia-profilo-sinistro, fermo e passo1–4,
+rifatti sui nuovi frame senza torcia: stessa manica A RIGHE anche
+col braccio piegato (bande ancorate alla cintura), polsino chiaro,
+mano del frame senza torcia che stringe la torcia con le dita,
+fiamma a goccia davanti al petto appena davanti alla linea del
+naso — viso, barba e bocca sempre visibili. Vecchio braccio
+rimosso con la maschera esatta della manica: niente macchie
+chiare né buchi sulle gambe. Stesse pulizie della cintura e dei
+contorni. Controlli in controllo/: sovrapposizione al 50% sul
+frame senza torcia con lo stesso nome — fuori dal braccio torcia
+tutto coincide.
 STATO: gruppo 2 pronto
