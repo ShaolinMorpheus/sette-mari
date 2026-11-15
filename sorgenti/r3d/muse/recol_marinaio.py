@@ -16,15 +16,19 @@ def recol(src):
     lab,n=ndi.label(red);sz=ndi.sum(red,lab,range(1,n+1))
     keep=np.isin(lab,[i+1 for i,z in enumerate(sz) if z>400])
     keep=ndi.binary_dilation(keep,iterations=1)&(~bg)&(s>.15)
-    gold=(~bg)&(hue>35)&(hue<60)&(s>.45)&(v>.55)
+    belt=(~bg)&(v<.26)
+    belt=ndi.binary_opening(belt,iterations=1)
+    nearbelt=ndi.binary_dilation(belt,iterations=7)
+    gold=(~bg)&(hue>35)&(hue<60)&(s>.45)&(v>.55)&(~nearbelt)
     keep=keep|(gold&ndi.binary_dilation(keep,iterations=4))
     filled=ndi.binary_fill_holes(keep)
     holes=filled&~keep
     lab,n=ndi.label(holes)
     if n:
         sz=ndi.sum(holes,lab,range(1,n+1))
-        small=np.isin(lab,[i+1 for i,z in enumerate(sz) if z<2500])
+        small=np.isin(lab,[i+1 for i,z in enumerate(sz) if z<2500])&(~nearbelt)
         keep=keep|small
+    keep&=~belt
     return im,keep
 def stripes(im,keep,y0):
     H,W=keep.shape;yy=np.arange(H)[:,None]*np.ones((1,W))
