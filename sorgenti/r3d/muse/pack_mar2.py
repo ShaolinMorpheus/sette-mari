@@ -7,7 +7,7 @@ W,H=int(J['dim'][0]*S),int(J['dim'][1]*S);MD='/home/claude/work/marc/'
 out={};over=0;sheet={}
 for nm,r in R.items():
     ma,bg=matte(np.array(Image.open(glob.glob(MD+'02-*_'+nm+'.png')[0]).convert('RGB')))
-    bn=nm.replace('torcia-','') if nm.startswith('torcia-fronte') else nm
+    bn=nm.replace('torcia-','') if nm.startswith('torcia-') and 'ascia' not in nm else nm
     if bn!=nm or ('profilo' in nm and bn in RC and not nm.startswith(('ascia','piccone','mani'))):
         if bn in RC: r=RC[bn]
     M=np.array(r['M'],float);A=np.array([[S,0,-CROP[0]*S],[0,S,-CROP[1]*S],[0,0,1]])@np.vstack([M,[0,0,1]])
