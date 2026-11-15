@@ -1,3 +1,4 @@
+foglio-A.png.b64
 frame/02-marinaio-righe_profilo-destro-passo2.png.b64
 frame/02-marinaio-righe_profilo-destro-passo3.png.b64
 frame/02-marinaio-righe_profilo-destro-passo4.png.b64
