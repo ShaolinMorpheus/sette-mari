@@ -762,8 +762,9 @@ function mv2Water(dd,tx,ty){
   /* profondita dd (0 riva, 1 abisso) -> posizione sulla tavolozza (riva, bassa, media, largo, abisso) */
   const u=dd<.12?dd/.12*.25:dd<.34?.25+(dd-.12)/.22*.25:dd<.62?.5+(dd-.34)/.28*.25:.75+(dd-.62)/.38*.25;
   const i=clamp(Math.round(u*255),0,255)*4,p=MV2.pal;
-  const wm=sstep(.3,.66,dd),a=mv2S(MV2.m,tx*TS,ty*TS,700),b=mv2S(MV2.l,tx*TS+137,ty*TS+61,820),mm=MV2.m.m,ml=MV2.l.m;
-  const k=1.15,f=[(a[0]/mm[0])*(1-wm)+(b[0]/ml[0])*wm,(a[1]/mm[1])*(1-wm)+(b[1]/ml[1])*wm,(a[2]/mm[2])*(1-wm)+(b[2]/ml[2])*wm];
+  const wx=tx*TS,wy=ty*TS,rx=wx*.825+wy*.565,ry=-wx*.565+wy*.825,av=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2,(p[2]+q[2])/2];
+  const wm=sstep(.3,.66,dd),a=av(mv2S(MV2.m,wx,wy,700),mv2S(MV2.m,rx+300,ry,1130)),b=av(mv2S(MV2.l,wx+137,wy+61,820),mv2S(MV2.l,rx,ry+200,1290)),mm=MV2.m.m,ml=MV2.l.m;
+  const k=.95,f=[(a[0]/mm[0])*(1-wm)+(b[0]/ml[0])*wm,(a[1]/mm[1])*(1-wm)+(b[1]/ml[1])*wm,(a[2]/mm[2])*(1-wm)+(b[2]/ml[2])*wm];
   return[p[i]*(1+(f[0]-1)*k),p[i+1]*(1+(f[1]-1)*k),p[i+2]*(1+(f[2]-1)*k)];
 }
 async function bakeGround(prog){

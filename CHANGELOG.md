@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Mare senza rettangoli
+- Nella «Mappa di prova» l'acqua non mostra più blocchi rettangolari scuri fissi: la texture di Muse è ora mescolata con una copia ruotata e di scala diversa, così la ripetizione non si vede.
 ## 15 nov 2026 (notte) – Schiuma che va e viene
 - Nella «Mappa di prova» la schiuma si dissolve quando l'acqua si ritira verso il mare e ricompare quando torna verso la sabbia.
 ## 15 nov 2026 (notte) – Schiuma continua
