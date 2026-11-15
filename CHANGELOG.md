@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Pulizia
+- Tolte dal repository le vecchie consegne di Muse per il marinaio (tentativi con la torcia v4–v7, «da zero», «pulito»): il marinaio ora usa le pose del Capitano e quei frame non servono più. Restano nella cronologia di git.
 ## 15 nov 2026 (sera) – Riva viva (Mappa di prova)
 - Tolte le vecchie lineette bianche tratteggiate sulla riva e corretto lo sfarfallio della schiuma quando ci si muove.
 - Nella «Mappa di prova» la riva ora ha schiuma a pizzo disegnata da Muse lungo il bordo che avanza e si ritira, con una scia di bollicine quando l'acqua si ritira, sabbia bagnata morbida che si asciuga e una fascia d'acqua bassa senza macchie. Il resto del gioco non cambia.
