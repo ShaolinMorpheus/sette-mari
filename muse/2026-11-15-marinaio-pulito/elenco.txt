@@ -1,0 +1,12 @@
+frame/02-marinaio-righe_profilo-destro-passo2.png.b64
+frame/02-marinaio-righe_profilo-destro-passo3.png.b64
+frame/02-marinaio-righe_profilo-destro-passo4.png.b64
+frame/02-marinaio-righe_profilo-sinistro-fermo.png.b64
+frame/02-marinaio-righe_profilo-sinistro-passo1.png.b64
+controllo/02-marinaio-righe_profilo-destro-passo2.png.b64
+controllo/02-marinaio-righe_profilo-destro-passo3.png.b64
+controllo/02-marinaio-righe_profilo-destro-passo4.png.b64
+controllo/02-marinaio-righe_profilo-sinistro-fermo.png.b64
+controllo/02-marinaio-righe_profilo-sinistro-passo1.png.b64
+foglio-gruppo-a.png.b64
+LEGGIMI.md
