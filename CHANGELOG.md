@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Via i rettangoli scuri sulla riva
+- Nella «Mappa di prova» la sabbia bagnata non lascia più chiazze rettangolari scure: la texture di Muse sfuma a zero ai bordi e, ripetuta, creava una griglia di celle. Ora poggia su un colore pieno uguale e la fascia è continua.
 ## 15 nov 2026 (notte) – Mare senza rettangoli
 - Nella «Mappa di prova» l'acqua non mostra più blocchi rettangolari scuri fissi: la texture di Muse è ora mescolata con una copia ruotata e di scala diversa, così la ripetizione non si vede.
 ## 15 nov 2026 (notte) – Schiuma che va e viene
