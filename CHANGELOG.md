@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Marinaio: stesse pose del Capitano
+- Il marinaio ora usa le pose esatte del Capitano (camminata, torcia, ascia, piccone, mani nude) con la maglia a righe al posto della giacca rossa. Niente più pose strane o frame sfasati.
 ## 15 nov 2026 (sera) – Marinaio ridisegnato: camminata, torcia, attacchi
 - Maglia da marinaio rifatta da Muse con il metodo pulito: camminata in tutte le direzioni, torcia (20 frame) e attacchi con ascia, piccone e mani nude. Niente più righe sul viso, bordi grigi o buchi nelle gambe.
 - Bandana allineata alle pose con la torcia di fronte e di spalle.
