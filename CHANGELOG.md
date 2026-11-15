@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (sera) – Marinaio ridisegnato: camminata, torcia, attacchi
+- Maglia da marinaio rifatta da Muse con il metodo pulito: camminata in tutte le direzioni, torcia (20 frame) e attacchi con ascia, piccone e mani nude. Niente più righe sul viso, bordi grigi o buchi nelle gambe.
+- Bandana allineata alle pose con la torcia di fronte e di spalle.
 ## 15 nov 2026 – Marinaio da zero, menu a scorrimento
 - Maglia da marinaio ridisegnata da zero da Muse (camminata e torcia, tutte le viste), con corpo identico a torcia accesa e spenta e allineata al ciclo del Capitano. Pantaloni più chiari. Gli attacchi (ascia, piccone, mani nude) restano da rifare.
 - Di spalle la maschera della bandana non cancella più collo e maglia (rettangolo dorato).
