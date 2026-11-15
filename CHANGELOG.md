@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (sera) – Riva viva (Mappa di prova)
+- Nella «Mappa di prova» la riva ora ha schiuma a pizzo disegnata da Muse lungo il bordo che avanza e si ritira, con una scia di bollicine quando l'acqua si ritira, sabbia bagnata morbida che si asciuga e una fascia d'acqua bassa senza macchie. Il resto del gioco non cambia.
 ## 15 nov 2026 (notte) – Marinaio: stesse pose del Capitano
 - Cintura sempre visibile durante la camminata (prima compariva e scompariva in alcuni passi).
 - Il marinaio ora usa le pose esatte del Capitano (camminata, torcia, ascia, piccone, mani nude) con la maglia a righe al posto della giacca rossa. Niente più pose strane o frame sfasati.
