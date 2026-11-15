@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Mare: via le vecchie texture
+- Nella «Mappa di prova» sono spente le vecchie caustiche a ragnatela, i brillantini a crocetta e la vecchia schiuma cotta: resta solo l'acqua nuova di Muse con la riva animata.
 ## 15 nov 2026 (notte) – Laghetto calmo e sabbia bagnata
 - Il laghetto non ha più schiuma né onde sul bordo: è acqua ferma, come un laghetto vero (nella «Mappa di prova»).
 - Tolte le chiazze tonde di sabbia bagnata che comparivano e sparivano sulla riva.
