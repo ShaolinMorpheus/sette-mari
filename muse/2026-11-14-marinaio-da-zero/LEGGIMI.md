@@ -182,4 +182,19 @@ pulizia della versione precedente). Cambia solo il braccio torcia:
   al braccio e alla spalla.
 Controlli in controllo/: sovrapposizione al 50% sul frame senza
 torcia con lo stesso nome — fuori dal braccio tutto coincide.
+
+## Correzione profili — ANTEPRIMA profilo destro (15 nov)
+Su richiesta (immagine «correzione-profili»): nei profili il petto
+davanti e il braccio erano beige «come una pelliccia». Ora:
+- Il petto davanti è A RIGHE blu e bianche, come il resto del busto
+  e come nei frame di fronte e di spalle.
+- La manica lunga è A RIGHE, con polsino chiaro e la mano disegnata
+  come prima. Niente più parti beige su petto e braccio.
+- Tutto il resto è identico: testa, capelli, barba, cintura,
+  pantaloni, stivali, bacino, gambe e piedi non sono toccati.
+In questa consegna SOLO profilo-destro-fermo e profilo-destro-passo1,
+per approvazione. Controlli in controllo/: sovrapposizione al 50%
+vecchio/nuovo — coincidono ovunque tranne petto e braccio.
+Gli altri profili (destro passo2–4, sinistro, e i torcia) seguono
+dopo il via libera.
 STATO: gruppo 2 pronto
