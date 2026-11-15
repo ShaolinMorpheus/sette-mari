@@ -36,50 +36,84 @@ buchi nelle gambe) venivano proprio dai ritocchi sui singoli frame già tagliati
   - **abito ridisegnato nell'unico passaggio**: maglia a righe orizzontali
     bianche/blu regolari (bande da 6px ancorate alla cintura, ombreggiatura
     dalla luminanza sfumata del Capitano; bottoni, placket e dettagli rossi
-    della giacca non vengono conservati), braccio separato dal busto dalla
-    sua stessa linea d'ombra con manica a righe, polsino chiaro e mano color
-    pelle; cintura marrone sottile con **fibbia grigia**; pantaloni blu medio;
-    sfondo appiattito sul verde uniforme (203,228,172) come nei frame approvati.
+    della giacca non vengono conservati), cintura marrone sottile con
+    **fibbia grigia**; pantaloni blu medio; sfondo appiattito sul verde
+    uniforme (203,228,172) come nei frame approvati.
 - I profili sinistri sono disegnati sui frame sinistri del Capitano,
   **non specchiati** dai destri.
+- Nei frame con la torcia la posa è quella del Capitano (braccio in avanti,
+  mano allo sterno): **fiamma e manico restano verbatim** e protetti, la
+  manica è a righe come negli altri frame, la mano è quella del Capitano
+  che stringe la torcia.
 
-## Gruppo A — contenuto (5 frame)
+## Ritocchi chiesti il 15 nov (gruppo B), applicati anche al gruppo A
+
+I 5 frame del gruppo A sono stati **rigenerati con la ricetta aggiornata**
+e sostituiscono quelli della prima consegna in questa cartella.
+
+1. **Braccio più leggibile**: contorno scuro morbido lungo **tutto** il
+   braccio, dalla spalla al polsino (banda a cavallo del bordo del braccio
+   con bordo smussato, sfumata sul colore dipinto; niente nodi da bottoni).
+2. **Fibbia**: piccola e chiara (al massimo 9×7 px, sul gruppo metallico
+   frontale della cintura del Capitano), **senza riquadro grigio e senza
+   linea scura a triangolo**; cintura marrone **uniforme**.
+3. **Sotto la cintura**: la manica davanti ai pantaloni ha **le righe**
+   come sopra la cintura; il polsino chiaro resta, ma è solo la banda
+   al polso.
+4. **Scollo**: tolto il filo rosso al collo — il bordo rosso vivo della
+   maglia allo scollo viene ridipinto con le righe anche sotto l'alone
+   della testa (viso, barba e capelli restano protetti: i loro toni
+   non sono rosso vivo).
+
+## Gruppo A — rigenerato con i ritocchi (5 frame)
 
 - `frame/02-marinaio-righe_profilo-destro-passo2.png.b64`
 - `frame/02-marinaio-righe_profilo-destro-passo3.png.b64`
 - `frame/02-marinaio-righe_profilo-destro-passo4.png.b64`
 - `frame/02-marinaio-righe_profilo-sinistro-fermo.png.b64`
 - `frame/02-marinaio-righe_profilo-sinistro-passo1.png.b64`
-- `controllo/` — sovrapposizione al 50% di ogni frame con il frame del
-  Capitano con lo stesso nome.
-- `foglio-gruppo-a.png.b64` — il foglio intero del gruppo, prima del taglio.
+
+## Gruppo B — nuovo (5 frame)
+
+- `frame/02-marinaio-righe_profilo-sinistro-passo2.png.b64`
+- `frame/02-marinaio-righe_profilo-sinistro-passo3.png.b64`
+- `frame/02-marinaio-righe_profilo-sinistro-passo4.png.b64`
+- `frame/02-marinaio-righe_torcia-profilo-destro-fermo.png.b64`
+- `frame/02-marinaio-righe_torcia-profilo-destro-passo1.png.b64`
+
+In `controllo/` la sovrapposizione al 50% di ogni frame con il frame del
+Capitano con lo stesso nome; `foglio-gruppo-a.png.b64` e
+`foglio-gruppo-b.png.b64` sono i fogli interi dei due gruppi prima del taglio.
 
 ## Controlli fatti prima della consegna (su ogni frame, anche a ingrandimento)
 
-- **Sagoma = Capitano**: differenza di sagoma 0 px in passo2, passo3, passo4 e
-  profilo-sinistro-passo1; in profilo-sinistro-fermo 1 px di bordo, che è un
-  pixel di antialias identico al Capitano (la differenza è solo nel ricalcolo
-  della maschera, non nel disegno).
-- **Testa intatta**: 0 pixel della figura modificati sopra la riga 145 in tutti
-  e 5 i frame; viso, capelli e barba sono quelli del Capitano.
-- **Niente righe su viso, capelli o stivali**; niente buchi nelle gambe;
-  niente bordi grigi sui capelli.
-- **Rosso della giacca sul busto**: residuo 0 px in passo3, passo4 e
-  profilo-sinistro-fermo; 3 px in passo2 e 4 px in profilo-sinistro-passo1,
-  tutti alla base dei capelli sullo scollo (un filettino di 3–4 px, dello
-  stesso tipo presente nei frame approvati).
-- **Braccio**: staccato dal busto, manica a righe, polsino e mano color pelle
-  in tutti e 5 i frame; passo1/3 con gambe vicine e stivali a terra,
-  passo2/4 in falcata, come nel Capitano.
-- Nota: nei profili sinistri la fibbia grigia ha una forma triangolare perché
-  è la forma del gruppo fibbia del Capitano in quella vista; è dentro la
-  cintura e in metallo grigio come da scheda.
+- **Sagoma = Capitano**: differenza di sagoma 0 px in 8 frame su 10;
+  1 px di bordo in profilo-sinistro-passo4 e 3 px di bordo in
+  torcia-profilo-destro-fermo (pixel di antialias sul contorno del
+  polsino/pugno, dipinti e dentro la figura: la differenza è solo nel
+  ricalcolo della maschera).
+- **Testa intatta**: 0 pixel della figura modificati sopra la riga 145
+  in tutti e 10 i frame.
+- **Braccio**: contorno morbido continuo dalla spalla al polsino in
+  tutti i frame; sotto la cintura la manica è a righe e il polsino è
+  solo la banda al polso.
+- **Fibbia**: presente in tutti e 10 i frame, piccola (22–48 px) e
+  chiara, al fronte della cintura; cintura uniforme, niente triangolo
+  scuro (verificato a zoom sui profili sinistri).
+- **Scollo**: il filo rosso è sparito (in profilo-sinistro-passo1 resta
+  1 solo px rosso vivo invariato su 370 nella fascia del collo; il
+  resto è ridipinto con le righe).
+- **Torcia**: fiamma e manico identici al Capitano; manica a righe con
+  contorno; mano del Capitano che stringe la torcia.
+- Nota: nei frame torcia la cucitura posteriore della manica è una
+  linea diagonale morbida sul petto (segue la banda della manica del
+  Capitano, che è orizzontale davanti al petto).
 
 ## Prossimi gruppi (in attesa di via libera dopo ogni gruppo)
 
-- Gruppo B: profilo-sinistro-passo2, passo3, passo4 e
-  torcia-profilo-destro-fermo, passo1.
+- Gruppo C: torcia-profilo-destro-passo2, passo3, passo4 e
+  torcia-profilo-sinistro-fermo, passo1.
 - Poi gli altri frame con la torcia, a gruppi da 5.
 - Alla fine gli attacchi (ascia, piccone, mani nude), a gruppi.
 
-STATO: gruppo A pronto
+STATO: gruppo B pronto
