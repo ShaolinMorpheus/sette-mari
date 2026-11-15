@@ -215,4 +215,16 @@ Sui due frame di anteprima, corretti come richiesto:
   solo la manica del braccio davanti ai pantaloni.
 Controlli aggiornati in controllo/ (sovrapposizione al 50% con la
 versione precedente). In attesa di via libera per gli altri profili.
+
+## Correzione profili — gruppo senza torcia (15 nov)
+Profilo destro approvato (fermo e passo1); applicato lo stesso
+trattamento a tutti i profili senza torcia: profilo-destro
+fermo/passo1 (solo le pulizie: via la macchietta marrone sulla
+cintura davanti e i pixel scuri sparsi lungo il contorno del
+braccio), passo2, passo3, passo4; profilo-sinistro fermo e
+passo1–4, disegnati sui frame sinistri del Capitano (non
+specchiati). Petto e manica a righe, braccio staccato con contorno
+proprio, testa identica al frame approvato, cintura pulita con
+fibbia grigia. Controlli in controllo/: sovrapposizione al 50%
+con la versione precedente di ogni frame.
 STATO: gruppo 2 pronto
