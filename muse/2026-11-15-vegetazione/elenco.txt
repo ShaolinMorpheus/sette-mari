@@ -1,0 +1,11 @@
+palm-a.png.b64
+palm-b.png.b64
+tree-a.png.b64
+tree-b.png.b64
+pine-a.png.b64
+pine-b.png.b64
+bush-a.png.b64
+bush-b.png.b64
+anteprima-vegetazione.png.b64
+controllo/prova-sfondi.png.b64
+LEGGIMI.md
