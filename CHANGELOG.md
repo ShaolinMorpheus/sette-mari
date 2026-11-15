@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Vegetazione: più verde e liane scure
+- Palme, alberi, pini e cespugli di Muse più saturi e più verdi (il legno resta com'è).
+- Il cespuglio con le liane riavrà i rami/liane scuri come prima, non più verdi.
 ## 15 nov 2026 (notte) – Vegetazione pastello di Muse (Mappa di prova)
 - Con «Mappa di prova» attiva (e la grafica nuova) palme, alberi, pini e cespugli usano gli sprite ridipinti da Muse nei colori del terreno nuovo. Stessa forma e ingombro: collisioni invariate.
 ## 15 nov 2026 (notte) – Via i rettangoli scuri sulla riva
