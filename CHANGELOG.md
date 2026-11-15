@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Schiuma continua
+- Nella «Mappa di prova» la schiuma della riva è una fascia continua e non più pezzi separati: bordi che sfumano (via i rettangoli), movimento coerente tra tratti vicini e normali levigate lungo la costa.
 ## 15 nov 2026 (notte) – Mare solo di Muse (Mappa di prova)
 - Nella «Mappa di prova» la riva usa solo texture di Muse: acqua bassa, sabbia bagnata e schiuma a merletto (più marcata). Tolti i miei sprite sfumati.
 ## 15 nov 2026 (notte) – Mare: via le vecchie texture
