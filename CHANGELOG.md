@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Schiuma che va e viene
+- Nella «Mappa di prova» la schiuma si dissolve quando l'acqua si ritira verso il mare e ricompare quando torna verso la sabbia.
 ## 15 nov 2026 (notte) – Schiuma continua
 - Nella «Mappa di prova» la schiuma della riva è una fascia continua e non più pezzi separati: bordi che sfumano (via i rettangoli), movimento coerente tra tratti vicini e normali levigate lungo la costa.
 ## 15 nov 2026 (notte) – Mare solo di Muse (Mappa di prova)

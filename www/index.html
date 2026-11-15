@@ -5594,7 +5594,7 @@ function drawBeach(g,t,vx0,vy0,vx1,vy1){
       const px=s.x+s.nx*(off+1),py=s.y+s.ny*(off+1),ang=Math.atan2(s.nx,-s.ny);
       g.save();g.translate(px,py);g.rotate(ang);
       if(dw<0){g.globalAlpha=Math.min(.45,(1-w)*-dw*.7);g.drawImage(M.tr2||M.tr,-48,-40,96,40)}
-      g.globalAlpha=.55+.4*w;g.drawImage(M.ed2||M.ed,-48,-26,96,44);
+      {const a0=clamp((w-.1)/.55,0,1);g.globalAlpha=.95*a0*a0*(3-2*a0)}g.drawImage(M.ed2||M.ed,-48,-26,96,44);
       g.restore()}}}
     g.restore();
   }
