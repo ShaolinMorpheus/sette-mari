@@ -809,7 +809,7 @@ async function bakeGround(prog){
         else{const lc=e>WL?landRGB(e,tx,ty,sh):[190,168,120];
         dL[o]=lc[0];dL[o+1]=lc[1];dL[o+2]=lc[2];dL[o+3]=255*sstep(WL-.008,WL+.012,e)}
       }
-      if(e>WL-.135&&e<WL+.03){
+      if(e>WL-.135&&e<WL+.03&&hyp((tx-POND.x)/(POND.rx+1.8),(ty-POND.y)/(POND.ry+1.8))>=1){
         const fn=NZ.fbm(tx*3.1+5,ty*3.1,2);
         let A=sstep(WL-.04,WL-.012,e)*(1-sstep(WL-.002,WL+.016,e));A*=clamp(.5+fn*1.1,0,1);
         let B=sstep(WL-.115,WL-.085,e)*(1-sstep(WL-.07,WL-.045,e));B*=clamp(fn*1.5-.1,0,1)*.7;
@@ -5517,6 +5517,7 @@ function shoreBuild(){
     {
       let best=null,be=-1;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const e2=E2(x+dx,y+dy);if(e2>=WL&&e2>be){be=e2;best=[dx,dy]}}
       if(!best)continue;
+      if(hyp((x+.5-POND.x)/(POND.rx+1.8),(y+.5-POND.y)/(POND.ry+1.8))<1)continue;
       const f=clamp((WL-e)/(be-e),0,1);let gx=E2(Math.min(MW-1,x+1),y)-E2(Math.max(0,x-1),y),gy=E2(x,Math.min(MH-1,y+1))-E2(x,Math.max(0,y-1));const gl=Math.hypot(gx,gy);
       let dx=best[0],dy=best[1];if(gl>1e-4){dx=gx/gl;dy=gy/gl}
       const px=(x+.5+best[0]*f)*TS,py=(y+.5+best[1]*f)*TS;
@@ -5549,7 +5550,7 @@ function drawBeach(g,t,vx0,vy0,vx1,vy1){
     g.restore()}
     for(const[s,w,off,amp,dw]of vis){
       const px=s.x+s.nx*(off+1),py=s.y+s.ny*(off+1),tx=-s.ny,ty=s.nx,L=24;
-      {const M=mareGet();g.save();g.globalAlpha=(dw<0?.34:.14)*(1-w);g.drawImage(M.sb,px+s.nx*16-52,py+s.ny*16-52,104,104);g.restore()}
+      
       
       
     }

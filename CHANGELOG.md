@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Laghetto calmo e sabbia bagnata
+- Il laghetto non ha più schiuma né onde sul bordo: è acqua ferma, come un laghetto vero (nella «Mappa di prova»).
+- Tolte le chiazze tonde di sabbia bagnata che comparivano e sparivano sulla riva.
 ## 15 nov 2026 (notte) – Mare v2 (Mappa di prova)
 - Nella «Mappa di prova» il mare usa le nuove texture di Muse (giorno): colore dalla riva al largo con una tavolozza di profondità, acquerello azzurro vicino alla costa e blu scuro al largo, increspature e riflessi sottili che scorrono. Solo variante giorno per ora.
 ## 15 nov 2026 (notte) – Pulizia
