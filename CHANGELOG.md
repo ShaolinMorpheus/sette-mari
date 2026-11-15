@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 15 nov 2026 (notte) – Mare v2 (Mappa di prova)
+- Nella «Mappa di prova» il mare usa le nuove texture di Muse (giorno): colore dalla riva al largo con una tavolozza di profondità, acquerello azzurro vicino alla costa e blu scuro al largo, increspature e riflessi sottili che scorrono. Solo variante giorno per ora.
 ## 15 nov 2026 (notte) – Pulizia
 - Tolte dal repository le vecchie consegne di Muse per il marinaio (tentativi con la torcia v4–v7, «da zero», «pulito»): il marinaio ora usa le pose del Capitano e quei frame non servono più. Restano nella cronologia di git.
 ## 15 nov 2026 (sera) – Riva viva (Mappa di prova)
