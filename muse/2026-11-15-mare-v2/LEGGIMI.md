@@ -4,14 +4,18 @@ Rifacimento dell'acqua di tutto il gioco: profondità vera dalla riva all'abisso
 
 **Questa consegna contiene solo la variante GIORNO e l'anteprima di scena. Tramonto e notte arrivano dopo il via libera dell'utente, con la stessa struttura e gli stessi nomi col suffisso -tramonto / -notte.**
 
+## Correzione di stile (15 novembre, sera)
+
+Su segnalazione dell'utente ("a guardare l'acqua non mi sembra lo stile pastello"), tavolozza e texture del mare aperto sono state rifatte nel registro pastello del terreno: la prima versione era troppo satura e liscia, da gradiente digitale (saturazione media 0,75–0,82 contro 0,57 dell'acqua pastello del gioco). Ora: saturazione ~0,53, colori gessosi e desaturati, lavaggi con bordo di pigmento leggermente più scuro, striature da pennello e grana di carta morbida. Nuove tappe della tavolozza: spiaggia (206,243,236, alpha ~100) → bassa (110,210,203) → media (78,160,198) → largo (56,112,152) → abisso (39,61,84), inchiostro gessoso con punta verde-viola. Le texture precedenti sono state sostituite da queste.
+
 ## Tavolozza di profondità
 
-`profondita-giorno.png` — striscia 256×1 RGBA, sinistra = riva, destra = abisso. Il motore campiona il colore (e l'alpha) in base alla profondità. Tappe: spiaggia turchese chiarissimo (197,241,232, alpha ~100: quasi trasparente alla riva esatta) → acqua bassa turchese (96,208,200) → acqua media azzurro (45,148,203) → largo blu profondo (25,96,160) → abisso blu notte quasi inchiostro (14,33,53) con una punta di verde-viola nelle zone più scure. Passaggi morbidi (interpolazione smussata), nessuna fascia netta; alpha piena da circa il 10% in poi. In `controllo/tavolozza-giorno-ingrandita.png.b64` la striscia ingrandita a 256×48 per leggerla.
+`profondita-giorno.png` — striscia 256×1 RGBA, sinistra = riva, destra = abisso. Il motore campiona il colore (e l'alpha) in base alla profondità. Tappe: spiaggia turchese chiarissimo (206,243,236, alpha ~100: quasi trasparente alla riva esatta) → acqua bassa turchese (110,210,203) → acqua media azzurro (78,160,198) → largo blu profondo (56,112,152) → abisso blu notte quasi inchiostro (39,61,84) con una punta di verde-viola nelle zone più scure. Passaggi morbidi (interpolazione smussata), nessuna fascia netta; alpha piena da circa il 10% in poi. In `controllo/tavolozza-giorno-ingrandita.png.b64` la striscia ingrandita a 256×48 per leggerla.
 
 ## Mare aperto (opache, tileabili in entrambe le direzioni)
 
-- `mare-largo-giorno.png` (512×512): blu scuro (base ~24,90,152) con macchie chiare e scure da acquerello bagnato.
-- `mare-medio-giorno.png` (512×512): azzurro intenso (base ~46,146,203) con luci morbide, stesso stile.
+- `mare-largo-giorno.png` (512×512): blu scuro gessoso (base ~56,112,152) con macchie chiare e scure da acquerello bagnato.
+- `mare-medio-giorno.png` (512×512): azzurro intenso pastello (base ~78,160,198) con luci morbide, stesso stile.
 
 Come sono fatte (importante, dopo il problema delle "bolle"): NESSUNA macchia ovale o cerchio disegnato. La marezzatura nasce da campi di rumore morbido periodico combinati in prodotto: le forme sono irregolari e spezzate come l'acquerello, più uno strato fine ad alta frequenza e bassa ampiezza che rompe le forme grandi. Niente grana digitale, niente bordi netti.
 
