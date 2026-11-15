@@ -197,4 +197,22 @@ per approvazione. Controlli in controllo/: sovrapposizione al 50%
 vecchio/nuovo — coincidono ovunque tranne petto e braccio.
 Gli altri profili (destro passo2–4, sinistro, e i torcia) seguono
 dopo il via libera.
+
+## Seconda correzione profili — profilo destro (15 nov)
+Sui due frame di anteprima, corretti come richiesto:
+- Testa e barba IDENTICHE al frame precedente: le righe stanno
+  solo sulla maglia, mai su mento, baffi o sotto il naso (la testa
+  è ricopiata dal frame approvato; intorno alla barba solo la sua
+  ombra, come nel gruppo 1).
+- Braccio STACCATO dal busto: contorno proprio sopra il torso,
+  manica a righe leggermente più profonda del petto, che segue
+  l'arco del braccio; polsino chiaro e mano come prima.
+- Petto: tolta la macchia color pelle; righe continue e regolari
+  fino alla cintura, senza spezzature e senza bianchi bruciati.
+- Cintura pulita: marrone uniforme, fibbia GRIGIA davanti, niente
+  macchie né pixel sparsi.
+- Bacino, gambe, stivali e piedi identici: sotto la cintura cambia
+  solo la manica del braccio davanti ai pantaloni.
+Controlli aggiornati in controllo/ (sovrapposizione al 50% con la
+versione precedente). In attesa di via libera per gli altri profili.
 STATO: gruppo 2 pronto
