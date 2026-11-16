@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (sera, 4) – Riva molto più leggera
+- Acqua bassa e sabbia bagnata ora hanno ciascuna una propria immagine pronta, che si rinfresca una volta ogni 3 fotogrammi (sfalsate), con un margine intorno allo schermo. Meno passaggi di disegno per fotogramma, stesso aspetto.
+- «Test FPS»: aggiunte le modalità «senza strati riva» e «senza schiuma riva».
 ## 16 nov 2026 (sera, 3) – Meno lavoro per fotogramma
 - Conchiglie, stelle marine e sassolini sulla sabbia non si ridisegnano più a ogni fotogramma: si preparano a blocchi la prima volta che li vedi e poi si copiano (stesso aspetto).
 - Le trame di onde e riflessi del mare si creano una volta sola invece che a ogni fotogramma.
