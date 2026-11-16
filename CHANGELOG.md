@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre sera — Capitolo 2, prime sistemazioni della storia
+- A fine Capitolo 2 il Diario scrive il «Prossimo scopo» secondo il finale scelto.
+- Alla riunione serale e prima di salpare, una riga dice cosa chiude la partenza (pagine di J., Briciola, tesori).
+- Biscotto parla sottovoce alla scoperta della Sirena.
+- Dopo «Gente del campo» il Capitano si accorge di aver riso.
+
 ## 16 novembre sera — Marinaio con l'accetta
 - Di fronte o di spalle all'albero il marinaio non si sovrappone più: si gira tutto di profilo verso l'albero (testa e bandana comprese).
 
