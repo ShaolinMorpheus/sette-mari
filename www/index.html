@@ -2889,6 +2889,7 @@ function genWorld2(){
    const ec=fr(83,29,4);ent({id:'lt_east',type:'loot',kind:8,x:(ec[0]+.5)*TS,y:(ec[1]+.8)*TS,tx:ec[0],ty:ec[1],got:false,label:'Cassa'});
    const cv=fr(CV2.cave[0],CV2.cave[1],2);deco('cave','cave',(cv[0]+.5),cv[1]+.95,[cv[0]-1,cv[1],3,1],{hitw:150,hith:100,inter:'look',label:'La grotta'});caveBuild();hutBuild();
    [[56.4,33.8,0],[61.6,35.2,1],[53.2,30.5,2]].forEach((q,i)=>{const f=fr(q[0],q[1],2);deco('clue'+i,'clue',f[0]+.5,f[1]+.8,null,{inter:'look',k:i,hitw:60,hith:44,label:'Tracce'})});
+   {const f=fr(57.8,34.8,2);deco('briciola','briciola',f[0]+.5,f[1]+.8,null,{hidden:1,hitw:70,hith:50,label:'Briciola'})}
    Ch2.spawnNpcs();
   }
   // granchi sulle spiagge
@@ -3487,7 +3488,7 @@ function targetInfo(t){
     case'npc':return{l:'Parla',i:'talk'};
     case'thief':return{l:'Scaccia',i:'hand'};
     case'cdeco':return e.k==='orto'?{l:'Orto',i:'hand'}:e.k==='essic'?{l:'Essiccatore',i:'hand'}:e.k==='amaca'?{l:'Riposa',i:'bed'}:e.k==='tavolo'?{l:'Siediti',i:'hand'}:{l:'Leggi',i:'eye'};
-    case'deco':if(hutLbl(e))return hutLbl(e);if(e.id==='c2fire')return{l:'Scaldati',i:'fire'};if(e.id==='cave'||e.id==='cave1')return{l:'Entra',i:'hand'};if(e.id==='cavex')return{l:'Esci',i:'hand'};if(e.id==='cvchest'||e.id==='cvsm')return{l:'Apri',i:'hand'};if(e.id&&e.id.indexOf('cvbr')===0)return{l:'Accendi',i:'fire'};if(e.id==='cvskel')return{l:'Esamina',i:'eye'};if(e.spr==='sign')return{l:'Leggi',i:'eye'};if(e.spr==='pit')return{l:S.flags.pitLit?'Esamina':'Accendi',i:S.flags.pitLit?'eye':'fire'};return{l:e.inter==='climb'?'Sali':'Esamina',i:e.inter==='climb'?'hand':'eye'};
+    case'deco':if(hutLbl(e))return hutLbl(e);if(e.id==='c2fire')return{l:'Scaldati',i:'fire'};if(e.id==='briciola')return{l:'Briciola',i:'hand'};if(e.id==='cave'||e.id==='cave1')return{l:'Entra',i:'hand'};if(e.id==='cavex')return{l:'Esci',i:'hand'};if(e.id==='cvchest'||e.id==='cvsm')return{l:'Apri',i:'hand'};if(e.id&&e.id.indexOf('cvbr')===0)return{l:'Accendi',i:'fire'};if(e.id==='cvskel')return{l:'Esamina',i:'eye'};if(e.spr==='sign')return{l:'Leggi',i:'eye'};if(e.spr==='pit')return{l:S.flags.pitLit?'Esamina':'Accendi',i:S.flags.pitLit?'eye':'fire'};return{l:e.inter==='climb'?'Sali':'Esamina',i:e.inter==='climb'?'hand':'eye'};
     case'vdrink':return{l:'Bevi',i:'drop'};
     case'vfish':return S.up.net?{l:'Rete',i:'net'}:{l:'Pesca',i:'fish'};
     case'vdock':return{l:'Scendi',i:'hand'};
@@ -6355,7 +6356,7 @@ const plotE=id=>EID['plot_'+id];
 const D=(w,t,x)=>Object.assign({w,t:pn(t)},x||{});
 function nearestE(types,ok){let b=null,bd=1e12;for(const e of E){if(types.indexOf(e.type)<0||(ok&&!ok(e)))continue;const d=(e.x-P.x)**2+(e.y-P.y)**2;if(d<bd){bd=d;b=e}}return b}
 const pt=(e,up)=>e?{x:e.fp?(e.fp[0]+e.fp[2]/2)*TS:e.x,y:e.fp?(e.fp[1]+e.fp[3]/2)*TS:e.y-20,up:up==null?70:up}:null;
-const SIDE=WORLD===2?['n1','n2','n3','n4','n5','n6','n7','n8','n9']:['s1','s2','s3','s4','s5','s6','s7'];
+const SIDE=WORLD===2?['n1','n2','n3','n4','n5','n6','n7','n8','n9','n10']:['s1','s2','s3','s4','s5','s6','s7'];
 const matsNeed=()=>PLOTS.zattera.cost;
 const matsOk=()=>S.built.zattera||hasRes(matsNeed());
 const matsTxt=()=>{const c=matsNeed();return'Materiali: '+Object.keys(c).map(k=>RNAME[k].toLowerCase()+' '+Math.min(S.res[k]||0,c[k])+'/'+c[k]).join(', ')};
@@ -6734,6 +6735,12 @@ n7:{kind:'side',title:"L'isola orientale",blurb:"A est, oltre il canale, un'isol
 n9:{kind:'side',title:"I tesori dei Fuggiaschi",blurb:"Si dice che i vecchi abitanti abbiano nascosto casse sulle isolette e in cima alla collina.",avail:()=>qDone('c5'),
   goals:[{k:'flag',done:()=>(C().tre||0)>=5,txt:()=>"Trova le casse nascoste ("+Math.min(5,C().tre||0)+"/5): quattro isolette e la collina a nord-est",hint:"Le isolette si raggiungono con la zattera (ai quattro angoli della mappa). Biscotto può indicarti dove guardare: apri la mappa grande."}],
   onDone(){UI.dlg([D('hero',"Cinque casse. I vecchi fuggiaschi avevano più fiducia nel mare che nelle persone."),D('biscotto',"Cra! Ricchi! Quasi!")],()=>{gain('tela',3,P.x,P.y);gain('corda',4,P.x,P.y-20);S.phats=S.phats||{};const m=PHATS.find(h=>!S.phats[h.id]);if(m){S.phats[m.id]=1;UI.banner('Cappellino per il pappagallo',m.n)}})}},
+n10:{kind:'side',title:"Briciola al campo",blurb:"La cagnetta di Tito non può restare un segreto per sempre. Non se la nave parte.",avail:()=>qDone('n5')&&!!C().ch.puppy&&C().ch.puppy!=='told',
+  goals:[{k:'flag',done:()=>!!Ch2.br().met,txt:"Chiedi a Tito di portarti da Briciola",hint:"Parla con Tito: «Portami da Briciola».",mark:()=>pt(EID.npc_tito,110)},
+         {k:'flag',done:()=>!!Ch2.br().home,txt:"Prepara per Briciola una cuccia (4 legna, 1 corda) oppure un cesto da viaggio (2 corda, 1 tela)",hint:"Briciola è nascosta vicino alle barche, a est del campo. Se ne costruisce una sola: la cuccia la fa restare al campo, il cesto la porta sulla nave.",mark:()=>pt(EID.briciola,40)},
+         {k:'flag',done:()=>(Ch2.br().fed||0)>=2,txt:()=>"Dai da mangiare a Briciola per 2 giorni ("+Math.min(2,Ch2.br().fed||0)+"/2)",hint:"Un pesce o dei molluschi, una volta al giorno.",mark:()=>pt(EID.briciola,40)},
+         {k:'flag',done:()=>!!Ch2.br().fire,txt:"Parla con Gnocco di Briciola",hint:"Parla con Gnocco: «Parla di Briciola».",mark:()=>pt(EID.npc_gnocco,110)}],
+  onDone(){Ch2.br().day=S.day;addXp(30);float(P.x,P.y-80,'+30 XP','#ffe27a')}},
 j1:{kind:'main',title:"Chi era J.?",blurb:"Le bottiglie e le pagine hanno la stessa mano. Qualcuno ha lasciato la verità in pezzi.",
   goals:[{k:'flag',done:()=>(C().pages||0)>=2,txt:()=>"Trova almeno 2 pagine del diario di J. ("+Math.min(2,C().pages||0)+"/2, in tutto sono 4)",hint:"Brillano di giorno e di notte in punti lontani dell'isola grande. Ogni pagina dà un indizio, e il pappagallo ti aiuta.",mark:()=>{const e=nearestE(['loot'],l=>l.kind===11&&!l.got);return pt(e,50)}}],
   onDone(){UI.dlg([D('hero',"Giacomo Marrone, capitano della Sirena. Lo stesso J. delle bottiglie."),D('hero',"Ferro lo conosceva. E ha deciso chi poteva salire a bordo, e chi no.")],()=>startQuest('c8'))}},
@@ -6767,6 +6774,48 @@ Ch2.QH.push({w:'gnocco',active:()=>qAct('n4',0),ready:()=>true,label:()=>"Chiedi
     {t:"Gnocco: a chi lavora di più.",fn:()=>{Ch2.addTrust('gnocco',2);Ch2.addTrust('nives',-1);C().ch.liteW='gnocco'},next:[D('gnocco',"Un giudice! Finalmente!"),D('nives',"Non è giusto, ma lo accetto. Per ora.")]},
     {t:"Nives: parti uguali per tutti.",fn:()=>{Ch2.addTrust('nives',2);Ch2.addTrust('gnocco',-1);C().ch.liteW='nives'},next:[D('nives',"Ecco! Qualcuno con la testa sulle spalle."),D('gnocco',"Il mio stomaco protesta. Ma non troppo.")]},
     {t:"Divido io: aggiungo due pesci arrosto dalle mie scorte.",fn:()=>{if((S.res.arrosto||0)>=2){S.res.arrosto-=2;UI.sync();Ch2.addTrust('nives',1);Ch2.addTrust('gnocco',1);C().ch.liteW='both'}else{C().ch.liteW='gnocco';Ch2.addTrust('gnocco',1)}},next:[D('gnocco',"Due pesci... e la pace. Che spettacolo."),D('nives',"Non è un compromesso. È un tributo. Ma lo apprezzo.")]}]})],()=>{C().ch.lite=1;checkAll()})}});
+Ch2.br=function(){const c=C();return c.br||(c.br={})};
+Ch2.QH.push({w:'tito',active:()=>qAct('n10',0),ready:()=>true,label:()=>"Portami da Briciola",run(){
+  UI.dlg([D('hero',"Portami da lei."),D('tito',"Adesso? Va bene. Ma piano: se abbaia, io non c'ero."),D('hero',"Dietro le barche, tra due casse, due occhi neri e una coda che batte sulla sabbia."),D('tito',"Briciola, questo è {cap}. È dei nostri. Credo."),D('hero',"Quando la nave partirà, qui non resterà nessuno a portarle l'acqua. Bisogna decidere prima.")],()=>{Ch2.br().met=1;checkAll()})}});
+Ch2.QH.push({w:'gnocco',active:()=>qAct('n10',3),ready:()=>true,label:()=>"Parla di Briciola",run(){
+  const b=Ch2.br(),kn=C().ch.puppy==='gnocco';
+  const L=b.home==='cuccia'?[D('hero',"Gnocco, vicino alle barche c'è una cosa che devi sapere."),D('gnocco',"La cagnetta? Lo so dal primo giorno. Chi credi che lasci gli avanzi dietro le casse?"),D('gnocco',kn?"È assunta da un pezzo. Adesso ha anche una casa.":"Un assaggiatore? Con la coda? È già assunto."),D('tito',"Io non c'ero. Ma grazie.")]
+    :[D('hero',"Gnocco, mi serve un po' di pesce secco. Per un viaggio."),D('gnocco',"Un cesto da viaggio, con una coperta dentro. Non dirmi per chi è: lo so dal primo giorno."),D('gnocco',"Io non ho visto niente. Ma gli avanzi li metto da parte."),D('tito',"Io non c'ero. Ma grazie.")];
+  UI.dlg(L,()=>{b.fire=1;Ch2.addTrust('gnocco',1);Ch2.addTrust('tito',1);checkAll()})}});
+Ch2.brLook=function(){
+  const b=Ch2.br();
+  if(qAct('n10',1)){
+    let k=null;const A={legna:4,corda:1},B={corda:2,tela:1};
+    UI.dlg([D('hero',"Briciola mi annusa le mani. Una cuccia qui, o un cesto per portarla a bordo: una cosa sola.",{choices:[
+      {t:"Una cuccia vicino alle barche ("+costTxt(A)+").",fn:()=>{k='cuccia'}},
+      {t:"Un cesto da viaggio per la nave ("+costTxt(B)+").",fn:()=>{k='cesto'}},
+      {t:"Non ancora.",fn:()=>{k=null}}]})],()=>{
+      if(!k)return;const cst=k==='cuccia'?A:B;
+      if(!hasRes(cst)){UI.toast("Non basta il materiale: "+costTxt(cst)+".");return}
+      payRes(cst);UI.sync();b.home=k;sfx('hammer');
+      UI.dlg([D('hero',k==='cuccia'?"Quattro assi, una corda, un tetto storto. Briciola ci entra subito, come se l'avesse sempre avuta.":"Un cesto intrecciato, con un pezzo di tela per coperta. Briciola ci gira dentro tre volte e si accuccia."),D('tito',k==='cuccia'?"Allora resta. Qui, con tutti.":"Allora viene con me. Di nascosto.")],()=>checkAll())});
+    return true}
+  if(qAct('n10',2)){
+    if(b.fedDay===S.day){UI.dlg([D('hero',"Ha già mangiato, oggi. Torno domani.")]);return true}
+    let f=null;const ch=[];
+    if((S.res.pesce||0)>=1)ch.push({t:"Un pesce.",fn:()=>{f='pesce'}});
+    if((S.res.molluschi||0)>=1)ch.push({t:"Dei molluschi.",fn:()=>{f='molluschi'}});
+    if(!ch.length){UI.dlg([D('hero',"Non ho niente per lei. Le serve un pesce, o dei molluschi.")]);return true}
+    ch.push({t:"Non adesso.",fn:()=>{f=null}});
+    UI.dlg([D('hero',"Briciola guarda la mia bisaccia. Cosa le do?",{choices:ch})],()=>{
+      if(!f)return;S.res[f]-=1;UI.sync();b.fed=(b.fed||0)+1;b.fedDay=S.day;sfx('ok');
+      UI.dlg([D('hero',b.fed>=2?"Mangia piano, stavolta. Si fida. Al campo nessuno si è accorto di niente. O così sembra.":"Finisce tutto in tre morsi e mi lecca le dita. Domani torno.")],()=>checkAll())});
+    return true}
+  UI.dlg([D('hero',b.home?"Briciola scodinzola. Non abbaia: ha imparato a stare zitta.":"Due occhi neri tra le casse. Mi tiene d'occhio.")]);return true};
+Ch2.brAsm=function(){const b=Ch2.br(),c=C();if(!b.home)return[];
+  return[D('hero',b.home==='cuccia'?"Briciola è accucciata ai piedi di Tito. Ferro la guarda"+(c.ch.note?", poi guarda me. Penso al suo biglietto: otto posti, tre nomi.":".")+" Non dice niente. Per ora.":"Tito tiene un cesto dietro le gambe. Il cesto respira. Ferro guarda altrove.")]};
+Ch2.brEnd=function(k){const b=Ch2.br();if(!b.home)return[];
+  const cu=b.home==='cuccia';
+  const T={ferro:"Sulla riva, accanto a Tito, una cosa piccola e chiara scodinzola. Almeno lui non resta solo.",
+    ferro2:cu?"Dietro Tito, dal barile, salta fuori anche Briciola. Ferro conta di nuovo. Non dice niente.":"Dopo Tito, dal barile esce anche un cesto. Il cesto abbaia una volta. Ferro finge di non sentire.",
+    all:cu?"Briciola è a prua, col muso nel vento. Gnocco le ha già messo da parte un osso.":"Tito sale per ultimo, con un cesto stretto al petto. Nessuno gli chiede cosa c'è dentro. Lo sanno tutti.",
+    solo:"A riva restano tutti. Anche Tito, anche Briciola. Lui, almeno, le porterà l'acqua."};
+  T.fire=T.all;return T[k]?[D('hero',T[k])]:[]};
 Ch2.QH.push({w:'tito',active:()=>qAct('n5',1),ready:()=>true,label:()=>"Parla del furto d'acqua",run(){
   UI.dlg([D('hero',"Ho trovato impronte piccole, una ciotola e un po' di pelo vicino alla cisterna."),D('tito',"...Io non ero lì."),D('hero',"Tito."),D('tito',"Va bene! C'è un cucciolo. Un cane, o quasi. L'ho trovato sulla spiaggia. Lo tengo nascosto vicino alle barche."),D('tito',"Ferro lo caccerebbe. Dice che le bocche in più sono un problema. Cosa faccio?",{choices:[
     {t:"Mantengo il segreto: lo nascondiamo insieme.",fn:()=>{Ch2.addTrust('tito',3);Ch2.addTrust('ferro',-1);C().ch.puppy='secret'},next:[D('tito',"Davvero? Non lo dirai a nessuno?"),D('hero',"A nessuno. Ma l'acqua gliela porti tu."),D('tito',"Promesso. Il cane si chiama Briciola. È una femmina.")]},
@@ -6804,6 +6853,7 @@ Ch2.look=function(e){
     const T=Ch2.TENT[e.id];c.tentSeen=c.tentSeen||{};
     if(!c.tentSeen[e.id]){c.tentSeen[e.id]=1;sfx('ok');addXp(6);float(P.x,P.y-80,'+6 XP','#ffe27a')}
     UI.dlg([D('hero',T[0])]);return true}
+  if(e.id==='briciola')return Ch2.brLook();
   if(e.id==='c2fire'){
     c.fireDay=c.fireDay||{};
     let best=null,bd=1e9;for(const n of E)if(n.type==='npc'){const d=hyp(n.x-P.x,n.y-P.y);if(d<bd&&d<7*TS){bd=d;best=n}}
@@ -7015,6 +7065,7 @@ Ch2.npcAI=function(dt){
 function _thStep(e,a,len){for(const o of[0,.5,-.5,1,-1,1.6,-1.6]){const nx=e.x+Math.cos(a+o)*len,ny=e.y+Math.sin(a+o)*len;if(!solidPx(nx,ny)&&!solidPx(nx,ny+6)){e.x=nx;e.y=ny;return true}}return false}
 Ch2.tick=function(dt){
   const c=C();
+  {const b=EID.briciola;if(b){const v=!!(c.br&&c.br.met);b.hidden=!v;b.inter=v?'look':null}}
   Ch2.npcAI(dt);
   try{FE.tick(dt)}catch(e){console.error('festa',e)}
   // riunione serale
@@ -7055,11 +7106,11 @@ Ch2.tick=function(dt){
   if(!night)for(const e of ths)if(!e.flee){e.flee=true;e.fleeT=0}
 };
 /* ---------- scene del capitolo: riunione, partenza, finali ---------- */
-Ch2.closes=function(){const c=C();return "Dal Diario. Partire chiude: pagine di J. ("+(c.pages||0)+"/4) · Briciola ("+(c.ch&&c.ch.puppy?"scoperta":"non scoperta")+") · Tesori dei Fuggiaschi ("+(c.tre||0)+"/5)."};
+Ch2.closes=function(){const c=C();return "Dal Diario. Partire chiude: pagine di J. ("+(c.pages||0)+"/4) · Briciola ("+(c.br&&c.br.fire?"sistemata":c.ch&&c.ch.puppy?"scoperta":"non scoperta")+") · Tesori dei Fuggiaschi ("+(c.tre||0)+"/5)."};
 Ch2.NEXT=k=>k==='solo'?"Prossimo scopo: seguire la stella bassa a ovest, la rotta di J. Seconda cosa nota: al largo passa un convoglio carico d'argento.":"Prossimo scopo: raggiungere la vela vista all'orizzonte. È un convoglio carico d'argento.";
 Ch2.assembly=function(){
   const c=C();c.ch.assembly='pending';
-  UI.dlg([D('ferro',"Tutti qui. Subito."),D('ferro',"La nave è pronta. Parto all'alba. Porto chi serve."),D('nives',"«Chi serve». Bella espressione, Ferro. Dici «chi serve» e intendi «chi ubbidisce»."),D('gnocco',"Intanto io ho cucinato per tutti. E per tutti, intendo tutti."),D('tito',"Io non ci sono. Faccio finta di non esserci."),D('ferro',"Silenzio. {cap}, tu hai portato più di tutti. Parla."),D('hero',Ch2.closes()),D('hero',"Cosa dico?",{choices:[
+  UI.dlg([D('ferro',"Tutti qui. Subito."),D('ferro',"La nave è pronta. Parto all'alba. Porto chi serve."),D('nives',"«Chi serve». Bella espressione, Ferro. Dici «chi serve» e intendi «chi ubbidisce»."),D('gnocco',"Intanto io ho cucinato per tutti. E per tutti, intendo tutti."),D('tito',"Io non ci sono. Faccio finta di non esserci."),D('ferro',"Silenzio. {cap}, tu hai portato più di tutti. Parla."),...Ch2.brAsm(),D('hero',Ch2.closes()),D('hero',"Cosa dico?",{choices:[
     {t:"Partiamo tutti insieme, o nessuno.",fn:()=>{c.ch.assembly='all';['nives','tito','gnocco'].forEach(w=>Ch2.addTrust(w,1,1));Ch2.addTrust('ferro',-1,1)},next:[D('nives',"Ecco! Qualcuno con il cervello."),D('ferro',"...Sul ponte c'è posto. Ma io decido la rotta."),D('gnocco',"Le provviste per tutti. Ci penso io.")]},
     {t:"Decide Ferro: è lui il capo.",fn:()=>{c.ch.assembly='ferro';Ch2.addTrust('ferro',2,1);Ch2.addTrust('nives',-1,1);Ch2.addTrust('tito',-1,1)},next:[D('ferro',"Giusto. Chi sa comandare, comanda."),D('nives',"Mi dispiace, {cap}. Mi aspettavo di meglio."),D('tito',"Io non c'ero. Non c'ero, vero?")]},
     {t:"Decidiamo a voto, tutti.",fn:()=>{c.ch.assembly='vote';Ch2.addTrust('nives',1,1);Ch2.addTrust('tito',1,1);Ch2.addTrust('gnocco',1,1);Ch2.addTrust('ferro',-2,1)},next:[D('ferro',"Un voto. Qui."),D('ferro',"Va bene. Una volta sola."),D('nives',"Hai fatto arrabbiare Ferro. Per me sei già un eroe.")]}]})
@@ -7097,6 +7148,7 @@ Ch2.ending=function(k){
     fire:[D('hero',"All'alba, la nave è pronta con tutti a bordo, tranne uno."),D('ferro',"Una nave piena di indisciplinati non arriverà lontano."),D('hero',"Ferro resta sulla riva con la torcia in mano. La lascia cadere sul campo: le tende, la bancarella, la bandiera. Il fuoco sale."),D('nives',"Perché?!"),D('ferro',"Così nessuno tornerà."),D('hero',"Salpiamo con il fuoco alle spalle. Nives non gli rivolgerà più la parola. Gnocco cucinerà in silenzio, per giorni."),D('hero',"Dietro di noi il fumo sale. Davanti, un mare che ci aspetta senza fretta.")],
     solo:[D('hero',"Nel buio, uno dopo l'altro, taglio gli ormeggi. La nave scivola via come se avesse aspettato questo da sempre."),D('hero',"Sulla riva, una sola luce: Ferro, con la lanterna. Non grida. Alza la lanterna una volta. Poi la spegne."),D('biscotto',"Cra... non ci voleva."),D('hero',(c.pages||0)>=4?"Sul fondo del timone ho scritto le parole di Giacomo: «Cerca la stella bassa a ovest». È dove andrò.":"Davanti a me, il mare. Dietro, tutto il resto."),D('hero',"«Cerca la stella bassa a ovest.» Ho una nave, un pappagallo e nessun posto dove tornare.")]
   }[k];
+  L.push(...Ch2.brEnd(k));
   {const pg=c.pages||0;
    L.push(pg>=4?D('hero',"Ho tutte le pagine di Giacomo. So chi era, so cosa ha fatto Ferro. Qualunque rotta prenda, la porterò come una promessa."):pg>=2?D('hero',"Di Giacomo ho solo qualche pagina. Il resto resterà un mistero, in mare."):D('hero',"Chi era J.? Non lo so davvero. Resterà un nome su una bottiglia."))}
   c.endings=c.endings||{};
@@ -7119,6 +7171,7 @@ Ch2.endCard=function(k){
 Ch2.openStatus=function(){
   const c=C(),p=c.parts,ok=v=>v?'✔':'—';
   let h='<h2>Il campo dei Fuggiaschi</h2><p class="sm">Fiducia con i personaggi (cresce parlando ogni giorno e con le missioni).</p><div class="stats">'+['ferro','nives','tito','gnocco'].map(w=>'<div><b>'+HEARTS(Ch2.tr(w))+'</b>'+Ch2.NPC[w].n+'</div>').join('')+'</div>';
+  try{if(Ch2.tr('ferro')>=8&&NV2.fr('ferro',2)&&!NV2.fr('ferro',4)&&(c.pages||0)<1)h+='<p class="sm">Ferro: c\'è qualcosa che non hai ancora trovato.</p>'}catch(_){}
   h+='<p class="sm">Festa al campo: ogni cinque giorni, la sera, al falò (musica e una zuppa con i raccolti dell\'orto). Prossima: '+FE.nextTxt()+(c.fest&&c.fest.n?' · feste vissute: '+c.fest.n:'')+'.</p>';
   h+='<p>La nave: albero '+ok(p.mast)+' · timone '+ok(p.rudder)+' · vele '+ok(p.sails)+' · cantiere '+ok(p.yard)+'</p><p class="sm">Pagine del diario di J.: '+(c.pages||0)+'/4 · Finali visti: '+Object.keys(c.endings||{}).length+'/5</p><div class="row"><button class="btn" id="shBk">Torna al Capitolo 1</button><button class="btn" id="shNo">Chiudi</button></div><p class="sm">Il progresso del Capitolo 2 resta salvato: per riprenderlo, dal Capitolo 1 sbarca di nuovo sull\'isola dei fuggiaschi.</p>';
   sheetFor(h,cc=>{cc.querySelector('#shBk').onclick=()=>Ch2.toCh1()});
@@ -9891,6 +9944,19 @@ NV2.pages=()=>Math.min(4,(S&&S.c2&&S.c2.pages)||0);
 
 /* ---- disegni (tutti in coordinate locali: x,y = punto a terra) ---- */
 const NVDX={};
+NVDX.briciola=(g,e,t)=>{   // SEGNAPOSTO disegnato a codice
+  const b=(S&&S.c2&&S.c2.br)||{};g.save();g.translate(e.x,e.y);
+  if(b.home==='cuccia'){g.save();g.translate(-34,0);shadow(g,0,2,24,6,.22);g.fillStyle='#a9784a';g.strokeStyle='#3a2010';g.lineWidth=1.6;g.beginPath();g.rect(-17,-20,34,20);g.fill();g.stroke();g.fillStyle='#8a5a34';g.beginPath();g.moveTo(-21,-20);g.lineTo(0,-36);g.lineTo(21,-20);g.closePath();g.fill();g.stroke();g.fillStyle='#2a1a10';g.beginPath();g.moveTo(-8,0);g.lineTo(-8,-9);g.arc(0,-9,8,Math.PI,0);g.lineTo(8,0);g.closePath();g.fill();g.restore()}
+  else if(b.home==='cesto'){g.save();g.translate(-30,0);shadow(g,0,2,18,5,.22);g.fillStyle='#c9a160';g.strokeStyle='#3a2010';g.lineWidth=1.6;g.beginPath();g.ellipse(0,-7,15,8,0,0,7);g.fill();g.stroke();g.fillStyle='#d8d0b8';g.beginPath();g.ellipse(0,-10,11,4.5,0,0,7);g.fill();g.stroke();g.restore()}
+  shadow(g,0,2,13,4,.25);const w=Math.sin(t*9)*.5;
+  g.strokeStyle='#3a2a1a';g.lineWidth=1.5;g.fillStyle='#e8d6b0';
+  g.save();g.translate(-10,-11);g.rotate(-.9+w);g.beginPath();g.ellipse(0,-5,2.2,6,0,0,7);g.fill();g.stroke();g.restore();
+  g.beginPath();g.ellipse(0,-8,11,6.5,0,0,7);g.fill();g.stroke();
+  for(const x of[-6,6]){g.beginPath();g.rect(x-2,-4,4,5);g.fill();g.stroke()}
+  g.beginPath();g.arc(11,-15,6.5,0,7);g.fill();g.stroke();
+  g.fillStyle='#b8894f';g.beginPath();g.ellipse(7,-19,3,4.5,-.5,0,7);g.fill();g.stroke();
+  g.fillStyle='#1c1410';g.beginPath();g.arc(13,-16,1.2,0,7);g.fill();g.beginPath();g.arc(17,-13.5,1.5,0,7);g.fill();
+  g.restore()};
 NVDX.nv_laundry=(g,e,t)=>{
   g.save();g.translate(e.x,e.y);
   shadow(g,0,3,80,8,.2);
@@ -10220,7 +10286,7 @@ NV2.scene=function(w,h){
 };
 for(const w of['ferro','nives','tito','gnocco'])for(const h of[2,4]){
   Ch2.QH.push({w,g:1,ready:()=>true,
-    active:()=>!!C().met[w]&&Ch2.tr(w)>=h*2&&!NV2.fr(w,h)&&(h===2||NV2.fr(w,2)),
+    active:()=>!!C().met[w]&&Ch2.tr(w)>=h*2&&!NV2.fr(w,h)&&(h===2||NV2.fr(w,2))&&!(w==='ferro'&&h===4&&(C().pages||0)<1),
     label:()=>NV2.FS[w][h].label,run(){NV2.scene(w,h)}});
 }
 

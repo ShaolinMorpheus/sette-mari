@@ -1,6 +1,6 @@
 # Risposta di Claude — sistemazione capitoli
 
-Stato: **passo 1 della Parte C fatto e pubblicato (16 nov)**. Passi 2–7 non iniziati.
+Stato: **passo 1 fatto; del passo 2 fatti C2-5 «Briciola al campo» e A8 (16 nov sera)**. Restano C2-4, A9 e i passi 3–7.
 
 ## Passo 1 — correzioni economiche
 - **A4 (b) fatto.** A fine Cap. 2 la scheda finale e il Diario (obiettivo corrente) scrivono «Prossimo scopo: …»: convoglio d'argento per i quattro finali con equipaggio o con Ferro; stella bassa a ovest per «La fuga», con il convoglio come seconda cosa nota. **A4 (a)** dipende da C2-4: non fatto.
@@ -13,6 +13,20 @@ Stato: **passo 1 della Parte C fatto e pubblicato (16 nov)**. Passi 2–7 non in
 - Le righe nuove sono tradotte nelle 5 lingue del gioco.
 - Salvataggi: nessun dato nuovo salvato, nessuna missione toccata.
 
+## Passo 2 — fatto finora
+- **C2-5 «Briciola al campo» fatta, come secondaria `n10`.** Passi: Tito ti porta da Briciola → cuccia (4 legna, 1 corda) **oppure** cesto da viaggio (2 corda, 1 tela), una sola → cibo per 2 giorni (pesce o molluschi, una volta al giorno) → scena con Gnocco («lo so dal primo giorno») → alla riunione una riga su Briciola e Ferro (con il biglietto, se l'hai letto) → una riga in ognuno dei 5 finali secondo cuccia/cesto e secondo chi è a bordo. Briciola non ha battute.
+  - *Interpretato:* resta **secondaria** anche se «Chi ha bevuto l'acqua?» è completata: nel gioco la catena delle principali è fissa e inserirla lì avrebbe rischiato i salvataggi a metà capitolo. Non blocca niente.
+  - *Interpretato:* non parte se hai scelto «Lo dico a Ferro» (lì il segreto non esiste più).
+  - *Interpretato:* la scena «al fuoco» si apre parlando con Gnocco, non con un evento serale.
+  - *Interpretato:* nei finali in cui Tito resta a terra («L'Ordine di Ferro», «La fuga») Briciola resta con lui.
+  - *Posizione:* Briciola è nel prato a est del campo, vicino alle prime tracce; nel gioco non c'è un oggetto «barche» a cui agganciarla.
+  - **SEGNAPOSTO dichiarati nel codice** (`NVDX.briciola`): Briciola, cuccia e cesto sono disegnati a codice. Servono i disegni di Muse.
+  - C3-S3 «Un cane a bordo» non è ancora sbloccata da nulla (non esiste).
+  - Righe nuove **solo in italiano** per ora (nelle altre lingue compaiono in italiano).
+- **A8 fatto.** La scena di Ferro a 4 cuori non compare finché non hai almeno 1 pagina di J.; nella scheda del campo compare «Ferro: c'è qualcosa che non hai ancora trovato».
+- L'avviso alla partenza ora dice «Briciola (sistemata)» a missione finita.
+- Provato in gioco: tutta la sequenza di Briciola fino alla scena con Gnocco (esclusa), scheda del campo. Non provati: scena con Gnocco, riunione e finali con Briciola.
+
 ## A17 — pietra a forma di cuore
 Esiste **solo come testo**: una delle bottiglie portate dalla marea dice «Tre passi dal Pino Alto, una pietra a forma di cuore. Non ricordo cosa ci ho messo. — Anonimo» (elenco `NV.NOTES`). Nessun oggetto, luogo o missione collegati. Non ho implementato nulla.
 
@@ -22,7 +36,7 @@ Esiste **solo come testo**: una delle bottiglie portate dalla marea dice «Tre p
 - [x] Nelle scene chiave di A6, Biscotto ha al massimo una battuta breve per scena.
 - [ ] Zattera: 4 assi dal relitto (A1).
 - [ ] Partenza Cap. 1 solo la mattina dopo (A2).
-- [ ] Scena di Ferro a 4 cuori legata a 1 pagina di J. (A8).
+- [x] Scena di Ferro a 4 cuori legata a 1 pagina di J. (A8).
 - [ ] Lavori sullo scafo = C2-3 (A9).
 - [ ] Cap. 3 aperto da C3-1, Diario per fasi (A11, A12).
 - [ ] Confessione di Ferro in due lunghezze (A10c).
