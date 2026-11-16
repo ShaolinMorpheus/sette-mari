@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## Capitano: toppa sulla schiena
+- La toppa dorata sulla schiena ora resta anche nei frame di taglio/scavo di spalle.
+
 ## Capitano: maglia rossa pulita negli attrezzi
 - Tolte le righe e le macchie chiare dalla maglia rossa del capitano nei frame di taglio/scavo.
 
