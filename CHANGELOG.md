@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Marinaio: animazioni fronte/spalle rifatte
+- Stessa grandezza e stessi colori del marinaio fermo in tutti i frame; bandana sempre presente.
+- Scartata la posa di riposo di stile diverso che faceva "saltare" il personaggio.
+
 ## Marinaio: animazioni fronte/spalle
 - Montati i 30 frame di Muse (ascia, piccone, mani nude) di fronte e di spalle: il marinaio non si gira più di profilo quando taglia. Dimensione e colori della maglia ora allineati al marinaio fermo.
 
