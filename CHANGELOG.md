@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 – Cespugli a tre stati e alberi che ricrescono lontano
+- Cespuglio normale, con liane, con bacche: raccogliendo liane o bacche torna sempre al cespuglio normale (stesso disegno di Muse).
+- Gli alberi abbattuti ricrescono solo quando sono fuori dall'inquadratura, e ci mettono di più (circa 7-10 minuti invece di 3-4).
 ## 15 nov 2026 (notte) – Vegetazione: più verde e liane scure
 - Palme, alberi, pini e cespugli di Muse più saturi e più verdi (il legno resta com'è).
 - Il cespuglio con le liane riavrà i rami/liane scuri come prima, non più verdi.
