@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Animazioni attrezzi: capitano e colori
+- Il capitano rosso ora taglia/scava anche di fronte e di spalle (stessi frame del marinaio con maglia rossa), non solo di lato.
+- Marinaio: maglia e pantaloni dei frame d'azione allineati ai colori del frame fermo.
+
 ## Marinaio: animazioni fronte/spalle rifatte
 - Stessa grandezza e stessi colori del marinaio fermo in tutti i frame; bandana sempre presente.
 - Scartata la posa di riposo di stile diverso che faceva "saltare" il personaggio.
