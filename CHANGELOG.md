@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (pomeriggio) – Oggetti di Muse e contatore FPS
+- Contatore FPS: nel menu, «Contatore FPS» lo accende e lo spegne (FPS, tempo medio, fotogramma peggiore e 5% più lenti).
+- Grafica di prova (con «Mappa di prova»): rocce, rocce spaccate, ceppo, conchiglie, capanna, banco, grotta, forzieri, falò, casse, barili, pini, pozza di marea (piena e vuota), roccione, torre, bandiera, campo vecchio e Pino Alto ora sono i disegni di Muse, più vivi e con le linee scure. Tenda dei Fuggiaschi e cartello restano come prima (misure diverse da verificare).
 ## 16 nov 2026 (giorno) – Più fluido
 - Mare e riva più leggeri: gli strati di acqua bassa e sabbia bagnata si disegnano a metà risoluzione e in un solo passaggio. Nelle mie prove il gioco con la grafica di prova passa da circa 38 a 50 fotogrammi al secondo (uguale alla grafica normale), con lo stesso aspetto.
 ## 16 nov 2026 – Cespugli a tre stati e alberi che ricrescono lontano
