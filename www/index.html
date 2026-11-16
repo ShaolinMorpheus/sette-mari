@@ -3523,6 +3523,7 @@ function doAction(){
 /* ---- azioni ---- */
 const AXE_T=.62;
 function actSpeed(){return(S.up.axe?1.4:1)*(S.buff>0?1.3:1)}
+function pickSpeed(){return(S.up.pick?1.4:1)*(S.buff>0?1.3:1)}
 function startAct(e){
   if(e.type!=='vdrink'&&e.type!=='vfish'&&e.type!=='vdock')faceTo(e);
   const mk=(kind,dur,hits,tool,label)=>{dur*=lvSpeed(lvOf(S.xpt||0));P.act={e,kind,t:0,dur,hits,done:0,tool,label};P.tool=tool};
@@ -3535,7 +3536,7 @@ function startAct(e){
     case'palm':if(!e.coco){UI.toast('Questa palma non ha più noci. Torna più tardi.');return}mk('shake',0,2,null);P.act.per=.55;break;
     case'rock':
       if(!S.flags.pick){UI.toast('Serve un piccone per spaccare la roccia.');sfx('no');return}
-      mk('mine',0,4,'pick');P.act.per=.7/actSpeed();break;
+      mk('mine',0,S.up.pick?3:4,'pick');P.act.per=.7/pickSpeed();break;
     case'bush':if(!e.ready){return}mk('gather',1.1,0,null);break;
     case'berry':if(!e.ready){return}mk('forage',1.0,0,null);break;
     case'rockpool':if(!e.ready){return}mk('pool',1.3,0,null);break;
@@ -5931,6 +5932,7 @@ const DECOR=[
 const PLOT_ORDER=["falo","capanna","banco","zattera"];
 const UPGR={
   axe:{name:"Ascia affilata",desc:"Servono meno colpi per abbattere un albero e si lavora più in fretta.",cost:{legna:4,pietra:6}},
+  pick:{name:"Piccone rinforzato",desc:"Servono meno colpi per spaccare una roccia e si lavora più in fretta.",cost:{legna:4,pietra:6},need:'pick',needText:'Prima ti serve un piccone (nella cassa del carpentiere).'},
   boots:{name:"Sandali di corda",desc:"Camminare sulla sabbia e nel bosco costa meno fatica: il passo è più svelto.",cost:{corda:4,rottami:3}},
   rod:{name:"Canna rinforzata",desc:"Lenza più robusta e un amo migliore: peschi più in fretta e il pesce scappa meno.",cost:{legna:3,corda:3,rottami:2},need:'lenza',needText:'Prima ti serve la lenza (cerca nel relitto).'},
   net:{name:"Rete da pesca",desc:"Una rete di corda da gettare in acqua: ci mette di più, ma porta più pesci in una volta.",cost:{corda:8,rottami:3},need:'lenza',needText:'Prima ti serve la lenza (cerca nel relitto).'},
@@ -13268,7 +13270,7 @@ function startNew(name,hero){
 }
 function startContinue(nm,hero){
   const s=loadSave();if(!s)return;
-  S=s;if(nm)S.name=nm;if(hero)S.hero=hero;S.hints=S.hints||{};S.up=Object.assign({axe:0,boots:0,flask:0,torch:0,rod:0,net:0},S.up);S.wx=S.wx||{k:'clear',t:300};if(S.pond==null)S.pond=100;S.flags=S.flags||{};S.built=S.built||{};S.q=S.q||{};
+  S=s;if(nm)S.name=nm;if(hero)S.hero=hero;S.hints=S.hints||{};S.up=Object.assign({axe:0,pick:0,boots:0,flask:0,torch:0,rod:0,net:0},S.up);S.wx=S.wx||{k:'clear',t:300};if(S.pond==null)S.pond=100;S.flags=S.flags||{};S.built=S.built||{};S.q=S.q||{};
   S.res=Object.assign(emptyRes(),S.res);S.stat=Object.assign({chopped:0,stone:0,days:1,built:0,fish:0,forage:0,bottles:0},S.stat);
   S.vit=Object.assign({t:58,h:70},S.vit);S.said=S.said||{};S.hand=handPref();S.ctrl='joy';if(S.flags.parrot&&!S.pname)S.pname='Biscotto';if(S.xpt==null)S.xpt=xpFromStats();
   for(const k in S.q)S.q[k].busy=false;

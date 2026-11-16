@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre sera — Piccone rinforzato
+- Nuovo miglioramento «Piccone rinforzato» (4 legna, 6 pietra): una roccia si spacca con 3 colpi invece di 4 e si lavora più in fretta, come l'ascia affilata.
+
 ## 16 novembre sera — Scelte nei dialoghi
 - Quando le risposte sono più di tre vanno su due colonne; se sono comunque troppe l'elenco scorre col dito e non esce più dallo schermo.
 
