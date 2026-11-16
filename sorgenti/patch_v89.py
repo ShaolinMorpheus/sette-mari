@@ -24,7 +24,7 @@ rep("SP.rockpool=mkRockpool();","SP.rockpool=swapArt(mkRockpool(),'rockpool');if
 rep("SP.mesa=MESA_PTS.length?mkMesa():null;","SP.mesa=MESA_PTS.length?swapArt(mkMesa(),'mesa'):null;")
 rep("SP.torre=mkTorre();","SP.torre=swapArt(mkTorre(),'torre');")
 rep("SP.bandiera=mkBandiera();","SP.bandiera=swapArt(mkBandiera(),'bandiera');")
-rep("SP.oldcamp=mkOldCamp();SP.lookout=mkLookoutPine();","SP.oldcamp=swapArt(mkOldCamp(),'oldcamp');SP.lookout=swapArt(mkLookoutPine(),'lookout');")
+rep("SP.oldcamp=mkOldCamp();SP.lookout=mkLookoutPine();","SP.oldcamp=swapArt(mkOldCamp(),'oldcamp');SP.lookout=mkLookoutPine();")
 # pozza vuota
 rep("g.save();g.translate(e.x,e.y);if(!e.ready)g.globalAlpha=.6;drawSp(g,SP.rockpool,0,0,1);g.restore();","g.save();g.translate(e.x,e.y);if(!e.ready&&!SP.rockpool0)g.globalAlpha=.6;drawSp(g,(!e.ready&&SP.rockpool0)?SP.rockpool0:SP.rockpool,0,0,1);g.restore();")
 # dati e funzione, globali

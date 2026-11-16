@@ -1911,7 +1911,7 @@ function initPropSprites(){
   SP.berry=[mkBerryBush(0),mkBerryBush(1),mkBerryBush(2)];SP.berry0=mkBerryBare();
   SP.rockpool=swapArt(mkRockpool(),'rockpool');if(VEGPG&&VEGZ['rockpool0'])SP.rockpool0=swapArt(mkRockpool(),'rockpool0');
   SP.chest=[[chestSpr(0,false),chestSpr(0,true)],[chestSpr(1,false),chestSpr(1,true)],[chestSpr(2,false),chestSpr(2,true)],[chestSpr(3,false),chestSpr(3,true)]];
-  SP.sailcloth=mkSailCloth();SP.bottle=mkBottle();SP.oldcamp=swapArt(mkOldCamp(),'oldcamp');SP.lookout=swapArt(mkLookoutPine(),'lookout');
+  SP.sailcloth=mkSailCloth();SP.bottle=mkBottle();SP.oldcamp=swapArt(mkOldCamp(),'oldcamp');SP.lookout=mkLookoutPine();
   SP.sign=mkSign();SP.raftHull=mkRaftHull();SP.raftSail=mkRaftSail();SP.raftHull2=mkRaftHull(1);SP.raftSail2=mkRaftSail(1);SP.skull=mkSkull();
 }
 
@@ -12942,7 +12942,7 @@ function hatOnly(g,sp_,back,sv,hy,hr){
   /* cappelli senza disegno nuovo: tolti dal gioco */
   for(const id of ['h_paglia','h_pesc','h_turb','h_viagg','h_bosc','h_guardia','h_tito','h_tela']){const i=WEAR.findIndex(w=>w.id===id);if(i>=0)WEAR.splice(i,1);delete WRH[id]}
 })();
-var FPSC={on:false,el:null,n:0,t0:0,mx:0,last:0,fr:[],
+var FPSC={js:0,rs:0,jn:0,on:false,el:null,n:0,t0:0,mx:0,last:0,fr:[],
   set(v){this.on=!!v;try{localStorage.setItem('sm_fps',v?'1':'0')}catch(e){}
     if(!this.el){const d=document.createElement('div');d.style.cssText='position:fixed;left:6px;top:96px;z-index:99999;background:rgba(0,0,0,.65);color:#9f9;font:12px/1.25 monospace;padding:3px 6px;border-radius:5px;pointer-events:none;white-space:pre';document.body.appendChild(d);this.el=d}
     this.el.style.display=v?'block':'none';
@@ -12952,6 +12952,7 @@ var FPSC={on:false,el:null,n:0,t0:0,mx:0,last:0,fr:[],
     if(t-this.t0>=500){const fps=this.n*1000/(t-this.t0);const s=this.fr.slice().sort((a,b)=>b-a);const low=s[Math.max(0,Math.floor(s.length*.05))]||0;
       const col=fps>=55?'#9f9':fps>=40?'#fd6':'#f88';this.el.style.color=col;
       this.el.textContent=fps.toFixed(0)+' fps\nmedia '+(1000/Math.max(fps,1)).toFixed(1)+' ms\npeggiore '+this.mx.toFixed(0)+' ms\n5% lenti '+low.toFixed(0)+' ms';
+      const jn=Math.max(1,this.jn);this.el.textContent+='\nJS '+(this.js/jn).toFixed(1)+' ms (disegno '+(this.rs/jn).toFixed(1)+')\nDPR '+DPR.toFixed(2)+'  QL '+QL;this.js=0;this.rs=0;this.jn=0;
       this.n=0;this.mx=0;this.fr=[];this.t0=t}
     requestAnimationFrame(()=>FPSC.tick())}};
 try{if(localStorage.getItem('sm_fps')==='1')setTimeout(()=>FPSC.set(true),1500)}catch(e){}
@@ -13564,7 +13565,7 @@ setTimeout(edAuto,1500);
 window.__ED={start:edStart,stop:edStop,ED,scr:toScreen,E,EID,code:()=>JSON.stringify(ED.ed)};
 
 function frame(ts){
-  requestAnimationFrame(frame);
+  requestAnimationFrame(frame);const _f0=FPSC.on?performance.now():0;
   const t=ts/1000,dt=Math.min(.05,Math.max(0,t-lastTs));lastTs=t;RT=t;
   if(!S)return;
   UI.tick(dt,t);
@@ -13586,8 +13587,8 @@ function frame(ts){
   }else{
     cam.x=((WORLD===2?40:34)+Math.sin(t*.06)*14)*TS;cam.y=((WORLD===2?30:32)+Math.cos(t*.045)*8)*TS;camClamp();
   }
-  render(t);if(ED.on)edDraw();
-  frameN++;
+  {const _r0=_f0?performance.now():0;render(t);if(_r0){FPSC.rs+=performance.now()-_r0}}if(ED.on)edDraw();
+  frameN++;if(_f0){FPSC.js+=performance.now()-_f0;FPSC.jn++}
 }
 const TXTK='sette-mari-text',TXT_NAMES=['Normale','Grande','Molto grande'];
 function txtLevel(){let n=0;try{n=+localStorage.getItem(TXTK)||0}catch(_){}return n===1||n===2?n:0}

@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (pomeriggio, 2) – Pino Alto com'era; contatore più completo
+- Il Pino Alto (la vedetta) torna al disegno di prima: quello di Muse veniva troppo piatto e tagliato.
+- Il contatore FPS ora mostra anche il tempo di calcolo (JS) e di disegno per fotogramma, la risoluzione (DPR) e il livello di qualità automatica (QL), per capire cosa rallenta.
 ## 16 nov 2026 (pomeriggio) – Oggetti di Muse e contatore FPS
 - Contatore FPS: nel menu, «Contatore FPS» lo accende e lo spegne (FPS, tempo medio, fotogramma peggiore e 5% più lenti).
 - Grafica di prova (con «Mappa di prova»): rocce, rocce spaccate, ceppo, conchiglie, capanna, banco, grotta, forzieri, falò, casse, barili, pini, pozza di marea (piena e vuota), roccione, torre, bandiera, campo vecchio e Pino Alto ora sono i disegni di Muse, più vivi e con le linee scure. Tenda dei Fuggiaschi e cartello restano come prima (misure diverse da verificare).
