@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (sera) – Riva più leggera
+- Gli strati di acqua bassa e sabbia bagnata si aggiornano un fotogramma su due (la differenza non si vede): meno lavoro vicino al mare.
 ## 16 nov 2026 (pomeriggio, 3) – Meno memoria
 - Con «Mappa di prova» non si creano più le quattro immagini giganti di schiuma e riflessi del mare vecchio (non venivano disegnate): circa 100 MB di memoria in meno. Il telefono rallenta quando la memoria grafica è piena.
 ## 16 nov 2026 (pomeriggio, 2) – Pino Alto com'era; contatore più completo

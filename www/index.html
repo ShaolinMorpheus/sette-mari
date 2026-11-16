@@ -5575,9 +5575,9 @@ function drawBeach(g,t,vx0,vy0,vx1,vy1){
         const HS=.5,hw=Math.ceil(lw*HS)+2,hh=Math.ceil(lh*HS)+2;
         if(!drawBeach.L){drawBeach.L=document.createElement('canvas');drawBeach.A=document.createElement('canvas')}
         const L=drawBeach.L,AC=drawBeach.A;if(L.width<hw)L.width=hw;if(L.height<hh)L.height=hh;if(AC.width<hw)AC.width=hw;if(AC.height<hh)AC.height=hh;
-        const q=L.getContext('2d'),ag=AC.getContext('2d');ag.setTransform(1,0,0,1,0,0);ag.globalCompositeOperation='source-over';ag.globalAlpha=1;ag.clearRect(0,0,hw,hh);let any=0;
+        const q=L.getContext('2d'),ag=AC.getContext('2d');ag.setTransform(1,0,0,1,0,0);ag.globalCompositeOperation='source-over';ag.globalAlpha=1;const RU=drawBeach.ac&&((drawBeach.fc=(drawBeach.fc||0)+1)&1)===1&&Math.abs(drawBeach.ac.x-vx0)<8&&Math.abs(drawBeach.ac.y-vy0)<8&&drawBeach.ac.lw===lw&&drawBeach.ac.lh===lh;if(!RU)ag.clearRect(0,0,hw,hh);let any=0;
         const layer=(img,mask,sz,sc,al,pos)=>{
-          if(!img||!vis.length)return;
+          if(RU||!img||!vis.length)return;
           const ps=[];let nx0=1e9,ny0=1e9,nx1=-1e9,ny1=-1e9;
           for(const[s,w,off]of vis){const p=pos(s,w,off);ps.push(p);if(p[0]<nx0)nx0=p[0];if(p[0]>nx1)nx1=p[0];if(p[1]<ny0)ny0=p[1];if(p[1]>ny1)ny1=p[1]}
           const bx0=Math.max(vx0,Math.floor(nx0-sz/2)),by0=Math.max(vy0,Math.floor(ny0-sz/2)),bx1=Math.min(vx1,Math.ceil(nx1+sz/2)),by1=Math.min(vy1,Math.ceil(ny1+sz/2));
@@ -5593,7 +5593,8 @@ function drawBeach(g,t,vx0,vy0,vx1,vy1){
         };
         layer(MARE.aq,.55,150,.6,.8,(s,w,off)=>[s.x+s.nx*off,s.y+s.ny*off]);
         layer(B.im,.6,120,.45,.85,(s,w,off)=>[s.x+s.nx*(off*.5+12),s.y+s.ny*(off*.5+12)]);
-        if(any){g.save();g.imageSmoothingEnabled=true;g.drawImage(AC,0,0,Math.ceil(lw*HS),Math.ceil(lh*HS),vx0,vy0,Math.ceil(lw*HS)/HS,Math.ceil(lh*HS)/HS);g.restore()}
+        if(RU){const c=drawBeach.ac;if(c.any){g.save();g.imageSmoothingEnabled=true;g.drawImage(AC,0,0,Math.ceil(lw*HS),Math.ceil(lh*HS),c.x,c.y,Math.ceil(lw*HS)/HS,Math.ceil(lh*HS)/HS);g.restore()}}
+        else{drawBeach.ac={x:vx0,y:vy0,lw,lh,any};if(any){g.save();g.imageSmoothingEnabled=true;g.drawImage(AC,0,0,Math.ceil(lw*HS),Math.ceil(lh*HS),vx0,vy0,Math.ceil(lw*HS)/HS,Math.ceil(lh*HS)/HS);g.restore()}}
       }}
     for(const[s,w,off,amp,dw]of vis){
       const px=s.x+s.nx*(off+1),py=s.y+s.ny*(off+1),tx=-s.ny,ty=s.nx,L=24;
