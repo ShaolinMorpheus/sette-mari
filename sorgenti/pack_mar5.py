@@ -55,8 +55,14 @@ for k in names:
     # variante capitano: maglia rossa
     A3=A2.copy();Lr=lab(A2[...,:3][sh])[:,0]
     tt=np.clip((Lr-Dr[0])/max(Wr[0]-Dr[0],1),0,1)[:,None];col=RED[0]*.93+tt*(RED[0]*.07)-8*(1-tt)
-    sh3=sh&~belt;A3[...,:3][sh3]=col[~belt[sh]].astype(np.uint8) if False else A3[...,:3][sh3]
-    A3[...,:3][sh&~belt]=col[~belt[sh]].astype(np.uint8)
+    hv2=mc.rgb_to_hsv(A2[...,:3]/255.);d=cv2.dilate((sh&~belt).astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9)))>0
+    c2=(A2[...,3]>30)&d&~belt&~((hv2[...,2]<.42)&(hv2[...,1]<.5))&(((hv2[...,1]<.32)&(hv2[...,2]>.45))|((hv2[...,0]>.5)&(hv2[...,0]<.74)&(hv2[...,1]>.12)))
+    d2=cv2.dilate((sh&~belt).astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(15,15)))>0
+    gr=(A2[...,3]>30)&d2&~belt&(hv2[...,0]>.14)&(hv2[...,0]<.5)&(hv2[...,1]>.04)&(hv2[...,2]>.35)
+    c2|=gr
+    c2&=~((hv2[...,0]<.12)&(hv2[...,1]>.3))   # non toccare pelle/legno
+    c2=cv2.morphologyEx(c2.astype(np.uint8),cv2.MORPH_OPEN,np.ones((2,2),np.uint8))>0
+    Lg=hv2[...,2][c2][:,None];A3[...,:3][c2]=np.clip(RED[0]*(0.86+0.2*(Lg-.5)),0,255).astype(np.uint8)
     if pa.sum()>200:A3[...,:3][pa]=(A3[...,:3][pa]*np.array([.62,.68,.8])).astype(np.uint8)
     capimgs['cap:'+k[4:]]=A3
 for k,A in capimgs.items():put(k,A);J['hq'][k]=J['hq']['mar:'+k[4:]]

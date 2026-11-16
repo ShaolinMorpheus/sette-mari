@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## Capitano: maglia rossa pulita negli attrezzi
+- Tolte le righe e le macchie chiare dalla maglia rossa del capitano nei frame di taglio/scavo.
+
 ## Cintura nei frame d'azione
 - Ripristinata la cintura scura che spariva mentre si usa l'accetta (marinaio e capitano).
 
