@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre — Nuovi disegni di Muse
+- Pozza di molluschi, grotta, cespuglio con bacche rosse e cespuglio senza bacche ridisegnati.
+- Rocce con forma originale e superficie nuova.
+
 ## 16 novembre — Riva ripulita
 - Tolti per ora conchiglie, stelle marine, ricci, rami, noci di cocco e sassolini dalla riva e dal bosco (si rimettono più avanti).
 - Cespuglio senza bacche: niente più puntini scuri.
