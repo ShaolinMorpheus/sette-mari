@@ -62,13 +62,14 @@ for k in names:
     # variante capitano: maglia rossa
     A3=A2.copy();Lr=lab(A2[...,:3][sh])[:,0]
     tt=np.clip((Lr-Dr[0])/max(Wr[0]-Dr[0],1),0,1)[:,None];col=RED[0]*.93+tt*(RED[0]*.07)-8*(1-tt)
-    hv2=mc.rgb_to_hsv(A2[...,:3]/255.);d=cv2.dilate((sh&~belt).astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(9,9)))>0
+    hv2=mc.rgb_to_hsv(A2[...,:3]/255.);d=cv2.dilate((sh&~belt).astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5)))>0
     c2=(A2[...,3]>30)&d&~belt&~((hv2[...,2]<.42)&(hv2[...,1]<.5))&(((hv2[...,1]<.32)&(hv2[...,2]>.45))|((hv2[...,0]>.5)&(hv2[...,0]<.74)&(hv2[...,1]>.12)))
-    d2=cv2.dilate((sh&~belt).astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(15,15)))>0
+    d2=cv2.dilate((sh&~belt).astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5)))>0
     gr=(A2[...,3]>30)&d2&~belt&(hv2[...,0]>.14)&(hv2[...,0]<.5)&(hv2[...,1]>.04)&(hv2[...,2]>.35)
     c2|=gr
-    yb=np.arange(A2.shape[0])[:,None]*np.ones((1,A2.shape[1]));c2|=(A2[...,3]>30)&d2&~belt&(yb>BT[0]-34)&(yb<BT[0]+8)&~((hv2[...,2]<.42)&(hv2[...,1]<.5))&~((hv2[...,0]<.12)&(hv2[...,1]>.3)&(hv2[...,2]>.55))
-    c2&=~((hv2[...,0]<.12)&(hv2[...,1]>.3))   # non toccare pelle/legno
+    skin=(A2[...,3]>30)&(hv2[...,0]<.14)&(hv2[...,1]>.09)&(hv2[...,2]>.35)
+    yb=np.arange(A2.shape[0])[:,None]*np.ones((1,A2.shape[1]));c2|=(A2[...,3]>30)&d2&~belt&(yb>BT[0]-34)&(yb<BT[0]+8)&~((hv2[...,2]<.42)&(hv2[...,1]<.5))&~skin
+    c2&=~cv2.dilate(skin.astype(np.uint8),np.ones((5,5),np.uint8)).astype(bool)   # non toccare pelle/legno
     c2=cv2.morphologyEx(c2.astype(np.uint8),cv2.MORPH_OPEN,np.ones((2,2),np.uint8))>0
     Lg=hv2[...,2][c2][:,None];A3[...,:3][c2]=np.clip(RED[0]*(0.86+0.2*(Lg-.5)),0,255).astype(np.uint8)
     if pa.sum()>200:A3[...,:3][pa]=(A3[...,:3][pa]*np.array([.62,.68,.8])).astype(np.uint8)

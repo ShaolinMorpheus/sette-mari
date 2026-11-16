@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Animazione piccone: testa e colori
+- Capitano: il viso e le braccia non diventano più rossi nei frame col piccone alzato; solo la maglia è rossa.
+- Marinaio e capitano: la bandana segue la testa inclinata (misurata su ogni frame), niente più effetto strano.
+
 ## Menu: anteprima Briciola
 - Nuovo tasto nel Menu (solo nell'isola del Capitolo 2): «Anteprima Briciola» fa comparire la cagnetta accanto a te, da sola, con la cuccia o con il cesto, per controllare i disegni. Tocca ancora per cambiare o spegnere.
 
