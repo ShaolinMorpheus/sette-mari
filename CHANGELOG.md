@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre sera — Scelte nei dialoghi
+- Quando le risposte sono più di tre vanno su due colonne; se sono comunque troppe l'elenco scorre col dito e non esce più dallo schermo.
+
 ## 16 novembre sera — Briciola al campo
 - Nuova missione secondaria nel Capitolo 2 (dopo «Chi ha bevuto l'acqua?»): Tito ti porta da Briciola, scegli tra cuccia e cesto da viaggio, la nutri per due giorni; la scelta si vede alla riunione e nei finali. Disegni provvisori.
 - La scena di amicizia di Ferro a 4 cuori richiede almeno una pagina del diario di J.
