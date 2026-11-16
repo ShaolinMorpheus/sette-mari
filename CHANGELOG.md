@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (sera, 3) – Meno lavoro per fotogramma
+- Conchiglie, stelle marine e sassolini sulla sabbia non si ridisegnano più a ogni fotogramma: si preparano a blocchi la prima volta che li vedi e poi si copiano (stesso aspetto).
+- Le trame di onde e riflessi del mare si creano una volta sola invece che a ogni fotogramma.
 ## 16 nov 2026 (sera, 2) – Test FPS
 - Nel menu, «Test FPS»: ogni tocco cambia modalità (normale, senza riva, senza onde/riflessi, senza riva+onde, risoluzione 1.5) e accende il contatore, per capire cosa causa gli scatti sul telefono.
 ## 16 nov 2026 (sera) – Riva più leggera
