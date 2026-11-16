@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre sera — Correzioni
+- Pozza di molluschi: non è più tagliata (errore nel montaggio dei disegni; correggeva anche mesa, torre, bandiera e campo vecchio).
+- La grotta nel bosco usa il disegno nuovo.
+- Marinaio con l'accetta o il piccone di fronte o di spalle: resta marinaio, non cambia più in giacca rossa.
+
 ## 16 novembre — Nuovi disegni di Muse
 - Pozza di molluschi, grotta, cespuglio con bacche rosse e cespuglio senza bacche ridisegnati.
 - Rocce con forma originale e superficie nuova.
