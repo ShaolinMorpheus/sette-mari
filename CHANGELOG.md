@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## Briciola con i disegni di Muse
+- Briciola, cuccia e cesto sono ora i disegni dipinti da Muse (con grafica nuova e «Mappa di prova»): fermo, seduta se c'è il cesto, sdraiata davanti alla cuccia.
+
 ## Capitano: toppa sulla schiena
 - La toppa dorata sulla schiena ora resta anche nei frame di taglio/scavo di spalle.
 
