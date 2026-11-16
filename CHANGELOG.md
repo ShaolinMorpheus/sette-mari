@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre sera — Marinaio con l'accetta
+- Di fronte o di spalle all'albero il marinaio non si sovrappone più: si gira tutto di profilo verso l'albero (testa e bandana comprese).
+
 ## 16 novembre sera — Correzioni
 - Pozza di molluschi: non è più tagliata (errore nel montaggio dei disegni; correggeva anche mesa, torre, bandiera e campo vecchio).
 - La grotta nel bosco usa il disegno nuovo.

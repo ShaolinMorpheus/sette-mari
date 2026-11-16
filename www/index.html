@@ -12822,9 +12822,13 @@ function RIGMZ(o,v,back,side,tool,sw,mv,ph){
   return nm&&RIGM.im[pf+nm]?{k:pf+nm,nf:nf}:null;
 }
 function drawRig(g,x,y,o){
-  const KF=RIG.KF,t=o.t||0,back=o.dir==='b',side=!!o.side&&!back,mv=o.moving?1:0,ph=o.walk||0,sw=o.swing,tool=o.tool;
+  const KF=RIG.KF,t=o.t||0,mv=o.moving?1:0,ph=o.walk||0,sw=o.swing,tool=o.tool;
+  let back=o.dir==='b',side=!!o.side&&!back,FQ=0;
+  // marinaio che usa un attrezzo: esistono solo i fotogrammi di profilo, quindi tutto il personaggio (corpo, testa, cappello) si disegna di profilo, girato verso il bersaglio
+  if(tool&&sw!=null&&!side&&o.k&&o.k.oid==='o_mar'&&RIGMAR&&RIGM.ok){back=false;side=true;FQ=1}
   const v=back?'spalle':side?'profilo':'fronte';
   const MZ=RIGMZ(o,v,back,side,tool,sw,mv,ph);let FLX=o.flip?-1:1;if(MZ&&MZ.nf)FLX=1;
+  if(FQ&&typeof P!=='undefined'&&P.act&&P.act.e&&P.act.e.x!=null){const dx=P.act.e.x-P.x;if(Math.abs(dx)>3)FLX=dx<0?-1:1}
   g.save();g.translate(x,y);
   if(!o.noShadow){g.fillStyle='rgba(20,25,10,.3)';g.beginPath();g.ellipse(0,0,12,4.6,0,0,7);g.fill()}
   if(o.alpha!=null)g.globalAlpha=o.alpha;
