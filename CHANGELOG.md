@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (pomeriggio, 3) – Meno memoria
+- Con «Mappa di prova» non si creano più le quattro immagini giganti di schiuma e riflessi del mare vecchio (non venivano disegnate): circa 100 MB di memoria in meno. Il telefono rallenta quando la memoria grafica è piena.
 ## 16 nov 2026 (pomeriggio, 2) – Pino Alto com'era; contatore più completo
 - Il Pino Alto (la vedetta) torna al disegno di prima: quello di Muse veniva troppo piatto e tagliato.
 - Il contatore FPS ora mostra anche il tempo di calcolo (JS) e di disegno per fotogramma, la risoluzione (DPR) e il livello di qualità automatica (QL), per capire cosa rallenta.

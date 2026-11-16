@@ -823,7 +823,7 @@ async function bakeGround(prog){
   ctxs.forEach((x,i)=>x.putImageData(ids[i],0,0));
   const sm=(src,w,h)=>{const c=mkc(w,h),q=c.getContext('2d');q.imageSmoothingEnabled=true;q.imageSmoothingQuality='high';q.drawImage(src,0,0,w,h);return c};
   const gw1=Math.round(WW*GS),gh1=Math.round(WH*GS),fw1=Math.round(WW*FS),fh1=Math.round(WH*FS);
-  WATERC=sm(cWat,fw1,fh1);FOAM_A=sm(cFa,fw1,fh1);FOAM_B=sm(cFb,fw1,fh1);CAUS_A=sm(cCa,fw1,fh1);CAUS_B=sm(cCb,fw1,fh1);
+  WATERC=sm(cWat,fw1,fh1);FOAM_A=PT?mkc(1,1):sm(cFa,fw1,fh1);FOAM_B=PT?mkc(1,1):sm(cFb,fw1,fh1);CAUS_A=PT?mkc(1,1):sm(cCa,fw1,fh1);CAUS_B=PT?mkc(1,1):sm(cCb,fw1,fh1);
   if(PT){
     PC.forEach((c,i)=>c.getContext('2d').putImageData(PC.id[i],0,0));
     const [cG,cD,cT,cA]=PC;
