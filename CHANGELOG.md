@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre sera — Banco al campo dei Fuggiaschi
+- Il banco di Nives al campo della seconda isola ora si usa: apre i miglioramenti degli attrezzi (ascia, piccone, canna, ecc.), anche senza aver costruito il proprio banco.
+
 ## 16 novembre sera — Piccone rinforzato
 - Nuovo miglioramento «Piccone rinforzato» (4 legna, 6 pietra): una roccia si spacca con 3 colpi invece di 4 e si lavora più in fretta, come l'ascia affilata.
 

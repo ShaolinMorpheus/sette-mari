@@ -3490,7 +3490,7 @@ function targetInfo(t){
     case'npc':return{l:'Parla',i:'talk'};
     case'thief':return{l:'Scaccia',i:'hand'};
     case'cdeco':return e.k==='orto'?{l:'Orto',i:'hand'}:e.k==='essic'?{l:'Essiccatore',i:'hand'}:e.k==='amaca'?{l:'Riposa',i:'bed'}:e.k==='tavolo'?{l:'Siediti',i:'hand'}:{l:'Leggi',i:'eye'};
-    case'deco':if(hutLbl(e))return hutLbl(e);if(e.id==='c2fire')return{l:'Scaldati',i:'fire'};if(e.id==='briciola')return{l:'Briciola',i:'hand'};if(e.id==='cave'||e.id==='cave1')return{l:'Entra',i:'hand'};if(e.id==='cavex')return{l:'Esci',i:'hand'};if(e.id==='cvchest'||e.id==='cvsm')return{l:'Apri',i:'hand'};if(e.id&&e.id.indexOf('cvbr')===0)return{l:'Accendi',i:'fire'};if(e.id==='cvskel')return{l:'Esamina',i:'eye'};if(e.spr==='sign')return{l:'Leggi',i:'eye'};if(e.spr==='pit')return{l:S.flags.pitLit?'Esamina':'Accendi',i:S.flags.pitLit?'eye':'fire'};return{l:e.inter==='climb'?'Sali':'Esamina',i:e.inter==='climb'?'hand':'eye'};
+    case'deco':if(hutLbl(e))return hutLbl(e);if(e.id==='c2fire')return{l:'Scaldati',i:'fire'};if(e.id==='briciola')return{l:'Briciola',i:'hand'};if(e.id==='c2stall')return{l:'Banco',i:'hammer'};if(e.id==='cave'||e.id==='cave1')return{l:'Entra',i:'hand'};if(e.id==='cavex')return{l:'Esci',i:'hand'};if(e.id==='cvchest'||e.id==='cvsm')return{l:'Apri',i:'hand'};if(e.id&&e.id.indexOf('cvbr')===0)return{l:'Accendi',i:'fire'};if(e.id==='cvskel')return{l:'Esamina',i:'eye'};if(e.spr==='sign')return{l:'Leggi',i:'eye'};if(e.spr==='pit')return{l:S.flags.pitLit?'Esamina':'Accendi',i:S.flags.pitLit?'eye':'fire'};return{l:e.inter==='climb'?'Sali':'Esamina',i:e.inter==='climb'?'hand':'eye'};
     case'vdrink':return{l:'Bevi',i:'drop'};
     case'vfish':return S.up.net?{l:'Rete',i:'net'}:{l:'Pesca',i:'fish'};
     case'vdock':return{l:'Scendi',i:'hand'};
@@ -6378,7 +6378,7 @@ Ch2.decor=function(deco){
   tent('c2t0',58.2,26.4,0,1);tent('c2t1',53.6,28.6,1);tent('c2t2',54.2,33.4,0);tent('c2t3',62.8,27.6,1);tent('c2t4',63.6,33,0);tent('c2t5',50.6,31.4,1);
   deco('c2flag','bandiera',60.2,26.6,null,{nohit:1,k:1});
   deco('c2fire','cfire',58.5,30.7,[58,30,1,1],{inter:'look',hitw:110,hith:50,label:'Il fuoco del campo'});
-  deco('c2stall','banco',62,30.6,[61,30,2,1],{nohit:1,k:.95,label:'Bancarella di Nives'});
+  deco('c2stall','banco',62,30.6,[61,30,2,1],{inter:'look',hitw:150,hith:70,k:.95,label:'Banco di Nives'});
   deco('c2b0','barrel0',60.4,30.9,[60,30,1,1],{nohit:1});deco('c2b1','barrel1',56.2,32,[56,31,1,1],{nohit:1});
   deco('c2cr0','crate',57.1,27.4,[57,26,1,1],{nohit:1});deco('c2cr1','crate',64.8,30.6,[64,30,1,1],{nohit:1});
   deco('c2coil','coil',55.2,27.7,null,{nohit:1});
@@ -6858,6 +6858,7 @@ Ch2.look=function(e){
     if(!c.tentSeen[e.id]){c.tentSeen[e.id]=1;sfx('ok');addXp(6);float(P.x,P.y-80,'+6 XP','#ffe27a')}
     UI.dlg([D('hero',T[0])]);return true}
   if(e.id==='briciola')return Ch2.brLook();
+  if(e.id==='c2stall'){UI.openUpgrades(true);return true}
   if(e.id==='c2fire'){
     c.fireDay=c.fireDay||{};
     let best=null,bd=1e9;for(const n of E)if(n.type==='npc'){const d=hyp(n.x-P.x,n.y-P.y);if(d<bd&&d<7*TS){bd=d;best=n}}
@@ -8757,8 +8758,8 @@ function wardCollectionHtml(){
   return'<h3>Guardaroba · '+n+'/'+WEAR.length+'</h3>'+hero.map(row).join('')+par.map(row).join('');
 }
 
-UI.openUpgrades=function(){
-  if(!S.built.banco){UI.toast('Serve prima il Banco da lavoro.');return}
+UI.openUpgrades=function(fromCamp){
+  if(!S.built.banco&&!fromCamp){UI.toast('Serve prima il Banco da lavoro.');return}
   const draw=()=>{
     S.flags.zatteraB=S.built.zattera?1:0;
     let h='<h2>Banco da lavoro</h2><p>Migliora i tuoi attrezzi con quello che hai raccolto.</p>';
