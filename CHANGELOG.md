@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (giorno) – Più fluido
+- Mare e riva più leggeri: gli strati di acqua bassa e sabbia bagnata si disegnano a metà risoluzione e in un solo passaggio. Nelle mie prove il gioco con la grafica di prova passa da circa 38 a 50 fotogrammi al secondo (uguale alla grafica normale), con lo stesso aspetto.
 ## 16 nov 2026 – Cespugli a tre stati e alberi che ricrescono lontano
 - Cespuglio normale, con liane, con bacche: raccogliendo liane o bacche torna sempre al cespuglio normale (stesso disegno di Muse).
 - Gli alberi abbattuti ricrescono solo quando sono fuori dall'inquadratura, e ci mettono di più (circa 7-10 minuti invece di 3-4).
