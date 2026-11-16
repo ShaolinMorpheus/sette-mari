@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 nov 2026 (sera, 2) – Test FPS
+- Nel menu, «Test FPS»: ogni tocco cambia modalità (normale, senza riva, senza onde/riflessi, senza riva+onde, risoluzione 1.5) e accende il contatore, per capire cosa causa gli scatti sul telefono.
 ## 16 nov 2026 (sera) – Riva più leggera
 - Gli strati di acqua bassa e sabbia bagnata si aggiornano un fotogramma su due (la differenza non si vede): meno lavoro vicino al mare.
 ## 16 nov 2026 (pomeriggio, 3) – Meno memoria
