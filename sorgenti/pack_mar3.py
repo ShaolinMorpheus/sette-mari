@@ -14,7 +14,7 @@ for nm,r in R.items():
     if not nm.startswith(('ascia','piccone','mani')):continue
     ma,_=matte(np.array(Image.open(glob.glob(MD+'02-*_'+nm+'.png')[0]).convert('RGB')));fx,fy,_t=feet(ma);M=np.array(r['M'])
     offx.append(M[0,0]*fx+M[0,1]*fy+M[0,2]-anc[0]);offy.append(M[1,0]*fx+M[1,1]*fy+M[1,2]-anc[1]);ks.append(np.hypot(M[0,0],M[1,0]))
-K=float(np.mean(ks));OX=float(np.median(offx));OY=float(np.median(offy));print('K',round(K,3),'off',round(OX,1),round(OY,1))
+K=float(np.mean(ks));OX=float(np.median(offx));OY=float(np.median(offy))-10/S;print('K',round(K,3),'off',round(OX,1),round(OY,1))
 sift=cv2.SIFT_create(4000)
 def headreg(ma_new,ma_ref,top_new,top_ref):
     # registra la testa (parte alta) del frame nuovo su quella del frame fermo di riferimento
@@ -29,20 +29,38 @@ def headreg(ma_new,ma_ref,top_new,top_ref):
     M,inl=cv2.estimateAffinePartial2D(p1,p2,method=cv2.RANSAC,ransacReprojThreshold=4)
     if M is None or inl.sum()<6:return None
     return M,int(inl.sum())
+def lab(x):return cv2.cvtColor(np.clip(x,0,255).astype(np.uint8)[None],cv2.COLOR_RGB2LAB)[0].astype(np.float32)
+REFC={}
+def colmatch(c,al,v):
+    m=al>200
+    if m.sum()<500:return c
+    L=lab(c[m]);
+    if v not in REFC:
+        r=refs[v];rm=r[...,3]>200;REFC[v]=(lab(r[...,:3][rm]).mean(0),lab(r[...,:3][rm]).std(0))
+    mu,sd=REFC[v];mn,sn=L.mean(0),L.std(0)+1e-3
+    L2=(L-mn)*np.clip(sd/sn,.85,1.15)+mu
+    L2[:,0]=np.clip(L2[:,0],0,255)
+    o=c.copy();o[m]=cv2.cvtColor(np.clip(L2,0,255).astype(np.uint8)[None],cv2.COLOR_LAB2RGB)[0]
+    return o
 out={};hq={};rep=[];sheet={}
 refs={}
 for v in('fronte','spalle'):
     ma,_=matte(np.array(Image.open(glob.glob(MD+'02-*_%s-fermo.png'%v)[0]).convert('RGB')));refs[v]=ma
-    M0=np.array(R[v+'-fermo']['M']);refs[v+'M']=M0;refs[v+'top']=feet(ma)[2]
+    M0=np.array(R[v+'-fermo']['M']);refs[v+'k']=float(np.hypot(M0[0,0],M0[1,0]));refs[v+'M']=M0;refs[v+'top']=feet(ma)[2]
 for f in sorted(glob.glob(ND+'02-marinaio-righe_*.png')):
     nm=os.path.basename(f).split('_',1)[1][:-4];v='fronte' if nm.endswith('fronte') else 'spalle'
     ma,_=matte(np.array(Image.open(f).convert('RGB')));fx,fy,top=feet(ma)
     # similitudine immagine -> spazio rig: scala K, piedi sull'ancora
-    A_rig=np.array([[K,0,anc[0]+OX-K*fx],[0,K,anc[1]+OY-K*fy],[0,0,1.]])
+    hr0=headreg(ma,refs[v],top,refs[v+'top']);Kn=K
+    if hr0 is not None and hr0[1]>=12:
+        Mh0=hr0[0];sh=float(np.hypot(Mh0[0,0],Mh0[1,0]))   # scala img nuova -> img fermo
+        if .8<sh<1.25: Kn=K*sh*(refs[v+'k']/K)
+    A_rig=np.array([[Kn,0,anc[0]+OX-Kn*fx],[0,Kn,anc[1]+OY-Kn*fy],[0,0,1.]])
     A=np.array([[S,0,-CROP[0]*S],[0,S,-CROP[1]*S],[0,0,1]])@A_rig
     pm=ma.astype(np.float32);pm[...,:3]*=pm[...,3:4]/255
     w=cv2.warpAffine(pm,A[:2],(W,H),flags=cv2.INTER_AREA,borderValue=(0,0,0,0))
     a=w[...,3:4];c=np.where(a>1,w[...,:3]*255/np.maximum(a,1),0)
+    c=colmatch(c,a[...,0],v)
     hh=mc.rgb_to_hsv(np.clip(c,0,255)/255);yy=np.arange(H)[:,None]*np.ones((1,W))
     yv=np.where(a[...,0]>20)[0];t0,b0=(yv.min(),yv.max()) if len(yv) else (0,H)
     mk=(hh[...,0]>.55)&(hh[...,0]<.72)&(hh[...,1]>.2)&(hh[...,2]<.55)&(yy>t0+.62*(b0-t0))

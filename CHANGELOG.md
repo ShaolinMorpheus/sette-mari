@@ -1,7 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
 ## Marinaio: animazioni fronte/spalle
-- Montati i 30 frame di Muse (ascia, piccone, mani nude) di fronte e di spalle: il marinaio non si gira più di profilo quando taglia.
+- Montati i 30 frame di Muse (ascia, piccone, mani nude) di fronte e di spalle: il marinaio non si gira più di profilo quando taglia. Dimensione e colori della maglia ora allineati al marinaio fermo.
 
 ## 16 novembre sera — Banco al campo dei Fuggiaschi
 - Il banco di Nives al campo della seconda isola ora si usa: apre i miglioramenti degli attrezzi (ascia, piccone, canna, ecc.), anche senza aver costruito il proprio banco.
