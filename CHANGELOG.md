@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## 16 novembre — Riva ripulita
+- Tolti per ora conchiglie, stelle marine, ricci, rami, noci di cocco e sassolini dalla riva e dal bosco (si rimettono più avanti).
+- Cespuglio senza bacche: niente più puntini scuri.
+- Pozza di molluschi: tornato il disegno originale in attesa di quello nuovo.
+
 ## 16 nov 2026 (sera, 4) – Riva molto più leggera
 - Acqua bassa e sabbia bagnata ora hanno ciascuna una propria immagine pronta, che si rinfresca una volta ogni 3 fotogrammi (sfalsate), con un margine intorno allo schermo. Meno passaggi di disegno per fotogramma, stesso aspetto.
 - «Test FPS»: aggiunte le modalità «senza strati riva» e «senza schiuma riva».
