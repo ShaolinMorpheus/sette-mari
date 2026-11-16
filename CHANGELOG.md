@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## Menu: anteprima Briciola
+- Nuovo tasto nel Menu (solo nell'isola del Capitolo 2): «Anteprima Briciola» fa comparire la cagnetta accanto a te, da sola, con la cuccia o con il cesto, per controllare i disegni. Tocca ancora per cambiare o spegnere.
+
 ## Briciola con i disegni di Muse
 - Briciola, cuccia e cesto sono ora i disegni dipinti da Muse (con grafica nuova e «Mappa di prova»): fermo, seduta se c'è il cesto, sdraiata davanti alla cuccia.
 
