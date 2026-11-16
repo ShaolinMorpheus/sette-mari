@@ -12,24 +12,28 @@ def stripe_class(A):
     h=mc.rgb_to_hsv(A[...,:3]/255.);op=A[...,3]>200
     white=(h[...,1]<.28)&(h[...,2]>.62);blue=(h[...,0]>.52)&(h[...,0]<.72)&(h[...,1]>.25)&(h[...,2]<.62)
     return op&(white|blue),white,blue
-BELT=92   # px sopra i piedi dove finisce la maglia
+BELT=62   # px sopra i piedi dove finisce la maglia
 def parts(A,view_ref=None):
     fy=feetY(A);yy=np.arange(A.shape[0])[:,None]*np.ones((1,A.shape[1]))
-    cls,w,b=stripe_class(A);cls=cls&(yy<fy-BELT)&(yy>fy-330)
+    cls,w,b=stripe_class(A);hv=mc.rgb_to_hsv(A[...,:3]/255.);dark=(hv[...,2]<.42)&(hv[...,1]<.5)
+    bm=(A[...,3]>200)&dark&(yy>fy-128)&(yy<fy-58);rows=np.where(bm.sum(1)>=18)[0]
+    bt,bb=(rows.min(),rows.max()) if len(rows) else (fy-105,fy-88)
+    BT[0]=bt;BT[1]=bb
+    cls=cls&(yy<bt+5)&(yy>fy-330)&~dark
     # solo la componente collegata al busto (non la lama dell'ascia)
     m=cv2.morphologyEx(cls.astype(np.uint8),cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
     n,lab_,st,_=cv2.connectedComponentsWithStats(m,connectivity=8)
     keep=np.zeros_like(cls)
-    cx=A.shape[1]//2;band=lab_[int(fy-BELT-60):int(fy-BELT-10),int(cx-40):int(cx+40)]
+    cx=A.shape[1]//2;band=lab_[int(bt-60):int(bt-8),int(cx-40):int(cx+40)]
     ids=set(np.unique(band))-{0}
     for i in ids:
         if st[i,4]>400:keep|=lab_==i
     shirt=keep&cls
-    pants=(A[...,3]>200)&(yy>=fy-BELT)&(yy<fy-45)&(mc.rgb_to_hsv(A[...,:3]/255.)[...,0]>.5)&(mc.rgb_to_hsv(A[...,:3]/255.)[...,0]<.75)
+    pants=(A[...,3]>200)&(yy>bb)&(yy<fy-45)&(mc.rgb_to_hsv(A[...,:3]/255.)[...,0]>.5)&(mc.rgb_to_hsv(A[...,:3]/255.)[...,0]<.75)
     return shirt,pants,w,b
 def clus(A,shirt,w):
     Lc=lab(A[...,:3][shirt]);Lw=Lc[Lc[:,0]>np.median(Lc[:,0])];Ld=Lc[Lc[:,0]<=np.median(Lc[:,0])];return Lw.mean(0),Ld.mean(0)
-REF={}
+REF={};BT=[0,0]
 for v in('fronte','spalle'):
     A=get('mar:%s-fermo'%v);sh,pa,w,b=parts(A);REF[v]=dict(c=clus(A,sh,w),p=(lab(A[...,:3][pa]).mean(0),lab(A[...,:3][pa]).std(0)))
     print(v,sh.sum(),pa.sum(),REF[v]['c'][0].round(),REF[v]['c'][1].round())
@@ -44,11 +48,15 @@ for k in names:
     A2=A.copy();A2[...,:3][sh]=unlab(newL)
     if pa.sum()>200:
         P=lab(A[...,:3][pa]);mu,sd=REF[v]['p'];P2=(P-P.mean(0))*np.clip(sd/(P.std(0)+1e-3),.7,1.3)+mu;A2[...,:3][pa]=unlab(P2)
+    yy=np.arange(A.shape[0])[:,None]*np.ones((1,A.shape[1]));fy=feetY(A);hv=mc.rgb_to_hsv(A[...,:3]/255.)
+    belt=(A[...,3]>200)&(yy>fy-128)&(yy<fy-58)&(hv[...,2]<.45)&(hv[...,1]<.55)
+    f=(0.75+0.5*hv[...,2][belt]/.45)[:,None];A2[...,:3][belt]=np.clip(np.array([40,31,33])*f,0,255).astype(np.uint8);sh=sh|belt
     put(k,A2)
     # variante capitano: maglia rossa
     A3=A2.copy();Lr=lab(A2[...,:3][sh])[:,0]
     tt=np.clip((Lr-Dr[0])/max(Wr[0]-Dr[0],1),0,1)[:,None];col=RED[0]*.93+tt*(RED[0]*.07)-8*(1-tt)
-    A3[...,:3][sh]=col.astype(np.uint8)
+    sh3=sh&~belt;A3[...,:3][sh3]=col[~belt[sh]].astype(np.uint8) if False else A3[...,:3][sh3]
+    A3[...,:3][sh&~belt]=col[~belt[sh]].astype(np.uint8)
     if pa.sum()>200:A3[...,:3][pa]=(A3[...,:3][pa]*np.array([.62,.68,.8])).astype(np.uint8)
     capimgs['cap:'+k[4:]]=A3
 for k,A in capimgs.items():put(k,A);J['hq'][k]=J['hq']['mar:'+k[4:]]

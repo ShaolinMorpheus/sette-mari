@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## Cintura nei frame d'azione
+- Ripristinata la cintura scura che spariva mentre si usa l'accetta (marinaio e capitano).
+
 ## Animazioni attrezzi: capitano e colori
 - Il capitano rosso ora taglia/scava anche di fronte e di spalle (stessi frame del marinaio con maglia rossa), non solo di lato.
 - Marinaio: maglia e pantaloni dei frame d'azione allineati ai colori del frame fermo.
