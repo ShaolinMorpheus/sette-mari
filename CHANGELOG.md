@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Animazioni attrezzi uniformate (v4 di Muse)
+- Ascia, piccone e mani nude: tutti i 49 fotogrammi (fronte, spalle, lato, riposo) hanno ora la stessa scala, gli stessi piedi e gli stessi colori del personaggio fermo: niente più salti di grandezza o di colore durante l'animazione.
+- Il capitano ha la stessa serie con la maglia rossa.
+
 ## Attrezzi di lato e pose di riposo (v3 di Muse)
 - Ascia, piccone e mani nude di lato: ora i disegni nuovi di Muse (stessa maglia a righe del marinaio); il capitano di lato ha la maglia rossa e non usa più i vecchi frame grigi.
 - Prima del colpo, il personaggio sta in posa di riposo (attrezzo basso) di fronte e di spalle, al posto del frame di taglio.

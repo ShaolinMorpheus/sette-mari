@@ -11,12 +11,7 @@ def put(k,A):
     b=io.BytesIO();Image.fromarray(A,'RGBA').save(b,'WEBP',quality=88,method=6);J['img'][k]=base64.b64encode(b.getvalue()).decode()
 RED=np.array([196,64,58],np.float32)
 for nm in [n for n in R if n.endswith('profilo-destro') and any(n.startswith(p) for p in('ascia','piccone','mani'))]:
-    ma=np.array(Image.open('/home/claude/work/v3d/02-marinaio-righe_%s.png'%nm).convert('RGBA'))
-    M=np.array(R[nm]['M'],float);A=np.array([[S,0,-CROP[0]*S],[0,S,-CROP[1]*S],[0,0,1]])@np.vstack([M,[0,0,1]])
-    p=ma.astype(np.float32).copy();p[...,:3]*=p[...,3:4]/255
-    w=cv2.warpAffine(p,A[:2],(W,H),flags=cv2.INTER_AREA,borderValue=(0,0,0,0))
-    a=w[...,3:4];c=np.where(a>1,w[...,:3]*255/np.maximum(a,1),0);A2=np.dstack([np.clip(c,0,255),a]).astype(np.uint8)
-    put('mar:'+nm,A2)
+    A2=np.array(Image.open(io.BytesIO(base64.b64decode(J['img']['mar:'+nm]))).convert('RGBA'))
     # capitano: righe -> rosso sopra la cintura
     hv=mc.rgb_to_hsv(A2[...,:3]/255.);op=A2[...,3]>30;yy=np.arange(H)[:,None]*np.ones((1,W))
     ys=np.where((A2[...,3]>40).any(1))[0];fy=ys.max()
@@ -24,7 +19,7 @@ for nm in [n for n in R if n.endswith('profilo-destro') and any(n.startswith(p) 
     bm=(A2[...,3]>200)&dark&(yy>fy-128)&(yy<fy-58);rows=np.where(bm.sum(1)>=14)[0]
     bt=rows.min() if len(rows) else fy-100
     white=(hv[...,1]<.3)&(hv[...,2]>.6);blue=(hv[...,0]>.52)&(hv[...,0]<.72)&(hv[...,1]>.25)&(hv[...,2]<.62)
-    skin=op&(hv[...,0]<.14)&(hv[...,1]>.09)&(hv[...,2]>.35)
+    skin=op&(hv[...,0]<.14)&(hv[...,1]>.2)&(hv[...,2]>.35)
     cls=op&(white|blue)&(yy<bt+4)&(yy>fy-330)&~dark
     m=cv2.morphologyEx(cls.astype(np.uint8),cv2.MORPH_CLOSE,np.ones((5,5),np.uint8));n,l,st,_=cv2.connectedComponentsWithStats(m,connectivity=8)
     cx=W//2;band=l[int(bt-60):int(bt-8),int(cx-70):int(cx+70)];keep=np.zeros_like(cls)
