@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## Corretto: galeone, assalto, interno nave e grande viaggio non si caricavano
+- Il codice dei capitoli 3, 4 e 5 finiva nel punto sbagliato del file dopo gli ultimi aggiornamenti dell'interfaccia: il caricamento restava fermo (anche dagli editor «Editor galeone», «Editor interno nave», «Editor viaggio finale» e dalle prove «Capitolo 3», «Assalto al galeone», «Il grande viaggio»). Ora è tornato al suo posto.
+
 ## Briciola vive nel campo
 - Dopo che l'hai trovata e le hai preparato cuccia o cesto, Briciola va in giro da sola vicino al campo, annusa qua e là e poi torna a casa. Cammina con saltelli e si gira nella direzione di marcia. Di notte dorme nella cuccia/cesto.
 - Cuccia e cesto restano fermi al loro posto mentre lei si muove.
