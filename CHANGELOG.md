@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Briciola vive nel campo
+- Dopo che l'hai trovata e le hai preparato cuccia o cesto, Briciola va in giro da sola vicino al campo, annusa qua e là e poi torna a casa. Cammina con saltelli e si gira nella direzione di marcia. Di notte dorme nella cuccia/cesto.
+- Cuccia e cesto restano fermi al loro posto mentre lei si muove.
+
 ## Animazioni attrezzi uniformate (v4 di Muse)
 - Ascia, piccone e mani nude: tutti i 49 fotogrammi (fronte, spalle, lato, riposo) hanno ora la stessa scala, gli stessi piedi e gli stessi colori del personaggio fermo: niente più salti di grandezza o di colore durante l'animazione.
 - Il capitano ha la stessa serie con la maglia rossa.
