@@ -27,8 +27,10 @@ for v in('fronte','spalle'):
 fr={}
 for f in sorted(glob.glob(ND+'02-marinaio-righe_*.png')):
     nm=os.path.basename(f).split('_',1)[1][:-4]
-    if 'taglio1-' in nm:continue          # posa di riposo: stile diverso dalle altre, scartata
-    ma,_=matte(np.array(Image.open(f).convert('RGB')));fr[nm]=dict(ma=ma,hair=hair(ma),feet=feet(ma))
+    if 'taglio1-' in nm and 'riposo' not in nm:continue          # taglio1 v2 scartato; v3 riposo ok
+    im0=Image.open(f).convert('RGBA');a0=np.array(im0)
+    ma=a0 if (a0[...,3]<250).mean()>.2 else matte(np.array(im0.convert('RGB')))[0]
+    fr[nm]=dict(ma=ma,hair=hair(ma),feet=feet(ma))
 out={};hq={};sheet={}
 def lab(x):return cv2.cvtColor(np.clip(x,0,255).astype(np.uint8)[None],cv2.COLOR_RGB2LAB)[0].astype(np.float32)
 KB={}
@@ -69,8 +71,6 @@ for v in('spalle','fronte'):
 for v in('fronte','spalle'):
     im=Image.open(io.BytesIO(base64.b64decode(J['img']['mar:%s-fermo'%v]))).convert('RGBA');dr=ImageDraw.Draw(im);q=J['hq']['mar:%s-fermo'%v]
     pp=[((p[0]+ANC[0])*S,(p[1]+ANC[1])*S) for p in q];dr.line([pp[0],pp[1]],fill=(255,0,0,255),width=2);dr.line([pp[0],pp[2]],fill=(0,0,255,255),width=2);sheet['0'+v]=im
-for d_ in (out,hq,sheet):
-    k_=('mar:' if d_ is not sheet else '')+'piccone-taglio%d-fronte';d_[k_%3]=d_[k_%2]
 J['img'].update(out);J['hq'].update(hq);json.dump(J,open('rig_muse.json','w'))
 for v in('fronte','spalle'):
     ns=['0'+v]+sorted(n for n in sheet if n.endswith(v) and n[0]!='0');Sh=Image.new('RGB',(7*200,2*206),(150,200,130))

@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Attrezzi di lato e pose di riposo (v3 di Muse)
+- Ascia, piccone e mani nude di lato: ora i disegni nuovi di Muse (stessa maglia a righe del marinaio); il capitano di lato ha la maglia rossa e non usa più i vecchi frame grigi.
+- Prima del colpo, il personaggio sta in posa di riposo (attrezzo basso) di fronte e di spalle, al posto del frame di taglio.
+- Piccone di fronte: nuovo fotogramma col viso visibile.
+
 ## Animazione piccone: testa e colori
 - Capitano: il viso e le braccia non diventano più rossi nei frame col piccone alzato; solo la maglia è rossa.
 - Marinaio e capitano: la bandana segue la testa inclinata (misurata su ogni frame), niente più effetto strano.
