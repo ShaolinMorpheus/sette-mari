@@ -172,6 +172,7 @@ rep("  if(k==='-'||k==='_'){cam.uz=","  if(WORLD!==4&&(k==='-'||k==='_')){cam.uz
 
 exec(open('voy_patch.py',encoding='utf8').read())
 inj3=open('ch3_inject.js').read().replace('// @@VOY@@',open('ch5_inject.js',encoding='utf8').read());inj4=open('ch4_inject.js').read()
+inj3=inj3.replace('/*@@MZS@@*/null',open('mz_sea.json',encoding='utf8').read())
 import json as _j
 _B=_j.load(open('ed_baked.json',encoding='utf8'))
 for _k,_t in(('x3','/*@@EXB3@@*/null'),('x4','/*@@EXB4@@*/null'),('x5','/*@@EXB5@@*/null')):

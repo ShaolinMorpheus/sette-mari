@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Mare dei convogli: scia, spruzzi e nebbia nuovi (Muse A1) – «Grafica di prova»
+- Le navi lasciano una scia di schiuma dipinta (scia a V di Muse) che si allarga e si vede di più quando vanno veloci; al posto dei vecchi cerchi bianchi.
+- I colpi di cannone in acqua fanno un vero spruzzo dipinto.
+- I banchi di nebbia sono dipinti (tre forme diverse) e si diradano attorno alla tua nave.
+
 ## Corretto: galeone, assalto, interno nave e grande viaggio non si caricavano
 - Il codice dei capitoli 3, 4 e 5 finiva nel punto sbagliato del file dopo gli ultimi aggiornamenti dell'interfaccia: il caricamento restava fermo (anche dagli editor «Editor galeone», «Editor interno nave», «Editor viaggio finale» e dalle prove «Capitolo 3», «Assalto al galeone», «Il grande viaggio»). Ora è tornato al suo posto.
 
