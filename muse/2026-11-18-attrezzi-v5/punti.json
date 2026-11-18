@@ -1,0 +1,734 @@
+{
+ "marinaio-ascia-fronte-carica": {
+  "corpo": "marinaio-corpo-fronte-carica",
+  "mano": [
+   172,
+   240
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false
+ },
+ "marinaio-ascia-fronte-apice": {
+  "corpo": "marinaio-corpo-fronte-apice",
+  "mano": [
+   168,
+   30
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   154
+  ]
+ },
+ "marinaio-ascia-fronte-colpo": {
+  "corpo": "marinaio-corpo-fronte-colpo",
+  "mano": [
+   172,
+   248
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false
+ },
+ "marinaio-ascia-fronte-ritorno": {
+  "corpo": "marinaio-corpo-fronte-ritorno",
+  "mano": [
+   170,
+   108
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false
+ },
+ "marinaio-ascia-spalle-carica": {
+  "corpo": "marinaio-corpo-spalle-carica",
+  "mano": [
+   168,
+   240
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false
+ },
+ "marinaio-ascia-spalle-apice": {
+  "corpo": "marinaio-corpo-spalle-apice",
+  "mano": [
+   168,
+   30
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   154
+  ]
+ },
+ "marinaio-ascia-spalle-colpo": {
+  "corpo": "marinaio-corpo-spalle-colpo",
+  "mano": [
+   170,
+   246
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false
+ },
+ "marinaio-ascia-spalle-ritorno": {
+  "corpo": "marinaio-corpo-spalle-ritorno",
+  "mano": [
+   215,
+   228
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": false
+ },
+ "marinaio-ascia-profilo-destro-carica": {
+  "corpo": "marinaio-corpo-profilo-destro-carica",
+  "mano": [
+   198,
+   252
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": true
+ },
+ "marinaio-ascia-profilo-destro-apice": {
+  "corpo": "marinaio-corpo-profilo-destro-apice",
+  "mano": [
+   150,
+   40
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": true,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   150,
+   164
+  ]
+ },
+ "marinaio-ascia-profilo-destro-colpo": {
+  "corpo": "marinaio-corpo-profilo-destro-colpo",
+  "mano": [
+   222,
+   246
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": true
+ },
+ "marinaio-ascia-profilo-destro-ritorno": {
+  "corpo": "marinaio-corpo-profilo-destro-ritorno",
+  "mano": [
+   252,
+   128
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   82,
+   95
+  ],
+  "specchiato": true
+ },
+ "marinaio-piccone-fronte-carica": {
+  "corpo": "marinaio-corpo-fronte-carica",
+  "mano": [
+   172,
+   240
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false
+ },
+ "marinaio-piccone-fronte-apice": {
+  "corpo": "marinaio-corpo-fronte-apice",
+  "mano": [
+   168,
+   30
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   154
+  ]
+ },
+ "marinaio-piccone-fronte-colpo": {
+  "corpo": "marinaio-corpo-fronte-colpo",
+  "mano": [
+   172,
+   248
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false
+ },
+ "marinaio-piccone-fronte-ritorno": {
+  "corpo": "marinaio-corpo-fronte-ritorno",
+  "mano": [
+   170,
+   108
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false
+ },
+ "marinaio-piccone-spalle-carica": {
+  "corpo": "marinaio-corpo-spalle-carica",
+  "mano": [
+   168,
+   240
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false
+ },
+ "marinaio-piccone-spalle-apice": {
+  "corpo": "marinaio-corpo-spalle-apice",
+  "mano": [
+   168,
+   30
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   154
+  ]
+ },
+ "marinaio-piccone-spalle-colpo": {
+  "corpo": "marinaio-corpo-spalle-colpo",
+  "mano": [
+   170,
+   246
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false
+ },
+ "marinaio-piccone-spalle-ritorno": {
+  "corpo": "marinaio-corpo-spalle-ritorno",
+  "mano": [
+   215,
+   228
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": false
+ },
+ "marinaio-piccone-profilo-destro-carica": {
+  "corpo": "marinaio-corpo-profilo-destro-carica",
+  "mano": [
+   198,
+   252
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": true
+ },
+ "marinaio-piccone-profilo-destro-apice": {
+  "corpo": "marinaio-corpo-profilo-destro-apice",
+  "mano": [
+   150,
+   40
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": true,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   150,
+   164
+  ]
+ },
+ "marinaio-piccone-profilo-destro-colpo": {
+  "corpo": "marinaio-corpo-profilo-destro-colpo",
+  "mano": [
+   222,
+   246
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": true
+ },
+ "marinaio-piccone-profilo-destro-ritorno": {
+  "corpo": "marinaio-corpo-profilo-destro-ritorno",
+  "mano": [
+   252,
+   128
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   106,
+   149
+  ],
+  "specchiato": true
+ },
+ "capitano-ascia-fronte-carica": {
+  "corpo": "capitano-corpo-fronte-carica",
+  "mano": [
+   142,
+   220
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false
+ },
+ "capitano-ascia-fronte-apice": {
+  "corpo": "capitano-corpo-fronte-apice",
+  "mano": [
+   168,
+   30
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   154
+  ]
+ },
+ "capitano-ascia-fronte-colpo": {
+  "corpo": "capitano-corpo-fronte-colpo",
+  "mano": [
+   174,
+   228
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false
+ },
+ "capitano-ascia-fronte-ritorno": {
+  "corpo": "capitano-corpo-fronte-ritorno",
+  "mano": [
+   170,
+   118
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false
+ },
+ "capitano-ascia-spalle-carica": {
+  "corpo": "capitano-corpo-spalle-carica",
+  "mano": [
+   162,
+   232
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false
+ },
+ "capitano-ascia-spalle-apice": {
+  "corpo": "capitano-corpo-spalle-apice",
+  "mano": [
+   168,
+   42
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   166
+  ]
+ },
+ "capitano-ascia-spalle-colpo": {
+  "corpo": "capitano-corpo-spalle-colpo",
+  "mano": [
+   170,
+   238
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false
+ },
+ "capitano-ascia-spalle-ritorno": {
+  "corpo": "capitano-corpo-spalle-ritorno",
+  "mano": [
+   174,
+   178
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": false
+ },
+ "capitano-ascia-profilo-destro-carica": {
+  "corpo": "capitano-corpo-profilo-destro-carica",
+  "mano": [
+   146,
+   274
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": true
+ },
+ "capitano-ascia-profilo-destro-apice": {
+  "corpo": "capitano-corpo-profilo-destro-apice",
+  "mano": [
+   140,
+   34
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": true,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   140,
+   158
+  ]
+ },
+ "capitano-ascia-profilo-destro-colpo": {
+  "corpo": "capitano-corpo-profilo-destro-colpo",
+  "mano": [
+   208,
+   262
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": true
+ },
+ "capitano-ascia-profilo-destro-ritorno": {
+  "corpo": "capitano-corpo-profilo-destro-ritorno",
+  "mano": [
+   222,
+   234
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   34,
+   167
+  ],
+  "specchiato": true
+ },
+ "capitano-piccone-fronte-carica": {
+  "corpo": "capitano-corpo-fronte-carica",
+  "mano": [
+   142,
+   220
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false
+ },
+ "capitano-piccone-fronte-apice": {
+  "corpo": "capitano-corpo-fronte-apice",
+  "mano": [
+   168,
+   30
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   154
+  ]
+ },
+ "capitano-piccone-fronte-colpo": {
+  "corpo": "capitano-corpo-fronte-colpo",
+  "mano": [
+   174,
+   228
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false
+ },
+ "capitano-piccone-fronte-ritorno": {
+  "corpo": "capitano-corpo-fronte-ritorno",
+  "mano": [
+   170,
+   118
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false
+ },
+ "capitano-piccone-spalle-carica": {
+  "corpo": "capitano-corpo-spalle-carica",
+  "mano": [
+   162,
+   232
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false
+ },
+ "capitano-piccone-spalle-apice": {
+  "corpo": "capitano-corpo-spalle-apice",
+  "mano": [
+   168,
+   42
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   168,
+   166
+  ]
+ },
+ "capitano-piccone-spalle-colpo": {
+  "corpo": "capitano-corpo-spalle-colpo",
+  "mano": [
+   170,
+   238
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false
+ },
+ "capitano-piccone-spalle-ritorno": {
+  "corpo": "capitano-corpo-spalle-ritorno",
+  "mano": [
+   174,
+   178
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": false
+ },
+ "capitano-piccone-profilo-destro-carica": {
+  "corpo": "capitano-corpo-profilo-destro-carica",
+  "mano": [
+   146,
+   274
+  ],
+  "angolo_gradi_orari_da_verticale": -50,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": true
+ },
+ "capitano-piccone-profilo-destro-apice": {
+  "corpo": "capitano-corpo-profilo-destro-apice",
+  "mano": [
+   140,
+   34
+  ],
+  "angolo_gradi_orari_da_verticale": -15,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": true,
+  "tela": [
+   336,
+   500
+  ],
+  "margine_sopra": 124,
+  "mano_nella_tela": [
+   140,
+   158
+  ]
+ },
+ "capitano-piccone-profilo-destro-colpo": {
+  "corpo": "capitano-corpo-profilo-destro-colpo",
+  "mano": [
+   208,
+   262
+  ],
+  "angolo_gradi_orari_da_verticale": 55,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": true
+ },
+ "capitano-piccone-profilo-destro-ritorno": {
+  "corpo": "capitano-corpo-profilo-destro-ritorno",
+  "mano": [
+   222,
+   234
+  ],
+  "angolo_gradi_orari_da_verticale": 0,
+  "presa_nel_master": [
+   157,
+   165
+  ],
+  "specchiato": true
+ }
+}
