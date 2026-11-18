@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Navi di Muse nel mare (A3)
+- Tutte le navi del mare (Sirena, mercantili, pattuglia, brigantino, galeone, scorta/prigionieri) usano i disegni dall'alto di Muse, solo con «Mappa di prova».
+- Tre stati: integra, danneggiata (sotto metà scafo o in avaria) e affondata (dissolvenza sul relitto con detriti).
+- Le vele sono nel disegno; il pappagallo si posa sul ponte. Isole A2 e boe A3 non ancora montate (isole legate alla mappa a caselle, boe con la J della storia).
+
 ## Mare dei convogli: scia, spruzzi e nebbia nuovi (Muse A1) – «Grafica di prova»
 - Le navi lasciano una scia di schiuma dipinta (scia a V di Muse) che si allarga e si vede di più quando vanno veloci; al posto dei vecchi cerchi bianchi.
 - I colpi di cannone in acqua fanno un vero spruzzo dipinto.

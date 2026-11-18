@@ -635,7 +635,18 @@ let fogSpr=null;
 /* mare nuovo (Muse, mondo A1): scia a V, spruzzi, nebbia — solo con «Grafica di prova» */
 const MZS=/*@@MZS@@*/null,MZSO={};
 function mzs(k){if(!VEGPG||!MZS||!MZS[k])return null;let o=MZSO[k];if(!o){o=MZSO[k]=new Image();o.src='data:image/webp;base64,'+MZS[k].b}return o.complete&&o.naturalWidth?o:null}
-function wakeSp(g,s){
+
+const MZN=/*@@MZN@@*/null,MZNO={},NAVM={sirena:'giocatore',mercante:'mercantile',pattuglia:'pattuglia',scorta:'brigantino',galeone:'galeone',prigionieri:'galeone',fantasma:'galeone',brigantino:'brigantino'};
+function mzn(k){if(!VEGPG||!MZN||!MZN[k])return null;let o=MZNO[k];if(!o){o=MZNO[k]=new Image();o.src='data:image/webp;base64,'+MZN[k].b}return o.complete&&o.naturalWidth?o:null}
+/* nave di Muse (dall'alto, prua a nord): integra / danneggiata / affondata; sceglie lo stato dai colpi presi */
+function navDraw(g,s,sp0,sk){
+  const m=NAVM[s.type];if(!m)return false;
+  const r=s.max?s.hull/s.max:1,st0=(r<=.5||s.disabled&&r<.8)?'d':'i',ia=mzn(m+'-'+st0);if(!ia)return false;
+  const K=2*sp0.L/288;
+  const put=(im,al)=>{if(al<=.01)return;const w=im.naturalWidth*K,h=im.naturalHeight*K;g.save();g.globalAlpha*=al;g.rotate(Math.PI/2);g.drawImage(im,-w/2,-h/2,w,h);g.restore()};
+  if(sk>0){const im2=mzn(m+'-a'),f=Math.min(1,sk*2.2);if(im2){put(ia,1-f);put(im2,f);return true}}
+  put(ia,1);return true
+}function wakeSp(g,s){
   const sp1=SPEC[s.type],im=mzs('scia-v');if(!sp1||!im)return;
   const v=Math.abs(s.v||0);if(v<22||s.sinking||s.dead)return;
   const a=Math.min(.95,.45+v/160),sc=(sp1.L*2.1)/218*(.95+.05*Math.sin(C.t*7+s.x)),cc=Math.cos(s.hd),ss=Math.sin(s.hd);
@@ -1119,7 +1130,7 @@ function drawShip0(g,e,t){
   if(sk>0)g.globalAlpha=1-sk*.9;
   if(sk<.3){g.save();g.translate(s.x+12,s.y+26);g.rotate(s.hd);g.fillStyle='rgba(4,24,44,.26)';g.beginPath();g.ellipse(0,0,sp0.L*.82,sp0.W*.7,0,0,7);g.fill();g.restore()}
   g.translate(s.x,s.y+8+bob+sk*26);g.rotate(s.hd+sk*.15+Math.sin(t*1.1+s.seed)*.012);
-  drawSp(g,hs(s.type,s),0,0,1);
+  const NV=navDraw(g,s,sp0,sk);if(!NV)drawSp(g,hs(s.type,s),0,0,1);
   if(s.flash>0){g.globalAlpha=Math.min(1,s.flash*3.5);g.fillStyle='rgba(255,255,255,.7)';g.beginPath();g.ellipse(0,0,sp0.L*.85,sp0.W*.85,0,0,7);g.fill();g.globalAlpha=1}
   g.restore();
   if(sk>.5)return;
@@ -1129,13 +1140,13 @@ function drawShip0(g,e,t){
   if(s.sg==null)s.sg=c<0?-1:1;if(c>.25)s.sg=1;else if(c<-.25)s.sg=-1;
   s.sf=s.sf==null?s.sg:s.sf+(s.sg-s.sf)*Math.min(1,Math.max(0,t-(s.sfT||t))*4);s.sfT=t;   // la vela gira piano da un lato all'altro, senza scatto
   const ms=sp0.masts.slice().sort((a,b)=>s.sg>0?(b-a)*c:(a-b)*c);   // ordine stabile: dipende dal lato della vela, non da un segno che scatta
-  for(const m of ms){
+  for(const m of (NV?[]:ms)){
     g.save();g.translate(s.x+c*m*sp0.L,s.y+sn*m*sp0.L+8+bob);
     g.transform(1,0,sw,1,0,0);g.scale(1,k);{const mg=g.createLinearGradient(-3,0,3,0);mg.addColorStop(0,'#9a7048');mg.addColorStop(1,'#4a2c18');g.fillStyle=mg;g.fillRect(-3,-sp0.mh,6,sp0.mh);g.strokeStyle='rgba(20,10,4,.6)';g.lineWidth=1;g.strokeRect(-3,-sp0.mh,6,sp0.mh)}g.scale(s.sf,1);
     if(sk>0)g.globalAlpha=1-sk*1.4;
     const spr=ss(s.type,s);drawSp(g,spr,0,0,1);g.restore()
   }
-  if(s===C.p&&sk<.3){const m0=sp0.masts[0],px=s.x+c*m0*sp0.L,py=s.y+sn*m0*sp0.L+8+bob-sp0.mh*k+8;drawParrot(g,px,py,{t,s:.78,perch:true,flip:c<0,hat:S&&S.phat})}
+  if(s===C.p&&sk<.3){const m0=sp0.masts[0],px=NV?s.x+c*sp0.L*.18:s.x+c*m0*sp0.L,py=NV?s.y+sn*sp0.L*.18+8+bob-26:s.y+sn*m0*sp0.L+8+bob-sp0.mh*k+8;drawParrot(g,px,py,{t,s:.78,perch:true,flip:c<0,hat:S&&S.phat})}
   // etichetta e barra
   const hy=s.y-sp0.mh*k-14;
   if(!s.isP){
