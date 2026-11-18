@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Cannonate, minimappa e Sirena guidata di Muse (A4 + C)
+- Cannonate: palla con scia, fumo alla bocca del cannone, esplosione sul colpo, getto d'acqua a mare (4 fotogrammi ciascuno). Minimappa con cornice a pergamena, rosa dei venti e nave di Muse.
+- Sirena guidata nuova (mondo C): vele gonfie in movimento, ammainate da ferma, danneggiata sotto metà scafo, riparata dopo la riparazione. Le altre navi restano quelle di A3.
+- Solo con «Mappa di prova».
+
 ## Boe, pontile e uscita di Muse (A2/A3)
 - Boe del grande viaggio: rossa da spenta, gialla con alone quando accesa (senza la J, finché Muse non la disegna). Solo «Mappa di prova».
 - Pontile del convoglio e molo di Giacomo: nuovo disegno di Muse. Marcatore «USCITA»: segno a X di Muse.
