@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Grotta di Muse
+- Pavimento e pareti dipinti da Muse (fondi a roccia con crepe, vene e sassolini, parete con bordo irregolare), pozze d'acqua, stalagmiti e cristalli viola/teal al posto dei disegni a codice.
+- Sei torce a parete con alone che tremola e luce calda (solo grotta grande). Resta il buio: la luce la fanno le torce e il giocatore.
+- Solo con «Grafica di prova» + «Mappa di prova». Non ancora usati: stalattiti, massi, mappa piu' ricca.
+
 ## Nave fantasma e boa con la J di Muse
 - «Il Gabbiano» ora e' il galeone spettrale disegnato da Muse (vele strappate, alghe, lanterne verdi), con il suo alone e la dissolvenza.
 - Boe del grande viaggio: boa rossa con la J sul fianco da spenta, boa gialla con alone dorato da accesa. Solo «Mappa di prova».
