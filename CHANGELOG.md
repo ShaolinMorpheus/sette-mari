@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Giacomo di Muse (senza cappello)
+- Giacomo al faro e nel ritratto dei dialoghi e' il disegno di Muse: capelli legati, fazzoletto con la J rossa, orecchino d'oro. Solo con «Grafica di prova» + «Mappa di prova».
+- Il set di 28 pose e' gia' nel gioco, pronto per quando Giacomo camminera' o combattera'.
+
 ## Ferro, Nives, Tito e Gnocco di Muse
 - I quattro Fuggiaschi del campo ora sono i disegni di Muse (fermo, passi di fronte e di profilo, ognuno con la sua statura). Solo con «Grafica di prova» + «Mappa di prova».
 - Giacomo e il Cormorano restano in attesa della scelta della bozza.

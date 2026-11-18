@@ -7,7 +7,7 @@ def rep(a,b):
     if src.count(a)!=1:print('PATCH111 FAIL',src.count(a),a[:70]);sys.exit(1)
     src=src.replace(a,b)
 rep("function drawNpc(g,e,t){\n",
-r"""const NOM=__NOM__,NOMI={},NOMF={ferro:1.06,nives:1,tito:.88,gnocco:1};
+r"""const NOM=__NOM__,NOMI={},NOMF={ferro:1.06,nives:1,tito:.88,gnocco:1,giacomo:1};
 function nomImg(k){if(!VEGPG||!NOM[k])return null;let o=NOMI[k];if(!o){o=NOMI[k]=new Image();o.src='data:image/webp;base64,'+NOM[k]}return o.complete&&o.naturalWidth?o:null}
 function nomDraw(g,x,y,o){
   const w=o.k&&o.k.name&&o.k.name.toLowerCase();if(!NOMF[w])return false;

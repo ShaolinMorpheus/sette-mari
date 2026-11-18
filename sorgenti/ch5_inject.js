@@ -262,7 +262,7 @@ function drawGiacomo(g,t){
   const L=lighthouse(),x=(L.coast+2.7)*T,y=(L.ty+.3)*T;
   if(Math.hypot(C.p.x-x,C.p.y-y)>2200)return;
   g.save();
-  drawChar(g,x,y,{k:CH.giacomo,dir:'f',flip:true,t,walk:0,moving:false,look:0});
+  if(!nomDraw(g,x,y,{k:CH.giacomo,dir:'f',flip:true,t,walk:0,moving:false,noShadow:false}))drawChar(g,x,y,{k:CH.giacomo,dir:'f',flip:true,t,walk:0,moving:false,look:0});
   // lanterna in mano
   const f=.85+.15*Math.sin(t*6),rg=g.createRadialGradient(x-20,y-22,2,x-20,y-22,54);
   rg.addColorStop(0,'rgba(255,220,130,'+(.8*f)+')');rg.addColorStop(1,'rgba(255,200,90,0)');
