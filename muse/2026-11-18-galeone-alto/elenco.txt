@@ -1,0 +1,17 @@
+baule.png
+botola-aperta.png
+botola-chiusa.png
+cannone-dir0.png
+cannone-dir1.png
+cannone-dir2.png
+cannone-dir3.png
+cella.png
+forziere.png
+lanterna.png
+letto.png
+parete-micro.png
+pavimento-micro.png
+porta.png
+scala.png
+tavolo-mappa.png
+timone.png
