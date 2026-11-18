@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Interno del galeone di Muse (mondo B, prima parte)
+- Guardie spagnole, comandante e alleati nell'interno del galeone e nell'assalto usano i personaggi di Muse: fermi, camminata di fronte/spalle/profilo, attacco e a terra.
+- Botti e rotoli di corda nuovi di Muse. Solo con «Mappa di prova».
+- Da montare: pavimenti e pareti a pannelli, cannoni, scale, botole, porte, cella, lanterne, tavoli (i disegni sono vista di lato/3/4, la mappa è a caselle).
+
 ## Cannonate, minimappa e Sirena guidata di Muse (A4 + C)
 - Cannonate: palla con scia, fumo alla bocca del cannone, esplosione sul colpo, getto d'acqua a mare (4 fotogrammi ciascuno). Minimappa con cornice a pergamena, rosa dei venti e nave di Muse.
 - Sirena guidata nuova (mondo C): vele gonfie in movimento, ammainate da ferma, danneggiata sotto metà scafo, riparata dopo la riparazione. Le altre navi restano quelle di A3.

@@ -183,6 +183,7 @@ src=src.replace("<head>","<head><script>(function(){try{var g=localStorage.getIt
 tail="\n})();\n</script>"
 _kc=src.find('<style id="kitCss">')
 k=src.rindex(tail,0,_kc) if _kc>0 else src.rindex(tail)   # fine dello script principale (non quello dell'interfaccia aggiunto dopo)
+inj4=inj4.replace('/*@@BCH@@*/null',open('mz_bch.json',encoding='utf8').read())
 src=src[:k]+"\n"+inj3+"\n"+inj4+tail+src[k+len(tail):]
 open('/home/claude/out/index_final.html','w',encoding='utf8').write(src)
 print('ok',len(src))
