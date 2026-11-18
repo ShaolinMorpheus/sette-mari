@@ -22,3 +22,10 @@ Già nel prompt `muse/2026-11-18-richieste-fantasma-isole/PROMPT.md`: nave fanta
 
 ## 4. Galeone visto dall'alto (per la mappa a caselle)
 I pezzi del mondo B sono disegnati di lato/3-4; la mappa del gioco è dall'alto. Servono, in versione dall'alto e con la tela di una casella (44 px, esporta a 256): cannone (prua verso l'alto, 4 direzioni), scala, botola chiusa e aperta, porta, cella con sbarre, lanterna a muro, tavolo con mappa, timone, forziere, baule e letto. Più pavimento in tavole a micro-piastrelle ripetibili (non pannelli da stanza) e pareti con bordo.
+
+## 5. Attrezzi del marinaio (ascia e piccone) — da rifare con metodo diverso, in coda dopo 1-4
+Le v3 e v4 non vanno: nel gioco il personaggio **cambia colore** durante l'animazione di taglio e **cambia dimensione/si sovrappone** all'attrezzo (ascia e piccone), soprattutto con il marinaio e con l'abito rosso. Vincoli per la nuova consegna:
+- Il personaggio resta IDENTICO frame dopo frame: stessi colori (pelle, camicia, pantaloni, abito), stessa altezza e stessa larghezza, piedi sulla stessa riga della camminata del marinaio v4 e stessa tela 336x376.
+- L'attrezzo è un livello **separato** (PNG a parte, solo ascia/piccone con la mano che lo regge) così non si sovrappone né ricolora il corpo; il corpo è la posa «braccio alzato/abbassato» senza attrezzo in mano.
+- Per ogni attrezzo: 4 pose (carica, apice, colpo, ritorno) x fronte/spalle/profilo destro, con l'attrezzo con rotazione e punto di presa dichiarati in un file `punti.json` (x,y della mano e angolo del manico per frame).
+- Fornire anche la versione con abito rosso (capitano) e con maglia da marinaio, stessa posa, stessi colori dei fermi/camminata.
