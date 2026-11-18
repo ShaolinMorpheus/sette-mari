@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Nave fantasma e boa con la J di Muse
+- «Il Gabbiano» ora e' il galeone spettrale disegnato da Muse (vele strappate, alghe, lanterne verdi), con il suo alone e la dissolvenza.
+- Boe del grande viaggio: boa rossa con la J sul fianco da spenta, boa gialla con alone dorato da accesa. Solo «Mappa di prova».
+
 ## Attrezzi v5 di Muse (corpo e attrezzo separati)
 - Ascia e piccone del marinaio e del capitano usano i nuovi livelli: il corpo e l'attrezzo sono disegni separati (carica, apice, colpo, ritorno) di fronte, di spalle e di profilo, cosi' i colori non cambiano piu' durante il taglio.
 - I corpi di Muse hanno la testa piu' grande rispetto alla camminata: li ho ridimensionati a meta' strada tra testa e altezza. Da far uniformare a Muse.

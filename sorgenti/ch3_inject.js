@@ -637,7 +637,7 @@ let fogSpr=null;
 const MZS=/*@@MZS@@*/null,MZSO={};
 function mzs(k){if(!VEGPG||!MZS||!MZS[k])return null;let o=MZSO[k];if(!o){o=MZSO[k]=new Image();o.src='data:image/webp;base64,'+MZS[k].b}return o.complete&&o.naturalWidth?o:null}
 
-const MZN=/*@@MZN@@*/null,MZNO={},NAVM={sirena:'giocatore',mercante:'mercantile',pattuglia:'pattuglia',scorta:'brigantino',galeone:'galeone',prigionieri:'galeone',fantasma:'galeone',brigantino:'brigantino'};
+const MZN=/*@@MZN@@*/null,MZNO={},NAVM={sirena:'giocatore',mercante:'mercantile',pattuglia:'pattuglia',scorta:'brigantino',galeone:'galeone',prigionieri:'galeone',fantasma:'fantasma',brigantino:'brigantino'};
 function mzn(k){if(!VEGPG||!MZN||!MZN[k])return null;let o=MZNO[k];if(!o){o=MZNO[k]=new Image();o.src='data:image/webp;base64,'+MZN[k].b}return o.complete&&o.naturalWidth?o:null}
 /* nave di Muse (dall'alto, prua a nord): integra / danneggiata / affondata; sceglie lo stato dai colpi presi */
 function navDraw(g,s,sp0,sk){
@@ -651,7 +651,7 @@ function navDraw(g,s,sp0,sk){
       if(sk>0){const im2=mzn('giocatore-a'),f=Math.min(1,sk*2.2);if(im2){putc(ic,1-f,kc);putc(im2,f,2*sp0.L/288);return true}}
       putc(ic,1,kc);return true}
   }
-  const r=s.max?s.hull/s.max:1,st0=(r<=.5||s.disabled&&r<.8)?'d':'i',ia=mzn(m+'-'+st0);if(!ia)return false;
+  const r=s.max?s.hull/s.max:1,st0=(m==='fantasma'||!(r<=.5||s.disabled&&r<.8))?'i':'d',ia=mzn(m+'-'+st0);if(!ia)return false;
   const K=2*sp0.L/288;
   const put=(im,al)=>{if(al<=.01)return;const w=im.naturalWidth*K,h=im.naturalHeight*K;g.save();g.globalAlpha*=al;g.rotate(Math.PI/2);g.drawImage(im,-w/2,-h/2,w,h);g.restore()};
   if(sk>0){const im2=mzn(m+'-a'),f=Math.min(1,sk*2.2);if(im2){put(ia,1-f);put(im2,f);return true}}
@@ -1128,7 +1128,7 @@ function ghostDeco(g,s,t,al){
 function drawShip(g,e,t){
   const s=e.s;
   if(s.ev&&s.k!=='ghost'){evDrawShip(g,s,t);return}
-  if(s.type==='fantasma'){const ga=s.gh==null?1:s.gh;if(ga<=.01)return;g.save();g.globalCompositeOperation='lighter';const gl=g.createRadialGradient(s.x,s.y,10,s.x,s.y,190);gl.addColorStop(0,'rgba(120,255,220,'+(.20*ga)+')');gl.addColorStop(1,'rgba(120,255,220,0)');g.fillStyle=gl;g.fillRect(s.x-190,s.y-190,380,380);g.restore();const al=Math.max(0,(.74+.12*Math.sin(t*2+s.seed))*(1-(s.fade||0))*ga);g.save();g.globalAlpha=al;drawShip0(g,e,t);g.restore();ghostDeco(g,s,t,al);return}
+  if(s.type==='fantasma'){const ga=s.gh==null?1:s.gh;if(ga<=.01)return;g.save();g.globalCompositeOperation='lighter';const gl=g.createRadialGradient(s.x,s.y,10,s.x,s.y,190);gl.addColorStop(0,'rgba(120,255,220,'+(.20*ga)+')');gl.addColorStop(1,'rgba(120,255,220,0)');g.fillStyle=gl;g.fillRect(s.x-190,s.y-190,380,380);g.restore();const al=Math.max(0,(.74+.12*Math.sin(t*2+s.seed))*(1-(s.fade||0))*ga);g.save();g.globalAlpha=al;drawShip0(g,e,t);g.restore();if(!mzn('fantasma-i'))ghostDeco(g,s,t,al);return}
   wakeSp(g,s);
   drawShip0(g,e,t)
 }

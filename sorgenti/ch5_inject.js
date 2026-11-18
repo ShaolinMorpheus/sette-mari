@@ -141,7 +141,7 @@ function drawVortex(g,v,t){
 function drawBuoy(g,x,y,t,lit,i){
   const bob=Math.sin(t*1.6+i)*2.5;
   g.save();g.translate(x,y+bob);
-  {const bm=mzn(lit?'boa-gialla':'boa-rossa');if(bm){const w=78,h=w*bm.naturalHeight/bm.naturalWidth;g.rotate(Math.sin(t*1.1+i)*.05);g.drawImage(bm,-w/2,-h/2,w,h);if(lit){g.globalCompositeOperation='lighter';const gl=g.createRadialGradient(0,0,4,0,0,70);gl.addColorStop(0,'rgba(255,214,110,'+(.5+.12*Math.sin(t*4+i))+')');gl.addColorStop(1,'rgba(255,214,110,0)');g.fillStyle=gl;g.fillRect(-70,-70,140,140)}g.restore();return}}
+  {const bm=mzn(lit?'boa-accesa':'boa-j');if(bm){const w=lit?132:76,h=w*bm.naturalHeight/bm.naturalWidth;g.rotate(Math.sin(t*1.1+i)*.05);g.globalAlpha=lit?.88+.12*Math.sin(t*4+i):1;g.drawImage(bm,-w/2,-h/2,w,h);g.restore();return}}
   g.fillStyle='rgba(6,40,60,.3)';g.beginPath();g.ellipse(4,12,16,6,0,0,7);g.fill();
   g.strokeStyle='rgba(255,255,255,'+(.3+.1*Math.sin(t*2+i))+')';g.lineWidth=2;g.beginPath();g.ellipse(0,10,22+Math.sin(t*1.4+i)*2,8,0,0,7);g.stroke();
   // corpo a strisce
