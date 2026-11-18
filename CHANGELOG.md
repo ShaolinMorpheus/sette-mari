@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Attrezzi v5 di Muse (corpo e attrezzo separati)
+- Ascia e piccone del marinaio e del capitano usano i nuovi livelli: il corpo e l'attrezzo sono disegni separati (carica, apice, colpo, ritorno) di fronte, di spalle e di profilo, cosi' i colori non cambiano piu' durante il taglio.
+- I corpi di Muse hanno la testa piu' grande rispetto alla camminata: li ho ridimensionati a meta' strada tra testa e altezza. Da far uniformare a Muse.
+
 ## Interno del galeone di Muse (mondo B, prima parte)
 - Guardie spagnole, comandante e alleati nell'interno del galeone e nell'assalto usano i personaggi di Muse: fermi, camminata di fronte/spalle/profilo, attacco e a terra.
 - Botti e rotoli di corda nuovi di Muse. Solo con «Mappa di prova».
