@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Boe, pontile e uscita di Muse (A2/A3)
+- Boe del grande viaggio: rossa da spenta, gialla con alone quando accesa (senza la J, finché Muse non la disegna). Solo «Mappa di prova».
+- Pontile del convoglio e molo di Giacomo: nuovo disegno di Muse. Marcatore «USCITA»: segno a X di Muse.
+- Non ancora montati: isole, scogli, faro, bandierine (servono pezzi senza alone d'acqua e la mappa rifatta).
+
 ## Navi di Muse nel mare (A3)
 - Tutte le navi del mare (Sirena, mercantili, pattuglia, brigantino, galeone, scorta/prigionieri) usano i disegni dall'alto di Muse, solo con «Mappa di prova».
 - Tre stati: integra, danneggiata (sotto metà scafo o in avaria) e affondata (dissolvenza sul relitto con detriti).

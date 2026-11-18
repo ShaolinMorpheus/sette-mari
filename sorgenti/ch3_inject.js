@@ -1160,6 +1160,7 @@ function drawShip0(g,e,t){
 function drawPier(g,t){
   const x0=(17.8+5.15)*T,y0=(29.45+15)*T,w=4.4*T,h=.8*T;
   g.save();
+  {const pm=mzn('pontile');if(pm){const ww=w/.88,hh=ww*pm.naturalHeight/pm.naturalWidth;g.drawImage(pm,x0+w/2-ww/2,y0+h/2-hh/2,ww,hh);const lx=x0+w-4,ly=y0-18;g.fillStyle='#3a200c';g.fillRect(lx-2,ly,4,16);const gl=g.createRadialGradient(lx,ly-4,2,lx,ly-4,34);gl.addColorStop(0,'rgba(255,214,120,'+(.55+.1*Math.sin(t*5))+')');gl.addColorStop(1,'rgba(255,214,120,0)');g.fillStyle=gl;g.fillRect(lx-34,ly-38,68,68);g.restore();return}}
   g.fillStyle='rgba(6,40,60,.28)';g.fillRect(x0+8,y0+h+8,w,10);
   for(let i=0;i<Math.ceil(w/13);i++){const x=x0+i*13;g.fillStyle=i%2?'#a97c4a':'#b88a55';g.fillRect(x,y0,12.6,h);g.strokeStyle='rgba(50,26,10,.6)';g.lineWidth=1;g.strokeRect(x,y0,12.6,h)}
   g.fillStyle='#6a3e1c';g.fillRect(x0,y0-4,w,5);g.fillRect(x0,y0+h-1,w,5);
@@ -1183,7 +1184,7 @@ function drawFx(g,t){
   if(!VOY)drawPier(g,t);
   {const pts=galPath();if(pts&&pts.length>1){
     g.save();g.strokeStyle='rgba(255,214,90,.75)';g.lineWidth=5;g.setLineDash([22,16]);g.lineDashOffset=-t*30;g.lineCap='round';g.beginPath();g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)g.lineTo(pts[i][0],pts[i][1]);g.stroke();g.setLineDash([]);
-    const e=pts[pts.length-1];g.fillStyle='#3a2410';g.strokeStyle='#ffd23a';g.lineWidth=4;g.beginPath();g.arc(e[0],e[1],34,0,7);g.fill();g.stroke();g.fillStyle='#ffd23a';g.font='900 18px Nunito,Arial';g.textAlign='center';g.fillText('USCITA',e[0],e[1]+6);g.restore()}}
+    const e=pts[pts.length-1],sg=mzn('segno');if(sg){const w=150,h=w*sg.naturalHeight/sg.naturalWidth;g.drawImage(sg,e[0]-w/2,e[1]-h/2,w,h);g.font='900 18px Nunito,Arial';g.textAlign='center';g.lineWidth=5;g.strokeStyle='rgba(30,16,4,.9)';g.strokeText('USCITA',e[0],e[1]+h/2+8);g.fillStyle='#ffd23a';g.fillText('USCITA',e[0],e[1]+h/2+8)}else{g.fillStyle='#3a2410';g.strokeStyle='#ffd23a';g.lineWidth=4;g.beginPath();g.arc(e[0],e[1],34,0,7);g.fill();g.stroke();g.fillStyle='#ffd23a';g.font='900 18px Nunito,Arial';g.textAlign='center';g.fillText('USCITA',e[0],e[1]+6)}g.restore()}}
   poiDraw(g,t);
   // casse
   for(const c of C.crates){const x=c.x,y=c.y+Math.sin(c.t*2)*3;g.save();g.translate(x,y);
