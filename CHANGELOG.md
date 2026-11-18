@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## Ferro, Nives, Tito e Gnocco di Muse
+- I quattro Fuggiaschi del campo ora sono i disegni di Muse (fermo, passi di fronte e di profilo, ognuno con la sua statura). Solo con «Grafica di prova» + «Mappa di prova».
+- Giacomo e il Cormorano restano in attesa della scelta della bozza.
+
 ## Grotta di Muse
 - Pavimento e pareti dipinti da Muse (fondi a roccia con crepe, vene e sassolini, parete con bordo irregolare), pozze d'acqua, stalagmiti e cristalli viola/teal al posto dei disegni a codice.
 - Sei torce a parete con alone che tremola e luce calda (solo grotta grande). Resta il buio: la luce la fanno le torce e il giocatore.
