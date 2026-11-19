@@ -1415,21 +1415,21 @@ function drawProp(g,e,t){
 
 
 /* ---- personaggi dell'interno: disegni di Muse (mondo B), solo con la Mappa di prova ---- */
-const BCH=/*@@BCH@@*/null,BCHI={},BWHO={Guardia:'guardia',Comandante:'comandante',Lupo:'alleato',Barba:'alleato',Moro:'alleato',Gina:'alleato',Zeno:'alleato'};
+const BCH=/*@@BCH@@*/null,BCHI={},BWHO={Guardia:'guardia',Comandante:'comandante',Lupo:'alleato',Barba:'alleato',Moro:'alleato',Gina:'alleato',Zeno:'alleato',Pip:'pip',Dodo:'dodo'},BSC={comandante:1.06,pip:.88},BSIX={pip:1,dodo:1};
 function bImg(k){if(typeof VEGPG==='undefined'||!VEGPG||!BCH||!BCH[k])return null;let o=BCHI[k];if(!o){o=BCHI[k]=new Image();o.src='data:image/webp;base64,'+BCH[k]}return o.complete&&o.naturalWidth?o:null}
 function bPose(ch,o){
-  const back=o.dir==='b',mv=!!o.moving,fl=!!o.flip,ph=o.walk||0,i=1+Math.floor((((ph/(Math.PI*2))%1)+1)%1*4);
+  const back=o.dir==='b',mv=!!o.moving,fl=!!o.flip,ph=o.walk||0,six=!!BSIX[ch],i=six?1+(((Math.floor(ph*2)%6)+6)%6):1+(((Math.floor(ph*1.3)%4)+4)%4);
   const atk=o.sab&&o.sab.r>.5;
-  if(atk){if(back||(o.dir==='f'&&!fl))return {k:ch+'/fronte-attacco'};return {k:ch+'/profilo-destro-attacco'+((Math.floor((o.t||0)*9)%2)+1),mir:fl}}
-  if(back)return {k:ch+'/spalle-'+(mv?'passo'+i:'fermo')};
+  if(atk){if(back||(o.dir==='f'&&!fl))return {k:ch+'/fronte-attacco'};return {k:ch+'/profilo-destro-attacco'+((Math.floor((o.t||0)*9)%3)+1),mir:fl}}
+  if(back)return {k:ch+'/spalle-'+(mv?'passo'+i:(six?'passo1':'fermo'))};
   if(mv)return {k:ch+'/profilo-'+(fl?'sinistro':'destro')+'-passo'+i};
   return {k:ch+'/fronte-fermo'}}
 function drawChar2(g,x,y,o){
   const ch=o.k&&BWHO[o.k.name];
   if(ch){
-    const P=bPose(ch,o);let im=bImg(P.k);if(!im&&P.k.indexOf('attacco2')>0)im=bImg(P.k.replace('attacco2','attacco1'));
+    const P=bPose(ch,o);let im=bImg(P.k);if(!im&&P.k.indexOf('attacco3')>0)im=bImg(P.k.replace('attacco3','attacco2'));if(!im&&P.k.indexOf('attacco2')>0)im=bImg(P.k.replace('attacco2','attacco1'));
     if(im){
-      const sc=(o.s||1)*(ch==='comandante'?1.06:1)*70/376,W=336*sc,H=376*sc;
+      const sc=(o.s||1)*(BSC[ch]||1)*70/376,W=336*sc,H=376*sc;
       g.save();g.translate(x,y);
       if(o.alpha!=null)g.globalAlpha=o.alpha;
       if(!o.noShadow){g.fillStyle='rgba(20,25,10,.3)';g.beginPath();g.ellipse(0,0,14,5.4,0,0,7);g.fill()}

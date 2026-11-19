@@ -29,7 +29,8 @@ function portKey(key){
 function drawPortrait(cv,key,L){
 """)
 rep("  if(key==='giacomo'&&nomImg('giacomo/fronte-fermo')){",
-"""  const __pk=portKey(key),__pi=__pk&&portImg(__pk+'/'+portExpr(L))||(__pk&&portImg(__pk+'/neutro'));
+"""  const __pk=portKey(key),__hk=key==='biscotto'&&S&&S.phat?'biscotto-cap/'+(({cuffia:'marinaio',babbo:'natale'})[S.phat]||S.phat):null;
+  const __pi=__hk&&PORT[__hk]?portImg(__hk):(__pk&&portImg(__pk+'/'+portExpr(L))||(__pk&&portImg(__pk+'/neutro')));
   if(__pi){
     g.drawImage(__pi,0,0,W,H);
     if(typeof key==='object'&&key&&key.hat&&key.hat!=='bald'&&typeof RIGHATMAP==='function'){

@@ -1,5 +1,12 @@
 # Sette Mari — Registro delle modifiche
 
+## Ferro nuovo, Pip e Dodo, cappellini di Biscotto
+- Ferro cammina col viso nuovo e la barba corta grigia (camminata v2 di Muse).
+- Pip e Dodo hanno corpo e camminata a 6 pose di Muse nei sotterranei del galeone (Pip piu' basso come Tito). Il ciclo di passi di guardie e alleati e' piu' veloce, e l'attacco dei soldati alterna ora tre pose invece di due.
+- Il ritratto di Biscotto nei dialoghi mostra il cappellino che indossa (18 cappellini). Col cappellino l'espressione resta neutra: Muse non ha ancora fatto le altre.
+- Non montate per ora: pose para2/colpito2 (nessun personaggio le usa ancora).
+- Solo con «Grafica di prova» + «Mappa di prova».
+
 ## Ritratti nei dialoghi e presa di spalle/capitano
 - Nei dialoghi ora c'e' il ritratto di Muse per Capitano (marinaio e giacca rossa), Biscotto, Ferro, Nives, Tito, Gnocco, Giacomo, Pip e Dodo. L'espressione (neutro, felice, preoccupato, serio, sorpreso, triste) la sceglie il gioco dalle parole della battuta; una riga puo' forzarla.
 - Il cappello del Capitano resta quello scelto dal giocatore, sovrapposto al ritratto. Il cappellino di Biscotto per ora non si vede nel ritratto.
