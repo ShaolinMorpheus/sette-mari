@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## Visi nuovi e camminata vera al campo
+- Gnocco, Nives e Tito hanno il viso nuovo di Muse (Gnocco non somiglia piu' al marinaio). Ferro resta col viso di prima: Muse deve ancora rifare la barba grigia.
+- Ferro, Nives, Tito, Gnocco e Giacomo camminano con 6 pose per direzione (fronte, spalle, profilo destro e sinistro), con le gambe che si muovono davvero. Il passo e' agganciato alla camminata (circa un passo ogni 0,15 s) e di fronte/spalle quando salgono o scendono.
+- I personaggi del campo restano fermi meno a lungo, cosi' si vedono camminare di piu'.
+- Solo con «Grafica di prova» + «Mappa di prova».
+
 ## Giacomo di Muse (senza cappello)
 - Giacomo al faro e nel ritratto dei dialoghi e' il disegno di Muse: capelli legati, fazzoletto con la J rossa, orecchino d'oro. Solo con «Grafica di prova» + «Mappa di prova».
 - Il set di 28 pose e' gia' nel gioco, pronto per quando Giacomo camminera' o combattera'.
