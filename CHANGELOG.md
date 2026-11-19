@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## Piccone e accetta: metodo nuovo (marinaio)
+- Col marinaio il corpo non cambia piu' durante il colpo: resta sempre la posa ferma col pugno chiuso di Muse, stessa testa, stessi colori, stessa statura della camminata. Il cappello resta al suo posto.
+- Ascia e piccone sono pezzi separati di Muse, ruotati dal codice attorno alla mano: carica indietro, colpo in avanti, ritorno. Il corpo si inclina e si abbassa leggermente nel colpo.
+- Di spalle e col completo da capitano restano i vecchi fotogrammi (Muse non ha ancora consegnato la presa di spalle e del capitano).
+- Solo con «Grafica di prova» + «Mappa di prova».
+
 ## Visi nuovi e camminata vera al campo
 - Gnocco, Nives e Tito hanno il viso nuovo di Muse (Gnocco non somiglia piu' al marinaio). Ferro resta col viso di prima: Muse deve ancora rifare la barba grigia.
 - Ferro, Nives, Tito, Gnocco e Giacomo camminano con 6 pose per direzione (fronte, spalle, profilo destro e sinistro), con le gambe che si muovono davvero. Il passo e' agganciato alla camminata (circa un passo ogni 0,15 s) e di fronte/spalle quando salgono o scendono.
