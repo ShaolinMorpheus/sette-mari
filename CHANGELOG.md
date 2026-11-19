@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## Ritratti nei dialoghi e presa di spalle/capitano
+- Nei dialoghi ora c'e' il ritratto di Muse per Capitano (marinaio e giacca rossa), Biscotto, Ferro, Nives, Tito, Gnocco, Giacomo, Pip e Dodo. L'espressione (neutro, felice, preoccupato, serio, sorpreso, triste) la sceglie il gioco dalle parole della battuta; una riga puo' forzarla.
+- Il cappello del Capitano resta quello scelto dal giocatore, sovrapposto al ritratto. Il cappellino di Biscotto per ora non si vede nel ritratto.
+- Piccone e accetta: il nuovo metodo vale anche di spalle e col completo da capitano (prese di Muse), quindi niente piu' corpi sostituiti in nessuna vista.
+- Solo con «Grafica di prova» + «Mappa di prova».
+
 ## Piccone e accetta: metodo nuovo (marinaio)
 - Col marinaio il corpo non cambia piu' durante il colpo: resta sempre la posa ferma col pugno chiuso di Muse, stessa testa, stessi colori, stessa statura della camminata. Il cappello resta al suo posto.
 - Ascia e piccone sono pezzi separati di Muse, ruotati dal codice attorno alla mano: carica indietro, colpo in avanti, ritorno. Il corpo si inclina e si abbassa leggermente nel colpo.

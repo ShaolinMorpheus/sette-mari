@@ -8,7 +8,7 @@ def rep(a,b):
     src=src.replace(a,b)
 rep("function RIGMZ(o,v,back,side,tool,sw,mv,ph){\n",
 r"""var RIGNP=__NP__;
-(function(){RIGNP.im={};for(var k in RIGNP.img){(function(k){var i=new Image();i.src='data:image/webp;base64,'+RIGNP.img[k];RIGNP.im[k]=i;RIGM.im[k]=i;RIGM.fd[k]=RIGNP.fd[k];RIGM.hq[k]=RIGM.hq['mar:'+(k.indexOf('profilo')>0?'profilo-destro':'fronte')+'-fermo']})(k)}
+(function(){RIGNP.im={};for(var k in RIGNP.img){(function(k){var i=new Image();i.src='data:image/webp;base64,'+RIGNP.img[k];RIGNP.im[k]=i;RIGM.im[k]=i;RIGM.fd[k]=RIGNP.fd[k];var sp=k.slice(0,4)==='mar:'?'mar:':'cap:',vw=k.indexOf('profilo')>0?'profilo-destro':k.indexOf('spalle')>0?'spalle':'fronte';RIGM.hq[k]=RIGM.hq[sp+vw+'-fermo']||RIGM.hq[vw+'-fermo']})(k)}
  RIGNP.tl={};for(var n in RIGNP.tools){var t=RIGNP.tools[n],i=new Image();i.src='data:image/webp;base64,'+t.b;RIGNP.tl[n]=i}})();
 function npOk(k){var i=RIGNP.im[k];return !!(i&&i.complete&&i.naturalWidth)}
 /* attrezzi v6: il corpo resta quello fermo in presa; inclinazione, abbassamento e angolo dell'attrezzo sono calcolati qui */
@@ -21,7 +21,7 @@ function RIGNPA(u,side){
 function RIGMZ(o,v,back,side,tool,sw,mv,ph){
 """)
 rep("  if((tool==='axe'||tool==='pick')&&sw!=null){\n    /* attrezzi v5: corpo + attrezzo separati (Muse) */",
-"  if((tool==='axe'||tool==='pick')&&sw!=null){\n    if(pf==='mar:'&&v!=='spalle'){var __nk='mar:np-presa-'+(v==='profilo'?'profilo-destro':'fronte');if(npOk(__nk))return {k:__nk,nf:v==='profilo'?0:1,np:1}}\n    /* attrezzi v5: corpo + attrezzo separati (Muse) */")
+"  if((tool==='axe'||tool==='pick')&&sw!=null){\n    {var __nk=(pf==='mar:'?'mar:':'cap:')+'np-presa-'+(v==='profilo'?'profilo-destro':v);if(npOk(__nk))return {k:__nk,nf:v==='profilo'?0:1,np:1}}\n    /* attrezzi v5: corpo + attrezzo separati (Muse) */")
 rep("  g.scale(FLX*KF,KF);\n  let n,hp,ang;const RIGU=",
 "  g.scale(FLX*KF,KF);\n  const NPM=MZ&&MZ.np&&sw!=null?RIGNPA(sw,side):null;if(NPM){g.rotate(NPM.lean);g.translate(0,NPM.dip)}\n  let n,hp,ang;const RIGU=")
 rep("  if(tool&&!back&&!MZ)ht();\n  g.restore();\n}",
