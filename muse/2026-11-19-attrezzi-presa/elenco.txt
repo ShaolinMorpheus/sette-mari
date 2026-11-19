@@ -1,0 +1,13 @@
+ascia-destra.png
+ascia.png
+marinaio-carica-fronte.png
+marinaio-carica-profilo-destro.png
+marinaio-colpo-fronte.png
+marinaio-colpo-profilo-destro.png
+marinaio-presa-fronte.png
+marinaio-presa-profilo-destro.png
+marinaio-presa-profilo-sinistro.png
+martello.png
+mestolo.png
+piccone.png
+punti.json

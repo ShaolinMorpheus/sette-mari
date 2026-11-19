@@ -1,0 +1,86 @@
+{
+ "ascia": {
+  "file": "ascia.png",
+  "tela": [
+   88,
+   240
+  ],
+  "presa": [
+   65,
+   109
+  ],
+  "lunghezza_manico_px": 174,
+  "inizio_manico_y": 66,
+  "testa_a": "sinistra (lama)",
+  "file_testa_a_destra": "ascia-destra.png",
+  "presa_testa_a_destra": [
+   22,
+   109
+  ]
+ },
+ "piccone": {
+  "file": "piccone.png",
+  "tela": [
+   159,
+   240
+  ],
+  "presa": [
+   78,
+   90
+  ],
+  "lunghezza_manico_px": 199,
+  "inizio_manico_y": 41,
+  "testa_a": "simmetrica, una sola versione"
+ },
+ "martello": {
+  "file": "martello.png",
+  "tela": [
+   84,
+   240
+  ],
+  "presa": [
+   41,
+   99
+  ],
+  "lunghezza_manico_px": 188,
+  "inizio_manico_y": 52,
+  "testa_a": "simmetrica, una sola versione"
+ },
+ "mestolo": {
+  "file": "mestolo.png",
+  "tela": [
+   65,
+   240
+  ],
+  "presa": [
+   32,
+   104
+  ],
+  "lunghezza_manico_px": 181,
+  "inizio_manico_y": 59,
+  "testa_a": "simmetrica, una sola versione"
+ },
+ "pose_presa_marinaio": {
+  "marinaio-presa-fronte.png": {
+   "pugno": [
+    93,
+    197
+   ],
+   "nota": "pugno destro in avanti verso chi guarda, altezza pancia; misura a occhio ±8 px"
+  },
+  "marinaio-presa-profilo-destro.png": {
+   "pugno": [
+    223,
+    165
+   ],
+   "nota": "pugno in avanti ad altezza petto; misura a occhio ±8 px"
+  },
+  "marinaio-presa-profilo-sinistro.png": {
+   "pugno": [
+    112,
+    165
+   ],
+   "nota": "specchiata dalla destra"
+  }
+ }
+}
