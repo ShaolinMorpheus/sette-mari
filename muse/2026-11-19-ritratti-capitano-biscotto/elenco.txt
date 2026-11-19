@@ -1,0 +1,12 @@
+ritratto-biscotto-felice.png
+ritratto-biscotto-neutro.png
+ritratto-biscotto-preoccupato.png
+ritratto-biscotto-serio.png
+ritratto-biscotto-sorpreso.png
+ritratto-biscotto-triste.png
+ritratto-capitano-marinaio-felice.png
+ritratto-capitano-marinaio-neutro.png
+ritratto-capitano-marinaio-preoccupato.png
+ritratto-capitano-marinaio-serio.png
+ritratto-capitano-marinaio-sorpreso.png
+ritratto-capitano-marinaio-triste.png
