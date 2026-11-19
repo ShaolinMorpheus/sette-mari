@@ -21,18 +21,20 @@ Tela 336x376, piedi sulla riga del marinaio, fattori invariati.
 Questi fermi sono i riferimenti per la camminata (parte B).
 
 ## Limiti dichiarati
-- FERRO: il rifacimento del viso (barba corta del tutto grigia)
-  NON e' riuscito in questa sessione per un errore del
-  generatore. Nel confronto c'e' il suo viso attuale, che gia'
-  differisce dal marinaio (viso lungo e squadrato, mascella
-  forte, cicatrice, sopracciglia dure, barba corta scura con
-  fili grigi): manca solo la barba piu' grigia della specifica.
-  Da rifare su richiesta.
+- FERRO: rifatto il 19 nov su richiesta (il primo tentativo
+  era fallito per un errore del generatore). Il nuovo
+  `ferro-fronte-fermo.png` in questa cartella ha il viso
+  lungo e squadrato, mascella forte, cicatrice, sopracciglia
+  dure e la BARBA CORTA GRIGIA della specifica; il foglio
+  di confronto e' stato aggiornato con la nuova testa.
+  Nota: la camminata di Ferro consegnata il 19 nov usa
+  ancora il viso precedente (barba scura): se il nuovo
+  viso viene approvato, la camminata va rigenerata.
 - La testa del marinaio nel foglio di confronto e' ritagliata
   dal suo frame master, che ha fondo verde chiaro pieno: e' un
   foglio di controllo, non un pezzo di gioco.
 - Nives nel nuovo fermo legge giovane: tratti e fuliggine sono
   quelli della specifica.
 
-STATO: pronto (parte A: 3 fermi nuovi + foglio di confronto;
-viso di Ferro da rifare, vedi limiti)
+STATO: pronto (parte A completa: 4 fermi nuovi + foglio
+di confronto aggiornato)
