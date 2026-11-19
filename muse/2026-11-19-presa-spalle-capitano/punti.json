@@ -1,0 +1,30 @@
+{
+ "marinaio-presa-spalle.png": {
+  "pugno": [
+   215,
+   235
+  ],
+  "nota": "pugno destro visibile di lato ad altezza cintura; misura a occhio ±8 px"
+ },
+ "capitano-presa-fronte.png": {
+  "pugno": [
+   105,
+   245
+  ],
+  "nota": "pugno destro in avanti verso chi guarda, altezza pancia; misura a occhio ±8 px"
+ },
+ "capitano-presa-spalle.png": {
+  "pugno": [
+   277,
+   250
+  ],
+  "nota": "pugno destro visibile di lato ad altezza cintura; misura a occhio ±8 px"
+ },
+ "capitano-presa-profilo-destro.png": {
+  "pugno": [
+   277,
+   245
+  ],
+  "nota": "pugno in avanti ad altezza pancia; misura a occhio ±8 px"
+ }
+}

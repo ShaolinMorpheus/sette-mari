@@ -1,0 +1,5 @@
+capitano-presa-fronte.png
+capitano-presa-profilo-destro.png
+capitano-presa-spalle.png
+marinaio-presa-spalle.png
+punti.json
