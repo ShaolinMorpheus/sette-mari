@@ -84,6 +84,6 @@ Già fatto: workflow AAB (`build-play.yml`, versionCode = numero di esecuzione),
 14. Tempi: la revisione di Google può durare giorni e il test chiuso 14 giorni. Meglio far partire il test appena c'è una build con Firebase/UMP/AdMob (ID di prova) e continuare ad aggiungere contenuti con aggiornamenti al test mentre i giorni passano.
 15. iPhone: oggi gli amici giocano dal sito Netlify. Per l'App Store servono un account Apple a pagamento e una build su Mac o cloud: decidere dopo il lancio su Android.
 
-## 7. Strategia proposta (da confermare con Davide)
+## 7. Decisione di Davide (20 nov 2026)
 
-Lancio a due tempi, come da piano iniziale e dalla scheda (che dice «due capitoli giocabili»): Capitoli 1–2 al lancio, Capitolo 3 come primo aggiornamento, Capitolo 4 (chiusura della Stagione 1) come secondo. Il test chiuso corre in parallelo al lavoro sulla storia.
+Al lancio devono essere giocabili TUTTI e quattro i capitoli (non il lancio a due tempi proposto prima). Quindi la storia (25 missioni del piano in `muse/2026-11-16-sistemazione-capitoli/`) e i disegni (`muse/2026-11-20-richieste-storia-completa/PROMPT.md`) sono sul percorso del lancio. Il test chiuso di 14 giorni resta il collo di bottiglia: far partire una build di test appena possibile e aggiornarla durante i giorni. La scheda Play va aggiornata (ora dice «due capitoli giocabili»).

@@ -20,7 +20,7 @@ Sei un pirata naufragato dopo la notte più lunga della tua vita. Il tuo pappaga
 • Funziona anche senza internet. Salvataggi sul dispositivo (3 slot)
 • Italiano, English, Deutsch, Español, Français
 
-Al momento sono giocabili due capitoli; la storia continua ed è in sviluppo.
+(DA AGGIORNARE al lancio: ora tutti e quattro i capitoli saranno giocabili.)
 
 Il gioco è gratuito. Contiene annunci: puoi scegliere di guardare un video facoltativo per ricevere una scorta in regalo.
 
