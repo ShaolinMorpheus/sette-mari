@@ -1,0 +1,15 @@
+ancore.json
+barchetta-attraccata-destra.png
+barchetta-attraccata-sinistra.png
+barchetta-fronte.png
+barchetta-navigazione-destra.png
+barchetta-navigazione-sinistra.png
+barchetta-ombra.png
+barchetta-scia.png
+barchetta-spalle.png
+cartello-moneta.png
+merce-barile.png
+merce-baule-aperto.png
+merce-cassa.png
+merce-sacco.png
+merce-tappeto.png
