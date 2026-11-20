@@ -1,0 +1,13 @@
+banco-nives-aperto.png
+banco-nives-chiuso.png
+cisterna-riparata.png
+cisterna-rotta.png
+icona-asse-scafo.png
+insegna-nives-appesa.png
+insegna-nives-non-appesa.png
+opossum-fermo.png
+opossum-mangia.png
+opossum-scappa.png
+procione-fermo.png
+procione-mangia.png
+procione-scappa.png
