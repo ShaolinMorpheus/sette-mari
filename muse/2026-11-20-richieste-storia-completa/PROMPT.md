@@ -29,8 +29,8 @@ Regole di sempre: stile e saturazione della mappa nuova, nessun alone, `.png.b64
 7. **Diario di bordo di Giacomo** (pagina scritta a mano, icona) e **campanella di bordo** (icona, piu' versione appesa all'albero).
 
 ## Blocco D — Il Cormorano: i due vivi (scelta di Davide)
-Dalle 5 bozze (`2026-11-18-personaggi-nominati`) servono **due personaggi completi**, i «due vivi»: **n. 3** (bandana gialla, giacca blu) e **n. 5** (giovane riccio) — salvo cambio di Davide. Per ciascuno: fermo, camminata a 6 passi in 4 direzioni (fronte, spalle, profilo destro e sinistro), 6 ritratti per i dialoghi, stesse regole dei personaggi del campo (tela 336x376, gambe che si muovono bene, stessa testa in tutte le viste). Controlla sul bordo della tela che non ci siano pezzi di altre figure.
-Per gli altri tre (**n. 4** il morto sepolto, **n. 1** e **n. 2** dispersi) basta la sagoma gia' consegnata e una versione «ritratto in cornice» piccola per la pagina del Diario.
+Dalle 5 bozze (`2026-11-18-personaggi-nominati`) servono **due personaggi completi**, i «due vivi»: **n. 3** (bandana gialla, giacca blu) e **n. 5** (giovane riccio) — CONFERMATI da Davide (20 nov). Per ciascuno: fermo, camminata a 6 passi in 4 direzioni (fronte, spalle, profilo destro e sinistro), 6 ritratti per i dialoghi, stesse regole dei personaggi del campo (tela 336x376, gambe che si muovono bene, stessa testa in tutte le viste). Controlla sul bordo della tela che non ci siano pezzi di altre figure.
+Per gli altri tre (confermato da Davide): **n. 4** il vecchio e' il morto sepolto (nessuna scena di morte: solo sagoma e ritratto in cornice piccola, sobrio, per la pagina del Diario), **n. 1** e **n. 2** sono i dispersi, aperti per la Stagione 2 (sagoma e ritratto in cornice piccola).
 
 ## Blocco E — Interni ed esterni ancora da sostituire
 - **Interni delle capanne** (pavimento, pareti, letto, tavolo, scaffali, finestra con luce), **fuoco del campo** (4–6 frame), **cuccia e cesto** nei due stati.
