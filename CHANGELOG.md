@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Pappagallo più zitto e freccia verso l'isola
+- Biscotto parla molto meno: le battute spontanee sono tre volte più rare e le altre (dopo costruzioni, scoperte ecc.) non possono più susseguirsi a meno di 50 secondi; restano sempre gli avvisi utili (torcia, tempesta).
+- Mare tra le due isole: dopo il cambio di zona compare una freccia dorata sul bordo dello schermo con la scritta «Isola» (o «Baia dei Fuggiaschi»), anche sulla minimappa, e un messaggio che dice in che direzione andare. Sparisce quando sei vicino. Il testo «Direzione: ovest, circa N passi» nel riquadro obiettivo la accompagna.
+- Camminate corrette di Muse: controllate, in attesa del tuo ok prima di pubblicarle.
+
 ## Ferro nuovo, Pip e Dodo, cappellini di Biscotto
 - Ferro cammina col viso nuovo e la barba corta grigia (camminata v2 di Muse).
 - Pip e Dodo hanno corpo e camminata a 6 pose di Muse nei sotterranei del galeone (Pip piu' basso come Tito). Il ciclo di passi di guardie e alleati e' piu' veloce, e l'attacco dei soldati alterna ora tre pose invece di due.
