@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## Livello nel riquadro, scala del Pino Alto e rane che saltano
+- Il livello («Lv 15») non esce più dal riquadro dell'orologio, anche con «Giorno», luna e tempesta insieme.
+- Salendo sul Pino Alto il personaggio ora sta sulla scala di corda e non più un po' a sinistra.
+- Le rane non saltano più sul posto: si spostano a balzi attorno allo stagno, rivolte nel verso del salto, con le zampe che si allungano.
+
 ## Pappagallo più zitto e freccia verso l'isola
 - Biscotto parla molto meno: le battute spontanee sono tre volte più rare e le altre (dopo costruzioni, scoperte ecc.) non possono più susseguirsi a meno di 50 secondi; restano sempre gli avvisi utili (torcia, tempesta).
 - Mare tra le due isole: dopo il cambio di zona compare una freccia dorata sul bordo dello schermo con la scritta «Isola» (o «Baia dei Fuggiaschi»), anche sulla minimappa, e un messaggio che dice in che direzione andare. Sparisce quando sei vicino. Il testo «Direzione: ovest, circa N passi» nel riquadro obiettivo la accompagna.
