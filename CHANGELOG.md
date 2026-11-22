@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v121 — Pino Alto: bordo sistemato
+- Tolto il contorno salmone/arancione attorno alla chioma del Pino Alto: ora il bordo è verde scuro, come il contorno interno.
+
+
 ## v120 — Messaggio iniziale più tardi
 - A inizio partita il messaggio sul Cormorano («la gola brucia…») non compare più dopo pochi passi: esce dopo circa un minuto di gioco o dopo aver camminato un bel tratto dalla spiaggia.
 
