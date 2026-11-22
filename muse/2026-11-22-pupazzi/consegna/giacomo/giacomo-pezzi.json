@@ -1,0 +1,792 @@
+{
+ "personaggio": "giacomo",
+ "tela": [
+  336,
+  376
+ ],
+ "nota": "coordinate in pixel della tela 336x376 del fermo attuale; 'cerniera' e' il punto di rotazione dentro il file del pezzo; 'cerniera_canvas' lo stesso punto sulla tela a riposo; 'genitore' indica la gerarchia per le rotazioni composte; la caviglia e' data come riferimento: stinco e stivale sono un pezzo unico",
+ "viste": {
+  "fronte": {
+   "giunti": {
+    "collo": [
+     167,
+     178
+    ],
+    "spalla-sinistra": [
+     90,
+     183
+    ],
+    "spalla-destra": [
+     244,
+     183
+    ],
+    "gomito-sinistro": [
+     90,
+     244
+    ],
+    "gomito-destra": [
+     244,
+     244
+    ],
+    "anca-sinistra": [
+     127,
+     262
+    ],
+    "anca-destra": [
+     207,
+     262
+    ],
+    "ginocchio-sinistro": [
+     127,
+     297
+    ],
+    "ginocchio-destra": [
+     207,
+     297
+    ],
+    "caviglia-sinistra": [
+     127,
+     357
+    ],
+    "caviglia-destra": [
+     207,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "giacomo-fronte-stinco-sinistro.png",
+     "offset": [
+      85,
+      286
+     ],
+     "dimensione": [
+      86,
+      89
+     ],
+     "cerniera": [
+      42,
+      11
+     ],
+     "cerniera_canvas": [
+      127,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "giacomo-fronte-stinco-destro.png",
+     "offset": [
+      163,
+      286
+     ],
+     "dimensione": [
+      78,
+      90
+     ],
+     "cerniera": [
+      44,
+      11
+     ],
+     "cerniera_canvas": [
+      207,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "giacomo-fronte-coscia-sinistra.png",
+     "offset": [
+      75,
+      244
+     ],
+     "dimensione": [
+      98,
+      68
+     ],
+     "cerniera": [
+      52,
+      18
+     ],
+     "cerniera_canvas": [
+      127,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "giacomo-fronte-coscia-destra.png",
+     "offset": [
+      161,
+      244
+     ],
+     "dimensione": [
+      96,
+      68
+     ],
+     "cerniera": [
+      46,
+      18
+     ],
+     "cerniera_canvas": [
+      207,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "giacomo-fronte-busto.png",
+     "offset": [
+      71,
+      158
+     ],
+     "dimensione": [
+      193,
+      116
+     ],
+     "cerniera": [
+      96,
+      108
+     ],
+     "cerniera_canvas": [
+      167,
+      266
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "giacomo-fronte-testa.png",
+     "offset": [
+      76,
+      0
+     ],
+     "dimensione": [
+      192,
+      188
+     ],
+     "cerniera": [
+      91,
+      178
+     ],
+     "cerniera_canvas": [
+      167,
+      178
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "giacomo-fronte-braccio-alto-sinistro.png",
+     "offset": [
+      67,
+      169
+     ],
+     "dimensione": [
+      50,
+      83
+     ],
+     "cerniera": [
+      23,
+      14
+     ],
+     "cerniera_canvas": [
+      90,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "giacomo-fronte-braccio-alto-destro.png",
+     "offset": [
+      218,
+      169
+     ],
+     "dimensione": [
+      50,
+      83
+     ],
+     "cerniera": [
+      26,
+      14
+     ],
+     "cerniera_canvas": [
+      244,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "giacomo-fronte-avambraccio-sinistro.png",
+     "offset": [
+      69,
+      241
+     ],
+     "dimensione": [
+      58,
+      56
+     ],
+     "cerniera": [
+      21,
+      3
+     ],
+     "cerniera_canvas": [
+      90,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "giacomo-fronte-avambraccio-destro.png",
+     "offset": [
+      208,
+      241
+     ],
+     "dimensione": [
+      49,
+      56
+     ],
+     "cerniera": [
+      36,
+      3
+     ],
+     "cerniera_canvas": [
+      244,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  },
+  "profilo-destro": {
+   "giunti": {
+    "collo": [
+     166,
+     162
+    ],
+    "spalla-davanti": [
+     160,
+     180
+    ],
+    "spalla-dietro": [
+     152,
+     180
+    ],
+    "gomito-davanti": [
+     162,
+     248
+    ],
+    "gomito-dietro": [
+     154,
+     248
+    ],
+    "anca-davanti": [
+     171,
+     259
+    ],
+    "anca-dietro": [
+     131,
+     259
+    ],
+    "ginocchio-davanti": [
+     173,
+     301
+    ],
+    "ginocchio-dietro": [
+     131,
+     301
+    ],
+    "caviglia-davanti": [
+     179,
+     357
+    ],
+    "caviglia-dietro": [
+     133,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-dietro": {
+     "file": "giacomo-profilo-destro-stinco-dietro.png",
+     "offset": [
+      112,
+      286
+     ],
+     "dimensione": [
+      48,
+      90
+     ],
+     "cerniera": [
+      19,
+      15
+     ],
+     "cerniera_canvas": [
+      131,
+      301
+     ],
+     "ordine": 1,
+     "genitore": "coscia-dietro"
+    },
+    "coscia-dietro": {
+     "file": "giacomo-profilo-destro-coscia-dietro.png",
+     "offset": [
+      112,
+      241
+     ],
+     "dimensione": [
+      48,
+      82
+     ],
+     "cerniera": [
+      19,
+      18
+     ],
+     "cerniera_canvas": [
+      131,
+      259
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "stinco-davanti": {
+     "file": "giacomo-profilo-destro-stinco-davanti.png",
+     "offset": [
+      144,
+      286
+     ],
+     "dimensione": [
+      75,
+      90
+     ],
+     "cerniera": [
+      29,
+      15
+     ],
+     "cerniera_canvas": [
+      173,
+      301
+     ],
+     "ordine": 3,
+     "genitore": "coscia-davanti"
+    },
+    "coscia-davanti": {
+     "file": "giacomo-profilo-destro-coscia-davanti.png",
+     "offset": [
+      144,
+      241
+     ],
+     "dimensione": [
+      75,
+      82
+     ],
+     "cerniera": [
+      27,
+      18
+     ],
+     "cerniera_canvas": [
+      171,
+      259
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-dietro": {
+     "file": "giacomo-profilo-destro-braccio-alto-dietro.png",
+     "offset": [
+      106,
+      162
+     ],
+     "dimensione": [
+      96,
+      94
+     ],
+     "cerniera": [
+      46,
+      18
+     ],
+     "cerniera_canvas": [
+      152,
+      180
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "busto"
+    },
+    "avambraccio-dietro": {
+     "file": "giacomo-profilo-destro-avambraccio-dietro.png",
+     "offset": [
+      106,
+      237
+     ],
+     "dimensione": [
+      96,
+      71
+     ],
+     "cerniera": [
+      48,
+      11
+     ],
+     "cerniera_canvas": [
+      154,
+      248
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "braccio-alto-dietro"
+    },
+    "busto": {
+     "file": "giacomo-profilo-destro-busto.png",
+     "offset": [
+      72,
+      128
+     ],
+     "dimensione": [
+      181,
+      113
+     ],
+     "cerniera": [
+      90,
+      139
+     ],
+     "cerniera_canvas": [
+      162,
+      267
+     ],
+     "ordine": 6,
+     "genitore": null
+    },
+    "testa": {
+     "file": "giacomo-profilo-destro-testa.png",
+     "offset": [
+      72,
+      0
+     ],
+     "dimensione": [
+      191,
+      188
+     ],
+     "cerniera": [
+      94,
+      162
+     ],
+     "cerniera_canvas": [
+      166,
+      162
+     ],
+     "ordine": 7,
+     "genitore": "busto"
+    },
+    "braccio-alto-davanti": {
+     "file": "giacomo-profilo-destro-braccio-alto-davanti.png",
+     "offset": [
+      114,
+      162
+     ],
+     "dimensione": [
+      96,
+      94
+     ],
+     "cerniera": [
+      46,
+      18
+     ],
+     "cerniera_canvas": [
+      160,
+      180
+     ],
+     "ordine": 8,
+     "genitore": "busto"
+    },
+    "avambraccio-davanti": {
+     "file": "giacomo-profilo-destro-avambraccio-davanti.png",
+     "offset": [
+      114,
+      237
+     ],
+     "dimensione": [
+      96,
+      71
+     ],
+     "cerniera": [
+      48,
+      11
+     ],
+     "cerniera_canvas": [
+      162,
+      248
+     ],
+     "ordine": 9,
+     "genitore": "braccio-alto-davanti"
+    }
+   }
+  },
+  "spalle": {
+   "giunti": {
+    "collo": [
+     167,
+     207
+    ],
+    "spalla-sinistra": [
+     100,
+     222
+    ],
+    "spalla-destra": [
+     234,
+     222
+    ],
+    "gomito-sinistro": [
+     100,
+     286
+    ],
+    "gomito-destra": [
+     234,
+     286
+    ],
+    "anca-sinistra": [
+     132,
+     305
+    ],
+    "anca-destra": [
+     202,
+     305
+    ],
+    "ginocchio-sinistro": [
+     132,
+     331
+    ],
+    "ginocchio-destra": [
+     202,
+     331
+    ],
+    "caviglia-sinistra": [
+     132,
+     357
+    ],
+    "caviglia-destra": [
+     202,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "giacomo-spalle-stinco-sinistro.png",
+     "offset": [
+      111,
+      320
+     ],
+     "dimensione": [
+      60,
+      55
+     ],
+     "cerniera": [
+      21,
+      11
+     ],
+     "cerniera_canvas": [
+      132,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "giacomo-spalle-stinco-destro.png",
+     "offset": [
+      163,
+      320
+     ],
+     "dimensione": [
+      59,
+      56
+     ],
+     "cerniera": [
+      39,
+      11
+     ],
+     "cerniera_canvas": [
+      202,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "giacomo-spalle-coscia-sinistra.png",
+     "offset": [
+      95,
+      286
+     ],
+     "dimensione": [
+      78,
+      60
+     ],
+     "cerniera": [
+      37,
+      19
+     ],
+     "cerniera_canvas": [
+      132,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "giacomo-spalle-coscia-destra.png",
+     "offset": [
+      161,
+      286
+     ],
+     "dimensione": [
+      82,
+      60
+     ],
+     "cerniera": [
+      41,
+      19
+     ],
+     "cerniera_canvas": [
+      202,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "giacomo-spalle-busto.png",
+     "offset": [
+      78,
+      196
+     ],
+     "dimensione": [
+      179,
+      127
+     ],
+     "cerniera": [
+      89,
+      113
+     ],
+     "cerniera_canvas": [
+      167,
+      309
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "giacomo-spalle-testa.png",
+     "offset": [
+      74,
+      0
+     ],
+     "dimensione": [
+      185,
+      218
+     ],
+     "cerniera": [
+      93,
+      207
+     ],
+     "cerniera_canvas": [
+      167,
+      207
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "giacomo-spalle-braccio-alto-sinistro.png",
+     "offset": [
+      74,
+      203
+     ],
+     "dimensione": [
+      47,
+      87
+     ],
+     "cerniera": [
+      26,
+      19
+     ],
+     "cerniera_canvas": [
+      100,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "giacomo-spalle-braccio-alto-destro.png",
+     "offset": [
+      214,
+      203
+     ],
+     "dimensione": [
+      47,
+      87
+     ],
+     "cerniera": [
+      20,
+      19
+     ],
+     "cerniera_canvas": [
+      234,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "giacomo-spalle-avambraccio-sinistro.png",
+     "offset": [
+      81,
+      274
+     ],
+     "dimensione": [
+      49,
+      64
+     ],
+     "cerniera": [
+      19,
+      12
+     ],
+     "cerniera_canvas": [
+      100,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "giacomo-spalle-avambraccio-destro.png",
+     "offset": [
+      205,
+      274
+     ],
+     "dimensione": [
+      50,
+      64
+     ],
+     "cerniera": [
+      29,
+      12
+     ],
+     "cerniera_canvas": [
+      234,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  }
+ }
+}
