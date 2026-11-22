@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## v133 — Spostamenti mappa e punta della Sirena
+- Alberi, forziere e oggetti spostati dall'editor (lt_pg3, p41, p39, p8, m10, lt_cr7, d1) ora nel gioco.
+- Il taglio della Sirena si riduce verso la prua: la punta non perde più il pezzo.
+
+
 ## v132 — Sirena infossata nel terreno
 - Niente sabbia sovrapposta: la nave (v2 senza sabbia) viene tagliata lungo la chiglia con bordo morbido, quindi sembra entrare nel terreno vero, con il suo colore.
 
