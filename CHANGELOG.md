@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v126 — Sirena infossata nella sabbia (Muse)
+- Montato il letto di sabbia di Muse sopra la parte bassa dello scafo, tagliato ai lati: niente più striscia di sabbia verso l'acqua. Tolta l'ombra provvisoria.
+
+
 ## v125 — Sirena nella posizione scelta, collisione solo sullo scafo
 - La nave dei Fuggiaschi sta dove l'hai messa tu nell'editor; tolto il cumulo di sabbia provvisorio (resta solo un'ombra a terra).
 - Collisione solo sullo scafo: si cammina liberamente tutto intorno, davanti e vicino alla nave.
