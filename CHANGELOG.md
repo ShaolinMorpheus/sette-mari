@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v127 — Sabbia della Sirena v2 (Muse)
+- La sabbia sotto la nave ora usa la texture vera del terreno (sassetti, conchiglie, granelli), con i toni accordati a quelli del gioco.
+
+
 ## v126 — Sirena infossata nella sabbia (Muse)
 - Montato il letto di sabbia di Muse sopra la parte bassa dello scafo, tagliato ai lati: niente più striscia di sabbia verso l'acqua. Tolta l'ombra provvisoria.
 
