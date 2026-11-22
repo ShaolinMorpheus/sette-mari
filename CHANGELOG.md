@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v119 — Pino Alto nuovo di Muse
+- Il Pino Alto della vedetta è stato rifatto da Muse (tronco largo, chioma piena, stesso stile dei pini del gioco). Visibile con Grafica di prova + Mappa di prova.
+- Ombra radicata a terra: ombra di contatto sotto le radici più ombra proiettata, così l'albero non sembra volare.
+- Scala e piattaforma allineate al tronco; la salita funziona come prima.
+
+
 ## v118 — Granchio e rana di Muse (22 nov)
 Con «Grafica di prova» + «Mappa di prova»:
 - Granchio nuovo: cammina, scappa, si spaventa e ogni tanto scava; rana nuova: salta, respira e gracida.
