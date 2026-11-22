@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v131 — Sirena incagliata (Muse)
+- Nave e sabbia in un'unica immagine: fascia stretta lungo la chiglia, prua interrata, scaletta e timone coperti. Sostituisce la sabbia fatta nel codice.
+
+
 ## v130 — Sirena: sabbia che copre tutto lo scafo
 - Sabbia generata nel gioco (stessa grafica del terreno), segue la chiglia fino alla prua rialzata, bordi sfumati, niente lastra.
 
