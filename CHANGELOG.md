@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v130 — Sirena: sabbia che copre tutto lo scafo
+- Sabbia generata nel gioco (stessa grafica del terreno), segue la chiglia fino alla prua rialzata, bordi sfumati, niente lastra.
+
+
 ## v128 — Sabbia della Sirena v3 (Muse)
 - La sabbia ora corre sotto tutto lo scafo fino alla punta della prua. Colore accordato alla spiaggia vicina.
 
