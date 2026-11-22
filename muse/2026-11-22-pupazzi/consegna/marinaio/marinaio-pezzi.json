@@ -1,0 +1,792 @@
+{
+ "personaggio": "marinaio",
+ "tela": [
+  336,
+  376
+ ],
+ "nota": "coordinate in pixel della tela 336x376 del fermo attuale; 'cerniera' e' il punto di rotazione dentro il file del pezzo; 'cerniera_canvas' lo stesso punto sulla tela a riposo; 'genitore' indica la gerarchia per le rotazioni composte; la caviglia e' data come riferimento: stinco e stivale sono un pezzo unico",
+ "viste": {
+  "fronte": {
+   "giunti": {
+    "collo": [
+     165,
+     201
+    ],
+    "spalla-sinistra": [
+     117,
+     205
+    ],
+    "spalla-destra": [
+     213,
+     205
+    ],
+    "gomito-sinistro": [
+     117,
+     251
+    ],
+    "gomito-destra": [
+     213,
+     251
+    ],
+    "anca-sinistra": [
+     140,
+     265
+    ],
+    "anca-destra": [
+     190,
+     265
+    ],
+    "ginocchio-sinistro": [
+     140,
+     291
+    ],
+    "ginocchio-destra": [
+     190,
+     291
+    ],
+    "caviglia-sinistra": [
+     140,
+     337
+    ],
+    "caviglia-destra": [
+     190,
+     337
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "marinaio-fronte-stinco-sinistro.png",
+     "offset": [
+      117,
+      282
+     ],
+     "dimensione": [
+      52,
+      69
+     ],
+     "cerniera": [
+      23,
+      9
+     ],
+     "cerniera_canvas": [
+      140,
+      291
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "marinaio-fronte-stinco-destro.png",
+     "offset": [
+      161,
+      282
+     ],
+     "dimensione": [
+      51,
+      68
+     ],
+     "cerniera": [
+      29,
+      9
+     ],
+     "cerniera_canvas": [
+      190,
+      291
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "marinaio-fronte-coscia-sinistra.png",
+     "offset": [
+      109,
+      251
+     ],
+     "dimensione": [
+      62,
+      51
+     ],
+     "cerniera": [
+      31,
+      14
+     ],
+     "cerniera_canvas": [
+      140,
+      265
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "marinaio-fronte-coscia-destra.png",
+     "offset": [
+      159,
+      251
+     ],
+     "dimensione": [
+      61,
+      51
+     ],
+     "cerniera": [
+      31,
+      14
+     ],
+     "cerniera_canvas": [
+      190,
+      265
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "marinaio-fronte-busto.png",
+     "offset": [
+      105,
+      185
+     ],
+     "dimensione": [
+      120,
+      89
+     ],
+     "cerniera": [
+      60,
+      84
+     ],
+     "cerniera_canvas": [
+      165,
+      269
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "marinaio-fronte-testa.png",
+     "offset": [
+      102,
+      65
+     ],
+     "dimensione": [
+      126,
+      143
+     ],
+     "cerniera": [
+      63,
+      136
+     ],
+     "cerniera_canvas": [
+      165,
+      201
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "marinaio-fronte-braccio-alto-sinistro.png",
+     "offset": [
+      104,
+      194
+     ],
+     "dimensione": [
+      30,
+      63
+     ],
+     "cerniera": [
+      13,
+      11
+     ],
+     "cerniera_canvas": [
+      117,
+      205
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "marinaio-fronte-braccio-alto-destro.png",
+     "offset": [
+      196,
+      194
+     ],
+     "dimensione": [
+      29,
+      63
+     ],
+     "cerniera": [
+      17,
+      11
+     ],
+     "cerniera_canvas": [
+      213,
+      205
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "marinaio-fronte-avambraccio-sinistro.png",
+     "offset": [
+      109,
+      248
+     ],
+     "dimensione": [
+      31,
+      43
+     ],
+     "cerniera": [
+      8,
+      3
+     ],
+     "cerniera_canvas": [
+      117,
+      251
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "marinaio-fronte-avambraccio-destro.png",
+     "offset": [
+      190,
+      248
+     ],
+     "dimensione": [
+      30,
+      43
+     ],
+     "cerniera": [
+      23,
+      3
+     ],
+     "cerniera_canvas": [
+      213,
+      251
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  },
+  "profilo-destro": {
+   "giunti": {
+    "collo": [
+     172,
+     186
+    ],
+    "spalla-davanti": [
+     168,
+     200
+    ],
+    "spalla-dietro": [
+     160,
+     200
+    ],
+    "gomito-davanti": [
+     170,
+     252
+    ],
+    "gomito-dietro": [
+     162,
+     252
+    ],
+    "anca-davanti": [
+     176,
+     261
+    ],
+    "anca-dietro": [
+     150,
+     261
+    ],
+    "ginocchio-davanti": [
+     177,
+     292
+    ],
+    "ginocchio-dietro": [
+     150,
+     292
+    ],
+    "caviglia-davanti": [
+     183,
+     336
+    ],
+    "caviglia-dietro": [
+     152,
+     336
+    ]
+   },
+   "pezzi": {
+    "stinco-dietro": {
+     "file": "marinaio-profilo-destro-stinco-dietro.png",
+     "offset": [
+      146,
+      281
+     ],
+     "dimensione": [
+      26,
+      69
+     ],
+     "cerniera": [
+      4,
+      11
+     ],
+     "cerniera_canvas": [
+      150,
+      292
+     ],
+     "ordine": 1,
+     "genitore": "coscia-dietro"
+    },
+    "coscia-dietro": {
+     "file": "marinaio-profilo-destro-coscia-dietro.png",
+     "offset": [
+      130,
+      246
+     ],
+     "dimensione": [
+      42,
+      64
+     ],
+     "cerniera": [
+      20,
+      15
+     ],
+     "cerniera_canvas": [
+      150,
+      261
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "stinco-davanti": {
+     "file": "marinaio-profilo-destro-stinco-davanti.png",
+     "offset": [
+      156,
+      281
+     ],
+     "dimensione": [
+      50,
+      68
+     ],
+     "cerniera": [
+      21,
+      11
+     ],
+     "cerniera_canvas": [
+      177,
+      292
+     ],
+     "ordine": 3,
+     "genitore": "coscia-davanti"
+    },
+    "coscia-davanti": {
+     "file": "marinaio-profilo-destro-coscia-davanti.png",
+     "offset": [
+      156,
+      246
+     ],
+     "dimensione": [
+      44,
+      64
+     ],
+     "cerniera": [
+      20,
+      15
+     ],
+     "cerniera_canvas": [
+      176,
+      261
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-dietro": {
+     "file": "marinaio-profilo-destro-braccio-alto-dietro.png",
+     "offset": [
+      130,
+      186
+     ],
+     "dimensione": [
+      62,
+      72
+     ],
+     "cerniera": [
+      30,
+      14
+     ],
+     "cerniera_canvas": [
+      160,
+      200
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "busto"
+    },
+    "avambraccio-dietro": {
+     "file": "marinaio-profilo-destro-avambraccio-dietro.png",
+     "offset": [
+      130,
+      243
+     ],
+     "dimensione": [
+      62,
+      55
+     ],
+     "cerniera": [
+      32,
+      9
+     ],
+     "cerniera_canvas": [
+      162,
+      252
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "braccio-alto-dietro"
+    },
+    "busto": {
+     "file": "marinaio-profilo-destro-busto.png",
+     "offset": [
+      129,
+      160
+     ],
+     "dimensione": [
+      96,
+      86
+     ],
+     "cerniera": [
+      41,
+      106
+     ],
+     "cerniera_canvas": [
+      170,
+      266
+     ],
+     "ordine": 6,
+     "genitore": null
+    },
+    "testa": {
+     "file": "marinaio-profilo-destro-testa.png",
+     "offset": [
+      111,
+      62
+     ],
+     "dimensione": [
+      125,
+      144
+     ],
+     "cerniera": [
+      61,
+      124
+     ],
+     "cerniera_canvas": [
+      172,
+      186
+     ],
+     "ordine": 7,
+     "genitore": "busto"
+    },
+    "braccio-alto-davanti": {
+     "file": "marinaio-profilo-destro-braccio-alto-davanti.png",
+     "offset": [
+      138,
+      186
+     ],
+     "dimensione": [
+      62,
+      72
+     ],
+     "cerniera": [
+      30,
+      14
+     ],
+     "cerniera_canvas": [
+      168,
+      200
+     ],
+     "ordine": 8,
+     "genitore": "busto"
+    },
+    "avambraccio-davanti": {
+     "file": "marinaio-profilo-destro-avambraccio-davanti.png",
+     "offset": [
+      138,
+      243
+     ],
+     "dimensione": [
+      62,
+      55
+     ],
+     "cerniera": [
+      32,
+      9
+     ],
+     "cerniera_canvas": [
+      170,
+      252
+     ],
+     "ordine": 9,
+     "genitore": "braccio-alto-davanti"
+    }
+   }
+  },
+  "spalle": {
+   "giunti": {
+    "collo": [
+     166,
+     214
+    ],
+    "spalla-sinistra": [
+     123,
+     225
+    ],
+    "spalla-destra": [
+     209,
+     225
+    ],
+    "gomito-sinistro": [
+     123,
+     273
+    ],
+    "gomito-destra": [
+     209,
+     273
+    ],
+    "anca-sinistra": [
+     143,
+     287
+    ],
+    "anca-destra": [
+     189,
+     287
+    ],
+    "ginocchio-sinistro": [
+     143,
+     306
+    ],
+    "ginocchio-destra": [
+     189,
+     306
+    ],
+    "caviglia-sinistra": [
+     143,
+     326
+    ],
+    "caviglia-destra": [
+     189,
+     326
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "marinaio-spalle-stinco-sinistro.png",
+     "offset": [
+      128,
+      298
+     ],
+     "dimensione": [
+      42,
+      42
+     ],
+     "cerniera": [
+      15,
+      8
+     ],
+     "cerniera_canvas": [
+      143,
+      306
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "marinaio-spalle-stinco-destro.png",
+     "offset": [
+      162,
+      298
+     ],
+     "dimensione": [
+      41,
+      42
+     ],
+     "cerniera": [
+      27,
+      8
+     ],
+     "cerniera_canvas": [
+      189,
+      306
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "marinaio-spalle-coscia-sinistra.png",
+     "offset": [
+      128,
+      273
+     ],
+     "dimensione": [
+      44,
+      45
+     ],
+     "cerniera": [
+      15,
+      14
+     ],
+     "cerniera_canvas": [
+      143,
+      287
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "marinaio-spalle-coscia-destra.png",
+     "offset": [
+      160,
+      273
+     ],
+     "dimensione": [
+      43,
+      45
+     ],
+     "cerniera": [
+      29,
+      14
+     ],
+     "cerniera_canvas": [
+      189,
+      287
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "marinaio-spalle-busto.png",
+     "offset": [
+      107,
+      206
+     ],
+     "dimensione": [
+      118,
+      95
+     ],
+     "cerniera": [
+      59,
+      85
+     ],
+     "cerniera_canvas": [
+      166,
+      291
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "marinaio-spalle-testa.png",
+     "offset": [
+      105,
+      60
+     ],
+     "dimensione": [
+      122,
+      162
+     ],
+     "cerniera": [
+      61,
+      154
+     ],
+     "cerniera_canvas": [
+      166,
+      214
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "marinaio-spalle-braccio-alto-sinistro.png",
+     "offset": [
+      106,
+      211
+     ],
+     "dimensione": [
+      30,
+      65
+     ],
+     "cerniera": [
+      17,
+      14
+     ],
+     "cerniera_canvas": [
+      123,
+      225
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "marinaio-spalle-braccio-alto-destro.png",
+     "offset": [
+      196,
+      211
+     ],
+     "dimensione": [
+      29,
+      65
+     ],
+     "cerniera": [
+      13,
+      14
+     ],
+     "cerniera_canvas": [
+      209,
+      225
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "marinaio-spalle-avambraccio-sinistro.png",
+     "offset": [
+      114,
+      264
+     ],
+     "dimensione": [
+      28,
+      48
+     ],
+     "cerniera": [
+      9,
+      9
+     ],
+     "cerniera_canvas": [
+      123,
+      273
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "marinaio-spalle-avambraccio-destro.png",
+     "offset": [
+      190,
+      264
+     ],
+     "dimensione": [
+      26,
+      48
+     ],
+     "cerniera": [
+      19,
+      9
+     ],
+     "cerniera_canvas": [
+      209,
+      273
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  }
+ }
+}
