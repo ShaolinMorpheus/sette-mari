@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v122 — Interni delle capanne di Muse
+- Pavimento e pareti in legno, finestre con luce, letto, scaffale, tavolo rotondo con sgabelli, bauli e tappeti intrecciati: tutti pezzi di Muse (blocco E). Solo con Grafica di prova + Mappa di prova.
+
+
 ## v121 — Pino Alto: bordo sistemato
 - Tolto il contorno salmone/arancione attorno alla chioma del Pino Alto: ora il bordo è verde scuro, come il contorno interno.
 
