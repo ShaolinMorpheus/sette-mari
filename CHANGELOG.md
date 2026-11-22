@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v132 — Sirena infossata nel terreno
+- Niente sabbia sovrapposta: la nave (v2 senza sabbia) viene tagliata lungo la chiglia con bordo morbido, quindi sembra entrare nel terreno vero, con il suo colore.
+
+
 ## v131 — Sirena incagliata (Muse)
 - Nave e sabbia in un'unica immagine: fascia stretta lungo la chiglia, prua interrata, scaletta e timone coperti. Sostituisce la sabbia fatta nel codice.
 
