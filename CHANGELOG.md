@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v128 — Sabbia della Sirena v3 (Muse)
+- La sabbia ora corre sotto tutto lo scafo fino alla punta della prua. Colore accordato alla spiaggia vicina.
+
+
 ## v127 — Sabbia della Sirena v2 (Muse)
 - La sabbia sotto la nave ora usa la texture vera del terreno (sassetti, conchiglie, granelli), con i toni accordati a quelli del gioco.
 
