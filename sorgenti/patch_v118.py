@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Muse 22 nov: granchio e rana animati, Pino Alto (scala spostata accanto al tronco). Alberi/pini/ceppi di Muse non montati.
+# Muse 22 nov: granchio e rana animati. Alberi/pini/ceppi e Pino Alto di Muse non montati.
 # Visibili solo con «Grafica di prova» + «Mappa di prova» come tutti i disegni di Muse.
 import sys,json
 P='/home/claude/work/base_index.html'
@@ -27,8 +27,7 @@ GfxNew.muse22=function(){
       if(!o.noart){const[c2,x2]=mk(lw,lh);x2.drawImage(c,0,0,lw,lh);x2.globalCompositeOperation='source-in';x2.fillStyle='#0e1c0a';x2.fillRect(0,0,lw,lh);s.sh=c2}};
     im.src='data:image/webp;base64,'+MZ22[k];return s};
   // (alberi, pini, ceppi e Pino Maestro di Muse: NON montati, Davide vuole i precedenti)
-  // Pino Alto: 760x1920 -> 190x480; l'asse del tronco (x=298 nel file) va portato a 95; la scala sta a +16 dall'asse
-  SP.lookout=mzArt('pino-alto',190,480,95,476,{dx:20.5,dy:0,dw:190,dh:480,noart:1});
+  // (Pino Alto di Muse: NON montato finche' non viene rifatto con tronco largo e chioma piena)
 };
 """
 rep("/* ---- GRAFICA DI PROVA: sprite d'arte (WebP incorporati) al posto di quelli disegnati a codice ---- */\nGfxNew.art=function(){",

@@ -1,10 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
-## v118 — Pino Alto, granchio e rana di Muse (22 nov)
+## v118 — Granchio e rana di Muse (22 nov)
 Con «Grafica di prova» + «Mappa di prova»:
-- Pino Alto nuovo: la scala di corda di Muse stava lontana dal tronco, l'ho avvicinata (a +16 dall'asse, dove sale il personaggio).
 - Granchio nuovo: cammina, scappa, si spaventa e ogni tanto scava; rana nuova: salta, respira e gracida.
-- Alberi, pini e ceppi nuovi di Muse: montati e poi tolti, restano quelli di prima.
+- Alberi, pini, ceppi e Pino Alto nuovi di Muse: montati e poi tolti, restano quelli di prima. Il Pino Alto è stato richiesto di nuovo a Muse (tronco largo, chioma piena).
 - Camminate dei pupazzi: NON montate (non approvate).
 
 ## Livello nel riquadro, scala del Pino Alto e rane che saltano

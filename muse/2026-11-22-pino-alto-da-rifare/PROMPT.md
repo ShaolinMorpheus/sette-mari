@@ -24,8 +24,8 @@ da lontano e ci si sale. Va rifatto, con lo stesso stile dipinto morbido dei pin
 
 - Tela **760×1920**, come prima (in gioco è 190×480).
 - **L'asse del tronco deve stare esattamente a x=380** (centro del file) e la base del tronco a **y=1888**:
-  nella consegna scorsa il tronco stava a x≈298 e non a 380, e la scala era a x≈445 invece che a 444 rispetto
-  all'ancora giusta. **Misura la x del tronco a due altezze (metà e base) e scrivila nel LEGGIMI.**
+  nella consegna scorsa il tronco stava a x≈298 e non a 380, quindi la scala (a x≈445) risultava a circa
+  146 px dal tronco invece di 64 e restava staccata dalla piattaforma. **Misura la x del tronco a due altezze (metà e base) e scrivila nel LEGGIMI.**
 - Ombra morbida a terra inclusa, come prima.
 - Due file: `pino-alto.png` e `pino-alto-notte.png` (stessi pixel, toni della sera).
 
