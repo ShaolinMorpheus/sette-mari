@@ -1,5 +1,16 @@
 # Sirena con scafo in vista — versione di profilo 3/4 della nave del campo
 
+**Versione 2** (correzioni sulla versione 1, stesso disegno e stesse ancore):
+- **Scafo appoggiato a terra**: l'ombra ora è un'ombra di contatto ricavata dalla sagoma
+  della nave — parte dalla linea di contatto e corre sotto tutta la nave — e il fondo
+  dello scafo ha una fascia di affondamento: chiglia e timone affondano un po' nella sabbia,
+  niente più effetto «sospeso».
+- **Scala fino a terra**: prolungata di due pioli in continuazione con la stessa corda
+  e gli stessi montanti, fino a toccare il suolo.
+- **Via il contorno rosato**: il bordo esterno è scuro come le linee interne (marrone
+  molto scuro sul legno, blu scuro sulle vele); tolte anche le pennellate magenta rimaste
+  dentro il disegno (sottoprua e sartiame). Controllati bandiera, sartiame e punta della prua.
+
 La `nave-campo-integra` della consegna creature/alberi era quasi tutta dall'alto: si vedeva
 solo il ponte e i fianchi non si leggevano. Questa è la stessa nave ridisegnata con
 **vista 3/4 e camera alta inclinata di circa 35–40°**: il ponte resta visibile, ma il fianco
