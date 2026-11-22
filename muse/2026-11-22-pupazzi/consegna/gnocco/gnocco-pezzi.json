@@ -1,0 +1,792 @@
+{
+ "personaggio": "gnocco",
+ "tela": [
+  336,
+  376
+ ],
+ "nota": "coordinate in pixel della tela 336x376 del fermo attuale; 'cerniera' e' il punto di rotazione dentro il file del pezzo; 'cerniera_canvas' lo stesso punto sulla tela a riposo; 'genitore' indica la gerarchia per le rotazioni composte; la caviglia e' data come riferimento: stinco e stivale sono un pezzo unico",
+ "viste": {
+  "fronte": {
+   "giunti": {
+    "collo": [
+     167,
+     178
+    ],
+    "spalla-sinistra": [
+     69,
+     183
+    ],
+    "spalla-destra": [
+     265,
+     183
+    ],
+    "gomito-sinistro": [
+     69,
+     244
+    ],
+    "gomito-destra": [
+     265,
+     244
+    ],
+    "anca-sinistra": [
+     116,
+     262
+    ],
+    "anca-destra": [
+     218,
+     262
+    ],
+    "ginocchio-sinistro": [
+     116,
+     297
+    ],
+    "ginocchio-destra": [
+     218,
+     297
+    ],
+    "caviglia-sinistra": [
+     116,
+     357
+    ],
+    "caviglia-destra": [
+     218,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "gnocco-fronte-stinco-sinistro.png",
+     "offset": [
+      80,
+      286
+     ],
+     "dimensione": [
+      91,
+      90
+     ],
+     "cerniera": [
+      36,
+      11
+     ],
+     "cerniera_canvas": [
+      116,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "gnocco-fronte-stinco-destro.png",
+     "offset": [
+      163,
+      286
+     ],
+     "dimensione": [
+      97,
+      90
+     ],
+     "cerniera": [
+      55,
+      11
+     ],
+     "cerniera_canvas": [
+      218,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "gnocco-fronte-coscia-sinistra.png",
+     "offset": [
+      73,
+      244
+     ],
+     "dimensione": [
+      100,
+      68
+     ],
+     "cerniera": [
+      43,
+      18
+     ],
+     "cerniera_canvas": [
+      116,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "gnocco-fronte-coscia-destra.png",
+     "offset": [
+      161,
+      244
+     ],
+     "dimensione": [
+      124,
+      68
+     ],
+     "cerniera": [
+      57,
+      18
+     ],
+     "cerniera_canvas": [
+      218,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "gnocco-fronte-busto.png",
+     "offset": [
+      45,
+      158
+     ],
+     "dimensione": [
+      245,
+      116
+     ],
+     "cerniera": [
+      122,
+      108
+     ],
+     "cerniera_canvas": [
+      167,
+      266
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "gnocco-fronte-testa.png",
+     "offset": [
+      40,
+      0
+     ],
+     "dimensione": [
+      242,
+      188
+     ],
+     "cerniera": [
+      127,
+      178
+     ],
+     "cerniera_canvas": [
+      167,
+      178
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "gnocco-fronte-braccio-alto-sinistro.png",
+     "offset": [
+      43,
+      169
+     ],
+     "dimensione": [
+      61,
+      83
+     ],
+     "cerniera": [
+      26,
+      14
+     ],
+     "cerniera_canvas": [
+      69,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "gnocco-fronte-braccio-alto-destro.png",
+     "offset": [
+      231,
+      169
+     ],
+     "dimensione": [
+      64,
+      83
+     ],
+     "cerniera": [
+      34,
+      14
+     ],
+     "cerniera_canvas": [
+      265,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "gnocco-fronte-avambraccio-sinistro.png",
+     "offset": [
+      72,
+      241
+     ],
+     "dimensione": [
+      44,
+      54
+     ],
+     "cerniera": [
+      -3,
+      3
+     ],
+     "cerniera_canvas": [
+      69,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "gnocco-fronte-avambraccio-destro.png",
+     "offset": [
+      218,
+      241
+     ],
+     "dimensione": [
+      74,
+      56
+     ],
+     "cerniera": [
+      47,
+      3
+     ],
+     "cerniera_canvas": [
+      265,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  },
+  "profilo-destro": {
+   "giunti": {
+    "collo": [
+     165,
+     162
+    ],
+    "spalla-davanti": [
+     158,
+     180
+    ],
+    "spalla-dietro": [
+     150,
+     180
+    ],
+    "gomito-davanti": [
+     160,
+     248
+    ],
+    "gomito-dietro": [
+     152,
+     248
+    ],
+    "anca-davanti": [
+     172,
+     259
+    ],
+    "anca-dietro": [
+     121,
+     259
+    ],
+    "ginocchio-davanti": [
+     175,
+     301
+    ],
+    "ginocchio-dietro": [
+     121,
+     301
+    ],
+    "caviglia-davanti": [
+     181,
+     357
+    ],
+    "caviglia-dietro": [
+     123,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-dietro": {
+     "file": "gnocco-profilo-destro-stinco-dietro.png",
+     "offset": [
+      102,
+      286
+     ],
+     "dimensione": [
+      54,
+      88
+     ],
+     "cerniera": [
+      19,
+      15
+     ],
+     "cerniera_canvas": [
+      121,
+      301
+     ],
+     "ordine": 1,
+     "genitore": "coscia-dietro"
+    },
+    "coscia-dietro": {
+     "file": "gnocco-profilo-destro-coscia-dietro.png",
+     "offset": [
+      52,
+      241
+     ],
+     "dimensione": [
+      104,
+      82
+     ],
+     "cerniera": [
+      69,
+      18
+     ],
+     "cerniera_canvas": [
+      121,
+      259
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "stinco-davanti": {
+     "file": "gnocco-profilo-destro-stinco-davanti.png",
+     "offset": [
+      140,
+      286
+     ],
+     "dimensione": [
+      146,
+      90
+     ],
+     "cerniera": [
+      35,
+      15
+     ],
+     "cerniera_canvas": [
+      175,
+      301
+     ],
+     "ordine": 3,
+     "genitore": "coscia-davanti"
+    },
+    "coscia-davanti": {
+     "file": "gnocco-profilo-destro-coscia-davanti.png",
+     "offset": [
+      140,
+      241
+     ],
+     "dimensione": [
+      149,
+      82
+     ],
+     "cerniera": [
+      32,
+      18
+     ],
+     "cerniera_canvas": [
+      172,
+      259
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-dietro": {
+     "file": "gnocco-profilo-destro-braccio-alto-dietro.png",
+     "offset": [
+      91,
+      162
+     ],
+     "dimensione": [
+      122,
+      94
+     ],
+     "cerniera": [
+      59,
+      18
+     ],
+     "cerniera_canvas": [
+      150,
+      180
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "busto"
+    },
+    "avambraccio-dietro": {
+     "file": "gnocco-profilo-destro-avambraccio-dietro.png",
+     "offset": [
+      91,
+      237
+     ],
+     "dimensione": [
+      122,
+      71
+     ],
+     "cerniera": [
+      61,
+      11
+     ],
+     "cerniera_canvas": [
+      152,
+      248
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "braccio-alto-dietro"
+    },
+    "busto": {
+     "file": "gnocco-profilo-destro-busto.png",
+     "offset": [
+      46,
+      128
+     ],
+     "dimensione": [
+      243,
+      113
+     ],
+     "cerniera": [
+      114,
+      139
+     ],
+     "cerniera_canvas": [
+      160,
+      267
+     ],
+     "ordine": 6,
+     "genitore": null
+    },
+    "testa": {
+     "file": "gnocco-profilo-destro-testa.png",
+     "offset": [
+      63,
+      0
+     ],
+     "dimensione": [
+      213,
+      188
+     ],
+     "cerniera": [
+      102,
+      162
+     ],
+     "cerniera_canvas": [
+      165,
+      162
+     ],
+     "ordine": 7,
+     "genitore": "busto"
+    },
+    "braccio-alto-davanti": {
+     "file": "gnocco-profilo-destro-braccio-alto-davanti.png",
+     "offset": [
+      99,
+      162
+     ],
+     "dimensione": [
+      122,
+      94
+     ],
+     "cerniera": [
+      59,
+      18
+     ],
+     "cerniera_canvas": [
+      158,
+      180
+     ],
+     "ordine": 8,
+     "genitore": "busto"
+    },
+    "avambraccio-davanti": {
+     "file": "gnocco-profilo-destro-avambraccio-davanti.png",
+     "offset": [
+      99,
+      237
+     ],
+     "dimensione": [
+      122,
+      71
+     ],
+     "cerniera": [
+      61,
+      11
+     ],
+     "cerniera_canvas": [
+      160,
+      248
+     ],
+     "ordine": 9,
+     "genitore": "braccio-alto-davanti"
+    }
+   }
+  },
+  "spalle": {
+   "giunti": {
+    "collo": [
+     167,
+     207
+    ],
+    "spalla-sinistra": [
+     74,
+     222
+    ],
+    "spalla-destra": [
+     260,
+     222
+    ],
+    "gomito-sinistro": [
+     74,
+     286
+    ],
+    "gomito-destra": [
+     260,
+     286
+    ],
+    "anca-sinistra": [
+     118,
+     305
+    ],
+    "anca-destra": [
+     216,
+     305
+    ],
+    "ginocchio-sinistro": [
+     118,
+     331
+    ],
+    "ginocchio-destra": [
+     216,
+     331
+    ],
+    "caviglia-sinistra": [
+     118,
+     357
+    ],
+    "caviglia-destra": [
+     216,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "gnocco-spalle-stinco-sinistro.png",
+     "offset": [
+      88,
+      320
+     ],
+     "dimensione": [
+      83,
+      56
+     ],
+     "cerniera": [
+      30,
+      11
+     ],
+     "cerniera_canvas": [
+      118,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "gnocco-spalle-stinco-destro.png",
+     "offset": [
+      163,
+      320
+     ],
+     "dimensione": [
+      56,
+      56
+     ],
+     "cerniera": [
+      53,
+      11
+     ],
+     "cerniera_canvas": [
+      216,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "gnocco-spalle-coscia-sinistra.png",
+     "offset": [
+      65,
+      286
+     ],
+     "dimensione": [
+      108,
+      60
+     ],
+     "cerniera": [
+      53,
+      19
+     ],
+     "cerniera_canvas": [
+      118,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "gnocco-spalle-coscia-destra.png",
+     "offset": [
+      161,
+      286
+     ],
+     "dimensione": [
+      96,
+      60
+     ],
+     "cerniera": [
+      55,
+      19
+     ],
+     "cerniera_canvas": [
+      216,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "gnocco-spalle-busto.png",
+     "offset": [
+      42,
+      196
+     ],
+     "dimensione": [
+      242,
+      127
+     ],
+     "cerniera": [
+      125,
+      113
+     ],
+     "cerniera_canvas": [
+      167,
+      309
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "gnocco-spalle-testa.png",
+     "offset": [
+      40,
+      0
+     ],
+     "dimensione": [
+      258,
+      218
+     ],
+     "cerniera": [
+      127,
+      207
+     ],
+     "cerniera_canvas": [
+      167,
+      207
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "gnocco-spalle-braccio-alto-sinistro.png",
+     "offset": [
+      37,
+      203
+     ],
+     "dimensione": [
+      65,
+      87
+     ],
+     "cerniera": [
+      37,
+      19
+     ],
+     "cerniera_canvas": [
+      74,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "gnocco-spalle-braccio-alto-destro.png",
+     "offset": [
+      233,
+      203
+     ],
+     "dimensione": [
+      51,
+      87
+     ],
+     "cerniera": [
+      27,
+      19
+     ],
+     "cerniera_canvas": [
+      260,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "gnocco-spalle-avambraccio-sinistro.png",
+     "offset": [
+      65,
+      274
+     ],
+     "dimensione": [
+      50,
+      64
+     ],
+     "cerniera": [
+      9,
+      12
+     ],
+     "cerniera_canvas": [
+      74,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "gnocco-spalle-avambraccio-destro.png",
+     "offset": [
+      220,
+      274
+     ],
+     "dimensione": [
+      39,
+      24
+     ],
+     "cerniera": [
+      40,
+      12
+     ],
+     "cerniera_canvas": [
+      260,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  }
+ }
+}
