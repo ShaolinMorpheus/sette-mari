@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v123 — Sirena di Muse (profilo 3/4) nella cala
+- La nave dei Fuggiaschi ricostruita usa il nuovo disegno di Muse in vista 3/4 con lo scafo in vista. È spostata verso l'acqua e infossata nella sabbia. Solo con Grafica di prova + Mappa di prova. Da rifinire.
+
+
 ## v124 — Casa: tavolo solido e bauli piccoli
 - Il tavolo rotondo e i due sgabelli ora sono ostacoli: non ci si può più salire sopra.
 - I bauli dentro la casa sono più piccoli e proporzionati.
