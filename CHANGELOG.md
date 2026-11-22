@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v125 — Sirena nella posizione scelta, collisione solo sullo scafo
+- La nave dei Fuggiaschi sta dove l'hai messa tu nell'editor; tolto il cumulo di sabbia provvisorio (resta solo un'ombra a terra).
+- Collisione solo sullo scafo: si cammina liberamente tutto intorno, davanti e vicino alla nave.
+- Le tue modifiche dell'editor (capitolo 2: spostamento p22 e celle) sono ora nella mappa definitiva.
+
+
 ## v123 — Sirena di Muse (profilo 3/4) nella cala
 - La nave dei Fuggiaschi ricostruita usa il nuovo disegno di Muse in vista 3/4 con lo scafo in vista. È spostata verso l'acqua e infossata nella sabbia. Solo con Grafica di prova + Mappa di prova. Da rifinire.
 
