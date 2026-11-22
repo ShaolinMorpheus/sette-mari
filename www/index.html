@@ -4901,9 +4901,9 @@ function drawDeco(g,e,t){
         for(const[tx,ty,ta]of[[-5.3,-3.6,-.5],[-1.9,-6,-.12],[1.9,-6,.12],[5.3,-3.6,.5]]){g.beginPath();g.ellipse(ox+tx,oy+ty,1.6,2.1,ta,0,7);g.fill()}};
       pr(.5,.7,'rgba(255,238,200,.32)');pr(0,0,'rgba(54,34,17,.7)');g.restore()}}
     g.restore();if(!e.seen)twinkle(g,e.x+8,e.y-18,t,6,e.x,'#fff');return}
-  const s=(e.id==='nave'&&e.spr==='shipFix'&&SP.shipFixM)||spriteOf(e.spr);if(!s)return;
+  const s=(e.id==='nave'&&nvSP(e))||spriteOf(e.spr);if(!s)return;
   if(s.mzp){const kk=e.k||1;g.save();g.translate(e.x,e.y);artGround(g,s,kk,34);shadow(g,12*kk,3*kk,58*kk,15*kk,.3);drawSp(g,s,0,3*kk,kk);g.restore();return}
-  if(s===SP.shipFixM){const kk=e.k||1;g.save();g.translate(e.x+52*kk,e.y+62*kk);
+  if(s===SP.shipFixM||s===SP.shipMidM){const kk=e.k||1;g.save();g.translate(e.x+52*kk,e.y+62*kk);
     drawSp(g,s,0,2*kk,kk);g.restore();return}
   g.save();g.translate(e.x,e.y);
   if(e.flip)g.scale(-1,1);
@@ -5212,17 +5212,45 @@ function drawProgress(g,t){
   g.restore();
 }
 /* ---- bersaglio dell'azione: anello sul terreno ---- */
+
+/* ---- la Sirena: scafo con collisione, vele e sartie dietro cui si passa, anello attorno allo scafo ---- */
+var NVPREV=0;try{NVPREV=+localStorage.getItem('sm_nvprev')||0}catch(e){}
+const NVK=[[320, 1006], [340, 1129], [360, 1141], [380, 1143], [400, 1137], [420, 1129], [440, 1124], [460, 1119], [480, 1114], [500, 1118], [520, 1117], [540, 1112], [560, 1112], [580, 1082], [600, 1076], [620, 1074], [640, 1072], [660, 1070], [680, 1067], [700, 1064], [720, 1061], [740, 1058], [760, 1053], [780, 1049], [800, 1044], [820, 1041], [840, 1035], [860, 1028], [880, 1024], [900, 1016], [920, 1009], [940, 1001], [960, 995], [980, 988], [1000, 980], [1020, 973], [1040, 965], [1060, 957], [1080, 948], [1100, 940], [1120, 934], [1140, 937], [1160, 936], [1180, 967], [1200, 907], [1220, 897], [1240, 887], [1260, 875], [1280, 860], [1300, 843], [1320, 823], [1340, 797], [1360, 760], [1380, 721], [1400, 655], [1420, 634], [1440, 620]];
+const NVT=[[210,800],[400,790],[600,780],[800,740],[1000,690],[1200,650],[1400,590],[1490,553]];
+const NVE=[150,330,470,610,750,890,1030,1170,1310,1450,1720];
+function navSpr(c){return NVPREV?['','wreck2','shipMid','shipFix'][NVPREV]:(c.parts.yard?'shipFix':'wreck2')}
+function nvSP(e){return e.spr==='shipMid'?(SP.shipMidM||SP.shipFixM):(e.spr==='shipFix'?SP.shipFixM:null)}
+function nvKy(px){if(px<=NVK[0][0])return NVK[0][1];for(let i=1;i<NVK.length;i++)if(px<=NVK[i][0]){const a=NVK[i-1],b=NVK[i];return a[1]+(b[1]-a[1])*(px-a[0])/(b[0]-a[0])}return NVK[NVK.length-1][1]}
+function nvStrips(e,list){const k=e.k||1;for(let i=0;i<NVE.length-1;i++){const cx=Math.min(1440,(NVE[i]+NVE[i+1])/2);list.push({type:'navestrip',e,i,sy:e.y+64*k+(nvKy(cx)/4-295)*k})}}
+function drawNaveStrip(g,o){const e=o.e,k=e.k||1,s=nvSP(e);if(!s)return;const n=NVE.length-1;
+  g.save();g.translate(e.x+52*k,e.y+62*k);
+  const l=o.i?(NVE[o.i]/4-215)*k-.5:-999,r=o.i<n-1?(NVE[o.i+1]/4-215)*k+.5:999;
+  g.beginPath();g.rect(l,-700,r-l,1500);g.clip();drawSp(g,s,0,2*k,k);g.restore()}
+function nvInPoly(pts,x,y){let c=false;for(let i=0,j=pts.length-1;i<pts.length;j=i++){const a=pts[i],b=pts[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])c=!c}return c}
+var NV_KEY='',NV_CELLS=[];
+function navBlkSync(e){const key=e.x+','+e.y+','+(e.k||1);if(key===NV_KEY)return;NV_KEY=key;
+  for(const c of NV_CELLS)blockRect(c[0],c[1],1,1,-1);NV_CELLS=[];
+  const k=e.k||1,ox=e.x+52*k,oy=e.y+64*k,W=(px,py)=>[ox+(px/4-215)*k,oy+(py/4-295)*k];
+  const pts=NVT.map(q=>W(q[0],q[1])).concat(NVK.slice().reverse().map(q=>W(q[0],q[1]))).concat([W(240,983)]);
+  let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;for(const p of pts){x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1])}
+  for(let ty=Math.floor(y0/TS);ty<=Math.floor(y1/TS);ty++)for(let tx=Math.floor(x0/TS);tx<=Math.floor(x1/TS);tx++){
+    if(!inMap(tx,ty))continue;const cx=(tx+.5)*TS,cy=(ty+.5)*TS,d=TS*.3;
+    if(nvInPoly(pts,cx,cy)||nvInPoly(pts,cx-d,cy-d)||nvInPoly(pts,cx+d,cy-d)||nvInPoly(pts,cx-d,cy+d)||nvInPoly(pts,cx+d,cy+d)){blockRect(tx,ty,1,1,1);NV_CELLS.push([tx,ty])}}
+  // se il giocatore e' finito dentro lo scafo lo sposto sul punto libero piu' vicino
+  try{const px=Math.floor(P.x/TS),py=Math.floor(P.y/TS);if(blockT[py*MW+px]>0){let best=null,bd=1e9;for(let dy=-8;dy<=8;dy++)for(let dx=-8;dx<=8;dx++){const tx=px+dx,ty=py+dy;if(inMap(tx,ty)&&blockT[ty*MW+tx]<=0){const d=dx*dx+dy*dy;if(d<bd){bd=d;best=[tx,ty]}}}if(best){P.x=(best[0]+.5)*TS;P.y=(best[1]+.5)*TS}}}catch(e){}
+}
 function drawTargetRing(g,t){
   if(!TARGET||PAUSED||dl.open||P.act)return;
   const e=TARGET.e;if(e.virtual)return;
-  let x=e.x,y=e.y-4,rx=30,ry=11;
+  let x=e.x,y=e.y-4,rx=30,ry=11,rot=0;
   if(e.type==='rock'){x=e.x;y=e.y-2;rx=40;ry=12}   // ovale ai piedi della roccia
   else if(e.type==='npc'||e.type==='thief'){x=e.x;y=e.y-2;rx=e.type==='npc'?27:22;ry=10}   // anello ai piedi del personaggio, non al centro della casella
+  else if(e.id==='nave'){const k=e.k||1;x=e.x+52*k+4*k;y=e.y+64*k-69*k;rx=168*k;ry=42*k;rot=-.33}
   else if(e.fp){x=(e.fp[0]+e.fp[2]/2)*TS;y=(e.fp[1]+e.fp[3]/2)*TS;rx=e.fp[2]*TS*.55;ry=e.fp[3]*TS*.5}
   else if(e.type==='wparrot'){y=e.y;rx=26;ry=9}
   const a=.7+.3*Math.sin(t*5);
   g.save();g.strokeStyle=`rgba(255,226,110,${a})`;g.lineWidth=2.6;g.setLineDash([8,6]);g.lineDashOffset=-t*18;
-  g.beginPath();g.ellipse(x,y,rx,ry,0,0,7);g.stroke();g.setLineDash([]);
+  g.beginPath();g.ellipse(x,y,rx,ry,rot,0,7);g.stroke();g.setLineDash([]);
   g.fillStyle='rgba(255,226,110,.1)';g.fill();g.restore();
 }
 function drawHeading(g,t){
@@ -5461,6 +5489,7 @@ function render(t){
     const ex=e.type==='plot'?(e.fp[0]+e.fp[2]/2)*TS:e.x,ey=e.type==='plot'?(e.fp[1]+e.fp[3])*TS:e.y;
     if(ex<vx0-260||ex>vx1+260||ey<vy0-120||ey>vy1+340)continue;
     {const tx_=Math.floor(ex/TS),ty_=Math.floor((ey-2)/TS);if(huReg(tx_,ty_)||((WORLD===1||WORLD===2)&&tx_>=CV_X0&&tx_<CV_X0+CV_W&&ty_>=CV_Y0&&ty_<CV_Y0+CV_H))continue}
+    if(e.id==='nave'&&nvSP(e)){nvStrips(e,list);continue}
     list.push(e);
   }
   if(WORLD===3){for(const q of Ch3.vis())list.push(q)}else{list.push(P);if(S.flags.parrot)list.push(PAR);if(P.mode==='raft')list.push(RAFTSAIL)}
@@ -5473,6 +5502,7 @@ function render(t){
     if(e===PAR){drawParrotEnt(g,t);continue}
     if(e===RAFTSAIL){drawRaftSail(g,t);continue}
     switch(e.type){
+      case'navestrip':drawNaveStrip(g,e);break;
       case'tree':case'pine':drawTree(g,e,t);break;
       case'palm':drawPalm(g,e,t);break;
       case'rock':drawRock(g,e);break;
@@ -6542,8 +6572,7 @@ Ch2.decor=function(deco){
   deco('c2boat','rowboat',68.6,34.6,null,{nohit:1,flip:true});
   deco('c2cannon','cannon',52.6,25.6,null,{inter:'look',hitw:110,hith:60,label:'Cannone'});
   // la cala della nave
-  deco('nave','wreck2',CV2.ship[0],CV2.ship[1],[68,45,6,2],{k:.95,hitw:230,hith:130,label:'La nave dei Fuggiaschi',inter:'look',flip:true});
-  blockRect(69,45,5,1,1);
+  deco('nave','wreck2',CV2.ship[0],CV2.ship[1],null,{k:.95,hitw:230,hith:130,label:'La nave dei Fuggiaschi',inter:'look',flip:true});
 };
 
 const QDEF={
@@ -7285,7 +7314,7 @@ Ch2.tick=function(dt){
   // riunione serale
   if(qAct('c11',0)&&!UI.dlgOpen()&&!c.ch.assembly&&(S.tod>=19||S.tod<5)&&hyp(P.x-CP.x,P.y-CP.y)<9*TS)Ch2.assembly();
   // la nave ricostruita
-  const nv=EID.nave;if(nv){const sp=c.parts.yard?'shipFix':'wreck2';if(nv.spr!==sp)nv.spr=sp}
+  const nv=EID.nave;if(nv){const sp=navSpr(c);if(nv.spr!==sp)nv.spr=sp;navBlkSync(nv)}
   // ladri
   const night=S.tod>=21.5||S.tod<5,act=qAct('n6',0);
   const ths=E.filter(e=>e.type==='thief'&&!e.gone);
@@ -7436,7 +7465,7 @@ Ch2.land=function(){
 };
 Ch2.onBegin=function(){
   const c=C();
-  if(EID.nave)EID.nave.spr=c.parts.yard?'shipFix':'wreck2';
+  if(EID.nave)EID.nave.spr=navSpr(c);
   if(S.c2&&S.c2.sea){setTimeout(()=>{UI.banner('Capitolo 2','Il mare aperto');UI.dlg([D('hero',"Il fumo di ieri è dietro di me. Davanti, un mare più grande di quanto sembrasse."),D('hero',"Da qualche parte c'è una baia, con delle tende. Seguo la costa e tengo gli scogli alla larga."),D('biscotto',"Cra! Si naviga! Io faccio la vedetta, tu fai tutto il resto!")],()=>{if(!S.q.c0)startQuest('c0')})},400);return}
   if(!S.q.c1){
     setTimeout(()=>{UI.banner('Capitolo 2','La Baia dei Fuggiaschi');
@@ -9328,7 +9357,7 @@ UI.openMenu=function(){
    +tabs.map(t=>'<button class="mn" data-mn="'+t[0]+'" aria-selected="'+(UI._mt===t[0])+'"><i>'+t[1]+'</i>'+t[2]+'</button>').join('')
    +'</div><div class="mpn">'
    +pnl('au',T('mSnd',AU.on?'🔊':'🔇','Suoni',AU.on?'accesi':'spenti','tgl'+(AU.on?' on':''))+T('mMus',AU.mus?'🎵':'🔕','Musica',AU.mus?'accesa':'spenta','tgl'+(AU.mus?' on':''))+T('mVib',HAP.on?'📳':'📴','Vibrazione',HAP.on?'attiva':'spenta','tgl'+(HAP.on?' on':''))+T('mFs','⛶','Schermo',FS_TXT())+T('mGfx','🎨','Grafica',GFX_NAMES[GFX]||'Auto')+T('mTxt','🔠','Testo',TXT_NAMES[txtLevel()])+T('mUnl','🎮','Comandi','sblocca')+T('mHand','🕹','Joystick',S.hand==='left'?'a sinistra':'a destra')+T('mFps','📈','Contatore FPS',FPSC.on?'acceso':'spento','tgl'+(FPSC.on?' on':''))+T('mDiag','🧪','Test FPS',FPSC.names[FPSC.test]))
-   +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+(SMAds.available()?T('mAd','🎁','Guarda un video','scorta in regalo')+T('mPriv','🔒','Privacy',null):'')+T('mJ','📖','Novità',null)+T('mAdm','🔐','Solo per me',null)+(WORLD>=3?T('mHome','🏝️','Torna all\'isola','tocca due volte'):'')+T('mRot','🔄','Rotazione schermo',rotLbl(),'')+T('mGfxN','🧪','Grafica di prova',GFXN?'accesa · b38':'spenta · b38','tgl'+(GFXN?' on':''))+T('mRigT','🧍','Grafica personaggio prova',RIGT?'accesa':'spenta','tgl'+(RIGT?' on':''))+T('mPastT','🎨','Mappa di prova',PASTT?'accesa':'spenta','tgl'+(PASTT?' on':''))+T('mVer','🔁',verLbl(),null)+(WORLD===2?T('mBrP','🐕','Anteprima Briciola',['spenta','solo cagnetta','con cuccia','con cesto'][BRPREV],'tgl'+(BRPREV?' on':''))+T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
+   +pnl('pa',T('mSave','💾','Salva ora',null)+T('mSlot','📂','Partite salvate',null)+T('mBk','🛟','Copia di sicurezza',null)+(SMAds.available()?T('mAd','🎁','Guarda un video','scorta in regalo')+T('mPriv','🔒','Privacy',null):'')+T('mJ','📖','Novità',null)+T('mAdm','🔐','Solo per me',null)+(WORLD>=3?T('mHome','🏝️','Torna all\'isola','tocca due volte'):'')+T('mRot','🔄','Rotazione schermo',rotLbl(),'')+T('mGfxN','🧪','Grafica di prova',GFXN?'accesa · b38':'spenta · b38','tgl'+(GFXN?' on':''))+T('mRigT','🧍','Grafica personaggio prova',RIGT?'accesa':'spenta','tgl'+(RIGT?' on':''))+T('mPastT','🎨','Mappa di prova',PASTT?'accesa':'spenta','tgl'+(PASTT?' on':''))+T('mVer','🔁',verLbl(),null)+(WORLD===2?T('mBrP','🐕','Anteprima Briciola',['spenta','solo cagnetta','con cuccia','con cesto'][BRPREV],'tgl'+(BRPREV?' on':''))+T('mNvP','⚓','Anteprima nave',['automatica','1 · da riparare','2 · in riparazione','3 · riparata'][NVPREV],'tgl'+(NVPREV?' on':''))+T('mC2','⛺','Il campo',null)+T('mC1','🏝️','Torna al Cap. 1',null):'')+T('mRes','⚠️','Ricomincia da capo',null,'warn')+'<p class="sm">Il gioco salva da solo ogni pochi secondi e quando esci, in questo browser.</p>')
    +pnl('gd','<div class="mhd2">Guardaroba</div>'+T('mWh',wI('hat'),'Cappello',wearName('hat'))+T('mWo',wI('out'),'Abito',wearName('out'))+(YD.avail()?T('mSh','⛵','Nave',YD.lookName())+T('mYd','⚓','Cantiere navale',YD.yardName()):'')+T('mPhoto','📷','Foto ricordo',PHO.sub())+'<p class="sm">Cappelli e abiti si trovano giocando: casse, raccolti, ricette, capitoli. Quelli che mancano sono elencati con un indizio.</p>')
    +(hasP?pnl('pp','<div class="mhd2">Pappagallo</div>'+T('mPn','🦜','Nome',pn('Biscotto')+' · tocca per rinominare')+(hasH?T('mPh',curH?'<img alt="" src="'+phatImg(curH.id)+'">':'🚫','Cappellino',curH?curH.n:'Nessuno'):'<p class="sm">Troverai dei cappellini per il pappagallo durante il viaggio.</p>')):'')
    +pnl('lg',I18N.langs.map(l=>T('mLg_'+l,l.toUpperCase(),I18N.names[l],null,l===I18N.lang?'sel':'')).join(''))+pnl('ai',T('mHow','❓','Come si gioca',null)+T('mTut','🧭','Tutorial',null))
@@ -9386,6 +9415,7 @@ UI.openMenu=function(){
   {const db=c.querySelector('#mDiag');if(db)db.onclick=()=>{if(!FPSC.DM)FPSC.DM=DPRMAX;FPSC.test=(FPSC.test+1)%FPSC.names.length;DPRMAX=FPSC.test===4?Math.min(1.5,FPSC.DM):FPSC.DM;try{resize()}catch(e){}const sb=db.querySelector('small');if(sb)sb.textContent=FPSC.names[FPSC.test];if(!FPSC.on)FPSC.set(true)}}
   {const fb=c.querySelector('#mFps');if(fb)fb.onclick=()=>{FPSC.set(!FPSC.on);const sb=fb.querySelector('.sub,small,span:last-child');try{fb.classList.toggle('on',FPSC.on)}catch(e){}if(sb&&sb.textContent!=null)sb.textContent=FPSC.on?'acceso':'spento'}}
   {const pb=c.querySelector('#mPastT');if(pb)pb.onclick=()=>{try{localStorage.setItem('sm_past',PASTT?'0':'1')}catch(e){}try{saveGame(true)}catch(e){}location.reload()}}
+  {const nb=c.querySelector('#mNvP');if(nb)nb.onclick=()=>{NVPREV=(NVPREV+1)%4;try{localStorage.setItem('sm_nvprev',''+NVPREV)}catch(e){}const n=EID.nave;if(n)n.spr=navSpr(C());UI.openMenu();UI.toast('Nave: '+['stadio automatico','1 · da riparare','2 · in riparazione','3 · riparata'][NVPREV]+(NVPREV&&!(GFXN&&VEGPG)?' (accendi Grafica di prova e Mappa di prova per vedere il disegno nuovo)':''))}}
   {const bb=c.querySelector('#mBrP');if(bb)bb.onclick=()=>{BRPREV=(BRPREV+1)%4;try{localStorage.setItem('sm_brprev',''+BRPREV)}catch(e){}
     const b=EID.briciola;if(b){if(BRPREV){if(b.ox==null){b.ox=b.x;b.oy=b.y}b.x=P.x+80;b.y=P.y+6}else if(b.ox!=null){b.x=b.ox;b.y=b.oy;b.ox=null}}
     UI.openMenu();UI.toast(['Anteprima spenta','Anteprima: solo Briciola','Anteprima: Briciola con cuccia','Anteprima: Briciola con cesto'][BRPREV]+(BRPREV&&!(GFXN&&VEGPG)?' (accendi Grafica di prova e Mappa di prova per vedere i disegni)':''))}}
@@ -12815,7 +12845,7 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
     for(let i=0;i<GLINTS.length;i+=9){
       const gl=GLINTS[i];if(gl[0]<vx0-60||gl[0]>vx1+60||gl[1]<vy0-60||gl[1]>vy1+60)continue;if(inPondPx(gl[0],gl[1],2.2))continue;
       const k=i%3;
-      if(k===0){const a=t*.12+i,x=gl[0]+Math.sin(a)*34,y=gl[1]+Math.cos(a*.8)*22,rot=Math.atan2(Math.cos(a*.8)*-22*.8,Math.cos(a)*34);
+      if(false&&k===0){const a=t*.12+i,x=gl[0]+Math.sin(a)*34,y=gl[1]+Math.cos(a*.8)*22,rot=Math.atan2(Math.cos(a*.8)*-22*.8,Math.cos(a)*34);
         gg.save();gg.translate(x+3,y+4);gg.rotate(rot);gg.globalAlpha=.16;gg.filter='brightness(0)';drawSp(gg,AN.turtle,0,0);gg.restore();
         gg.save();gg.translate(x,y);gg.rotate(rot);gg.globalAlpha=.9;drawSp(gg,AN.turtle,0,0);gg.restore()}
       else if(FULL&&k===1&&!q){for(let f=0;f<4;f++){const a=t*.5+i+f*.9,x=gl[0]+Math.cos(a)*26+f*7,y=gl[1]+Math.sin(a)*16+f*4;
@@ -14046,11 +14076,12 @@ async function boot(){
   cv=$('cv');ctx=cv.getContext('2d');
   const setP=(p,t)=>{$('lbar').firstElementChild.style.width=Math.round(p*100)+'%';if(t)$('lTxt').textContent=t};
   setP(.02,'Preparo i disegni…');await nextTick();
-  initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN){GfxNew.nature();GfxNew.art();GfxNew.muse22();try{if(VEGPG){const CUT=[[430, 0], [430, 330], [400, 330], [380, 150], [360.0, 155.0], [355.0, 158.5], [350.0, 163.8], [345.0, 180.3], [340.0, 190.1], [335.0, 199.1], [330.0, 205.7], [325.0, 210.7], [320.0, 215.0], [315.0, 218.8], [310.0, 221.8], [305.0, 224.3], [300.0, 226.9], [295.0, 241.6], [290.0, 233.9], [285.0, 234.2], [280.0, 233.5], [275.0, 235.0], [270.0, 237.0], [265.0, 239.2], [260.0, 241.2], [255.0, 243.2], [250.0, 245.0], [245.0, 247.0], [240.0, 248.8], [235.0, 250.2], [230.0, 252.2], [225.0, 254.0], [220.0, 256.0], [215.0, 257.0], [210.0, 258.8], [205.0, 260.2], [200.0, 261.0], [195.0, 262.2], [190.0, 263.2], [185.0, 264.5], [180.0, 265.2], [175.0, 266.0], [170.0, 266.8], [165.0, 267.5], [160.0, 268.0], [155.0, 268.5], [150.0, 269.0], [145.0, 270.5], [140.0, 278.0], [135.0, 278.0], [130.0, 279.2], [125.0, 279.5], [120.0, 278.5], [115.0, 279.8], [110.0, 281.0], [105.0, 282.2], [100.0, 284.2], [95.0, 285.8], [90.0, 285.2], [85.0, 282.2], [80.0, 251.5], [75.0, 245.8], [55, 330], [0, 330], [0, 0]];const im=new Image();im.onload=()=>{const W=430,H=330;const[c,x]=mk(W,H);x.drawImage(im,0,0,W,H);
+  initNatureSprites();initStructSprites();initPropSprites();try{GfxNew.base();if(GFXN){GfxNew.nature();GfxNew.art();GfxNew.muse22();try{if(VEGPG){const CUT=[[430, 0], [430, 330], [400, 330], [380, 150], [360.0, 155.0], [355.0, 158.5], [350.0, 163.8], [345.0, 180.3], [340.0, 190.1], [335.0, 199.1], [330.0, 205.7], [325.0, 210.7], [320.0, 215.0], [315.0, 218.8], [310.0, 221.8], [305.0, 224.3], [300.0, 226.9], [295.0, 241.6], [290.0, 233.9], [285.0, 234.2], [280.0, 233.5], [275.0, 235.0], [270.0, 237.0], [265.0, 239.2], [260.0, 241.2], [255.0, 243.2], [250.0, 245.0], [245.0, 247.0], [240.0, 248.8], [235.0, 250.2], [230.0, 252.2], [225.0, 254.0], [220.0, 256.0], [215.0, 257.0], [210.0, 258.8], [205.0, 260.2], [200.0, 261.0], [195.0, 262.2], [190.0, 263.2], [185.0, 264.5], [180.0, 265.2], [175.0, 266.0], [170.0, 266.8], [165.0, 267.5], [160.0, 268.0], [155.0, 268.5], [150.0, 269.0], [145.0, 270.5], [140.0, 278.0], [135.0, 278.0], [130.0, 279.2], [125.0, 279.5], [120.0, 278.5], [115.0, 279.8], [110.0, 281.0], [105.0, 282.2], [100.0, 284.2], [95.0, 285.8], [90.0, 285.2], [85.0, 282.2], [80.0, 251.5], [0, 251.5], [0, 0]];const im=new Image();im.onload=()=>{const W=430,H=330;const[c,x]=mk(W,H);x.drawImage(im,0,0,W,H);
   // la nave e' infossata nel terreno: il fondo dello scafo viene tagliato lungo la chiglia con bordo morbido
   const[cm,xm]=mk(W,H);xm.filter='blur(2.2px)';xm.fillStyle='#000';xm.beginPath();CUT.forEach((q,i)=>i?xm.lineTo(q[0],q[1]):xm.moveTo(q[0],q[1]));xm.closePath();xm.fill();xm.filter='none';
   x.globalCompositeOperation='destination-in';x.drawImage(cm,0,0,W,H);x.globalCompositeOperation='source-over';
-  SP.shipFixM={c,w:W,h:H,ax:215,ay:295,_x:x}};
+  SP.shipFixM={c,w:W,h:H,ax:215,ay:295,_x:x};
+  try{const[c2,x2]=mk(W,H);x2.drawImage(c,0,0,W,H);const d=x2.getImageData(0,0,c2.width,c2.height),q=d.data;for(let i=0;i<q.length;i+=4){const r=q[i],g2=q[i+1],b=q[i+2];if(q[i+3]&&b>r*1.2+8&&b>g2+10)q[i+3]=0}x2.putImageData(d,0,0);SP.shipMidM={c:c2,w:W,h:H,ax:215,ay:295,_x:x2}}catch(e){}};
   im.src='data:image/webp;base64,'+MZ23NAVE}}catch(e){}GfxNew.rub();GfxNew.bld();GfxNew.chest();GfxNew.props();window.__obrDirty=1}GfxNew.raft()}catch(e){console.error('gfx',e)}
   SP.scaf.zattera=mkScaffold(150,70);
   setP(.08,'Disegno il mare…');await nextTick();

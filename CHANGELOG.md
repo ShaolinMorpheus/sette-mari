@@ -1,5 +1,13 @@
 # Sette Mari — Registro delle modifiche
 
+## v134 — Sirena: collisione, vele, anello, stadi; via le tartarughe
+- Poppa pulita: tagliato il pezzo di timone/sabbia sotto lo scafo.
+- Collisione su tutto lo scafo (calcolata dalla sagoma, segue la diagonale); alberi, vele e sartie si attraversano e il personaggio passa dietro (disegno a strisce ordinate per profondità).
+- Anello giallo tratteggiato ora attorno allo scafo, inclinato come la nave.
+- Menu (Cap. 2): «Anteprima nave» con 3 stadi (1 da riparare, 2 in riparazione provvisorio senza vele, 3 riparata) per controllare. Prompt per Muse in muse/2026-11-23-sirena-stadi.
+- Tartarughe in mare tolte (da rifare).
+
+
 ## v133 — Spostamenti mappa e punta della Sirena
 - Alberi, forziere e oggetti spostati dall'editor (lt_pg3, p41, p39, p8, m10, lt_cr7, d1) ora nel gioco.
 - Il taglio della Sirena si riduce verso la prua: la punta non perde più il pezzo.
