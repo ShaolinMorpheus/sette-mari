@@ -1,5 +1,13 @@
 # Sette Mari — Registro delle modifiche
 
+## v118 — Alberi, Pino Alto, granchio e rana di Muse (22 nov)
+Con «Grafica di prova» + «Mappa di prova»:
+- 4 pini e 6 alberi nuovi (con i loro ceppi per specie); il Pino Maestro ha il suo disegno.
+- Pino Alto nuovo: la scala di corda di Muse stava lontana dal tronco, l'ho avvicinata (a +16 dall'asse, dove sale il personaggio).
+- Granchio nuovo: cammina, scappa, si spaventa e ogni tanto scava; rana nuova: salta, respira e gracida.
+- Camminate dei pupazzi: NON montate (non approvate).
+
+
 ## Livello nel riquadro, scala del Pino Alto e rane che saltano
 - Il livello («Lv 15») non esce più dal riquadro dell'orologio, anche con «Giorno», luna e tempesta insieme.
 - Salendo sul Pino Alto il personaggio ora sta sulla scala di corda e non più un po' a sinistra.
