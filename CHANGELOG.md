@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## v124 — Casa: tavolo solido e bauli piccoli
+- Il tavolo rotondo e i due sgabelli ora sono ostacoli: non ci si può più salire sopra.
+- I bauli dentro la casa sono più piccoli e proporzionati.
+
+
 ## v122 — Interni delle capanne di Muse
 - Pavimento e pareti in legno, finestre con luce, letto, scaffale, tavolo rotondo con sgabelli, bauli e tappeti intrecciati: tutti pezzi di Muse (blocco E). Solo con Grafica di prova + Mappa di prova.
 
