@@ -6521,7 +6521,7 @@ Ch2.decor=function(deco){
 const QDEF={
 m1:{kind:'main',title:"Sulla sabbia",blurb:"La tempesta è finita. Sei ancora qui.",
   onStart(){},      // le due battute iniziali escono a fine tutorial (UI.tutEnd), per non coprire le istruzioni
-  goals:[{k:'flag',done:()=>!!S.flags.moved,txt:()=>"Alzati e cammina: trascina il joystick a "+mvSide(),hint:()=>"Tieni il pollice nella metà "+mvSide()+" dello schermo e trascina."}],
+  goals:[{k:'flag',done:()=>!!S.flags.far,txt:()=>"Alzati e cammina: trascina il joystick a "+mvSide(),hint:()=>"Tieni il pollice nella metà "+mvSide()+" dello schermo e trascina."}],
   onDone(){UI.dlg([D('hero',"Il Cormorano è là, a pezzi. Frugherò tra i resti più tardi: la gola brucia."),D('hero',"L'acqua del mare non si beve. Serve un ruscello, un laghetto. Verso l'interno.")],()=>startQuest('m2'))}},
 m2:{kind:'main',title:"Acqua dolce",blurb:"Senza acqua non si arriva a domani.",
   goals:[{k:'flag',done:()=>!!S.flags.drank,txt:"Trova acqua dolce e bevi",hint:"Segui il sentiero che sale verso l'interno: lassù c'è un laghetto. Poi premi «Bevi».",mark:()=>({x:POND.x*TS,y:POND.y*TS,r:3*TS,up:10})}],
@@ -7675,7 +7675,8 @@ Story.restore=function(){
 let quipT=70,saveT=0,chkT=0,fogT=0,callT=6,sideT=0;
 Story.tick=function(dt){
   if(UI.dlgOpen()||PAUSED)return;
-  if(!S.flags.moved&&hyp(P.x-FIX.spawn[0]*TS,P.y-FIX.spawn[1]*TS)>3.2*TS)S.flags.moved=1;
+  if(!S.flags.moved&&hyp(P.x-FIX.spawn[0]*TS,P.y-FIX.spawn[1]*TS)>3.2*TS){S.flags.moved=1;S.flags.mvT=0}
+  if(S.flags.moved&&!S.flags.far){if(S.flags.mvT==null)S.flags.far=1;else{S.flags.mvT+=dt;if(S.flags.mvT>75||hyp(P.x-FIX.spawn[0]*TS,P.y-FIX.spawn[1]*TS)>13*TS)S.flags.far=1}}
   for(const id of activeIds()){
     const q=S.q[id];if(q.busy)continue;const g=curGoal(id);
     if(g&&g.k==='reach'&&hyp(P.x-g.x,P.y-g.y)<g.r){

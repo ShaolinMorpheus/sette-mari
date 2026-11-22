@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v120 — Messaggio iniziale più tardi
+- A inizio partita il messaggio sul Cormorano («la gola brucia…») non compare più dopo pochi passi: esce dopo circa un minuto di gioco o dopo aver camminato un bel tratto dalla spiaggia.
+
+
 ## v119 — Pino Alto nuovo di Muse
 - Il Pino Alto della vedetta è stato rifatto da Muse (tronco largo, chioma piena, stesso stile dei pini del gioco). Visibile con Grafica di prova + Mappa di prova.
 - Ombra radicata a terra: ombra di contatto sotto le radici più ombra proiettata, così l'albero non sembra volare.
