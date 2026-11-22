@@ -12833,20 +12833,7 @@ GfxNew.muse22=function(){
       x.drawImage(im,o.dx||0,o.dy||0,o.dw||lw,o.dh||lh);x.restore();
       if(!o.noart){const[c2,x2]=mk(lw,lh);x2.drawImage(c,0,0,lw,lh);x2.globalCompositeOperation='source-in';x2.fillStyle='#0e1c0a';x2.fillRect(0,0,lw,lh);s.sh=c2}};
     im.src='data:image/webp;base64,'+MZ22[k];return s};
-  // alberi a foglia larga: file 432x584 -> 108x146, base del tronco a y=138; ax = asse reale del tronco
-  const AXF=[52.75,52,51.75,50.25,53.5,53.75];
-  const T=[];for(let i=0;i<8;i++){const n=i%6,fl=i>=6;T.push(mzArt('foglia'+(n+1),108,146,fl?108-AXF[n]:AXF[n],138,{flip:fl,fl:fl?'brightness(.96) saturate(1.04)':null}))}
-  SP.tree=T;
-  // pini: file 384x688 -> 96x172, base a y=164; ax = asse reale del tronco
-  const AXP=[41.5,34.75,40.25,39.25];
-  const Q=[];for(let i=0;i<5;i++){const n=i%4,fl=i>=4;Q.push(mzArt('pino'+(n+1),96,172,fl?96-AXP[n]:AXP[n],164,{flip:fl}))}
-  SP.pine=Q;
-  // Pino Maestro (1,75x): file 672x1204 -> 168x301; asse tronco 80,25; base a y=287
-  SP.pineM=mzArt('pino-maestro',168,301,80.25,287);
-  // ceppi: file 192x136 -> 48x34; base a y=29 (asse al centro)
-  SP.stump=mzArt('foglia-ceppo',48,34,24,29);SP.stump.mz=1;
-  SP.stumpP=mzArt('pino-ceppo',48,34,24,29);SP.stumpP.mz=1;
-  SP.stumpM=mzArt('pino-maestro-ceppo',84,60,42,55);SP.stumpM.mz=1;
+  // (alberi, pini, ceppi e Pino Maestro di Muse: NON montati, Davide vuole i precedenti)
   // Pino Alto: 760x1920 -> 190x480; l'asse del tronco (x=298 nel file) va portato a 95; la scala sta a +16 dall'asse
   SP.lookout=mzArt('pino-alto',190,480,95,476,{dx:20.5,dy:0,dw:190,dh:480,noart:1});
 };
