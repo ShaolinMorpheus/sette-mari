@@ -1,0 +1,3 @@
+consegna/sirena-sabbia.png.b64
+consegna/sirena-sabbia-notte.png.b64
+controllo/anteprima-sirena-sabbia.png.b64
