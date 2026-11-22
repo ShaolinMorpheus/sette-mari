@@ -1,5 +1,18 @@
 # Sabbia attorno alla Sirena — letto di sabbia da sovrapporre allo scafo
 
+**Versione 3** (correzioni dallo screenshot di gioco dell'utente, 22 nov 2026):
+1) la sabbia arriva fino alla punta — una lingua di sabbia corre sotto la prua
+sollevata e oltre la punta (fino a x≈1660, assottigliandosi), così tutto lo
+scafo sta sulla sabbia; 2) il colore è quello della spiaggia vera attorno alla
+cala (il cerchio a sinistra nello screenshot dell'utente): beige pallido e poco
+saturo. La spiaggia della riva NON è il giallo dorato della texture interna
+`terreno-sabbia`: misurata sullo screenshot (notte, stessa luce per entrambe),
+la spiaggia rende mediana ~(93, 85, 69) contro il (220, 176, 77) della texture
+dorata. Il riempimento resta la texture del gioco — stessa grana, sassolini,
+conchiglie e macchie umide — ma desaturata (saturazione ×0,42) fino alla
+tavolozza della riva: mediana del pezzo (228, 212, 164), stessa famiglia di
+toni della spiaggia misurata.
+
 **Versione 2** (stesso design del terreno del gioco): la versione 1 era liscia e di un
 beige più chiaro e opaco della spiaggia, e si vedeva come una chiazza a parte. Ora il
 riempimento è la **texture sabbia vera del gioco** (`2026-11-14-mappa-v2/terreno-sabbia`,
@@ -30,11 +43,12 @@ sabbia invece che appoggiata sopra.
 - `consegna/sirena-sabbia-notte.png` — stessi pixel, toni della sera a programma
   (stessa trasformazione della nave, così di notte combaciano).
 - `controllo/anteprima-sirena-sabbia.png` — la Sirena v2 con il letto di sabbia
-  montato, in scala di gioco, su un pezzo di spiaggia vera del gioco (sopra, la
-  texture `terreno-sabbia`) e sull'erba vera del gioco (sotto, `terreno-erba`).
-  Sulla spiaggia il letto non si distingue dal terreno — è la stessa sabbia —
-  e si legge solo il contatto attorno allo scafo; sull'erba si vede la chiazza
-  di spiaggia sotto la nave.
+  montato, in scala di gioco, sulla sabbia della riva (sopra, la texture del
+  gioco desaturata alla tavolozza della spiaggia della cala) e sull'erba vera
+  del gioco (sotto, `terreno-erba`). Sulla riva il letto non si distingue dal
+  terreno — è la stessa sabbia — e si legge solo il contatto attorno allo
+  scafo e la lingua sotto la prua; sull'erba si vede la chiazza di spiaggia
+  sotto tutta la nave, punta compresa.
 
 ## Note
 
