@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## v138 — Sirena: via la sabbia davanti alla prua, via il verde dal legno
+- La sabbia del terreno resta solo sotto lo scafo; davanti alla prua il terreno torna com'era.
+- Muschio verde dipinto sul legno (poppa) riportato a legno negli stadi 2 e 3.
+
+
 ## v137b — Punta della Sirena
 - Ombra e cumulo di sabbia si assottigliano verso poppa e prua: la punta (bompresso) torna visibile, senza rettangolo.
 

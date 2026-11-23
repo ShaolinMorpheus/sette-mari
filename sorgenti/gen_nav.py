@@ -33,6 +33,14 @@ for k,(n,sp) in names.items():
     ends=(xx<x0+.2*L)|(xx>x1-.2*L)
     m=ndi.binary_dilation(sand2&(yy>full[None,:]-120),iterations=3)&(yy>full[None,:]-130)&ends
     arr[:,:,3]=np.where(m,0,arr[:,:,3])
+    if k in('s2','s3'):
+        # muschio/erba dipinti sul legno: li riporto a legno (solo pixel scuri sopra la linea di taglio)
+        q=arr.astype(int);R0,G0,B0=q[:,:,0],q[:,:,1],q[:,:,2];lum=.3*R0+.59*G0+.11*B0
+        gm=(G0>R0*.97)&(G0>B0+14)&(q[:,:,3]>0)&(lum<170)&(yy<full[None,:]-40)
+        gm=ndi.binary_dilation(gm,iterations=2)&(q[:,:,3]>0)&(lum<185)&(yy<full[None,:]-40)
+        for ch,f,add in ((0,1.14,8),(1,.80,0),(2,.52,0)):
+            q[:,:,ch]=np.where(gm,np.clip(lum*f+add,0,255),q[:,:,ch])
+        arr=q.astype(np.uint8);print(k,'verde->legno',int(gm.sum()))
     img=Image.fromarray(arr).resize((860,660),Image.LANCZOS)
     b=io.BytesIO();img.save(b,'WEBP',quality=88,method=6)
     open(f'/home/claude/work/nav_{k}.b64','w').write(base64.b64encode(b.getvalue()).decode())

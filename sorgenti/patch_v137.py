@@ -8,7 +8,7 @@ def rep(a,b):
 # posizione e rotazione scelte nell'editor
 rep("Object.assign(b.mv,{lt_pg3:[2928,2232]","b.mv.nave=[2991,2088];b.rt=Object.assign(b.rt||{},{nave:-9});Object.assign(b.mv,{lt_pg3:[2928,2232]")
 # niente onde: la riva davanti alla nave diventa sabbia asciutta
-rep('const EDT_BK=({"2": [], "1": []})[WORLD]||[];','const EDT_BK=({"2": [["d",69.4,46.9,6.6,3.0]], "1": []})[WORLD]||[];')
+rep('const EDT_BK=({"2": [], "1": []})[WORLD]||[];','const EDT_BK=({"2": [["d",68.6,46.8,5.0,2.5]], "1": []})[WORLD]||[];')
 # nave infossata: ombra di contatto + cumulo di sabbia (colore preso dal terreno vero) + sassolini lungo la chiglia
 a=s.index("function drawNaveStrip(g,o){");b=s.index("function nvInPoly")
 s=s[:a]+"""var NVX_C=null,NVX_K='';
