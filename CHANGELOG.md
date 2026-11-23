@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v152 — In gioco 0.11.7: campo rifinito
+- Tavolata ridotta (×0.72) con collisione in proporzione.
+- Calderone: ripristinato il disegno di prima (un solo fuoco nel campo); la collisione resta.
+- Palo della bandiera del campo: ora l'asta lunga di Muse con pomolo in cima e sassi alla base.
+- Tolto per ora il tavolino rotondo di J (disegno vecchio).
+
 > Numerazione: dal gioco si vede «Bozza v0.11.x» (menu iniziale e «Novità»). I numeri v139–v148 di questo registro sono interni: tutto il lavoro del 23 nov è in gioco **0.11.3**. D'ora in poi ogni pubblicazione aggiorna anche la voce «Novità» (0.11.4, 0.11.5…).
 
 ## v151 — In gioco 0.11.6: oggetti del campo di Muse con collisione

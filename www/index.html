@@ -6199,6 +6199,12 @@ const AFTER=[
   {t:"Multigiocatore",d:"Salpare insieme ad altri capitani: un'isola condivisa, scambi e ciurme. Dopo la fine della Stagione 1, senza una data per ora.",st:"Coming soon"}
 ];
 const CHANGELOG=[
+  {v:"0.11.7",d:"23 nov 2026",t:"Campo: tavolata più piccola, un solo fuoco, palo nuovo",n:[
+    "La tavolata è più piccola e proporzionata (anche la collisione).",
+    "Torna il calderone di prima: nel campo c'è un solo fuoco (la collisione resta).",
+    "Il palo della bandiera del campo è ridisegnato nel nuovo stile, con i sassi alla base.",
+    "Tolto per ora il tavolino rotondo vicino al pappagallo (aveva ancora il disegno vecchio).",
+  ]},
   {v:"0.11.6",d:"23 nov 2026",t:"Il campo ridisegnato: incudine, calderone, tavolata e festone",n:[
     "Grafica di prova: incudine con ceppo (il martello resta sopra quando Nives non batte), calderone sul tripode, tavolata con panche, piatti, pane e candela, festone con bandierine di tela e il palo della lanterna sono disegni nuovi di Muse.",
     "Incudine, calderone, tavolata e pali delle lanterne ora hanno la collisione: non si attraversano più, né tu né i personaggi del campo.",
@@ -6639,7 +6645,7 @@ const BOTTLES=[
 Ch2.decor=function(deco){
   const tent=(id,x,y,flip,big)=>deco(id,'tent',x,y,[Math.floor(x)-1,Math.floor(y-.2),2,1],{inter:'look',hitw:110,hith:90,label:'Tenda',flip:!!flip,k:big?1.18:1});
   tent('c2t0',58.2,26.4,0,1);tent('c2t1',53.6,28.6,1);tent('c2t2',54.2,33.4,0);tent('c2t3',62.8,27.6,1);tent('c2t4',63.6,33,0);tent('c2t5',50.6,31.4,1);
-  deco('c2flag','bandiera',60.2,26.6,null,{nohit:1,k:1});
+  deco('c2flag','nv_flagp',60.2,26.6,null,{nohit:1,k:1});
   deco('c2fire','cfire',58.5,30.7,[58,30,1,1],{inter:'look',hitw:110,hith:50,label:'Il fuoco del campo'});
   deco('c2stall','banco',62,30.6,[61,30,2,1],{inter:'look',hitw:150,hith:70,k:.95,label:'Banco di Nives'});
   deco('c2b0','barrel0',60.4,30.9,[60,30,1,1],{nohit:1});deco('c2b1','barrel1',56.2,32,[56,31,1,1],{nohit:1});
@@ -10550,12 +10556,13 @@ const CMPL={
   pot:['calderone-sassi-braci','calderone-braci-spente','calderone-tripode','calderone-liquido'],
   table:['tavolata-panca-dietro','tavolata-tavola','tavolata-piatto-1','tavolata-piatto-2','tavolata-piatto-3','tavolata-piatto-4','tavolata-piatto-5','tavolata-tazza-1','tavolata-tazza-2','tavolata-tazza-3','tavolata-tazza-4','tavolata-pane','tavolata-ciotola-bacche','tavolata-candela','tavolata-panca-davanti'],
   lant:['asta-corta'],
+  flag:['asta-lunga'],
   bunt:['corda','bandierina-rossa','bandierina-gialla','bandierina-azzurra','bandierina-crema','bandierina-verde']
 };
-const NVCBD={anvil:[-13,13,-10,3],pot:[-26,26,-13,5],table:[-76,76,-14,21],lant:[-6,6,-4,3]};
+const NVCBD={anvil:[-13,13,-10,3],pot:[-26,26,-13,5],table:[-55,55,-10,15],lant:[-6,6,-4,3]};
 {
   const oA=NVDX.nv_anvil,oP=NVDX.nv_pot,oT=NVDX.nv_table,oL=NVDX.nv_lant,oB=NVDX.nv_bunt;
-  const use=k=>VEGPG&&cmpOk(CMPL[k]);
+  const use=k=>k!=='pot'&&VEGPG&&cmpOk(CMPL[k]);
   NVDX.nv_anvil=(g,e,t)=>{
     if(!use('anvil'))return oA(g,e,t);
     g.save();g.translate(e.x,e.y);shadow(g,0,2,26,6,.26);
@@ -10592,7 +10599,7 @@ const NVCBD={anvil:[-13,13,-10,3],pot:[-26,26,-13,5],table:[-76,76,-14,21],lant:
   };
   NVDX.nv_table=(g,e,t)=>{
     if(!use('table'))return oT(g,e,t);
-    g.save();g.translate(e.x,e.y);shadow(g,0,6,92,13,.25);
+    g.save();g.translate(e.x,e.y);g.scale(.72,.72);shadow(g,0,6,92,13,.25);
     const L=['tavolata-panca-dietro','tavolata-tavola','tavolata-piatto-1','tavolata-piatto-2','tavolata-piatto-3','tavolata-piatto-4','tavolata-piatto-5','tavolata-tazza-1','tavolata-tazza-2','tavolata-tazza-3','tavolata-tazza-4','tavolata-pane','tavolata-ciotola-bacche','tavolata-candela'];
     for(const n of L)g.drawImage(cmpImg(n),-88,-54);
     g.fillStyle='#ffb43a';g.beginPath();g.ellipse(146-88,-1-54+1.5,1.9,3.2+Math.sin(t*9)*.4,0,0,7);g.fill();   // fiamma della candela (animata dal codice)
@@ -10615,6 +10622,15 @@ const NVCBD={anvil:[-13,13,-10,3],pot:[-26,26,-13,5],table:[-76,76,-14,21],lant:
     g.fillStyle='#ffb43a';g.beginPath();g.ellipse(0,19,2.2,3.6+Math.sin(t*9+e.x)*.5,0,0,7);g.fill();
     if(night){g.globalCompositeOperation='lighter';const q=g.createRadialGradient(0,17,2,0,17,40);q.addColorStop(0,'rgba(255,190,90,.45)');q.addColorStop(1,'rgba(255,150,50,0)');g.fillStyle=q;g.fillRect(-42,-24,84,84)}
     g.restore();g.restore();
+  };
+  NVDX.nv_flagp=(g,e,t)=>{
+    if(!use('flag')){const sv=e.spr;e.spr='bandiera';drawDeco(g,e,t);e.spr=sv;return}
+    g.save();g.translate(e.x,e.y);shadow(g,0,3,24,7,.3);
+    const st=[[-6,-8,7],[-14,-2,8],[14,-3,7],[2,2,9]];
+    for(const[x,y,r]of st.slice(0,1))ball(g,x,y,r,'#e6e2da','#b3b3ae','#7a7e86','rgba(30,34,42,.6)');
+    g.save();g.translate(0,3-152);g.rotate(Math.PI/2);g.drawImage(cmpImg('asta-lunga'),0,-10);g.restore();
+    for(const[x,y,r]of st.slice(1))ball(g,x,y,r,'#e6e2da','#b3b3ae','#7a7e86','rgba(30,34,42,.6)');
+    g.restore();
   };
   NVDX.nv_bunt=(g,e,t)=>{
     if(!use('bunt'))return oB(g,e,t);
@@ -10654,7 +10670,7 @@ NV2.spawn=function(){
   if(cp.b)NV2.addBunt();
   if(cp.l){NV2.addE('lant1',56.1,29.5,{spr:'nv_lant'});NV2.addE('lant2',61.1,29.3,{spr:'nv_lant'})}
   if(cp.t)NV2.addE('table',59.3,34.1);
-  if(cp.j)NV2.addE('jt',60.5,28.6);
+  // tavolino di J (disegno vecchio): tolto per ora
   if(NV2.fr('nives',2))NV2.addE('sign',62.0,30.2,{sy:30.7*TS});
   if(NV2.fr('tito',4))NV2.addE('boat',64.8,30.62);
 };
