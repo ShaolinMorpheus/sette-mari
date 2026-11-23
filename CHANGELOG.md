@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v137 — Sirena infossata nella sabbia, senza onde
+- Posizione e rotazione (-9°) scelte nell'editor.
+- Terreno: la riva davanti alla nave diventa sabbia asciutta, quindi niente onde/schiuma sotto lo scafo.
+- Nave infossata: ombra di contatto, cumulo di sabbia con il colore preso dal terreno vero, sassolini lungo la chiglia (tutti e 3 gli stadi).
+
+
 ## v136 — Sirena ruotabile dall'editor e più infossata
 - Editor: selezionando la nave compaiono «⟲ Ruota» e «Ruota ⟳» (passi da 3°). La rotazione entra nel codice come «rt»; collisione, anello e disegno ruotano insieme.
 - Scafi tagliati più in profondità: la nave sta più dentro il terreno.
