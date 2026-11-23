@@ -5,7 +5,12 @@ stanno benissimo. Ora il campo dei Fuggiaschi (e il resto delle isole) ha
 bisogno di altri oggetti, perché accanto ai tuoi disegni quelli fatti dal codice
 (forme piatte, colori uniti) si vedono. Ti chiedo due gruppi: **A) ridisegni**
 di cose che ci sono già ma sono "a mano", **B) oggetti nuovi** per rendere il
-campo abitato.
+campo abitato, **C) i pesci**, che non abbiamo ancora e che vorremmo far vedere
+anche nell'acqua.
+
+Non rifare: palme, alberi, pini, cespugli, bacche, granchi, tartarughe, gabbiani,
+zattera, falò, interni delle capanne, tenda, insegna di Nives, banco di Nives
+(sono già tuoi o approvati così).
 
 **Stile**: lo stesso delle tue consegne approvate in
 `muse/2026-11-23-oggetti-campo/consegna/` (guardale come riferimento: contorno
@@ -15,8 +20,8 @@ l'incudine è alta ~44 px, la tavolata 176×92 px.
 
 ## Come lavorare
 - **Fai a gruppi, in quest'ordine di priorità** (consegna ogni gruppo appena è
-  pronto, non aspettare la fine): **P1** = A1–A4 e B1–B4; **P2** = A5–A10 e B5–B8;
-  **P3** = B9–B12.
+  pronto, non aspettare la fine): **P1** = A1–A3 e B1–B4; **P2** = A4–A7, B5–B8 e
+  C (pesci); **P3** = B9–B11.
 - Per ogni oggetto consegna **livelli separati** sullo stesso canvas (si
   sovrappongono senza spostamenti), e le **parti animabili singole** (tessuti,
   bandierine, fiamme, vapore, fumo: il gioco le muove, tu disegnale ferme).
@@ -53,16 +58,7 @@ anello di sassi, niente braci accese nel disegno).
   soltanto all'ora dei pasti (fiamma e vapore li anima il codice)
 - stesso disegno nei due stati (spento = senza il livello d)
 
-### A2. Falò del campo (`falo`) — P1
-Il falò principale del campo, con anello di sassi, ceppi incrociati e cenere. Ora
-ha un vecchio disegno. Cerchio di sassi ben leggibile, 3–4 ceppi, un ceppo-sedile
-accanto.
-- ingombro ~80 × 52 px; punto d'appoggio al centro della cenere
-- livelli: (a) sassi + cenere (dietro), (b) ceppi, (c) sassi davanti, (d) `ceppo-sedile` separato.
-  La fiamma e le scintille le anima il codice.
-- ceppi anche in versione **spenta** (carbonizzati), stesso disegno
-
-### A3. Tavolino di J (`tavolino-j`) — P1
+### A2. Tavolino di J (`tavolino-j`) — P1
 Il tavolino da lavoro di J, il naufrago che ha lasciato bottiglie e pagine:
 piccolo tavolo tondo su un solo piede a tre zampe, piano di legno consumato.
 - ingombro ~56 × 44 px (piano) con punto d'appoggio al centro del piede
@@ -70,7 +66,7 @@ piccolo tavolo tondo su un solo piede a tre zampe, piano di legno consumato.
   man mano che il capitolo avanza: (1) calamaio con penna d'oca, (2) mappa
   arrotolata con laccio, (3) bussola d'ottone aperta, (4) diario con cinghia rossa
 
-### A4. Lanterna (`lanterna`) — P1
+### A3. Lanterna (`lanterna`) — P1
 La lanterna appesa al tuo palo è ancora fatta dal codice. Disegna **solo la
 lanterna**: struttura di ferro scuro con tetto a cupola, anello, quattro vetri
 chiari, base.
@@ -78,40 +74,29 @@ chiari, base.
 - livelli: (a) struttura, (b) `vetri` in un livello a parte (tono neutro, il gioco
   li illumina di giallo la sera), (c) `anello-catena` (corta catenella)
 
-### A5. Stendino con vela (`stendino`) — P2
+### A4. Stendino con vela (`stendino`) — P2
 Due pali ricurvi con una corda tesa e panni stesi ad asciugare.
 - ingombro ~118 × 76 px; punto d'appoggio al centro della base
 - livelli: (a) pali + corda, (b) **panni singoli** (vela rattoppata, camicia a
   righe, un paio di calzoni, uno straccio rosso) appesi ognuno con 2 mollette di
   legno, così il gioco li fa ondeggiare uno a uno
 
-### A6. Cartello di Nives (`cartello-nives`) — P2
-Insegna del fabbro, appesa a due pali bassi con catenelle.
-- ~84 × 40 px; la tavola resta **vuota** (la scritta «NIVES · FABBRO» la scrive il
-  gioco con il font), con due chiodi di ferro agli angoli
-- livelli: (a) pali + catenelle, (b) tavola (legno con venature e bordo scuro)
-
-### A7. Barca a remi (`barca-remi`) — P2
+### A5. Barca a remi (`barca-remi`) — P2
 Piccola barca di tavole tirata in secca, con i remi appoggiati dentro.
 - ~110 × 46 px, vista di lato leggermente dall'alto; punto d'appoggio sotto la chiglia
 - livelli: (a) scafo, (b) 2 remi separati, (c) una cima arrotolata a prua, (d)
   `sacco-rete` (un sacco con una rete dentro)
 
-### A8. Cannone del campo (`cannone`) — P2
+### A6. Cannone del campo (`cannone`) — P2
 Cannone di ferro nero su affusto di legno a due ruote, bocca a destra.
 - ~80 × 48 px; punto d'appoggio al centro tra le ruote
 - livelli: (a) affusto + ruote, (b) canna, (c) **pila di 4 palle di cannone** a
   parte, (d) `calcatoio` (bastone con spugna) appoggiato di lato
 
-### A9. Rotolo di corda (`corda-rotolo`) — P2
+### A7. Rotolo di corda (`corda-rotolo`) — P2
 Grosso rotolo di cordone di canapa (4 giri), con un capo libero che scende a terra.
 - ~44 × 30 px; punto d'appoggio al centro della base
 
-### A10. Palo con frecce / cartello indicatore (`palo-frecce`) — P2
-Palo di legno con 2 assi-freccia inchiodate (una verso destra, una verso
-sinistra, inclinate), per i sentieri dell'isola. Le assi **vuote** (la scritta la
-mette il gioco).
-- ~64 × 92 px; punto d'appoggio alla base del palo
 
 ---
 
@@ -203,18 +188,47 @@ re. Stato chiuso e stato aperto con **lo stesso disegno**.
 - livelli: (a) corpo, (b) coperchio chiuso, (c) coperchio aperto, (d) contenuto
   (singoli: monete, collana, una chiave)
 
-### B12. Altare dei caduti (`altare`) — P3
-Un pietra alta e piatta con intorno conchiglie, nastri colorati legati a un
-palo, piccole lanterne di vetro (spente) e un'ancora arrugginita. Un posto
-dove ricordare chi non ce l'ha fatta, sobrio.
-- ~96 × 88 px; punto d'appoggio al centro della pietra
-- livelli: (a) pietra + ancora, (b) palo con nastri (3 nastri singoli), (c)
-  conchiglie, (d) 3 piccole lanterne spente (il gioco le accende di sera)
+---
+
+## C) I pesci (`pesce-…`) — P2
+
+Nel gioco si pesca (canna, rete, 9 specie nel «Registro del pescatore»), ma i
+pesci oggi sono disegni fatti dal codice e **in mare non si vede mai un pesce**.
+Vorremmo entrambe le cose. Specie, nell'ordine del Registro: sardina, sgombro,
+orata, pesce pappagallo, spigola, pesce lanterna, cernia, pesce luna, pesce aurora
+(gli ultimi tre brillano: il bagliore è un livello a parte).
+
+**C1. Icone del Registro e della cattura** (9 specie): disegno di lato, rivolto a
+destra, 200 × 200 px, punto d'appoggio al centro. Dove ci sono già i tuoi
+`pesce-sgombro` e `pesce-dentice` (cap3-blocco-b) tienili come riferimento di
+stile e rifai solo quelli mancanti; per l'orata usa il dentice. Per lanterna, luna
+e aurora: livello `-alone` separato con il solo bagliore (il gioco lo pulsa).
+
+**C2. Pesci visti nell'acqua** (da sopra, in controluce come ombre colorate sotto
+la superficie, semitrasparenti, senza contorno scuro netto): per le specie
+comuni (sardina, sgombro, orata, pappagallo, cernia) **una figura da sopra, 6
+fotogrammi di nuoto** (coda che ondeggia) sulla stessa tela, 48 × 28 px; il
+gioco le muove in banchi nelle acque basse vicino alle spiagge e le fa scappare
+quando ti avvicini o tiri la lenza. In più: (a) **banco di sardine** (12 pesciolini
+raccolti in un'unica forma ovale, 3 varianti, 96 × 56 px), (b) **ombra grande**
+di un pesce lento (cernia o pesce luna), 120 × 60 px, 4 fotogrammi.
+
+**C3. In superficie** (4 fotogrammi ciascuno, in ordine): (a) **salto** di un
+pesce che esce dall'acqua con spruzzi (da sopra e di lato leggeri, 64 × 64 px),
+(b) **anelli sull'acqua** di un pesce che affiora o di un abbocco, tre cerchi che si
+allargano e svaniscono (80 × 40 px, prospettiva ellittica come il mare del gioco),
+(c) **boccheggio sul galleggiante**: uno strappo con una sola piccola corona di
+spruzzi per il momento dell'abbocco.
+
+Per C2 e C3 consegna nel `LEGGIMI.md` anche come li hai pensati sul mare del
+gioco (profondità, trasparenza, colori); se non ti convincono come ombre dall'alto
+dimmi un'alternativa. Nell'anteprima di controllo mostrali sull'acqua delle
+spiagge dell'isola 1 e della Baia.
 
 ---
 
 ## Se sei bloccata
 Scrivi la domanda in `LEGGIMI.md` e consegna il resto: meglio una consegna
-parziale ma sicura che aspettare tutto. Aggiornamenti futuri: Davide aggiungerà
-altri gruppi (isola 1, capanna, galeone, mari del Capitolo 4) in una consegna
-successiva, non in questa.
+parziale ma sicura che aspettare tutto. Altri gruppi (galeone, mari del Capitolo
+4, la Baia) li aggiungeremo in una consegna successiva solo se serve: molto di
+quello che avevamo pensato lo hai già consegnato.
