@@ -2,6 +2,11 @@
 
 > Numerazione: dal gioco si vede «Bozza v0.11.x» (menu iniziale e «Novità»). I numeri v139–v148 di questo registro sono interni: tutto il lavoro del 23 nov è in gioco **0.11.3**. D'ora in poi ogni pubblicazione aggiorna anche la voce «Novità» (0.11.4, 0.11.5…).
 
+## v151 — In gioco 0.11.6: oggetti del campo di Muse con collisione
+- Montati (grafica di prova): incudine con ceppo e martello (resta sopra quando Nives non batte), calderone su tripode (sassi con braci, fiamma e vapore animati dal codice), tavolata con panche/piatti/tazze/pane/ciotola/candela (fiamma dal codice), festone con corda e bandierine, asta come palo delle lanterne.
+- Collisione con rettangoli a terra: incudine, calderone, tavolata e pali lanterna non si attraversano; anche i personaggi del campo non vi entrano e non scelgono mete dentro.
+- Non montate: asta lunga e braci spente del calderone (il fuoco del calderone è sempre acceso).
+
 ## v150 — In gioco 0.11.5: pappagallo sulla mappa e abito nuovo nel menu
 - Biscotto in ricognizione: resta 20 s sul punto (prima 7) e poi torna da solo; il segno luminoso nel mondo dura 20 s. Sulla minimappa compare la sua testa (col cappellino) con una freccia per 20 s, sul bordo se il punto è lontano; sulla mappa grande resta segnato come prima con la testa al posto del cerchio rosso.
 - Menu › Guardaroba: l'icona dell'Abito per «Giacca rossa del Capitano» e «Maglia da marinaio» usa i ritratti nuovi del Capitano (gli altri abiti, senza disegno nuovo, restano com'erano).
