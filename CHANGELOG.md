@@ -2,6 +2,11 @@
 
 > Numerazione: dal gioco si vede «Bozza v0.11.x» (menu iniziale e «Novità»). I numeri v139–v148 di questo registro sono interni: tutto il lavoro del 23 nov è in gioco **0.11.3**. D'ora in poi ogni pubblicazione aggiorna anche la voce «Novità» (0.11.4, 0.11.5…).
 
+## v150 — In gioco 0.11.5: pappagallo sulla mappa e abito nuovo nel menu
+- Biscotto in ricognizione: resta 20 s sul punto (prima 7) e poi torna da solo; il segno luminoso nel mondo dura 20 s. Sulla minimappa compare la sua testa (col cappellino) con una freccia per 20 s, sul bordo se il punto è lontano; sulla mappa grande resta segnato come prima con la testa al posto del cerchio rosso.
+- Menu › Guardaroba: l'icona dell'Abito per «Giacca rossa del Capitano» e «Maglia da marinaio» usa i ritratti nuovi del Capitano (gli altri abiti, senza disegno nuovo, restano com'erano).
+- Oggetti del campo (Muse, 23 nov): ricevuti in muse/2026-11-23-oggetti-campo, in attesa dell'ok di Davide prima del montaggio.
+
 ## v149 — In gioco 0.11.4: muri, tartarughe, ritratto pappagallo
 - Muri invisibili ridotti: scatola di collisione degli oggetti più stretta e sagome più piccole; baked le 374 celle liberate con l'editor (zona Sirena/cala est).
 - Tartarughe ancora meno (da 1 su 6 a 1 su 14 dei punti d'acqua con riflessi).

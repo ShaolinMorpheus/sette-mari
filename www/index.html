@@ -5148,9 +5148,9 @@ function updateParrot(dt,t){
   if(P.mode==='raft'&&WORLD!==3){const c_=Math.cos(P.hd),s_=Math.sin(P.hd),mx_=P.x+c_*13.3,my_=P.y+8+s_*13.3,k_=1-Math.exp(-dt*6);e.x+=(mx_-e.x)*k_;e.y+=(my_+6-e.y)*k_;e.alt+=(150-e.alt)*k_;e.perch=true;e.fl=0;e.flip=c_<0;return}
   e.perch=false;
   let tx=P.x+(P.flip?54:-54),ty=P.y-12;
-  if(SC.e&&SC.t<7){tx=SC.e.x+Math.sin(SC.t*2)*26;ty=SC.e.y-8}
+  if(SC.e&&SC.t<20){tx=SC.e.x+Math.sin(SC.t*2)*26;ty=SC.e.y-8}
   const dx=tx-e.x,dy=ty-e.y,d=hyp(dx,dy);
-  const k=1-Math.exp(-dt*(SC.e&&SC.t<7?2.6:d>200?3:5));e.x+=dx*k;e.y+=dy*k;
+  const k=1-Math.exp(-dt*(SC.e&&SC.t<20?2.6:d>200?3:5));e.x+=dx*k;e.y+=dy*k;
   e.alt=42+Math.sin(e.ph*2.4)*6+Math.min(24,d*.1);
   if(e.hop>0){e.hop=Math.max(0,e.hop-dt);e.alt+=Math.sin(e.hop/.5*Math.PI)*18}      // saltello quando parla
   e.fl=d>10||P.moving||P.mode==='raft'?1:.35;e.flip=dx<0?true:(Math.abs(dx)>6?false:e.flip);
@@ -5378,6 +5378,17 @@ function mmRaft(g,x,y,k){   // zattera in miniatura: tronchi e vela, con contorn
   g.restore();
 }
 const MMR=17;     // raggio della minimappa, in tile
+const _PBC={};
+function parBadge(g,x,y,r){   // medaglione con la testa di Biscotto (col suo cappellino)
+  const k=(S&&S.phat)||'',now=performance.now();let c=_PBC[k];
+  if(!c){c=_PBC[k]=document.createElement('canvas');c.width=c.height=72;c.t=-1e9}
+  if(now-c.t>1500){c.t=now;try{drawPortrait(c,'biscotto',{t:'x'})}catch(e){}}
+  g.save();g.translate(x,y);
+  g.fillStyle='#2a1a0e';g.beginPath();g.arc(0,0,r+2.6,0,7);g.fill();
+  g.save();g.beginPath();g.arc(0,0,r,0,7);g.clip();g.drawImage(c,-r,-r,r*2,r*2);g.restore();
+  g.strokeStyle='#ffd23a';g.lineWidth=2;g.beginPath();g.arc(0,0,r+1.3,0,7);g.stroke();
+  g.restore();
+}
 function drawMini(){
   const mc=$('mini');if(!mc||!GPREV)return;
   if(FOGDIRTY||!FOGC)updateFogCanvas();
@@ -5429,6 +5440,17 @@ function drawMini(){
     if(dd>lim){g.rotate(Math.atan2(y-cym,x-cxm));g.fillStyle='#ffd23a';g.beginPath();g.moveTo(6.5,0);g.lineTo(-4,-5.5);g.lineTo(-1.5,0);g.lineTo(-4,5.5);g.closePath();g.fill()}
     else{g.fillStyle='#ffd23a';g.beginPath();g.arc(0,2.5,4.2,Math.PI,0);g.fill();g.fillRect(-.8,-4.5,1.6,7)}
     g.restore()}}
+  if(S.flags.parrot&&PQ.mark&&isInter(PQ.mark)&&RT-PQ.markT<20){   // dove e' andato Biscotto: testa + freccia, per 20 secondi
+    const tt=performance.now()/1000;let x=mxw(PQ.mark.x),y=myw(PQ.mark.y);const dd=hyp(x-cxm,y-cym),lim=R-22,out=dd>lim;
+    if(out){x=cxm+(x-cxm)/dd*lim;y=cym+(y-cym)/dd*lim}
+    const bob=Math.sin(tt*6)*2;
+    g.save();g.globalAlpha=Math.min(1,(20-(RT-PQ.markT))/2);
+    parBadge(g,x,y,9);
+    g.fillStyle='#ffd23a';g.strokeStyle='#2a1a0e';g.lineWidth=1.4;
+    if(out){const a=Math.atan2(y-cym,x-cxm);g.translate(x+Math.cos(a)*(14+bob),y+Math.sin(a)*(14+bob));g.rotate(a);g.beginPath();g.moveTo(7,0);g.lineTo(-4,-6);g.lineTo(-1.5,0);g.lineTo(-4,6);g.closePath();g.fill();g.stroke()}
+    else{g.translate(x,y-15-bob);g.beginPath();g.moveTo(0,6);g.lineTo(-6,-3);g.lineTo(6,-3);g.closePath();g.fill();g.stroke()}
+    g.restore();
+  }
   // il giocatore
   try{X2.mini(g,mxw,myw)}catch(e){}
   g.save();g.translate(cxm,cym);g.rotate(P.hd);g.fillStyle='#fff';g.strokeStyle='#2a1a0e';g.lineWidth=1.8;g.beginPath();g.moveTo(7,0);g.lineTo(-5,-5);g.lineTo(-2,0);g.lineTo(-5,5);g.closePath();g.fill();g.stroke();g.restore();
@@ -6174,6 +6196,10 @@ const AFTER=[
   {t:"Multigiocatore",d:"Salpare insieme ad altri capitani: un'isola condivisa, scambi e ciurme. Dopo la fine della Stagione 1, senza una data per ora.",st:"Coming soon"}
 ];
 const CHANGELOG=[
+  {v:"0.11.5",d:"23 nov 2026",t:"Il pappagallo sulla mappa e l'abito nuovo nel menu",n:[
+    "Quando Biscotto va a guardare qualcosa, sulla minimappa compare la sua testa con una freccia (anche sul bordo, se è lontano) per 20 secondi. Lui resta lì per 20 secondi e poi torna da solo da te. Sulla mappa grande resta segnato il punto.",
+    "Menu › Guardaroba: l'icona dell'abito (giacca rossa e maglia da marinaio) ora usa il disegno nuovo del Capitano.",
+  ]},
   {v:"0.11.4",d:"23 nov 2026",t:"Meno muri invisibili, meno tartarughe, ritratto del pappagallo giusto",n:[
     "Meno muri invisibili: si cammina più vicino a casse, alberi e rocce, e sono liberate le zone vicino alla Sirena indicate dall'editor.",
     "Ancora meno tartarughe in mare.",
@@ -7842,7 +7868,7 @@ Story.parrotGift=function(){
 };
 Story.parrotChat=function(dt){
   if(!S.flags.parrot)return;
-  if(SC.e){SC.t+=dt;if(SC.t>11||!isInter(SC.e)){SC.e=null;SC.t=99}}
+  if(SC.e){SC.t+=dt;if(SC.t>21||!isInter(SC.e)){SC.e=null;SC.t=99}}
   if(UI.dlgOpen()||PAUSED)return;
   PQ.helpCd=(PQ.helpCd==null?100:PQ.helpCd)-dt;
   if(PQ.helpCd<=0&&!P.act&&P.mode!=='raft'&&!SC.e&&!(S.wx&&S.wx.k==='storm')){PQ.helpCd=320+Math.random()*200;Story.parrotGift()}
@@ -7874,8 +7900,8 @@ Story.parrotChat=function(dt){
   say(PAR,txt,3.2);sfx('cra');PAR.hop=.4;
 };
 function drawScoutMark(g,t){
-  if(!SC.e||SC.t>10)return;
-  const e=SC.e,a=clamp(Math.min(SC.t*2,(10-SC.t)),0,1);
+  if(!SC.e||SC.t>20)return;
+  const e=SC.e,a=clamp(Math.min(SC.t*2,(20-SC.t)),0,1);
   g.save();g.globalAlpha=a;twinkle(g,e.x,e.y-(e.type==='loot'?58:46)+Math.sin(t*4)*3,t,13,e.x,'#fff2a0');
   g.strokeStyle='rgba(255,236,150,.8)';g.lineWidth=2;g.beginPath();g.ellipse(e.x,e.y-6,18+Math.sin(t*3)*3,8,0,0,7);g.stroke();
   g.restore();
@@ -9019,6 +9045,13 @@ function wearName(k){
 const _wi={};
 function wearImg(it){
   if(it.k==='hat'&&typeof RIGHAT!=='undefined'&&RIGHAT.map[it.id]&&RIGHAT.icons[RIGHAT.map[it.id]])return RIGHAT.icons[RIGHAT.map[it.id]];
+  if(it.k==='out'&&(it.id==='o_mar'||it.id==='o_cap')){
+    const pi=portImg(it.id==='o_mar'?'capitano-marinaio/neutro':'capitano-giacca/neutro'),pk='P'+it.id;
+    if(_wi[pk])return _wi[pk];
+    if(pi){const cv=document.createElement('canvas');cv.width=cv.height=112;const g=cv.getContext('2d'),W=112;
+      const bg=g.createRadialGradient(W*.4,W*.3,4,W/2,W/2,W*.75);bg.addColorStop(0,'#fff3c8');bg.addColorStop(1,'#d9a85a');g.fillStyle=bg;g.fillRect(0,0,W,W);
+      g.drawImage(pi,0,0,W,W);try{_wi[pk]=cv.toDataURL()}catch(e){_wi[pk]=''}if(_wi[pk])return _wi[pk]}
+  }
   const f=window.__hero==='f',key=it.id+(f?'f':'m');if(_wi[key])return _wi[key];
   const W=112,cv=document.createElement('canvas');cv.width=cv.height=W;const g=cv.getContext('2d');
   const bg=g.createRadialGradient(W*.4,W*.3,4,W/2,W/2,W*.75);bg.addColorStop(0,'#fff3c8');bg.addColorStop(1,'#d9a85a');g.fillStyle=bg;g.fillRect(0,0,W,W);
@@ -9032,6 +9065,7 @@ function wearImg(it){
   g.restore();
   try{_wi[key]=cv.toDataURL()}catch(e){_wi[key]=''}return _wi[key];
 }
+setTimeout(()=>{try{portImg('capitano-giacca/neutro');portImg('capitano-marinaio/neutro')}catch(e){}},2500);
 function wardSheet(kind){     // kind: 'hat' | 'out'
   const list=WEAR.filter(x=>x.k===kind&&!wHid(x)),own=list.filter(wOwned),lock=list.filter(x=>!wOwned(x));
   const sel=(S.wear||{})[kind];
@@ -9194,9 +9228,9 @@ function drawBigMap(g,W,H){
   // dove è andato Biscotto a guardare
   if(S.flags.parrot&&PQ.mark&&isInter(PQ.mark)&&RT-PQ.markT<600){
     const x=X(PQ.mark.x),y=Y(PQ.mark.y),t=performance.now()/1000,r=9+Math.sin(t*4)*2;
-    g.strokeStyle='#ff5a3a';g.lineWidth=2.4;g.beginPath();g.arc(x,y,r,0,7);g.stroke();
-    g.fillStyle='#e2402a';g.strokeStyle='#fff';g.lineWidth=1.6;g.beginPath();g.arc(x,y,5,0,7);g.fill();g.stroke();
-    lab(pn('Biscotto')+' è stato qui',x,y-18,'#ffb89a');
+    parBadge(g,x,y,12);
+    g.fillStyle='#ffd23a';g.strokeStyle='#2a1a0e';g.lineWidth=1.6;g.save();g.translate(x,y-20-Math.sin(t*6)*2.5);g.beginPath();g.moveTo(0,8);g.lineTo(-8,-4);g.lineTo(8,-4);g.closePath();g.fill();g.stroke();g.restore();
+    lab(pn('Biscotto')+' è stato qui',x,y-40,'#ffb89a');
   }
   if(S.flags.parrot&&hyp(PAR.x-P.x,PAR.y-P.y)>7*TS){   // Biscotto è lontano dalla vista: lo segno sulla mappa
     const x=X(PAR.x),y=Y(PAR.y),t=performance.now()/1000,r=11+Math.sin(t*5)*2.5;
@@ -9210,7 +9244,7 @@ function drawBigMap(g,W,H){
 }
 UI.openBigMap=function(){
   if(!S||!S.live||dl.open||PAUSED)return;
-  mapModal("Mappa dell'isola",drawBigMap,"Tocca la mappa per mettere o togliere una bandierina rossa.  Il cerchio rosso indica dove è andato il pappagallo a guardare. Si vede solo ciò che hai esplorato.");
+  mapModal("Mappa dell'isola",drawBigMap,"Tocca la mappa per mettere o togliere una bandierina rossa.  La testa del pappagallo con la freccia indica dove è andato a guardare. Si vede solo ciò che hai esplorato.");
   const cv=$('mapCv');cv.style.cursor='pointer';
   cv.onclick=ev=>{
     const r=cv.getBoundingClientRect(),rot=document.body.classList.contains('rot');
