@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v140 — Mercante e barchetta ridisegnati (Muse, arretrati 23 nov)
+- Montati il mercante nuovo (fermo, offre monete, offre forziere) e la barchetta attraccata ridisegnata in stile Sirena v2; ritratto nuovo negli scambi.
+- Ombra della barchetta data dal gioco.
+
 ## v139 — Mercante e barchetta nuovi (Muse)
 - Il mercante di passaggio usa il personaggio nuovo di Muse (fermo / offre merce quando ti avvicini) e la barchetta attraccata con bancarella, casse, barile, sacco e cartello moneta.
 - Ritratto del mercante nella finestra degli scambi.

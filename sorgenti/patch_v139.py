@@ -32,8 +32,8 @@ X2.merDraw=function(g,t){
   dr('merce-sacco',110,516,.12,-44,20);
   dr('cartello-moneta',230,476,.13,96,22);
   const near=Math.hypot(P.x-(x+62),P.y-(y+14))<TS*3.2,k=near?(((t/1.6)|0)%%2?'mercante-fronte-offre2':'mercante-fronte-offre1'):'mercante-fronte-fermo';
-  g.fillStyle='rgba(20,12,4,.28)';g.beginPath();g.ellipse(x+62,y+16,19,5.5,0,0,7);g.fill();
-  dr(k,168,364,.2,62,14);
+  g.fillStyle='rgba(20,12,4,.28)';g.beginPath();g.ellipse(x+62,y+16,21,6,0,0,7);g.fill();
+  dr(k,168,374,.23,62,14);
   g.restore();
   twinkle(g,x+30,y-72,t,7,1.3,'#ffe27a');
 };
