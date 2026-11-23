@@ -1,0 +1,792 @@
+{
+ "personaggio": "dodo",
+ "tela": [
+  336,
+  376
+ ],
+ "nota": "coordinate in pixel della tela 336x376 del fermo attuale; 'cerniera' e' il punto di rotazione dentro il file del pezzo; 'cerniera_canvas' lo stesso punto sulla tela a riposo; 'genitore' indica la gerarchia per le rotazioni composte; la caviglia e' data come riferimento: stinco e stivale sono un pezzo unico",
+ "viste": {
+  "fronte": {
+   "giunti": {
+    "collo": [
+     168,
+     178
+    ],
+    "spalla-sinistra": [
+     67,
+     183
+    ],
+    "spalla-destra": [
+     269,
+     183
+    ],
+    "gomito-sinistro": [
+     67,
+     244
+    ],
+    "gomito-destra": [
+     269,
+     244
+    ],
+    "anca-sinistra": [
+     116,
+     262
+    ],
+    "anca-destra": [
+     220,
+     262
+    ],
+    "ginocchio-sinistro": [
+     116,
+     297
+    ],
+    "ginocchio-destra": [
+     220,
+     297
+    ],
+    "caviglia-sinistra": [
+     116,
+     357
+    ],
+    "caviglia-destra": [
+     220,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "dodo-fronte-stinco-sinistro.png",
+     "offset": [
+      59,
+      286
+     ],
+     "dimensione": [
+      113,
+      84
+     ],
+     "cerniera": [
+      57,
+      11
+     ],
+     "cerniera_canvas": [
+      116,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "dodo-fronte-stinco-destro.png",
+     "offset": [
+      164,
+      286
+     ],
+     "dimensione": [
+      89,
+      90
+     ],
+     "cerniera": [
+      56,
+      11
+     ],
+     "cerniera_canvas": [
+      220,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "dodo-fronte-coscia-sinistra.png",
+     "offset": [
+      47,
+      244
+     ],
+     "dimensione": [
+      127,
+      68
+     ],
+     "cerniera": [
+      69,
+      18
+     ],
+     "cerniera_canvas": [
+      116,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "dodo-fronte-coscia-destra.png",
+     "offset": [
+      162,
+      244
+     ],
+     "dimensione": [
+      112,
+      68
+     ],
+     "cerniera": [
+      58,
+      18
+     ],
+     "cerniera_canvas": [
+      220,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "dodo-fronte-busto.png",
+     "offset": [
+      42,
+      158
+     ],
+     "dimensione": [
+      232,
+      116
+     ],
+     "cerniera": [
+      126,
+      108
+     ],
+     "cerniera_canvas": [
+      168,
+      266
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "dodo-fronte-testa.png",
+     "offset": [
+      56,
+      0
+     ],
+     "dimensione": [
+      243,
+      188
+     ],
+     "cerniera": [
+      112,
+      178
+     ],
+     "cerniera_canvas": [
+      168,
+      178
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "dodo-fronte-braccio-alto-sinistro.png",
+     "offset": [
+      37,
+      169
+     ],
+     "dimensione": [
+      65,
+      83
+     ],
+     "cerniera": [
+      30,
+      14
+     ],
+     "cerniera_canvas": [
+      67,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "dodo-fronte-braccio-alto-destro.png",
+     "offset": [
+      234,
+      175
+     ],
+     "dimensione": [
+      40,
+      77
+     ],
+     "cerniera": [
+      35,
+      8
+     ],
+     "cerniera_canvas": [
+      269,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "dodo-fronte-avambraccio-sinistro.png",
+     "offset": [
+      40,
+      241
+     ],
+     "dimensione": [
+      76,
+      56
+     ],
+     "cerniera": [
+      27,
+      3
+     ],
+     "cerniera_canvas": [
+      67,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "dodo-fronte-avambraccio-destro.png",
+     "offset": [
+      220,
+      241
+     ],
+     "dimensione": [
+      54,
+      56
+     ],
+     "cerniera": [
+      49,
+      3
+     ],
+     "cerniera_canvas": [
+      269,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  },
+  "profilo-destro": {
+   "giunti": {
+    "collo": [
+     165,
+     162
+    ],
+    "spalla-davanti": [
+     157,
+     180
+    ],
+    "spalla-dietro": [
+     149,
+     180
+    ],
+    "gomito-davanti": [
+     159,
+     248
+    ],
+    "gomito-dietro": [
+     151,
+     248
+    ],
+    "anca-davanti": [
+     173,
+     259
+    ],
+    "anca-dietro": [
+     116,
+     259
+    ],
+    "ginocchio-davanti": [
+     176,
+     301
+    ],
+    "ginocchio-dietro": [
+     116,
+     301
+    ],
+    "caviglia-davanti": [
+     182,
+     357
+    ],
+    "caviglia-dietro": [
+     118,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-dietro": {
+     "file": "dodo-profilo-destro-stinco-dietro.png",
+     "offset": [
+      35,
+      286
+     ],
+     "dimensione": [
+      119,
+      87
+     ],
+     "cerniera": [
+      81,
+      15
+     ],
+     "cerniera_canvas": [
+      116,
+      301
+     ],
+     "ordine": 1,
+     "genitore": "coscia-dietro"
+    },
+    "coscia-dietro": {
+     "file": "dodo-profilo-destro-coscia-dietro.png",
+     "offset": [
+      36,
+      241
+     ],
+     "dimensione": [
+      118,
+      82
+     ],
+     "cerniera": [
+      80,
+      18
+     ],
+     "cerniera_canvas": [
+      116,
+      259
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "stinco-davanti": {
+     "file": "dodo-profilo-destro-stinco-davanti.png",
+     "offset": [
+      138,
+      286
+     ],
+     "dimensione": [
+      155,
+      90
+     ],
+     "cerniera": [
+      38,
+      15
+     ],
+     "cerniera_canvas": [
+      176,
+      301
+     ],
+     "ordine": 3,
+     "genitore": "coscia-davanti"
+    },
+    "coscia-davanti": {
+     "file": "dodo-profilo-destro-coscia-davanti.png",
+     "offset": [
+      138,
+      241
+     ],
+     "dimensione": [
+      154,
+      82
+     ],
+     "cerniera": [
+      35,
+      18
+     ],
+     "cerniera_canvas": [
+      173,
+      259
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-dietro": {
+     "file": "dodo-profilo-destro-braccio-alto-dietro.png",
+     "offset": [
+      83,
+      162
+     ],
+     "dimensione": [
+      137,
+      94
+     ],
+     "cerniera": [
+      66,
+      18
+     ],
+     "cerniera_canvas": [
+      149,
+      180
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "busto"
+    },
+    "avambraccio-dietro": {
+     "file": "dodo-profilo-destro-avambraccio-dietro.png",
+     "offset": [
+      83,
+      237
+     ],
+     "dimensione": [
+      137,
+      71
+     ],
+     "cerniera": [
+      68,
+      11
+     ],
+     "cerniera_canvas": [
+      151,
+      248
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "braccio-alto-dietro"
+    },
+    "busto": {
+     "file": "dodo-profilo-destro-busto.png",
+     "offset": [
+      37,
+      128
+     ],
+     "dimensione": [
+      267,
+      113
+     ],
+     "cerniera": [
+      122,
+      139
+     ],
+     "cerniera_canvas": [
+      159,
+      267
+     ],
+     "ordine": 6,
+     "genitore": null
+    },
+    "testa": {
+     "file": "dodo-profilo-destro-testa.png",
+     "offset": [
+      31,
+      0
+     ],
+     "dimensione": [
+      239,
+      188
+     ],
+     "cerniera": [
+      134,
+      162
+     ],
+     "cerniera_canvas": [
+      165,
+      162
+     ],
+     "ordine": 7,
+     "genitore": "busto"
+    },
+    "braccio-alto-davanti": {
+     "file": "dodo-profilo-destro-braccio-alto-davanti.png",
+     "offset": [
+      91,
+      162
+     ],
+     "dimensione": [
+      137,
+      94
+     ],
+     "cerniera": [
+      66,
+      18
+     ],
+     "cerniera_canvas": [
+      157,
+      180
+     ],
+     "ordine": 8,
+     "genitore": "busto"
+    },
+    "avambraccio-davanti": {
+     "file": "dodo-profilo-destro-avambraccio-davanti.png",
+     "offset": [
+      91,
+      237
+     ],
+     "dimensione": [
+      137,
+      71
+     ],
+     "cerniera": [
+      68,
+      11
+     ],
+     "cerniera_canvas": [
+      159,
+      248
+     ],
+     "ordine": 9,
+     "genitore": "braccio-alto-davanti"
+    }
+   }
+  },
+  "spalle": {
+   "giunti": {
+    "collo": [
+     168,
+     207
+    ],
+    "spalla-sinistra": [
+     66,
+     222
+    ],
+    "spalla-destra": [
+     270,
+     222
+    ],
+    "gomito-sinistro": [
+     66,
+     286
+    ],
+    "gomito-destra": [
+     270,
+     286
+    ],
+    "anca-sinistra": [
+     114,
+     305
+    ],
+    "anca-destra": [
+     222,
+     305
+    ],
+    "ginocchio-sinistro": [
+     114,
+     331
+    ],
+    "ginocchio-destra": [
+     222,
+     331
+    ],
+    "caviglia-sinistra": [
+     114,
+     357
+    ],
+    "caviglia-destra": [
+     222,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "dodo-spalle-stinco-sinistro.png",
+     "offset": [
+      104,
+      320
+     ],
+     "dimensione": [
+      68,
+      41
+     ],
+     "cerniera": [
+      10,
+      11
+     ],
+     "cerniera_canvas": [
+      114,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "dodo-spalle-stinco-destro.png",
+     "offset": [
+      164,
+      320
+     ],
+     "dimensione": [
+      78,
+      56
+     ],
+     "cerniera": [
+      58,
+      11
+     ],
+     "cerniera_canvas": [
+      222,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "dodo-spalle-coscia-sinistra.png",
+     "offset": [
+      86,
+      286
+     ],
+     "dimensione": [
+      88,
+      60
+     ],
+     "cerniera": [
+      28,
+      19
+     ],
+     "cerniera_canvas": [
+      114,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "dodo-spalle-coscia-destra.png",
+     "offset": [
+      162,
+      286
+     ],
+     "dimensione": [
+      95,
+      60
+     ],
+     "cerniera": [
+      60,
+      19
+     ],
+     "cerniera_canvas": [
+      222,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "dodo-spalle-busto.png",
+     "offset": [
+      31,
+      196
+     ],
+     "dimensione": [
+      274,
+      127
+     ],
+     "cerniera": [
+      137,
+      113
+     ],
+     "cerniera_canvas": [
+      168,
+      309
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "dodo-spalle-testa.png",
+     "offset": [
+      36,
+      0
+     ],
+     "dimensione": [
+      272,
+      218
+     ],
+     "cerniera": [
+      132,
+      207
+     ],
+     "cerniera_canvas": [
+      168,
+      207
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "dodo-spalle-braccio-alto-sinistro.png",
+     "offset": [
+      25,
+      203
+     ],
+     "dimensione": [
+      71,
+      87
+     ],
+     "cerniera": [
+      41,
+      19
+     ],
+     "cerniera_canvas": [
+      66,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "dodo-spalle-braccio-alto-destro.png",
+     "offset": [
+      240,
+      203
+     ],
+     "dimensione": [
+      71,
+      87
+     ],
+     "cerniera": [
+      30,
+      19
+     ],
+     "cerniera_canvas": [
+      270,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "dodo-spalle-avambraccio-sinistro.png",
+     "offset": [
+      86,
+      274
+     ],
+     "dimensione": [
+      25,
+      59
+     ],
+     "cerniera": [
+      -20,
+      12
+     ],
+     "cerniera_canvas": [
+      66,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "dodo-spalle-avambraccio-destro.png",
+     "offset": [
+      225,
+      274
+     ],
+     "dimensione": [
+      32,
+      64
+     ],
+     "cerniera": [
+      45,
+      12
+     ],
+     "cerniera_canvas": [
+      270,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  }
+ }
+}
