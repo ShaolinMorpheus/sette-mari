@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## v135 — Sirena: i 3 stadi di Muse (relitto, riparazione, riparata)
+- Montate le tre versioni di Muse (21 nov, sirena-cala) al posto della nave a due alberi: 1 da riparare, 2 in riparazione, 3 riparata. Sabbia disegnata tolta e scafo infossato nel terreno vero lungo la chiglia.
+- Per ogni stadio: collisione sullo scafo, alberi/vele attraversabili con personaggio dietro, anello giallo attorno allo scafo.
+
+
 ## v134 — Sirena: collisione, vele, anello, stadi; via le tartarughe
 - Poppa pulita: tagliato il pezzo di timone/sabbia sotto lo scafo.
 - Collisione su tutto lo scafo (calcolata dalla sagoma, segue la diagonale); alberi, vele e sartie si attraversano e il personaggio passa dietro (disegno a strisce ordinate per profondità).
