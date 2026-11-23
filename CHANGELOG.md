@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## v142 — Tartarughe nuove (Muse)
+- Tornano le tartarughe nel mare: verde e cucciola dall'alto, nuoto a 8 fotogrammi (pinne anteriori che remano, posteriori che timonano). Solo con Grafica di prova + Mappa di prova.
+
 ## v141 — Sirena: via il bianco a prua, onde lontane dallo scafo
 - Tolti i pixel chiari rimasti sul bordo basso dello scafo (pezzo bianco a prua).
 - La riva vicino alla prua è stata spostata: le onde non vanno più sotto il disegno.
