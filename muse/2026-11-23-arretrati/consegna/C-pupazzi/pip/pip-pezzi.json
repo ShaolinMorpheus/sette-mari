@@ -1,0 +1,792 @@
+{
+ "personaggio": "pip",
+ "tela": [
+  336,
+  376
+ ],
+ "nota": "coordinate in pixel della tela 336x376 del fermo attuale; 'cerniera' e' il punto di rotazione dentro il file del pezzo; 'cerniera_canvas' lo stesso punto sulla tela a riposo; 'genitore' indica la gerarchia per le rotazioni composte; la caviglia e' data come riferimento: stinco e stivale sono un pezzo unico",
+ "viste": {
+  "fronte": {
+   "giunti": {
+    "collo": [
+     168,
+     202
+    ],
+    "spalla-sinistra": [
+     79,
+     207
+    ],
+    "spalla-destra": [
+     257,
+     207
+    ],
+    "gomito-sinistro": [
+     79,
+     260
+    ],
+    "gomito-destra": [
+     257,
+     260
+    ],
+    "anca-sinistra": [
+     122,
+     276
+    ],
+    "anca-destra": [
+     214,
+     276
+    ],
+    "ginocchio-sinistro": [
+     122,
+     306
+    ],
+    "ginocchio-destra": [
+     214,
+     306
+    ],
+    "caviglia-sinistra": [
+     122,
+     359
+    ],
+    "caviglia-destra": [
+     214,
+     359
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "pip-fronte-stinco-sinistro.png",
+     "offset": [
+      109,
+      297
+     ],
+     "dimensione": [
+      63,
+      79
+     ],
+     "cerniera": [
+      13,
+      9
+     ],
+     "cerniera_canvas": [
+      122,
+      306
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "pip-fronte-stinco-destro.png",
+     "offset": [
+      164,
+      297
+     ],
+     "dimensione": [
+      81,
+      78
+     ],
+     "cerniera": [
+      50,
+      9
+     ],
+     "cerniera_canvas": [
+      214,
+      306
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "pip-fronte-coscia-sinistra.png",
+     "offset": [
+      103,
+      260
+     ],
+     "dimensione": [
+      71,
+      60
+     ],
+     "cerniera": [
+      19,
+      16
+     ],
+     "cerniera_canvas": [
+      122,
+      276
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "pip-fronte-coscia-destra.png",
+     "offset": [
+      162,
+      260
+     ],
+     "dimensione": [
+      87,
+      60
+     ],
+     "cerniera": [
+      52,
+      16
+     ],
+     "cerniera_canvas": [
+      214,
+      276
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "pip-fronte-busto.png",
+     "offset": [
+      63,
+      184
+     ],
+     "dimensione": [
+      186,
+      103
+     ],
+     "cerniera": [
+      105,
+      96
+     ],
+     "cerniera_canvas": [
+      168,
+      280
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "pip-fronte-testa.png",
+     "offset": [
+      53,
+      45
+     ],
+     "dimensione": [
+      230,
+      165
+     ],
+     "cerniera": [
+      115,
+      157
+     ],
+     "cerniera_canvas": [
+      168,
+      202
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "pip-fronte-braccio-alto-sinistro.png",
+     "offset": [
+      101,
+      194
+     ],
+     "dimensione": [
+      9,
+      73
+     ],
+     "cerniera": [
+      -22,
+      13
+     ],
+     "cerniera_canvas": [
+      79,
+      207
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "pip-fronte-braccio-alto-destro.png",
+     "offset": [
+      226,
+      194
+     ],
+     "dimensione": [
+      18,
+      73
+     ],
+     "cerniera": [
+      31,
+      13
+     ],
+     "cerniera_canvas": [
+      257,
+      207
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "pip-fronte-avambraccio-sinistro.png",
+     "offset": [
+      103,
+      257
+     ],
+     "dimensione": [
+      19,
+      49
+     ],
+     "cerniera": [
+      -24,
+      3
+     ],
+     "cerniera_canvas": [
+      79,
+      260
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "pip-fronte-avambraccio-destro.png",
+     "offset": [
+      214,
+      257
+     ],
+     "dimensione": [
+      35,
+      49
+     ],
+     "cerniera": [
+      43,
+      3
+     ],
+     "cerniera_canvas": [
+      257,
+      260
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  },
+  "profilo-destro": {
+   "giunti": {
+    "collo": [
+     166,
+     187
+    ],
+    "spalla-davanti": [
+     162,
+     204
+    ],
+    "spalla-dietro": [
+     154,
+     204
+    ],
+    "gomito-davanti": [
+     163,
+     263
+    ],
+    "gomito-dietro": [
+     155,
+     263
+    ],
+    "anca-davanti": [
+     171,
+     273
+    ],
+    "anca-dietro": [
+     138,
+     273
+    ],
+    "ginocchio-davanti": [
+     173,
+     310
+    ],
+    "ginocchio-dietro": [
+     138,
+     310
+    ],
+    "caviglia-davanti": [
+     179,
+     359
+    ],
+    "caviglia-dietro": [
+     140,
+     359
+    ]
+   },
+   "pezzi": {
+    "stinco-dietro": {
+     "file": "pip-profilo-destro-stinco-dietro.png",
+     "offset": [
+      90,
+      297
+     ],
+     "dimensione": [
+      74,
+      79
+     ],
+     "cerniera": [
+      48,
+      13
+     ],
+     "cerniera_canvas": [
+      138,
+      310
+     ],
+     "ordine": 1,
+     "genitore": "coscia-dietro"
+    },
+    "coscia-dietro": {
+     "file": "pip-profilo-destro-coscia-dietro.png",
+     "offset": [
+      92,
+      257
+     ],
+     "dimensione": [
+      72,
+      73
+     ],
+     "cerniera": [
+      46,
+      16
+     ],
+     "cerniera_canvas": [
+      138,
+      273
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "stinco-davanti": {
+     "file": "pip-profilo-destro-stinco-davanti.png",
+     "offset": [
+      148,
+      297
+     ],
+     "dimensione": [
+      98,
+      77
+     ],
+     "cerniera": [
+      25,
+      13
+     ],
+     "cerniera_canvas": [
+      173,
+      310
+     ],
+     "ordine": 3,
+     "genitore": "coscia-davanti"
+    },
+    "coscia-davanti": {
+     "file": "pip-profilo-destro-coscia-davanti.png",
+     "offset": [
+      148,
+      257
+     ],
+     "dimensione": [
+      93,
+      73
+     ],
+     "cerniera": [
+      23,
+      16
+     ],
+     "cerniera_canvas": [
+      171,
+      273
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-dietro": {
+     "file": "pip-profilo-destro-braccio-alto-dietro.png",
+     "offset": [
+      116,
+      187
+     ],
+     "dimensione": [
+      78,
+      83
+     ],
+     "cerniera": [
+      38,
+      17
+     ],
+     "cerniera_canvas": [
+      154,
+      204
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "busto"
+    },
+    "avambraccio-dietro": {
+     "file": "pip-profilo-destro-avambraccio-dietro.png",
+     "offset": [
+      116,
+      254
+     ],
+     "dimensione": [
+      78,
+      62
+     ],
+     "cerniera": [
+      39,
+      9
+     ],
+     "cerniera_canvas": [
+      155,
+      263
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "braccio-alto-dietro"
+    },
+    "busto": {
+     "file": "pip-profilo-destro-busto.png",
+     "offset": [
+      104,
+      158
+     ],
+     "dimensione": [
+      142,
+      99
+     ],
+     "cerniera": [
+      59,
+      122
+     ],
+     "cerniera_canvas": [
+      163,
+      280
+     ],
+     "ordine": 6,
+     "genitore": null
+    },
+    "testa": {
+     "file": "pip-profilo-destro-testa.png",
+     "offset": [
+      96,
+      45
+     ],
+     "dimensione": [
+      150,
+      165
+     ],
+     "cerniera": [
+      70,
+      142
+     ],
+     "cerniera_canvas": [
+      166,
+      187
+     ],
+     "ordine": 7,
+     "genitore": "busto"
+    },
+    "braccio-alto-davanti": {
+     "file": "pip-profilo-destro-braccio-alto-davanti.png",
+     "offset": [
+      124,
+      187
+     ],
+     "dimensione": [
+      78,
+      83
+     ],
+     "cerniera": [
+      38,
+      17
+     ],
+     "cerniera_canvas": [
+      162,
+      204
+     ],
+     "ordine": 8,
+     "genitore": "busto"
+    },
+    "avambraccio-davanti": {
+     "file": "pip-profilo-destro-avambraccio-davanti.png",
+     "offset": [
+      124,
+      254
+     ],
+     "dimensione": [
+      78,
+      62
+     ],
+     "cerniera": [
+      39,
+      9
+     ],
+     "cerniera_canvas": [
+      163,
+      263
+     ],
+     "ordine": 9,
+     "genitore": "braccio-alto-davanti"
+    }
+   }
+  },
+  "spalle": {
+   "giunti": {
+    "collo": [
+     167,
+     227
+    ],
+    "spalla-sinistra": [
+     125,
+     240
+    ],
+    "spalla-destra": [
+     209,
+     240
+    ],
+    "gomito-sinistro": [
+     125,
+     297
+    ],
+    "gomito-destra": [
+     209,
+     297
+    ],
+    "anca-sinistra": [
+     145,
+     313
+    ],
+    "anca-destra": [
+     189,
+     313
+    ],
+    "ginocchio-sinistro": [
+     145,
+     336
+    ],
+    "ginocchio-destra": [
+     189,
+     336
+    ],
+    "caviglia-sinistra": [
+     145,
+     359
+    ],
+    "caviglia-destra": [
+     189,
+     359
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "pip-spalle-stinco-sinistro.png",
+     "offset": [
+      134,
+      326
+     ],
+     "dimensione": [
+      34,
+      50
+     ],
+     "cerniera": [
+      11,
+      10
+     ],
+     "cerniera_canvas": [
+      145,
+      336
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "pip-spalle-stinco-destro.png",
+     "offset": [
+      163,
+      326
+     ],
+     "dimensione": [
+      41,
+      45
+     ],
+     "cerniera": [
+      26,
+      10
+     ],
+     "cerniera_canvas": [
+      189,
+      336
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "pip-spalle-coscia-sinistra.png",
+     "offset": [
+      132,
+      297
+     ],
+     "dimensione": [
+      41,
+      53
+     ],
+     "cerniera": [
+      13,
+      16
+     ],
+     "cerniera_canvas": [
+      145,
+      313
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "pip-spalle-coscia-destra.png",
+     "offset": [
+      161,
+      297
+     ],
+     "dimensione": [
+      43,
+      53
+     ],
+     "cerniera": [
+      28,
+      16
+     ],
+     "cerniera_canvas": [
+      189,
+      313
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "pip-spalle-busto.png",
+     "offset": [
+      112,
+      217
+     ],
+     "dimensione": [
+      113,
+      113
+     ],
+     "cerniera": [
+      55,
+      100
+     ],
+     "cerniera_canvas": [
+      167,
+      317
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "pip-spalle-testa.png",
+     "offset": [
+      108,
+      45
+     ],
+     "dimensione": [
+      119,
+      192
+     ],
+     "cerniera": [
+      59,
+      182
+     ],
+     "cerniera_canvas": [
+      167,
+      227
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "pip-spalle-braccio-alto-sinistro.png",
+     "offset": [
+      112,
+      224
+     ],
+     "dimensione": [
+      26,
+      76
+     ],
+     "cerniera": [
+      13,
+      16
+     ],
+     "cerniera_canvas": [
+      125,
+      240
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "pip-spalle-braccio-alto-destro.png",
+     "offset": [
+      197,
+      224
+     ],
+     "dimensione": [
+      29,
+      76
+     ],
+     "cerniera": [
+      12,
+      16
+     ],
+     "cerniera_canvas": [
+      209,
+      240
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "pip-spalle-avambraccio-sinistro.png",
+     "offset": [
+      124,
+      287
+     ],
+     "dimensione": [
+      20,
+      56
+     ],
+     "cerniera": [
+      1,
+      10
+     ],
+     "cerniera_canvas": [
+      125,
+      297
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "pip-spalle-avambraccio-destro.png",
+     "offset": [
+      191,
+      287
+     ],
+     "dimensione": [
+      32,
+      56
+     ],
+     "cerniera": [
+      18,
+      10
+     ],
+     "cerniera_canvas": [
+      209,
+      297
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  }
+ }
+}

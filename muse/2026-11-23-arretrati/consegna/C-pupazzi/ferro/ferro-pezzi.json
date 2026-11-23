@@ -1,0 +1,792 @@
+{
+ "personaggio": "ferro",
+ "tela": [
+  336,
+  376
+ ],
+ "nota": "coordinate in pixel della tela 336x376 del fermo attuale; 'cerniera' e' il punto di rotazione dentro il file del pezzo; 'cerniera_canvas' lo stesso punto sulla tela a riposo; 'genitore' indica la gerarchia per le rotazioni composte; la caviglia e' data come riferimento: stinco e stivale sono un pezzo unico",
+ "viste": {
+  "fronte": {
+   "giunti": {
+    "collo": [
+     168,
+     178
+    ],
+    "spalla-sinistra": [
+     76,
+     183
+    ],
+    "spalla-destra": [
+     260,
+     183
+    ],
+    "gomito-sinistro": [
+     76,
+     244
+    ],
+    "gomito-destra": [
+     260,
+     244
+    ],
+    "anca-sinistra": [
+     120,
+     262
+    ],
+    "anca-destra": [
+     216,
+     262
+    ],
+    "ginocchio-sinistro": [
+     120,
+     297
+    ],
+    "ginocchio-destra": [
+     216,
+     297
+    ],
+    "caviglia-sinistra": [
+     120,
+     357
+    ],
+    "caviglia-destra": [
+     216,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "ferro-fronte-stinco-sinistro.png",
+     "offset": [
+      113,
+      286
+     ],
+     "dimensione": [
+      59,
+      86
+     ],
+     "cerniera": [
+      7,
+      11
+     ],
+     "cerniera_canvas": [
+      120,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "ferro-fronte-stinco-destro.png",
+     "offset": [
+      164,
+      286
+     ],
+     "dimensione": [
+      110,
+      90
+     ],
+     "cerniera": [
+      52,
+      11
+     ],
+     "cerniera_canvas": [
+      216,
+      297
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "ferro-fronte-coscia-sinistra.png",
+     "offset": [
+      71,
+      244
+     ],
+     "dimensione": [
+      103,
+      68
+     ],
+     "cerniera": [
+      49,
+      18
+     ],
+     "cerniera_canvas": [
+      120,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "ferro-fronte-coscia-destra.png",
+     "offset": [
+      162,
+      244
+     ],
+     "dimensione": [
+      109,
+      68
+     ],
+     "cerniera": [
+      54,
+      18
+     ],
+     "cerniera_canvas": [
+      216,
+      262
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "ferro-fronte-busto.png",
+     "offset": [
+      68,
+      158
+     ],
+     "dimensione": [
+      200,
+      116
+     ],
+     "cerniera": [
+      100,
+      108
+     ],
+     "cerniera_canvas": [
+      168,
+      266
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "ferro-fronte-testa.png",
+     "offset": [
+      48,
+      0
+     ],
+     "dimensione": [
+      240,
+      188
+     ],
+     "cerniera": [
+      120,
+      178
+     ],
+     "cerniera_canvas": [
+      168,
+      178
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "ferro-fronte-braccio-alto-sinistro.png",
+     "offset": [
+      68,
+      169
+     ],
+     "dimensione": [
+      40,
+      83
+     ],
+     "cerniera": [
+      8,
+      14
+     ],
+     "cerniera_canvas": [
+      76,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "ferro-fronte-braccio-alto-destro.png",
+     "offset": [
+      228,
+      169
+     ],
+     "dimensione": [
+      40,
+      83
+     ],
+     "cerniera": [
+      32,
+      14
+     ],
+     "cerniera_canvas": [
+      260,
+      183
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "ferro-fronte-avambraccio-sinistro.png",
+     "offset": [
+      71,
+      241
+     ],
+     "dimensione": [
+      49,
+      56
+     ],
+     "cerniera": [
+      5,
+      3
+     ],
+     "cerniera_canvas": [
+      76,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "ferro-fronte-avambraccio-destro.png",
+     "offset": [
+      216,
+      241
+     ],
+     "dimensione": [
+      48,
+      56
+     ],
+     "cerniera": [
+      44,
+      3
+     ],
+     "cerniera_canvas": [
+      260,
+      244
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  },
+  "profilo-destro": {
+   "giunti": {
+    "collo": [
+     165,
+     162
+    ],
+    "spalla-davanti": [
+     158,
+     180
+    ],
+    "spalla-dietro": [
+     150,
+     180
+    ],
+    "gomito-davanti": [
+     160,
+     248
+    ],
+    "gomito-dietro": [
+     152,
+     248
+    ],
+    "anca-davanti": [
+     172,
+     259
+    ],
+    "anca-dietro": [
+     122,
+     259
+    ],
+    "ginocchio-davanti": [
+     175,
+     301
+    ],
+    "ginocchio-dietro": [
+     122,
+     301
+    ],
+    "caviglia-davanti": [
+     181,
+     357
+    ],
+    "caviglia-dietro": [
+     124,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-dietro": {
+     "file": "ferro-profilo-destro-stinco-dietro.png",
+     "offset": [
+      49,
+      286
+     ],
+     "dimensione": [
+      108,
+      90
+     ],
+     "cerniera": [
+      73,
+      15
+     ],
+     "cerniera_canvas": [
+      122,
+      301
+     ],
+     "ordine": 1,
+     "genitore": "coscia-dietro"
+    },
+    "coscia-dietro": {
+     "file": "ferro-profilo-destro-coscia-dietro.png",
+     "offset": [
+      49,
+      241
+     ],
+     "dimensione": [
+      108,
+      82
+     ],
+     "cerniera": [
+      73,
+      18
+     ],
+     "cerniera_canvas": [
+      122,
+      259
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "stinco-davanti": {
+     "file": "ferro-profilo-destro-stinco-davanti.png",
+     "offset": [
+      141,
+      286
+     ],
+     "dimensione": [
+      145,
+      78
+     ],
+     "cerniera": [
+      34,
+      15
+     ],
+     "cerniera_canvas": [
+      175,
+      301
+     ],
+     "ordine": 3,
+     "genitore": "coscia-davanti"
+    },
+    "coscia-davanti": {
+     "file": "ferro-profilo-destro-coscia-davanti.png",
+     "offset": [
+      141,
+      241
+     ],
+     "dimensione": [
+      145,
+      82
+     ],
+     "cerniera": [
+      31,
+      18
+     ],
+     "cerniera_canvas": [
+      172,
+      259
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-dietro": {
+     "file": "ferro-profilo-destro-braccio-alto-dietro.png",
+     "offset": [
+      93,
+      162
+     ],
+     "dimensione": [
+      119,
+      94
+     ],
+     "cerniera": [
+      57,
+      18
+     ],
+     "cerniera_canvas": [
+      150,
+      180
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "busto"
+    },
+    "avambraccio-dietro": {
+     "file": "ferro-profilo-destro-avambraccio-dietro.png",
+     "offset": [
+      93,
+      237
+     ],
+     "dimensione": [
+      119,
+      71
+     ],
+     "cerniera": [
+      59,
+      11
+     ],
+     "cerniera_canvas": [
+      152,
+      248
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "braccio-alto-dietro"
+    },
+    "busto": {
+     "file": "ferro-profilo-destro-busto.png",
+     "offset": [
+      57,
+      128
+     ],
+     "dimensione": [
+      229,
+      113
+     ],
+     "cerniera": [
+      103,
+      139
+     ],
+     "cerniera_canvas": [
+      160,
+      267
+     ],
+     "ordine": 6,
+     "genitore": null
+    },
+    "testa": {
+     "file": "ferro-profilo-destro-testa.png",
+     "offset": [
+      88,
+      0
+     ],
+     "dimensione": [
+      198,
+      188
+     ],
+     "cerniera": [
+      77,
+      162
+     ],
+     "cerniera_canvas": [
+      165,
+      162
+     ],
+     "ordine": 7,
+     "genitore": "busto"
+    },
+    "braccio-alto-davanti": {
+     "file": "ferro-profilo-destro-braccio-alto-davanti.png",
+     "offset": [
+      101,
+      162
+     ],
+     "dimensione": [
+      119,
+      94
+     ],
+     "cerniera": [
+      57,
+      18
+     ],
+     "cerniera_canvas": [
+      158,
+      180
+     ],
+     "ordine": 8,
+     "genitore": "busto"
+    },
+    "avambraccio-davanti": {
+     "file": "ferro-profilo-destro-avambraccio-davanti.png",
+     "offset": [
+      101,
+      237
+     ],
+     "dimensione": [
+      119,
+      71
+     ],
+     "cerniera": [
+      59,
+      11
+     ],
+     "cerniera_canvas": [
+      160,
+      248
+     ],
+     "ordine": 9,
+     "genitore": "braccio-alto-davanti"
+    }
+   }
+  },
+  "spalle": {
+   "giunti": {
+    "collo": [
+     168,
+     207
+    ],
+    "spalla-sinistra": [
+     79,
+     222
+    ],
+    "spalla-destra": [
+     257,
+     222
+    ],
+    "gomito-sinistro": [
+     79,
+     286
+    ],
+    "gomito-destra": [
+     257,
+     286
+    ],
+    "anca-sinistra": [
+     121,
+     305
+    ],
+    "anca-destra": [
+     215,
+     305
+    ],
+    "ginocchio-sinistro": [
+     121,
+     331
+    ],
+    "ginocchio-destra": [
+     215,
+     331
+    ],
+    "caviglia-sinistra": [
+     121,
+     357
+    ],
+    "caviglia-destra": [
+     215,
+     357
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "ferro-spalle-stinco-sinistro.png",
+     "offset": [
+      59,
+      320
+     ],
+     "dimensione": [
+      113,
+      56
+     ],
+     "cerniera": [
+      62,
+      11
+     ],
+     "cerniera_canvas": [
+      121,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "ferro-spalle-stinco-destro.png",
+     "offset": [
+      164,
+      320
+     ],
+     "dimensione": [
+      65,
+      48
+     ],
+     "cerniera": [
+      51,
+      11
+     ],
+     "cerniera_canvas": [
+      215,
+      331
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "ferro-spalle-coscia-sinistra.png",
+     "offset": [
+      56,
+      286
+     ],
+     "dimensione": [
+      118,
+      60
+     ],
+     "cerniera": [
+      65,
+      19
+     ],
+     "cerniera_canvas": [
+      121,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "ferro-spalle-coscia-destra.png",
+     "offset": [
+      162,
+      286
+     ],
+     "dimensione": [
+      67,
+      60
+     ],
+     "cerniera": [
+      53,
+      19
+     ],
+     "cerniera_canvas": [
+      215,
+      305
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "ferro-spalle-busto.png",
+     "offset": [
+      49,
+      196
+     ],
+     "dimensione": [
+      237,
+      127
+     ],
+     "cerniera": [
+      119,
+      113
+     ],
+     "cerniera_canvas": [
+      168,
+      309
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "ferro-spalle-testa.png",
+     "offset": [
+      47,
+      0
+     ],
+     "dimensione": [
+      245,
+      218
+     ],
+     "cerniera": [
+      121,
+      207
+     ],
+     "cerniera_canvas": [
+      168,
+      207
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "ferro-spalle-braccio-alto-sinistro.png",
+     "offset": [
+      44,
+      203
+     ],
+     "dimensione": [
+      62,
+      87
+     ],
+     "cerniera": [
+      35,
+      19
+     ],
+     "cerniera_canvas": [
+      79,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "ferro-spalle-braccio-alto-destro.png",
+     "offset": [
+      230,
+      203
+     ],
+     "dimensione": [
+      56,
+      53
+     ],
+     "cerniera": [
+      27,
+      19
+     ],
+     "cerniera_canvas": [
+      257,
+      222
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "ferro-spalle-avambraccio-sinistro.png",
+     "offset": [
+      56,
+      274
+     ],
+     "dimensione": [
+      62,
+      58
+     ],
+     "cerniera": [
+      23,
+      12
+     ],
+     "cerniera_canvas": [
+      79,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "ferro-spalle-avambraccio-destro.png",
+     "offset": [
+      218,
+      274
+     ],
+     "dimensione": [
+      11,
+      64
+     ],
+     "cerniera": [
+      39,
+      12
+     ],
+     "cerniera_canvas": [
+      257,
+      286
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  }
+ }
+}
