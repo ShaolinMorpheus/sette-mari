@@ -2,6 +2,11 @@
 
 > Numerazione: dal gioco si vede «Bozza v0.11.x» (menu iniziale e «Novità»). I numeri v139–v148 di questo registro sono interni: tutto il lavoro del 23 nov è in gioco **0.11.3**. D'ora in poi ogni pubblicazione aggiorna anche la voce «Novità» (0.11.4, 0.11.5…).
 
+## v149 — In gioco 0.11.4: muri, tartarughe, ritratto pappagallo
+- Muri invisibili ridotti: scatola di collisione degli oggetti più stretta e sagome più piccole; baked le 374 celle liberate con l'editor (zona Sirena/cala est).
+- Tartarughe ancora meno (da 1 su 6 a 1 su 14 dei punti d'acqua con riflessi).
+- Ritratto di Biscotto nel dialogo: per occhiali, elica, cuffia, bandana, babbo, fiore e festa il disegno non coincideva con il cappellino in gioco (es. occhiali da sole) → ora usa lo stesso disegno del gioco.
+
 ## v148 — Versione in gioco 0.11.3
 - La voce «Novità» del gioco era ferma a 0.11.2 (8 nov): aggiunta la 0.11.3 (23 nov) con le novità di Sirena, personaggi, mercante, Nives all'incudine, isoletta.
 
