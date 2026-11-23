@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v147 — Fabbro Nives, proporzioni e isoletta
+- Ferro, Nives, Tito e Gnocco un po' più piccoli (-10%), più proporzionati al Capitano.
+- Nives di giorno resta all'incudine, a sinistra e rivolta verso di essa: ora si vedono martello alzato, colpo e scintille a tempo con il suono.
+- Isoletta a nord del campo (la lingua di sabbia con la schiuma): un po' più grande, con due palme e un cespuglio di bacche (si raggiunge in zattera).
+- Nuovo prompt per Muse: muse/2026-11-23-oggetti-campo (incudine, calderone, asta con bandierine, tavolata e panca da ridisegnare).
+
 ## v146 — Camminate del campo e viso più roseo
 - Nives: quando cammina a sinistra ora guarda a sinistra (prima usava i fotogrammi che guardavano a destra). È anche un po' più piccola (-12%).
 - Gnocco: tolta la fetta del fotogramma vicino che gli compariva davanti alla faccia (il «fiocco» spostato).
