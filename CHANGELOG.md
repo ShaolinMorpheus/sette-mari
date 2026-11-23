@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v139 — Mercante e barchetta nuovi (Muse)
+- Il mercante di passaggio usa il personaggio nuovo di Muse (fermo / offre merce quando ti avvicini) e la barchetta attraccata con bancarella, casse, barile, sacco e cartello moneta.
+- Ritratto del mercante nella finestra degli scambi.
+- Visibili solo con Grafica di prova + Mappa di prova; altrimenti resta la versione vecchia.
+- Il mercante non si ferma più vicino alla Sirena.
+
 ## v138b — Punta della Sirena
 - Il taglio e il cumulo di sabbia si fermano molto prima della punta di prua: lo scafo davanti resta tutto visibile.
 - Nuovo prompt per Muse: muse/2026-11-23-arretrati (tartarughe, mercante+barca stile nuovo, proporzioni pupazzi, Capitano roseo, camminate).
