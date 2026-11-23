@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v145 — Ritratti Capitano tutti con viso roseo
+- Tutte le espressioni del Capitano (giacca e marinaio) usano i ritratti di Muse con il viso roseo.
+- Attrezzi, presa e passi roseo consegnati da Muse in muse/2026-11-23-capitano-roseo: in attesa del tuo ok e del montaggio.
+
 - Nuovo prompt per Muse: muse/2026-11-23-capitano-roseo (ritratti e attrezzi del Capitano con viso roseo).
 
 ## v144 — Meno tartarughe
