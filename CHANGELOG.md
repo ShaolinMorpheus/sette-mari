@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+> Numerazione: dal gioco si vede «Bozza v0.11.x» (menu iniziale e «Novità»). I numeri v139–v148 di questo registro sono interni: tutto il lavoro del 23 nov è in gioco **0.11.3**. D'ora in poi ogni pubblicazione aggiorna anche la voce «Novità» (0.11.4, 0.11.5…).
+
+## v148 — Versione in gioco 0.11.3
+- La voce «Novità» del gioco era ferma a 0.11.2 (8 nov): aggiunta la 0.11.3 (23 nov) con le novità di Sirena, personaggi, mercante, Nives all'incudine, isoletta.
+
 ## v147 — Fabbro Nives, proporzioni e isoletta
 - Ferro, Nives, Tito e Gnocco un po' più piccoli (-10%), più proporzionati al Capitano.
 - Nives di giorno resta all'incudine, a sinistra e rivolta verso di essa: ora si vedono martello alzato, colpo e scintille a tempo con il suono.
