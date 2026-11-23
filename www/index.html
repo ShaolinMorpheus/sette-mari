@@ -12890,7 +12890,7 @@ function leafDabs(L,seed,n,col,sz){const r=rnd(seed);g.fillStyle=col;for(let i=0
     for(let i=0;i<GLINTS.length;i+=9){
       const gl=GLINTS[i];if(gl[0]<vx0-60||gl[0]>vx1+60||gl[1]<vy0-60||gl[1]>vy1+60)continue;if(inPondPx(gl[0],gl[1],2.2))continue;
       const k=i%3;
-      if(k===0&&TURM.ok()){const a=t*.12+i,x=gl[0]+Math.sin(a)*34,y=gl[1]+Math.cos(a*.8)*22,rot=Math.atan2(Math.cos(a*.8)*-22*.8,Math.cos(a)*34),nm=(i%2?'cucciola':'verde')+(1+(((t*8+i)|0)%8)),im=TURM.im[nm];
+      if(k===0&&((i/9)%6===0)&&TURM.ok()){const a=t*.12+i,x=gl[0]+Math.sin(a)*34,y=gl[1]+Math.cos(a*.8)*22,rot=Math.atan2(Math.cos(a*.8)*-22*.8,Math.cos(a)*34),nm=(i%2?'cucciola':'verde')+(1+(((t*8+i)|0)%8)),im=TURM.im[nm];
         gg.save();gg.imageSmoothingQuality='high';gg.translate(x+3,y+4);gg.rotate(rot);gg.globalAlpha=.16;gg.filter='brightness(0)';gg.drawImage(im,-58,-43,115,86);gg.restore();
         gg.save();gg.imageSmoothingQuality='high';gg.translate(x,y);gg.rotate(rot);gg.globalAlpha=.95;gg.drawImage(im,-58,-43,115,86);gg.restore()}
       else if(FULL&&k===1&&!q){for(let f=0;f<4;f++){const a=t*.5+i+f*.9,x=gl[0]+Math.cos(a)*26+f*7,y=gl[1]+Math.sin(a)*16+f*4;

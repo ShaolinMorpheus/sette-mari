@@ -1,5 +1,8 @@
 # Sette Mari — Registro delle modifiche
 
+## v144 — Meno tartarughe
+- Le tartarughe nel mare sono molte meno (circa una ogni sei di prima).
+
 ## v143 — Ritratto Capitano roseo
 - Ritratto «neutro» del Capitano (giacca rossa) con il viso roseo di Muse. Le altre espressioni e le camminate del Capitano restano da cambiare.
 - Pupazzi a pezzi (12 personaggi) e camminate: consegnati da Muse in muse/2026-11-23-arretrati, non ancora usati nel gioco.
