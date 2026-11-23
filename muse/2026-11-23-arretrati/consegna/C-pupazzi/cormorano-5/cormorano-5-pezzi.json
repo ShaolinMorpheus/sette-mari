@@ -1,0 +1,792 @@
+{
+ "personaggio": "cormorano-5",
+ "tela": [
+  336,
+  376
+ ],
+ "nota": "coordinate in pixel della tela 336x376 del fermo attuale; 'cerniera' e' il punto di rotazione dentro il file del pezzo; 'cerniera_canvas' lo stesso punto sulla tela a riposo; 'genitore' indica la gerarchia per le rotazioni composte; la caviglia e' data come riferimento: stinco e stivale sono un pezzo unico",
+ "viste": {
+  "fronte": {
+   "giunti": {
+    "collo": [
+     168,
+     198
+    ],
+    "spalla-sinistra": [
+     97,
+     203
+    ],
+    "spalla-destra": [
+     239,
+     203
+    ],
+    "gomito-sinistro": [
+     97,
+     257
+    ],
+    "gomito-destra": [
+     239,
+     257
+    ],
+    "anca-sinistra": [
+     131,
+     274
+    ],
+    "anca-destra": [
+     205,
+     274
+    ],
+    "ginocchio-sinistro": [
+     131,
+     305
+    ],
+    "ginocchio-destra": [
+     205,
+     305
+    ],
+    "caviglia-sinistra": [
+     131,
+     359
+    ],
+    "caviglia-destra": [
+     205,
+     359
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "cormorano-5-fronte-stinco-sinistro.png",
+     "offset": [
+      104,
+      295
+     ],
+     "dimensione": [
+      68,
+      81
+     ],
+     "cerniera": [
+      27,
+      10
+     ],
+     "cerniera_canvas": [
+      131,
+      305
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "cormorano-5-fronte-stinco-destro.png",
+     "offset": [
+      164,
+      295
+     ],
+     "dimensione": [
+      68,
+      81
+     ],
+     "cerniera": [
+      41,
+      10
+     ],
+     "cerniera_canvas": [
+      205,
+      305
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "cormorano-5-fronte-coscia-sinistra.png",
+     "offset": [
+      96,
+      258
+     ],
+     "dimensione": [
+      78,
+      61
+     ],
+     "cerniera": [
+      35,
+      16
+     ],
+     "cerniera_canvas": [
+      131,
+      274
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "cormorano-5-fronte-coscia-destra.png",
+     "offset": [
+      162,
+      258
+     ],
+     "dimensione": [
+      79,
+      61
+     ],
+     "cerniera": [
+      43,
+      16
+     ],
+     "cerniera_canvas": [
+      205,
+      274
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "cormorano-5-fronte-busto.png",
+     "offset": [
+      96,
+      180
+     ],
+     "dimensione": [
+      145,
+      105
+     ],
+     "cerniera": [
+      72,
+      98
+     ],
+     "cerniera_canvas": [
+      168,
+      278
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "cormorano-5-fronte-testa.png",
+     "offset": [
+      75,
+      38
+     ],
+     "dimensione": [
+      186,
+      169
+     ],
+     "cerniera": [
+      93,
+      160
+     ],
+     "cerniera_canvas": [
+      168,
+      198
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "cormorano-5-fronte-braccio-alto-sinistro.png",
+     "offset": [
+      98,
+      198
+     ],
+     "dimensione": [
+      24,
+      66
+     ],
+     "cerniera": [
+      -1,
+      5
+     ],
+     "cerniera_canvas": [
+      97,
+      203
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "cormorano-5-fronte-braccio-alto-destro.png",
+     "offset": [
+      214,
+      197
+     ],
+     "dimensione": [
+      25,
+      67
+     ],
+     "cerniera": [
+      25,
+      6
+     ],
+     "cerniera_canvas": [
+      239,
+      203
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "cormorano-5-fronte-avambraccio-sinistro.png",
+     "offset": [
+      96,
+      254
+     ],
+     "dimensione": [
+      35,
+      51
+     ],
+     "cerniera": [
+      1,
+      3
+     ],
+     "cerniera_canvas": [
+      97,
+      257
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "cormorano-5-fronte-avambraccio-destro.png",
+     "offset": [
+      205,
+      254
+     ],
+     "dimensione": [
+      36,
+      51
+     ],
+     "cerniera": [
+      34,
+      3
+     ],
+     "cerniera_canvas": [
+      239,
+      257
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  },
+  "profilo-destro": {
+   "giunti": {
+    "collo": [
+     166,
+     182
+    ],
+    "spalla-davanti": [
+     162,
+     199
+    ],
+    "spalla-dietro": [
+     154,
+     199
+    ],
+    "gomito-davanti": [
+     163,
+     260
+    ],
+    "gomito-dietro": [
+     155,
+     260
+    ],
+    "anca-davanti": [
+     170,
+     270
+    ],
+    "anca-dietro": [
+     139,
+     270
+    ],
+    "ginocchio-davanti": [
+     172,
+     307
+    ],
+    "ginocchio-dietro": [
+     139,
+     307
+    ],
+    "caviglia-davanti": [
+     178,
+     358
+    ],
+    "caviglia-dietro": [
+     141,
+     358
+    ]
+   },
+   "pezzi": {
+    "stinco-dietro": {
+     "file": "cormorano-5-profilo-destro-stinco-dietro.png",
+     "offset": [
+      103,
+      294
+     ],
+     "dimensione": [
+      61,
+      81
+     ],
+     "cerniera": [
+      36,
+      13
+     ],
+     "cerniera_canvas": [
+      139,
+      307
+     ],
+     "ordine": 1,
+     "genitore": "coscia-dietro"
+    },
+    "coscia-dietro": {
+     "file": "cormorano-5-profilo-destro-coscia-dietro.png",
+     "offset": [
+      134,
+      253
+     ],
+     "dimensione": [
+      30,
+      75
+     ],
+     "cerniera": [
+      5,
+      17
+     ],
+     "cerniera_canvas": [
+      139,
+      270
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "stinco-davanti": {
+     "file": "cormorano-5-profilo-destro-stinco-davanti.png",
+     "offset": [
+      148,
+      294
+     ],
+     "dimensione": [
+      94,
+      81
+     ],
+     "cerniera": [
+      24,
+      13
+     ],
+     "cerniera_canvas": [
+      172,
+      307
+     ],
+     "ordine": 3,
+     "genitore": "coscia-davanti"
+    },
+    "coscia-davanti": {
+     "file": "cormorano-5-profilo-destro-coscia-davanti.png",
+     "offset": [
+      148,
+      253
+     ],
+     "dimensione": [
+      68,
+      75
+     ],
+     "cerniera": [
+      22,
+      17
+     ],
+     "cerniera_canvas": [
+      170,
+      270
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-dietro": {
+     "file": "cormorano-5-profilo-destro-braccio-alto-dietro.png",
+     "offset": [
+      125,
+      182
+     ],
+     "dimensione": [
+      67,
+      85
+     ],
+     "cerniera": [
+      29,
+      17
+     ],
+     "cerniera_canvas": [
+      154,
+      199
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "busto"
+    },
+    "avambraccio-dietro": {
+     "file": "cormorano-5-profilo-destro-avambraccio-dietro.png",
+     "offset": [
+      126,
+      250
+     ],
+     "dimensione": [
+      66,
+      64
+     ],
+     "cerniera": [
+      29,
+      10
+     ],
+     "cerniera_canvas": [
+      155,
+      260
+     ],
+     "ordine": 5,
+     "derivato": true,
+     "genitore": "braccio-alto-dietro"
+    },
+    "busto": {
+     "file": "cormorano-5-profilo-destro-busto.png",
+     "offset": [
+      121,
+      152
+     ],
+     "dimensione": [
+      101,
+      101
+     ],
+     "cerniera": [
+      42,
+      125
+     ],
+     "cerniera_canvas": [
+      163,
+      277
+     ],
+     "ordine": 6,
+     "genitore": null
+    },
+    "testa": {
+     "file": "cormorano-5-profilo-destro-testa.png",
+     "offset": [
+      93,
+      37
+     ],
+     "dimensione": [
+      148,
+      169
+     ],
+     "cerniera": [
+      73,
+      145
+     ],
+     "cerniera_canvas": [
+      166,
+      182
+     ],
+     "ordine": 7,
+     "genitore": "busto"
+    },
+    "braccio-alto-davanti": {
+     "file": "cormorano-5-profilo-destro-braccio-alto-davanti.png",
+     "offset": [
+      133,
+      182
+     ],
+     "dimensione": [
+      67,
+      85
+     ],
+     "cerniera": [
+      29,
+      17
+     ],
+     "cerniera_canvas": [
+      162,
+      199
+     ],
+     "ordine": 8,
+     "genitore": "busto"
+    },
+    "avambraccio-davanti": {
+     "file": "cormorano-5-profilo-destro-avambraccio-davanti.png",
+     "offset": [
+      134,
+      250
+     ],
+     "dimensione": [
+      66,
+      64
+     ],
+     "cerniera": [
+      29,
+      10
+     ],
+     "cerniera_canvas": [
+      163,
+      260
+     ],
+     "ordine": 9,
+     "genitore": "braccio-alto-davanti"
+    }
+   }
+  },
+  "spalle": {
+   "giunti": {
+    "collo": [
+     168,
+     223
+    ],
+    "spalla-sinistra": [
+     112,
+     236
+    ],
+    "spalla-destra": [
+     224,
+     236
+    ],
+    "gomito-sinistro": [
+     112,
+     294
+    ],
+    "gomito-destra": [
+     224,
+     294
+    ],
+    "anca-sinistra": [
+     139,
+     311
+    ],
+    "anca-destra": [
+     197,
+     311
+    ],
+    "ginocchio-sinistro": [
+     139,
+     334
+    ],
+    "ginocchio-destra": [
+     197,
+     334
+    ],
+    "caviglia-sinistra": [
+     139,
+     358
+    ],
+    "caviglia-destra": [
+     197,
+     358
+    ]
+   },
+   "pezzi": {
+    "stinco-sinistro": {
+     "file": "cormorano-5-spalle-stinco-sinistro.png",
+     "offset": [
+      99,
+      324
+     ],
+     "dimensione": [
+      73,
+      51
+     ],
+     "cerniera": [
+      40,
+      10
+     ],
+     "cerniera_canvas": [
+      139,
+      334
+     ],
+     "ordine": 1,
+     "genitore": "coscia-sinistra"
+    },
+    "stinco-destro": {
+     "file": "cormorano-5-spalle-stinco-destro.png",
+     "offset": [
+      164,
+      324
+     ],
+     "dimensione": [
+      74,
+      51
+     ],
+     "cerniera": [
+      33,
+      10
+     ],
+     "cerniera_canvas": [
+      197,
+      334
+     ],
+     "ordine": 1,
+     "genitore": "coscia-destra"
+    },
+    "coscia-sinistra": {
+     "file": "cormorano-5-spalle-coscia-sinistra.png",
+     "offset": [
+      101,
+      294
+     ],
+     "dimensione": [
+      73,
+      54
+     ],
+     "cerniera": [
+      38,
+      17
+     ],
+     "cerniera_canvas": [
+      139,
+      311
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "coscia-destra": {
+     "file": "cormorano-5-spalle-coscia-destra.png",
+     "offset": [
+      162,
+      294
+     ],
+     "dimensione": [
+      76,
+      54
+     ],
+     "cerniera": [
+      35,
+      17
+     ],
+     "cerniera_canvas": [
+      197,
+      311
+     ],
+     "ordine": 2,
+     "genitore": "busto"
+    },
+    "busto": {
+     "file": "cormorano-5-spalle-busto.png",
+     "offset": [
+      97,
+      213
+     ],
+     "dimensione": [
+      134,
+      115
+     ],
+     "cerniera": [
+      71,
+      102
+     ],
+     "cerniera_canvas": [
+      168,
+      315
+     ],
+     "ordine": 3,
+     "genitore": null
+    },
+    "testa": {
+     "file": "cormorano-5-spalle-testa.png",
+     "offset": [
+      93,
+      37
+     ],
+     "dimensione": [
+      151,
+      196
+     ],
+     "cerniera": [
+      75,
+      186
+     ],
+     "cerniera_canvas": [
+      168,
+      223
+     ],
+     "ordine": 4,
+     "genitore": "busto"
+    },
+    "braccio-alto-sinistro": {
+     "file": "cormorano-5-spalle-braccio-alto-sinistro.png",
+     "offset": [
+      97,
+      220
+     ],
+     "dimensione": [
+      32,
+      77
+     ],
+     "cerniera": [
+      15,
+      16
+     ],
+     "cerniera_canvas": [
+      112,
+      236
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "braccio-alto-destro": {
+     "file": "cormorano-5-spalle-braccio-alto-destro.png",
+     "offset": [
+      208,
+      220
+     ],
+     "dimensione": [
+      23,
+      66
+     ],
+     "cerniera": [
+      16,
+      16
+     ],
+     "cerniera_canvas": [
+      224,
+      236
+     ],
+     "ordine": 5,
+     "genitore": "busto"
+    },
+    "avambraccio-sinistro": {
+     "file": "cormorano-5-spalle-avambraccio-sinistro.png",
+     "offset": [
+      115,
+      284
+     ],
+     "dimensione": [
+      22,
+      57
+     ],
+     "cerniera": [
+      -3,
+      10
+     ],
+     "cerniera_canvas": [
+      112,
+      294
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-sinistro"
+    },
+    "avambraccio-destro": {
+     "file": "cormorano-5-spalle-avambraccio-destro.png",
+     "offset": [
+      200,
+      284
+     ],
+     "dimensione": [
+      14,
+      57
+     ],
+     "cerniera": [
+      24,
+      10
+     ],
+     "cerniera_canvas": [
+      224,
+      294
+     ],
+     "ordine": 6,
+     "genitore": "braccio-alto-destro"
+    }
+   }
+  }
+ }
+}
