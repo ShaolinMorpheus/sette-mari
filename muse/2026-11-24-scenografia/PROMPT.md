@@ -20,8 +20,8 @@ l'incudine è alta ~44 px, la tavolata 176×92 px.
 
 ## Come lavorare
 - **Fai a gruppi, in quest'ordine di priorità** (consegna ogni gruppo appena è
-  pronto, non aspettare la fine): **P1** = A1–A3 e B1–B4; **P2** = A4–A7, B5–B8 e
-  C (pesci); **P3** = B9–B11.
+  pronto, non aspettare la fine): **P1** = A1, A3, A4 e B1–B4 (già consegnati,
+  grazie); **P2** = A5, A7–A9, B5–B8 e C (pesci); **P3** = B9–B11.
 - Per ogni oggetto consegna **livelli separati** sullo stesso canvas (si
   sovrappongono senza spostamenti), e le **parti animabili singole** (tessuti,
   bandierine, fiamme, vapore, fumo: il gioco le muove, tu disegnale ferme).
@@ -45,6 +45,10 @@ l'incudine è alta ~44 px, la tavolata 176×92 px.
 
 ## A) Ridisegni (oggetti già presenti, disegnati dal codice)
 
+*La numerazione resta quella della prima stesura. Tolti: A2 falò (consegnato, ma
+non lo montiamo: quello del campo resta com'è), A6 cartello di Nives (c'è già
+`insegna-nives-appesa`), A10 palo con frecce e B12 altare (non servono).*
+
 ### A1. Calderone, versione 2 (`calderone2`)  — P1
 Il tuo calderone è bello, ma il cerchio di sassi con le braci lo fa sembrare un
 **secondo falò** accanto a quello vero del campo (che ha già la sua fiamma e il
@@ -58,7 +62,7 @@ anello di sassi, niente braci accese nel disegno).
   soltanto all'ora dei pasti (fiamma e vapore li anima il codice)
 - stesso disegno nei due stati (spento = senza il livello d)
 
-### A2. Tavolino di J (`tavolino-j`) — P1
+### A3. Tavolino di J (`tavolino-j`) — P1
 Il tavolino da lavoro di J, il naufrago che ha lasciato bottiglie e pagine:
 piccolo tavolo tondo su un solo piede a tre zampe, piano di legno consumato.
 - ingombro ~56 × 44 px (piano) con punto d'appoggio al centro del piede
@@ -66,7 +70,7 @@ piccolo tavolo tondo su un solo piede a tre zampe, piano di legno consumato.
   man mano che il capitolo avanza: (1) calamaio con penna d'oca, (2) mappa
   arrotolata con laccio, (3) bussola d'ottone aperta, (4) diario con cinghia rossa
 
-### A3. Lanterna (`lanterna`) — P1
+### A4. Lanterna (`lanterna`) — P1
 La lanterna appesa al tuo palo è ancora fatta dal codice. Disegna **solo la
 lanterna**: struttura di ferro scuro con tetto a cupola, anello, quattro vetri
 chiari, base.
@@ -74,26 +78,26 @@ chiari, base.
 - livelli: (a) struttura, (b) `vetri` in un livello a parte (tono neutro, il gioco
   li illumina di giallo la sera), (c) `anello-catena` (corta catenella)
 
-### A4. Stendino con vela (`stendino`) — P2
+### A5. Stendino con vela (`stendino`) — P2
 Due pali ricurvi con una corda tesa e panni stesi ad asciugare.
 - ingombro ~118 × 76 px; punto d'appoggio al centro della base
 - livelli: (a) pali + corda, (b) **panni singoli** (vela rattoppata, camicia a
   righe, un paio di calzoni, uno straccio rosso) appesi ognuno con 2 mollette di
   legno, così il gioco li fa ondeggiare uno a uno
 
-### A5. Barca a remi (`barca-remi`) — P2
+### A7. Barca a remi (`barca-remi`) — P2
 Piccola barca di tavole tirata in secca, con i remi appoggiati dentro.
 - ~110 × 46 px, vista di lato leggermente dall'alto; punto d'appoggio sotto la chiglia
 - livelli: (a) scafo, (b) 2 remi separati, (c) una cima arrotolata a prua, (d)
   `sacco-rete` (un sacco con una rete dentro)
 
-### A6. Cannone del campo (`cannone`) — P2
+### A8. Cannone del campo (`cannone`) — P2
 Cannone di ferro nero su affusto di legno a due ruote, bocca a destra.
 - ~80 × 48 px; punto d'appoggio al centro tra le ruote
 - livelli: (a) affusto + ruote, (b) canna, (c) **pila di 4 palle di cannone** a
   parte, (d) `calcatoio` (bastone con spugna) appoggiato di lato
 
-### A7. Rotolo di corda (`corda-rotolo`) — P2
+### A9. Rotolo di corda (`corda-rotolo`) — P2
 Grosso rotolo di cordone di canapa (4 giri), con un capo libero che scende a terra.
 - ~44 × 30 px; punto d'appoggio al centro della base
 
