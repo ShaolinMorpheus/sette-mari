@@ -21,7 +21,7 @@ for k,(n,sp) in names.items():
     ok=~np.isnan(bot);bot=np.interp(xs,xs[ok],bot[ok]);top=np.interp(xs,xs[ok],top[ok])
     bot=uniform_filter1d(median_filter(bot,size=31,mode='nearest'),size=41,mode='nearest')
     top=median_filter(top,size=161,mode='nearest')
-    L=x1-x0;taper=np.clip(np.minimum(xs-x0,x1-xs)/(0.16*L),0,1)
+    L=x1-x0;taper=np.clip(np.minimum((xs-x0)/(0.16*L),(x1-xs)/(0.30*L)),0,1)
     line=bot-DM*taper**1.3
     arr=np.array(im);alpha=arr[:,:,3].astype(float)
     full=np.full(1720,-9999.0);full[x0:x1+1]=line;yy=np.arange(1320)[:,None];xx=np.arange(1720)[None,:]

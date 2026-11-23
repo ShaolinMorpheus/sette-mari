@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## v138b — Punta della Sirena
+- Il taglio e il cumulo di sabbia si fermano molto prima della punta di prua: lo scafo davanti resta tutto visibile.
+- Nuovo prompt per Muse: muse/2026-11-23-arretrati (tartarughe, mercante+barca stile nuovo, proporzioni pupazzi, Capitano roseo, camminate).
+
+
 ## v138 — Sirena: via la sabbia davanti alla prua, via il verde dal legno
 - La sabbia del terreno resta solo sotto lo scafo; davanti alla prua il terreno torna com'era.
 - Muschio verde dipinto sul legno (poppa) riportato a legno negli stadi 2 e 3.

@@ -23,7 +23,7 @@ function drawNaveStrip(g,o){const e=o.e,k=e.k||1,s=nvSP(e),d=NVSD[e.spr];if(!s||
   // la nave e' infossata: ombra di contatto, cumulo di sabbia e sassolini lungo la chiglia
   const c=nvxGround(e),xa=Math.max(d.x0,d.x0+w*o.i-3),xb=Math.min(d.x1,d.x0+w*(o.i+1)+3),step=3;
   const L=x=>(x-215)*k,Y=x=>(nvLn(d.b,x)-295)*k+2*k,bump=x=>(2.4*Math.sin(x*.21)+1.7*Math.sin(x*.063+1.3)+1.2*Math.sin(x*.47))*k;
-  const tp=x=>Math.max(0,Math.min(1,Math.min(x-d.x0-6,d.x1-30-x)/45));const band=(up,dn,col,aTop,aMid,aBot,f)=>{g.beginPath();for(let x=xa;x<=xb;x+=step){const y=Y(x)+(up*k+(f?bump(x):0))*tp(x);x===xa?g.moveTo(L(x),y):g.lineTo(L(x),y)}for(let x=xb;x>=xa;x-=step)g.lineTo(L(x),Y(x)+(dn*k+(f?bump(x)*.4:0))*tp(x));g.closePath();
+  const tp=x=>Math.max(0,Math.min(1,Math.min(x-d.x0-6,d.x1-70-x)/60));const band=(up,dn,col,aTop,aMid,aBot,f)=>{g.beginPath();for(let x=xa;x<=xb;x+=step){const y=Y(x)+(up*k+(f?bump(x):0))*tp(x);x===xa?g.moveTo(L(x),y):g.lineTo(L(x),y)}for(let x=xb;x>=xa;x-=step)g.lineTo(L(x),Y(x)+(dn*k+(f?bump(x)*.4:0))*tp(x));g.closePath();
     const y0=Y((xa+xb)/2);const gr=g.createLinearGradient(0,y0+up*k-6*k,0,y0+dn*k+6*k);gr.addColorStop(0,'rgba('+col+','+aTop+')');gr.addColorStop(.35,'rgba('+col+','+aMid+')');gr.addColorStop(1,'rgba('+col+','+aBot+')');g.fillStyle=gr;g.fill()};
   band(-30,2,'46,32,18',0,.34,.0,false);
   band(-5,19,(c[0]*.93|0)+','+(c[1]*.93|0)+','+(c[2]*.93|0),.0,.97,.0,true);
