@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v141 — Sirena: via il bianco a prua, onde lontane dallo scafo
+- Tolti i pixel chiari rimasti sul bordo basso dello scafo (pezzo bianco a prua).
+- La riva vicino alla prua è stata spostata: le onde non vanno più sotto il disegno.
+
 ## v140 — Mercante e barchetta ridisegnati (Muse, arretrati 23 nov)
 - Montati il mercante nuovo (fermo, offre monete, offre forziere) e la barchetta attraccata ridisegnata in stile Sirena v2; ritratto nuovo negli scambi.
 - Ombra della barchetta data dal gioco.
