@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v137b — Punta della Sirena
+- Ombra e cumulo di sabbia si assottigliano verso poppa e prua: la punta (bompresso) torna visibile, senza rettangolo.
+
+
 ## v137 — Sirena infossata nella sabbia, senza onde
 - Posizione e rotazione (-9°) scelte nell'editor.
 - Terreno: la riva davanti alla nave diventa sabbia asciutta, quindi niente onde/schiuma sotto lo scafo.

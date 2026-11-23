@@ -5234,12 +5234,12 @@ function drawNaveStrip(g,o){const e=o.e,k=e.k||1,s=nvSP(e),d=NVSD[e.spr];if(!s||
   // la nave e' infossata: ombra di contatto, cumulo di sabbia e sassolini lungo la chiglia
   const c=nvxGround(e),xa=Math.max(d.x0,d.x0+w*o.i-3),xb=Math.min(d.x1,d.x0+w*(o.i+1)+3),step=3;
   const L=x=>(x-215)*k,Y=x=>(nvLn(d.b,x)-295)*k+2*k,bump=x=>(2.4*Math.sin(x*.21)+1.7*Math.sin(x*.063+1.3)+1.2*Math.sin(x*.47))*k;
-  const band=(up,dn,col,aTop,aMid,aBot,f)=>{g.beginPath();for(let x=xa;x<=xb;x+=step){const y=Y(x)+up*k+(f?bump(x):0);x===xa?g.moveTo(L(x),y):g.lineTo(L(x),y)}for(let x=xb;x>=xa;x-=step)g.lineTo(L(x),Y(x)+dn*k+(f?bump(x)*.4:0));g.closePath();
+  const tp=x=>Math.max(0,Math.min(1,Math.min(x-d.x0-6,d.x1-30-x)/45));const band=(up,dn,col,aTop,aMid,aBot,f)=>{g.beginPath();for(let x=xa;x<=xb;x+=step){const y=Y(x)+(up*k+(f?bump(x):0))*tp(x);x===xa?g.moveTo(L(x),y):g.lineTo(L(x),y)}for(let x=xb;x>=xa;x-=step)g.lineTo(L(x),Y(x)+(dn*k+(f?bump(x)*.4:0))*tp(x));g.closePath();
     const y0=Y((xa+xb)/2);const gr=g.createLinearGradient(0,y0+up*k-6*k,0,y0+dn*k+6*k);gr.addColorStop(0,'rgba('+col+','+aTop+')');gr.addColorStop(.35,'rgba('+col+','+aMid+')');gr.addColorStop(1,'rgba('+col+','+aBot+')');g.fillStyle=gr;g.fill()};
   band(-30,2,'46,32,18',0,.34,.0,false);
   band(-5,19,(c[0]*.93|0)+','+(c[1]*.93|0)+','+(c[2]*.93|0),.0,.97,.0,true);
   band(-1,9,(Math.min(255,c[0]*1.05)|0)+','+(Math.min(255,c[1]*1.05)|0)+','+(Math.min(255,c[2]*1.04)|0),0,.75,0,true);
-  for(let i=Math.ceil(xa/9);i*9<xb;i++){const x=i*9+nvxHash(i)*5,y=Y(x)+(4+nvxHash(i+50)*9)*k,rr=(1+nvxHash(i+9)*1.7)*k;
+  for(let i=Math.ceil(xa/9);i*9<xb;i++){const x=i*9+nvxHash(i)*5;if(tp(x)<.5)continue;const y=Y(x)+(4+nvxHash(i+50)*9)*k,rr=(1+nvxHash(i+9)*1.7)*k;
     if(nvxHash(i+3)<.62){g.fillStyle='rgba('+(c[0]*.62|0)+','+(c[1]*.58|0)+','+(c[2]*.52|0)+',.85)';g.beginPath();g.ellipse(L(x),y+.5*k,rr*1.25,rr*.8,0,0,7);g.fill();
       g.fillStyle='rgba('+(Math.min(255,c[0]*1.1)|0)+','+(Math.min(255,c[1]*1.1)|0)+','+(Math.min(255,c[2]*1.08)|0)+',.9)';g.beginPath();g.ellipse(L(x)-.3*k,y,rr,rr*.62,0,0,7);g.fill()}}
   g.restore()}
