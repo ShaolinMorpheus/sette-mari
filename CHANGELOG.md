@@ -1,5 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
+- Nuovo prompt per Muse: muse/2026-11-23-capitano-roseo (ritratti e attrezzi del Capitano con viso roseo).
+
 ## v144 — Meno tartarughe
 - Le tartarughe nel mare sono molte meno (circa una ogni sei di prima).
 
