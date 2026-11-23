@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## v136 — Sirena ruotabile dall'editor e più infossata
+- Editor: selezionando la nave compaiono «⟲ Ruota» e «Ruota ⟳» (passi da 3°). La rotazione entra nel codice come «rt»; collisione, anello e disegno ruotano insieme.
+- Scafi tagliati più in profondità: la nave sta più dentro il terreno.
+
+
 ## v135 — Sirena: i 3 stadi di Muse (relitto, riparazione, riparata)
 - Montate le tre versioni di Muse (21 nov, sirena-cala) al posto della nave a due alberi: 1 da riparare, 2 in riparazione, 3 riparata. Sabbia disegnata tolta e scafo infossato nel terreno vero lungo la chiglia.
 - Per ogni stadio: collisione sullo scafo, alberi/vele attraversabili con personaggio dietro, anello giallo attorno allo scafo.
