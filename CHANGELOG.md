@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v146 — Camminate del campo e viso più roseo
+- Nives: quando cammina a sinistra ora guarda a sinistra (prima usava i fotogrammi che guardavano a destra). È anche un po' più piccola (-12%).
+- Gnocco: tolta la fetta del fotogramma vicino che gli compariva davanti alla faccia (il «fiocco» spostato).
+- Capitano e marinaio: viso più roseo, come se fosse il sole, su tutti i fotogrammi (passi, attrezzi, presa).
+- Tito: le braccia restano quasi ferme nel ciclo: serve un nuovo ciclo di Muse (prompt in muse/2026-11-23-tito-camminata).
+
 ## v145 — Ritratti Capitano tutti con viso roseo
 - Tutte le espressioni del Capitano (giacca e marinaio) usano i ritratti di Muse con il viso roseo.
 - Attrezzi, presa e passi roseo consegnati da Muse in muse/2026-11-23-capitano-roseo: in attesa del tuo ok e del montaggio.
