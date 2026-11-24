@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v156 — 0.11.11 «Camminate nuove»
+- Camminate ridisegnate da Muse (muse/2026-11-24-camminate) montate per Ferro, Gnocco, Nives e Giacomo: 6 passi × 4 direzioni + fermo, figure intere. Tito resta con le vecchie in attesa della sua versione corretta.
+
+
 ## v155 — 0.11.10 «Niente più sfarfallii»
 - I fotogrammi dei personaggi del campo vengono precaricati e decodificati subito: niente scomparse di un istante al cambio passo.
 - Prompt per Muse con le camminate da rifare (muse/2026-11-24-camminate/PROMPT.md).
