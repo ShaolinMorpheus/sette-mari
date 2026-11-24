@@ -1,5 +1,31 @@
 # Camminate rifatte — Ferro, Nives, Gnocco, Tito, Giacomo (24 novembre 2026)
 
+**Correzione serale (24 nov):** la prima versione di questa consegna
+era costruita sulle copie in `movimento-visi/camminata/`, che però NON
+contenevano tre correzioni già consegnate il 20/21 novembre. Ora le
+sorgenti sono quelle corrette:
+
+- **Nives, profilo-sinistro 1–6**: le copie in movimento-visi
+  guardavano a DESTRA (erano i frame pre-correzione); sostituite con
+  le correzioni del 21 novembre, che guardano a sinistra. La direzione
+  di TUTTI i profili sinistri è stata verificata anche numericamente
+  (confronto con lo specchio del profilo destro): 5 personaggi × 6
+  frame, tutti rivolti a sinistra.
+- **Tito, fronte-passo6 e spalle-passo6**: le copie in movimento-visi
+  avevano la testa tagliata sul lato sinistro (berretto e orecchio
+  troncati); sostituite con le correzioni del 21 novembre, teste
+  intere, verificate ingrandite.
+- **Gnocco, profilo-destro-passo2 e profilo-sinistro-passo2**:
+  sostituite con le correzioni del 20 novembre (destro senza lembi
+  del frame vicino sul bordo; sinistro col nodo del fazzoletto
+  completo dentro la tela).
+
+Nota su Tito: nei profili, il braccio visibile (quello davanti) è
+disegnato in avanti in 4 frame su 6 e in basso negli altri 2 — così è
+nei disegni originali, non è un effetto del montaggio; un'alternanza
+delle braccia più marcata richiederebbe di ridisegnare le pose del
+braccio nei profili.
+
 Per ogni personaggio: **6 fotogrammi × 4 direzioni** (fronte, spalle,
 profilo-destro, profilo-sinistro) + `fronte-fermo`, tela 336×376, in
 `consegna/<personaggio>/<direzione>-passoN.png.b64`.
