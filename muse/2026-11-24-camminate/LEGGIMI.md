@@ -1,5 +1,12 @@
 # Camminate rifatte — Ferro, Nives, Gnocco, Tito, Giacomo (24 novembre 2026)
 
+**Correzione (24 nov, dopo il controllo dell'utente):** la prima versione
+aveva pezzi che uscivano dalla sagoma con bordi tagliati e un difetto a
+righe verticali accanto alla figura nei profili (l'allungamento delle
+cosce era «spalmato» e, ruotando, si vedeva). Rifatto con allungamento a
+specchio e ampiezze ridotte (coscia ±20°, stinco max +26°, braccia ±12°);
+ricontrollato a piena risoluzione, fotogramma per fotogramma.
+
 Per ogni personaggio: **6 fotogrammi × 4 direzioni** (fronte, spalle,
 profilo-destro, profilo-sinistro) + `fronte-fermo`, tela 336×376 come i
 frame attuali, in `consegna/<personaggio>/<direzione>-passoN.png.b64`.
