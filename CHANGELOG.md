@@ -1,6 +1,7 @@
 # Sette Mari — Registro delle modifiche
 
 ## v153 — 0.11.8 «Campo più vivo e pesci nel mare»
+- Calderone spostato lontano dal falò, a ovest.
 - Montata tutta la scenografia di Muse nel campo: tavolo da cucina, rastrelliera, amaca, rete, pila, fusto, ceppo, cassa, mappa, trespolo, barca in costruzione, nuovo stendino, calderone, lanterne, tavolino di J, barchetta, cannone e corda.
 - Collisioni per ogni oggetto; percorsi liberi.
 - Pesci nel mare (ombre, banchi, salti) e nuove icone pesci nel Registro.
