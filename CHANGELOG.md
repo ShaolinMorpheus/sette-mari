@@ -1,5 +1,10 @@
 # Sette Mari — Registro delle modifiche
 
+## v155 — 0.11.10 «Niente più sfarfallii»
+- I fotogrammi dei personaggi del campo vengono precaricati e decodificati subito: niente scomparse di un istante al cambio passo.
+- Prompt per Muse con le camminate da rifare (muse/2026-11-24-camminate/PROMPT.md).
+
+
 ## v154 — 0.11.9 «Camminata corretta»
 - Gnocco, Ferro, Tito e gli altri guardano nella direzione in cui camminano anche verso sinistra (alcuni fotogrammi «sinistro» avevano la testa girata a destra: ora si usano quelli «destro» specchiati).
 
