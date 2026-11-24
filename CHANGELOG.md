@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v158 — 0.11.13 «Meno pesci grandi»
+- Tolta la grande ombra di pesce nel mare.
+
+
 ## v157 — 0.11.12 «Correzioni al campo»
 - Un errore nel disegno di un oggetto o di un pesce non fa più sparire tutta la scena (il ripristino dello stato del canvas mancava: probabile causa dello schermo con solo il terreno).
 - Il baule resta chiuso (il coperchio aperto era tagliato).

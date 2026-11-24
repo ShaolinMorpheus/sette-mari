@@ -6200,6 +6200,9 @@ const AFTER=[
   {t:"Multigiocatore",d:"Salpare insieme ad altri capitani: un'isola condivisa, scambi e ciurme. Dopo la fine della Stagione 1, senza una data per ora.",st:"Coming soon"}
 ];
 const CHANGELOG=[
+  {v:"0.11.13",d:"25 nov 2026",t:"Meno pesci grandi",n:[
+    "Tolta la grande ombra di pesce che passava nel mare.",
+  ]},
   {v:"0.11.12",d:"24 nov 2026",t:"Correzioni al campo",n:[
     "Se un oggetto o un pesce ha un problema di disegno, non fa più sparire tutta la scena e il personaggio.",
     "Il baule resta chiuso e non si apre più quando ti avvicini.",
@@ -10841,7 +10844,7 @@ NVF.draw=function(g,t,vx0,vy0,vx1,vy1){
       }
     }
     if(!NVF.sh&&QL<2){const p=NVF.pick(false);if(p&&scImg('pesce-banco-sardine-1'))NVF.sh={x:p[0],y:p[1],hd:Math.random()*6.283,tt:2,a:0,v:1+Math.floor(Math.random()*3)}}
-    if(!NVF.gs&&QL<2){const p=NVF.pick(true);if(p&&scImg('pesce-ombra-grande'))NVF.gs={x:p[0],y:p[1],hd:Math.random()*6.283,tt:4,a:0}}
+    if(false&&!NVF.gs&&QL<2){const p=NVF.pick(true);if(p&&scImg('pesce-ombra-grande'))NVF.gs={x:p[0],y:p[1],hd:Math.random()*6.283,tt:4,a:0}}
     NVF.jt=(NVF.jt||4+Math.random()*5)-.7;
     if(NVF.jt<=0&&NVF.F.length&&scImg('pesce-salto')){
       const f=NVF.F[Math.floor(Math.random()*NVF.F.length)];if(f.x>vx0&&f.x<vx1&&f.y>vy0&&f.y<vy1){NVF.fx.push({x:f.x,y:f.y,t:t});}
