@@ -6200,6 +6200,9 @@ const AFTER=[
   {t:"Multigiocatore",d:"Salpare insieme ad altri capitani: un'isola condivisa, scambi e ciurme. Dopo la fine della Stagione 1, senza una data per ora.",st:"Coming soon"}
 ];
 const CHANGELOG=[
+  {v:"0.11.9",d:"24 nov 2026",t:"Camminata corretta",n:[
+    "Gnocco, Ferro, Tito e gli altri ora guardano nella direzione in cui camminano anche quando vanno a sinistra.",
+  ]},
   {v:"0.11.8",d:"24 nov 2026",t:"Campo più vivo e pesci nel mare",n:[
     "Nuovi oggetti nel campo, disegnati da Muse: rastrelliera con le armi, amaca, rete da pesca, pila di barili, fusto d'acqua, ceppo con ascia, tavolo di cucina, mappa su cavalletto, trespolo con la gabbia aperta, cassa del tesoro (si apre quando ti avvicini) e uno scheletro di barca che cresce con la fiducia di Tito.",
     "Rifatti con il nuovo stile: calderone (acceso solo all'ora dei pasti), lanterne, stendino con i panni che ondeggiano, cannone, corda e barca a remi. Tornano il tavolino di J, con gli oggetti nuovi: calamaio, mappa, bussola e diario.",
@@ -6790,7 +6793,7 @@ function nomDraw(g,x,y,o){
   const w=o.k&&o.k.name&&o.k.name.toLowerCase();if(!NOMF[w])return false;
   const mv=!!o.moving,fl=!!o.flip,ph=o.walk||0,i=1+(((Math.floor(ph*2)%6)+6)%6);
   const dr=o.mdir||('profilo-'+(fl?'sinistro':'destro'));
-  const mr=w==='nives'&&mv&&dr==='profilo-sinistro'&&!o.pose,k=o.pose?w+'/'+o.pose:w+'/'+(mv?(mr?'profilo-destro':dr)+'-passo'+i:'fronte-fermo'),im=nomImg(k)||nomImg(w+'/fronte-fermo');if(!im)return false;
+  const mr=mv&&dr==='profilo-sinistro'&&!o.pose,k=o.pose?w+'/'+o.pose:w+'/'+(mv?(mr?'profilo-destro':dr)+'-passo'+i:'fronte-fermo'),im=nomImg(k)||nomImg(w+'/fronte-fermo');if(!im)return false;
   const sc=70/376*NOMF[w]*(o.s||1),W=336*sc,H=376*sc;
   g.save();g.translate(x,y);
   if(!o.noShadow){g.fillStyle='rgba(20,25,10,.3)';g.beginPath();g.ellipse(0,0,14*NOMF[w],5.4,0,0,7);g.fill()}

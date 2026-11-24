@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v154 — 0.11.9 «Camminata corretta»
+- Gnocco, Ferro, Tito e gli altri guardano nella direzione in cui camminano anche verso sinistra (alcuni fotogrammi «sinistro» avevano la testa girata a destra: ora si usano quelli «destro» specchiati).
+
+
 ## v153 — 0.11.8 «Campo più vivo e pesci nel mare»
 - Calderone spostato lontano dal falò, a ovest.
 - Montata tutta la scenografia di Muse nel campo: tavolo da cucina, rastrelliera, amaca, rete, pila, fusto, ceppo, cassa, mappa, trespolo, barca in costruzione, nuovo stendino, calderone, lanterne, tavolino di J, barchetta, cannone e corda.
