@@ -1,5 +1,11 @@
 # Sette Mari — Registro delle modifiche
 
+## v157 — 0.11.12 «Correzioni al campo»
+- Un errore nel disegno di un oggetto o di un pesce non fa più sparire tutta la scena (il ripristino dello stato del canvas mancava: probabile causa dello schermo con solo il terreno).
+- Il baule resta chiuso (il coperchio aperto era tagliato).
+- Prompt per Muse: muse/2026-11-25-correzioni-scenografia/PROMPT.md (disegni scenografia tagliati sul bordo, stendino).
+
+
 ## v156 — 0.11.11 «Camminate nuove»
 - Camminate ridisegnate da Muse (muse/2026-11-24-camminate) montate per Ferro, Gnocco, Nives e Giacomo: 6 passi × 4 direzioni + fermo, figure intere. Tito resta con le vecchie in attesa della sua versione corretta.
 

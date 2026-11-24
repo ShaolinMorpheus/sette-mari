@@ -4886,7 +4886,7 @@ function drawCrab(g,e,t){
 }
 function drawDeco(g,e,t){
   if(e.hidden)return;
-  if(typeof NVDX!=='undefined'&&NVDX[e.spr]){NVDX[e.spr](g,e,t);return}
+  if(typeof NVDX!=='undefined'&&NVDX[e.spr]){const _tf=g.getTransform(),_ga=g.globalAlpha,_gc=g.globalCompositeOperation;try{NVDX[e.spr](g,e,t)}catch(er){g.setTransform(_tf);g.globalAlpha=_ga;g.globalCompositeOperation=_gc;if(!window.__nvE){window.__nvE=1;try{console.warn('nvd',e.spr,er)}catch(_){}}}return}
   if(e.spr==='lamp'){if(!e.hid)drawCDeco(g,e.lk,t);return}
   if(e.spr==='pit'){
     g.save();g.translate(e.x,e.y);shadow(g,0,3,26,8,.25);
@@ -5526,7 +5526,7 @@ function render(t){
   if(smN){g.save();g.translate(FIX.smoke[0]*TS,FIX.smoke[1]*TS);drawCampFire(g,t);g.restore()}
   drawPondLevel(g,t);
   drawBeach(g,t,vx0,vy0,vx1,vy1);
-  try{NVF.draw(g,t,vx0,vy0,vx1,vy1)}catch(e){}
+  {const _tf=g.getTransform(),_ga=g.globalAlpha,_gc=g.globalCompositeOperation;try{NVF.draw(g,t,vx0,vy0,vx1,vy1)}catch(e){g.setTransform(_tf);g.globalAlpha=_ga;g.globalCompositeOperation=_gc}}
   if(WORLD<3){try{GfxNew.under(g,t,vx0,vy0,vx1,vy1)}catch(e){}}
   drawSkyFx1(g,t,vx0,vy0,vx1,vy1);
   computeTarget();
@@ -6200,6 +6200,10 @@ const AFTER=[
   {t:"Multigiocatore",d:"Salpare insieme ad altri capitani: un'isola condivisa, scambi e ciurme. Dopo la fine della Stagione 1, senza una data per ora.",st:"Coming soon"}
 ];
 const CHANGELOG=[
+  {v:"0.11.12",d:"24 nov 2026",t:"Correzioni al campo",n:[
+    "Se un oggetto o un pesce ha un problema di disegno, non fa più sparire tutta la scena e il personaggio.",
+    "Il baule resta chiuso e non si apre più quando ti avvicini.",
+  ]},
   {v:"0.11.11",d:"24 nov 2026",t:"Camminate nuove",n:[
     "Ferro, Gnocco, Nives e Giacomo hanno le camminate ridisegnate da Muse: figure intere, passo più fluido, in tutte e quattro le direzioni.",
   ]},
@@ -10777,7 +10781,7 @@ function scLant(g,night,t,ex){
     scDraw(g,'bco',['barca-costruzione-base','barca-costruzione-stato-'+st]);g.restore()};
   NVDX.nv_trespolo=(g,e,t)=>{if(!scNew('tre'))return;g.save();g.translate(e.x,e.y);shadow(g,0,3,22,5,.24);scDraw(g,'tre',SCNM.tre);g.restore()};
   NVDX.nv_cassa=(g,e,t)=>{if(!scNew('cas'))return;g.save();g.translate(e.x,e.y);shadow(g,0,3,32,6,.26);
-    const open=hyp(P.x-e.x,P.y-e.y)<TS*2.4;
+    const open=false;
     scDraw(g,'cas',open?['cassa-corpo','cassa-monete','cassa-collana','cassa-chiave','cassa-coperchio-aperto']:['cassa-corpo','cassa-coperchio-chiuso']);g.restore()};
 }
 /* ---- pesci: icone del Registro e pesci che nuotano nell'acqua ---- */
