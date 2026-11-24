@@ -8,7 +8,7 @@ Per ogni oggetto: livelli separati sulla stessa tela, punto d'appoggio
 la collisione (rettangolo in px rispetto al punto d'appoggio:
 sinistra, destra, sopra, sotto).
 
-STATO: in lavorazione (gruppi P1 e P2 consegnati; P3 in arrivo)
+STATO: pronto (gruppi P1, P2 e P3 consegnati e verificati)
 
 ---
 
@@ -219,4 +219,52 @@ grande e gli effetti di superficie.
 
 ---
 
-## Gruppo P3 — in lavorazione
+## Gruppo P3
+
+### B9. Scheletro di barca in costruzione (`barca-costruzione`) — tela 184×100, appoggio (92, 92), collisione -84,84,-10,4
+1. `barca-costruzione-base.png` — sempre presente: i due cavalletti,
+   il martello a terra e il cesto di chiodi.
+Stati di avanzamento (un livello in più sulla stessa tela, da solo):
+2. `barca-costruzione-stato-0.png` — chiglia posata e radici delle
+   prime coste.
+3. `barca-costruzione-stato-1.png` — coste complete, nessun fasciame.
+4. `barca-costruzione-stato-2.png` — fasciame nella metà bassa dello
+   scafo, coste nude sopra (stesso scheletro dello stato 1, con le
+   tavole del disegno dello stato 3 allineate e tagliate a metà scafo).
+5. `barca-costruzione-stato-3.png` — scafo quasi finito, punte delle
+   coste ancora fuori dal bordo.
+Nota di metodo (dichiarato): gli stati vengono da due disegni della
+stessa barca (scheletro e scafo fasciato) allineati sulla stessa tela;
+lo stato 0 è la banda bassa dello scheletro (chiglia e radici).
+
+### B10. Trespolo e gabbia di Biscotto (`trespolo`) — tela 76×90, appoggio (38, 86), collisione -8,8,-4,2
+La collisione è la base del palo; la gabbia sta a destra (x da ~+12
+a ~+36) e non blocca.
+Ordine di disegno:
+1. `trespolo-palo.png` — palo con anello di legno e piuma rossa.
+2. `trespolo-ciotole.png` — ciotola dei semi e ciotola dell'acqua.
+3. `trespolo-gabbia.png` — la gabbia vuota, senza porticina.
+4. `trespolo-porticina-aperta.png` — la porticina spalancata di lato
+   (stato normale: Biscotto è libero).
+   `trespolo-porticina-chiusa.png` — la stessa porticina rimessa
+   piatta sull'apertura frontale.
+
+### B11. Cassa del tesoro (`cassa`) — tela 68×54, appoggio (34, 50), collisione -28,28,-6,3
+Stato aperto, ordine di disegno:
+1. `cassa-corpo.png` — il corpo con la serratura a ghiera; l'interno
+   sotto il contenuto è legno scuro in ombra (ritoccato a programma,
+   dichiarato).
+2. Contenuto, singoli sulla stessa tela: `cassa-monete.png` (il mucchio
+   di monete), `cassa-collana.png` (la collana di perle sul bordo),
+   `cassa-chiave.png` (la chiave sulle monete).
+3. `cassa-coperchio-aperto.png` — il coperchio aperto all'indietro.
+Stato chiuso: corpo + `cassa-coperchio-chiuso.png`. Nota (dichiarato):
+il coperchio aperto mostra solo il lato interno, quindi il coperchio
+chiuso viene da un secondo disegno abbinato della stessa cassa (stesse
+misure, stesse fasce di ferro), ritagliato e montato sul corpo.
+
+### Controllo P3
+`controllo/controllo-p3.png` — i 4 stati della barca in costruzione,
+il trespolo con la gabbia aperta e chiusa, la cassa aperta con il
+contenuto e la cassa chiusa, sul prato del campo accanto a tavolata
+e incudine (ingrandimento ×2).
