@@ -15,3 +15,6 @@ Nel LEGGIMI scrivi le nuove misure e conferma che le àncore sono esattamente 3�
 ## Secondo giro (stessa regola 3×, stessi livelli, stesse àncore ×3, nome `@3x`), dopo il primo
 Oggetti del campo che si vedono spesso e sono piccoli: cassa (baule), lanterna, stendino, tavolo-cucina, rete, rastrelliera, amaca, fusto-acqua, pila-barili, ceppo-ascia, tavolino-j, calderone2, trespolo, mappa-cavalletto, corda-rotolo, cannone, barca-remi, barca-costruzione. Partire da quelli più piccoli (cassa, lanterna, tavolino-j, corda-rotolo, calderone2).
 Per ognuno: disegna da zero a 3× (dettagli nitidi, non un ingrandimento), stessa composizione dei file approvati, margine ≥ 12 px (×3 = 36 px).
+
+## Correzione richiesta (verdetto di Claude, 25 nov sera)
+Tutti i @3x sono nitidi e alla misura giusta tranne il **cannone**: `cannone-canna@3x` ha la canna con strisce orizzontali e una ruota duplicata sul livello sbagliato, `cannone-affusto@3x` è frammentato (pezzi di legno staccati, ruota senza resto). Rifai i 4 livelli `cannone-affusto`, `cannone-canna`, `cannone-palle`, `cannone-calcatoio` a 3× (339×252, àncora (162,201)) partendo dal cannone approvato (1×): un solo cannone intero, canna dritta senza strisce, nessuna parte duplicata.
