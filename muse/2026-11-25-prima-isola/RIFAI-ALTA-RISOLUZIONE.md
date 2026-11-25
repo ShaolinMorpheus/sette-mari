@@ -9,5 +9,9 @@ Rifai la stessa identica consegna a **risoluzione 3×** (stessa composizione, st
 - essiccatore: telaio 360×336 + 6 appesi 72×156
 - conchiglie 90×78, teschio 90×72, rottami 168×114
 
-Se riesci, fai lo stesso per cespugli, palma e rovine (3×). Mantieni margini ≥ 8 px (scalati), sfondo trasparente, un solo disegno per frame.
+NON rifare palma e cespugli: nel gioco ci sono già palme e cespugli dipinti (3 varianti di palma, con cocchi), la palma nuova non sostituisce quelle attuali e viene scartata. Mantieni margini ≥ 8 px (scalati), sfondo trasparente, un solo disegno per frame.
 Nel LEGGIMI scrivi le nuove misure e conferma che le àncore sono esattamente 3× quelle precedenti. Il gioco le disegnerà a 1/3 della grandezza, quindi l'aspetto in scena resta uguale ma nitido.
+
+## Secondo giro (stessa regola 3×, stessi livelli, stesse àncore ×3, nome `@3x`), dopo il primo
+Oggetti del campo che si vedono spesso e sono piccoli: cassa (baule), lanterna, stendino, tavolo-cucina, rete, rastrelliera, amaca, fusto-acqua, pila-barili, ceppo-ascia, tavolino-j, calderone2, trespolo, mappa-cavalletto, corda-rotolo, cannone, barca-remi, barca-costruzione. Partire da quelli più piccoli (cassa, lanterna, tavolino-j, corda-rotolo, calderone2).
+Per ognuno: disegna da zero a 3× (dettagli nitidi, non un ingrandimento), stessa composizione dei file approvati, margine ≥ 12 px (×3 = 36 px).
