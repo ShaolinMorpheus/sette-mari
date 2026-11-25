@@ -310,4 +310,70 @@ verificati. Restano fuori, come da prompt: il falò (non montato) e i pezzi già
 consegnati nel primo giro @3x (orto, colture, essiccatore, conchiglie, teschio,
 rottami), che hanno il loro LEGGIMI.
 
+---
+
+## Correzione cannone @3x (25 nov 2026 — secondo giro rifatto)
+
+I 4 livelli del cannone del secondo giro erano sbagliati NEI SINGOLI LIVELLI
+(i compositi sembravano a posto): `cannone-canna@3x` aveva la canna a strisce
+orizzontali e una ruota intera duplicata sul livello sbagliato;
+`cannone-affusto@3x` era frammentato in pezzi di legno staccati. Rifatti da
+capo, sostituiscono i file omonimi in `consegna/`.
+
+**Metodo (diverso dalla pipeline che aveva prodotto i difetti):** l'alfa di
+ogni livello è la maschera del livello 1× approvato (consegna corretta del
+25 nov) ingrandita ×3 — un pixel sta nel livello in cui sta a 1×, per
+costruzione. Il colore viene dalla generazione originale del cannone
+(1600×1600, e 1920×1280 per palle/calcatoio), registrata sulle maschere 1×
+con la stessa geometria della pipeline originale (verificata per
+sovrapposizione: IoU 0,88 cannone, 0,94 palle, 0,79 calcatoio) e
+ricampionata con filtro d'area. Dove la generazione non copre (estensione
+della volata), il colore è quello del livello 1× ingrandito.
+
+**Misure confermate:** tela **339×252**, àncora **(162,201)** — esattamente
+3× del cannone corretto 1× (113×84, àncora (54,67)). Margini dell'unione:
+35 px a sinistra, 35 a destra, 35 sopra, 37 sotto (1×: 12 px → atteso 36,
+scarto ±1 per l'antialias dei bordi).
+
+**Verifiche (sui singoli livelli, non solo sul composito):**
+
+- Componenti connesse (alfa >100): affusto 3 a 1× e 3 a 3× (6646 / 3522 /
+  411 px, ≈9× delle 1×); palle 1 e 1; calcatoio 1 e 1. Canna: a 1× sono 2
+  (la canna + i pezzi scuri della ruota posteriore, 62 px), a 3× risultano
+  unite in 1 perché l'ingrandimento morbido dell'alfa colma la valle
+  semitrasparente di 1–2 px che le separava — a grandezza di gioco il
+  disegno è identico.
+- La canna a 3× è una sola canna dritta e continua, senza strisce e senza
+  ruota: come a 1×, nel livello canna ci sono solo il cerchione di ferro
+  (sottile, interno vuoto) e i pezzi scuri degli affusti che il taglio
+  originale assegnava alla canna. L'affusto è la struttura lignea connessa
+  con le ruote complete, senza frammenti in più rispetto a 1×.
+- Sovrapposizioni tra livelli (px opachi in entrambi, alfa >100): sono le
+  stesse zone di contatto approvate a 1×, scalate — affusto∩canna 66 px a
+  1× → 723 a 3× (atteso ~594: i bordi morbidi a 3× allargano un poco la
+  striscia di contatto); affusto∩palle 116 → 1068; affusto∩calcatoio
+  19 → 195; canna∩palle 31 → 286; le coppie a 0 a 1× (canna∩calcatoio,
+  palle∩calcatoio) restano a 0. Nessuna ruota duplicata.
+- Composito @3x ridotto a 1× contro composito 1× approvato: differenza
+  media (RGB premoltiplicato) 4,63 su 255. Fuori dalle zone di
+  completamento la differenza sul nucleo opaco è 2,05 (canna), 5,32
+  (affusto), 2,61 (palle), 8,73 (calcatoio, asta sottile).
+
+**Limite dichiarato:** nella banda superiore della canna (righe 12–20 della
+tela 1×) il @3x differisce dall'1× (differenza nucleo 58,85): lì l'1×
+approvato aveva un completamento a programma (estrusione verticale dei
+colori della canna tagliata), mentre la generazione originale contiene la
+parte superiore vera della canna, ed è quella che il @3x mostra. La sagoma
+(alfa) è identica; cambia solo l'ombreggiatura interna della banda, più
+fedele al disegno originale. Stessa cosa, in piccolo, per la calotta della
+ruota dell'affusto.
+
+Fogli di controllo: `controllo/controllo-cannone-3x-livelli-chiaro.png` e
+`controllo-cannone-3x-livelli-erba.png` (i 4 livelli separati a grandezza
+piena, su fondo chiaro e su erba vera), `controllo-cannone-3x-composito-gioco.png`
+(composito a grandezza di gioco su erba: @3x ridotto a sinistra, 1× approvato
+a destra).
+
+Cosa manca: niente per il cannone.
+
 STATO: pronto
