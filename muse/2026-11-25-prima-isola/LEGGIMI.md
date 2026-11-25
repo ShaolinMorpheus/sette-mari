@@ -132,4 +132,91 @@ sull'erba fiorita del gioco si giudicano male), `controllo-orto`
 2×). Audit numerico su ogni file: dimensioni esatte da SPEC, una componente
 principale, zero pixel magenta residui.
 
+## Alta risoluzione @3x (25 nov 2026, su richiesta RIFAI-ALTA-RISOLUZIONE)
+
+Gli stessi disegni della consegna qui sopra, **ridisegnati a risoluzione 3×**:
+stessa composizione, stessi livelli, stesse trasformazioni relative (recinto
+davanti schiacciato in verticale, scala comune per specie delle colture). Il
+gioco li disegnerà a 1/3 della grandezza: in scena le dimensioni restano
+identiche, ma i disegni sono nitidi invece che sgranati. Questo è il PRIMO
+giro chiesto dal prompt aggiornato: orto, colture, essiccatore, conchiglie,
+teschio e rottami.
+
+**Metodo (per ogni pezzo): fonte `gen`** — nessun file è un ingrandimento del
+file 1× consegnato e nessuna rigenerazione è stata necessaria: ogni pezzo è
+stato ricavato dalla generazione originale (le stesse usate per l'1×, da
+1120×2240 a 2736×912) con la stessa chiave magenta e gli stessi tagli, ma
+ridimensionato alla misura 3× invece che a quella 1×. Le generazioni sono da
+~2,2× a ~12× più grandi del file 3× finale (fattori di riduzione tra 0,46 e
+0,08), quindi il dettaglio alla nuova misura è dettaglio disegnato, non
+interpolato. Dettaglio per gruppo:
+
+- orto (3 livelli): dalla generazione orto 1920×1280 e orto-extra 2736×912;
+  base ridotta a 408×210 (sorgente ritagliata 1594×964), spaventapasseri
+  fattore 0,126, recinto davanti schiacciato a 432×57 come a 1×.
+- colture (12): dai fogli 2736×912 delle tre specie, scala comune per specie
+  (patata 0,085, zucca 0,089, ananas 0,083 — le stesse proporzioni dell'1×).
+- essiccatore: telaio dal foglio 1600×1600 (fattore 0,176); appesi dal foglio
+  2736×912 (fattori 0,17–0,20).
+- conchiglie, teschio, rottami: dal foglio spiaggia 2480×992 (fattori
+  0,14–0,22).
+
+**Nuove misure e àncore — tutte esattamente 3× quelle dell'1×:**
+
+- `orto-base@3x`, `orto-spaventapasseri@3x`, `orto-recinto-davanti@3x` —
+  tela **552×348**, àncora **(312,276)**; i 3 livelli allineati sulla stessa
+  tela come a 1×.
+- `coltura-patata-0..3@3x`, `coltura-zucca-0..3@3x`,
+  `coltura-ananas-0..3@3x` — tela **84×78**, àncora **(42,72)**.
+- `essiccatore-telaio@3x` — tela **360×336**, àncora **(180,300)**.
+- `essiccatore-pesce-fresco@3x`, `-pesce-secco@3x`, `-bacche-fresche@3x`,
+  `-bacche-secche@3x`, `-fette-fresche@3x`, `-fette-secche@3x` — tela
+  **72×156**, àncora **(36,0)**.
+- `conchiglia-1/2/3@3x` — tela **90×78**, àncora **(45,66)**.
+- `teschio@3x` — tela **90×72**, àncora **(45,54)**.
+- `rottami@3x` — tela **168×114**, àncora **(84,90)**.
+
+**Margini:** ovunque il triplo dei margini dell'1×. Dove l'1× rispettava gli
+8 px, qui il margine è ≥24 px. Restano i casi imposti dalle misure già
+dichiarati a 1×, scalati ×3: filo degli appesi che parte da y=0 (àncora
+(36,0)) e contenuto che riempie l'altezza; margine basso 6 px sulle colture
+(era 2); margine alto 3 px del teschio (era 1); margine alto 6 px delle
+conchiglie (era 2).
+
+**Verifiche fatte:**
+
+- Dimensioni e àncore esatte su tutti i 27 file; una componente principale
+  per file (le colture ananas hanno 2–4 componenti con la principale ≥99,7%:
+  punte di foglia staccate, come a 1×); zero pixel magenta residui.
+- Test di composizione: ogni @3x ridotto alla misura 1× e confrontato col
+  file 1× consegnato — differenza media (RGB premoltiplicato) tra 0,08 e
+  14,8 su 255. I valori più alti sono solo su tele piccolissime
+  (conchiglia-1 14,8, pesce-fresco 14,6, teschio 10,0), dove il profilo
+  antialias dei bordi pesa di più: a vista è lo stesso disegno, con bordi
+  più puliti.
+- Test di nitidezza: per orto ricomposto e coltura-zucca-3, il file 1×
+  ingrandito ×3 col bicubico contro il @3x, sia a grandezza 3× sia ridotti
+  a grandezza telefono: il @3x è visibilmente più nitido (venature del
+  legno, spaventapasseri, foglie).
+- Fogli su fondi veri con i pezzi alla grandezza di gioco (il @3x ridotto a
+  1/3): `controllo-3x-orto` e `controllo-3x-essiccatore` (ricomposizioni),
+  `controllo-3x-gruppo4-colture`, `controllo-3x-spiaggia` (conchiglie,
+  teschio e rottami sulla sabbia vera, con la riga a grandezza piena 3×).
+
+**Palma, cespugli e rovine @3x: NON inclusi.** Il prompt aggiornato esclude
+palma e cespugli (nel gioco ci sono già palme e cespugli dipinti, 3 varianti
+di palma con cocchi: la palma nuova non li sostituisce e viene scartata) e
+non chiede le rovine. I file @3x di questi pezzi erano stati preparati e
+restano in locale, non in questa consegna.
+
+**Zattera:** gli stadi 1–3 restano solo a 1× — il prompt di rifacimento non
+li chiedeva.
+
+Cosa manca (sezione @3x): il SECONDO giro chiesto dal prompt aggiornato —
+gli oggetti piccoli del campo a 3× (cassa, lanterna, tavolino-j,
+corda-rotolo e calderone2 per primi; poi stendino, tavolo-cucina, rete,
+rastrelliera, amaca, fusto-acqua, pila-barili, ceppo-ascia, trespolo,
+mappa-cavalletto, cannone, barca-remi, barca-costruzione), partendo dalle
+composizioni corrette del 25 nov (cartella correzioni-scenografia).
+
 STATO: pronto
