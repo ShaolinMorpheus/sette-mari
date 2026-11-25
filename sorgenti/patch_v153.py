@@ -37,7 +37,7 @@ const SCA=__SCA__;
 const SCI={};
 function scImg(n){let o=SCI[n];if(!o){if(!SCA[n])return null;o=SCI[n]=new Image();o.src='data:image/png;base64,'+SCA[n]}return o.complete&&o.naturalWidth?o:null}
 function scOk(l){let ok=true;for(const n of l)if(!scImg(n))ok=false;return ok}
-const SCAN={cal2:[32,60],tj:[28,44],lan:[10,9],ras:[48,82],ama:[78,80],ret:[62,90],pil:[50,84],std:[59,72],fus:[48,100],cep:[48,54],cuc:[62,70],map:[50,110],bco:[92,92],tre:[38,86],cas:[34,50]};
+const SCAN={cal2:[44,72],tj:[35,61],lan:[22,35],ras:[60,106],ama:[86,106],ret:[74,91],pil:[61,108],std:[67,100],fus:[60,104],cep:[60,74],cuc:[63,101],map:[62,114],bco:[103,116],tre:[50,76],cas:[46,82]};
 const SCNM={
   cal2:['calderone2-cenere','calderone2-braci-calde','calderone2-tripode','calderone2-liquido'],
   tj:['tavolino-j-tavolino','tavolino-j-calamaio','tavolino-j-mappa','tavolino-j-bussola','tavolino-j-diario'],
@@ -62,17 +62,17 @@ function scApplySP(){
   if(SCD||!VEGPG)return;
   const L1=['cannone-affusto','cannone-canna','cannone-palle','cannone-calcatoio'],L2=['corda-rotolo'],L3=['barca-remi-scafo','barca-remi-remo-1','barca-remi-remo-2','barca-remi-cima','barca-remi-sacco-rete'];
   if(!(scOk(L1)&&scOk(L2)&&scOk(L3)))return;
-  SCD=1;SP.cannon=scBake(84,52,42,46,L1);SP.coil=scBake(48,34,24,30,L2);SP.rowboat=scBake(116,52,58,46,L3);
+  SCD=1;SP.cannon=scBake(113,84,54,67,L1);SP.coil=scBake(69,61,35,46,L2);SP.rowboat=scBake(139,88,70,70,L3);
 }
 let SCLT=null;
 function scLant(g,night,t,ex){
-  g.drawImage(scImg('lanterna-anello-catena'),-10,-9);
-  g.drawImage(scImg('lanterna-struttura'),-10,-9);
+  g.drawImage(scImg('lanterna-anello-catena'),-22,-35);
+  g.drawImage(scImg('lanterna-struttura'),-22,-35);
   if(night){
-    if(!SCLT){const c=document.createElement('canvas');c.width=20;c.height=44;const x=c.getContext('2d');x.drawImage(scImg('lanterna-vetri'),0,0);x.globalCompositeOperation='source-atop';x.fillStyle='rgba(255,206,110,.92)';x.fillRect(0,0,20,44);SCLT=c}
-    g.drawImage(SCLT,-10,-9);
+    if(!SCLT){const c=document.createElement('canvas');c.width=44;c.height=82;const x=c.getContext('2d');x.drawImage(scImg('lanterna-vetri'),0,0);x.globalCompositeOperation='source-atop';x.fillStyle='rgba(255,206,110,.92)';x.fillRect(0,0,20,44);SCLT=c}
+    g.drawImage(SCLT,-22,-35);
     g.fillStyle='#ffd27a';g.beginPath();g.ellipse(0,19,2,3.4+Math.sin(t*9+ex)*.5,0,0,7);g.fill();
-  }else g.drawImage(scImg('lanterna-vetri'),-10,-9);
+  }else g.drawImage(scImg('lanterna-vetri'),-22,-35);
 }
 {
   const oP2=NVDX.nv_pot,oJ=NVDX.nv_jt,oLa=NVDX.nv_laundry;

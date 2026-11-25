@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v159 — 0.11.14 «Oggetti del campo completi»
+- Montate le correzioni di Muse (muse/2026-11-25-correzioni-scenografia): tele allargate con margine, stendino con pali e corda, coperchio cassa completo, pali amaca, ecc. Nuove misure/ancore aggiornate nel gioco. Falò nuovo non montato.
+
+
 ## v158 — 0.11.13 «Meno pesci grandi»
 - Tolta la grande ombra di pesce nel mare.
 
