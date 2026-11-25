@@ -212,11 +212,102 @@ restano in locale, non in questa consegna.
 **Zattera:** gli stadi 1–3 restano solo a 1× — il prompt di rifacimento non
 li chiedeva.
 
-Cosa manca (sezione @3x): il SECONDO giro chiesto dal prompt aggiornato —
-gli oggetti piccoli del campo a 3× (cassa, lanterna, tavolino-j,
-corda-rotolo e calderone2 per primi; poi stendino, tavolo-cucina, rete,
-rastrelliera, amaca, fusto-acqua, pila-barili, ceppo-ascia, trespolo,
-mappa-cavalletto, cannone, barca-remi, barca-costruzione), partendo dalle
-composizioni corrette del 25 nov (cartella correzioni-scenografia).
+Cosa manca (sezione @3x): niente — il secondo giro degli oggetti del campo è nella sezione che segue.
+
+---
+
+# Secondo giro @3x — oggetti piccoli del campo (scenografia)
+
+Versione a 3× degli oggetti del campo della consegna **corretta** del 25 nov
+(`muse/2026-11-25-correzioni-scenografia/`): stessa composizione, stessi livelli,
+tela e àncora **esattamente 3×** quelle corrette. Il gioco disegna a 1/3, quindi
+in scena la misura non cambia ma il disegno è nitido. In questa cartella:
+`consegna/` con 92 file `nome@3x.png.b64` e `controllo/` con i fogli di controllo.
+Il falò NON è incluso (non montato, escluso anche dalle correzioni inviate).
+
+## Metodo
+
+- Pipeline ri-eseguita dalle **generazioni originali a piena risoluzione**
+  (master 1600×1600 / 1920×1280 / 2736×912): stesso scontorno (chiave magenta +
+  despill), stessi tagli e piazzamenti della consegna 24 nov, con
+  sovracampionamento interno S=8 e uscita a 3×. **Nessun ingrandimento dei file
+  1×** e nessuna rigenerazione: la risoluzione delle generazioni bastava per
+  tutti i pezzi.
+- Le **correzioni del 25 nov sono replicate a 3×** (tele allargate e
+  completamenti con misure ×3: pali amaca e rastrelliera, catena lanterna,
+  coste barca-costruzione, manico remo-1, tripode, lama ascia, cuneo e volata
+  della canna, calotta ruota e raggio dell'affusto, bordo ceppo, orli di
+  calamaio e mortaio, disco del tagliere, ellisse del tavolino, picco del telo,
+  arco dei barili, bordo del fusto, pali e corda ridisegnati dello stendino,
+  coperchio aperto rigenerato, coltello completato a programma). Tela finale e
+  àncora sono quelle corrette ×3 **per costruzione** (origine di ritaglio ×3).
+- Dove lo script su disco non riproduceva il file 1× consegnato, i parametri
+  sono stati **calibrati sul file consegnato** (dichiarato, come per il primo
+  giro): foglio oggetti-tavolino scontornato con `tutti=True`; corda dello
+  stendino a y=4 (cime dei panni a y=3 nei file consegnati); tavolo cucina
+  piazzato largo 97 unità (non 118: il consegnato ha contenuto x 13..110,
+  y 9..70); ellissi di liquido e acqua — disegnate a programma anche
+  nell'originale — con geometria calibrata sui livelli 1× consegnati (la misura
+  automatica sul frame dipende dalla risoluzione); puntine della mappa sui
+  centroidi dei livelli consegnati; banda dello stato-0 della barca a 0,35
+  dell'altezza (non 0,52: lo stato-0 consegnato parte a y=33 su 94,8);
+  coperchio chiuso dalla generazione `cassa-chiusa` (largo 59, centro x=34,
+  cima y=0, tenuto sopra y=27 — il ribaltamento dello script su disco non
+  corrisponde al consegnato); calotte di coperchio chiuso e corda e mollette
+  dei panni applicate col **profilo per colonna misurato dalla consegna
+  corretta 1×** (i fit analitici a 3× divergevano: calotta del coperchio 9
+  unità contro 2 consegnate; la calotta della catasta misurata è 0, nessun
+  innalzamento, come nel consegnato); estensione del remo-1 raccordata al
+  manico con un ponte di 3 px (a 3× la cima del manico sta 1–3 px sotto il
+  bordo tela e la striscia staccata verrebbe rimossa come granello, come fa il
+  finalizzatore 1× con le componenti staccate).
+
+## Oggetti (tela @3x, àncora @3x, collisione invariata dalla consegna corretta)
+
+- **calderone2** — tela 264×276, àncora (132, 216), collisione -20,20,-8,4. Livelli: cenere, braci-calde, tripode, liquido.
+- **tavolino-j** — tela 225×231, àncora (105, 183), collisione -9,9,-5,3. Livelli: tavolino, calamaio, mappa, bussola, diario.
+- **lanterna** — tela 132×246, àncora (66, 105), collisione nessuna (oggetto appeso). Livelli: anello-catena, struttura, vetri.
+- **rastrelliera** — tela 360×360, àncora (180, 318), collisione -44,44,-5,2. Livelli: telaio, sciabola-1/2/3, moschetto-1/2, ascia, pistola.
+- **amaca** — tela 522×366, àncora (258, 318), collisione -74,74,-4,3. Livelli: palo-sinistro, palo-destro, telo, cuscino.
+- **rete** — tela 444×321, àncora (222, 273), collisione -56,56,-5,2. Livelli: telaio, rete, galleggiante-1/2, peso-1/2/3, pesce-secco-1/2/3 (5 singoli invece di 6, come già dichiarato nelle correzioni: due galleggianti sono in parte fusi nel disegno).
+- **pila-barili** — tela 366×372, àncora (183, 324), collisione -44,44,-7,2. Livelli: barili, sacchi, telo.
+- **stendino** — tela 411×348, àncora (201, 300), collisione -52,52,-4,2. Livelli: pali, panno-vela, panno-camicia, panno-calzoni, panno-straccio.
+- **barca-remi** — tela 417×264, àncora (210, 210), collisione -52,52,-8,4. Livelli: scafo, remo-1, remo-2, cima, sacco-rete.
+- **cannone** — tela 339×252, àncora (162, 201), collisione -30,30,-6,3. Livelli: affusto, canna, palle, calcatoio.
+- **corda-rotolo** — tela 207×183, àncora (105, 138), collisione -18,18,-4,2. Livello unico.
+- **fusto-acqua** — tela 357×360, àncora (180, 312), collisione -26,26,-6,3. Livelli: fusto, acqua, mestolo (resta completamente trasparente, come nella consegna corretta: segnaposto disegnato dal codice), tettoia, gocce.
+- **ceppo-ascia** — tela 360×276, àncora (180, 222), collisione -20,20,-6,3. Livelli: catasta, ceppo, ascia, schegge.
+- **tavolo-cucina** — tela 411×351, àncora (189, 303), collisione -48,48,-5,2. Livelli: tavolo, tagliere, coltello, mortaio, pesce-appeso-1/2, cesta.
+- **mappa-cavalletto** — tela 372×390, àncora (186, 342), collisione -30,30,-4,2. Livelli: cavalletto, mappa, filo, pergamena, puntina-1/2/3/4 (filo e puntine disegnati a programma anche nell'originale).
+- **barca-costruzione** — tela 621×402, àncora (309, 348), collisione -84,84,-10,4. Livelli: base, stato-0, stato-1, stato-2, stato-3.
+- **trespolo** — tela 300×276, àncora (150, 228), collisione -8,8,-4,2. Livelli: palo, ciotole, gabbia, porticina-aperta, porticina-chiusa.
+- **cassa** — tela 270×294, àncora (138, 246), collisione -28,28,-6,3. Livelli: corpo, monete, collana, chiave, coperchio-aperto, coperchio-chiuso.
+
+## Verifiche fatte
+
+- Dimensioni e àncore: esattamente 3× la consegna corretta per tutti i 92 file.
+- Test di composizione: ogni @3x ridotto a 1× e confrontato col file corretto
+  1× (diff media assoluta su RGBA premoltiplicato): **min 0,00 — max 7,69 —
+  media 0,49**. Il massimo è `stendino-pali` (pali ridisegnati a programma
+  anche nell'originale; geometria coincidente, scostamento di profilo 1 unità).
+- Margini trasparenti (bbox unione per oggetto, a 3×): 34–45 px; il valore
+  richiesto è ≥36 e due oggetti stanno a 34–35 sul lato superiore (lanterna,
+  cassa) per l'arrotondamento del profilo alfa alla soglia di misura — il
+  contenuto visibile rispetta il margine.
+- Scostamenti residui dichiarati: due confini tra livelli differiscono di 3
+  unità di gioco dal 1× — bordo inferiore della `cannone-canna` alla volata
+  (+3) e punta del manico in `ceppo-ascia-ascia` (−3, quei pixel stanno nel
+  livello ceppo). I compositi completi coincidono; cambia solo la ripartizione
+  tra i due livelli.
+- Fogli di controllo in `controllo/`: ricomposizioni per oggetto su erba vera
+  alla grandezza di gioco (sopra la versione @3x ridotta, sotto la consegna
+  corretta 1×) e due zoom a piena risoluzione @3x (cassa aperta, stendino).
+
+## Cosa manca
+
+Niente per questo secondo giro: tutti i 18 oggetti (92 file) sono presenti e
+verificati. Restano fuori, come da prompt: il falò (non montato) e i pezzi già
+consegnati nel primo giro @3x (orto, colture, essiccatore, conchiglie, teschio,
+rottami), che hanno il loro LEGGIMI.
 
 STATO: pronto
