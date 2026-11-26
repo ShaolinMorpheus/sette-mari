@@ -1,5 +1,9 @@
 # Sette Mari — Registro delle modifiche
 
+## v160 — 0.11.15 «Capanna sbloccata»
+- Capanna (isola 2): l'area di scavo dell'editor ricalcolava la griglia di passaggio anche sul pavimento dell'interno (righe 6-8 non calpestabili, muri invisibili e uscita bloccata). Ora l'interno viene escluso e la griglia viene riapplicata a ogni entrata/uscita.
+
+
 ## v159 — 0.11.14 «Oggetti del campo completi»
 - Montate le correzioni di Muse (muse/2026-11-25-correzioni-scenografia): tele allargate con margine, stendino con pali e corda, coperchio cassa completo, pali amaca, ecc. Nuove misure/ancore aggiornate nel gioco. Falò nuovo non montato.
 
